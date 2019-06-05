@@ -270,7 +270,7 @@ namespace NClass.GUI
 			this.modelExplorer.Size = new System.Drawing.Size(236, 403);
 			this.modelExplorer.TabIndex = 0;
 			this.modelExplorer.Workspace = null;
-			this.modelExplorer.DocumentOpening += new NClass.DiagramEditor.DocumentEventHandler(this.modelExplorer_DocumentOpening);
+			this.modelExplorer.DocumentOpening += new NClass.DiagramEditor.DocumentEventHandler(this.ModelExplorer_DocumentOpening);
 			// 
 			// diagramNavigator
 			// 

@@ -74,7 +74,7 @@ namespace NClass.DiagramEditor
 			get { return (switchingNode != null); }
 		}
 
-		private void document_Closing(object sender, EventArgs e)
+		private void Document_Closing(object sender, EventArgs e)
 		{
 			IDocument document = (IDocument) sender;
 			Close(document);
@@ -105,7 +105,7 @@ namespace NClass.DiagramEditor
 				documents.Add(document);
 				activeDocument = document;
 				documentHistory.AddFirst(document);
-				document.Closing += new EventHandler(document_Closing);
+				document.Closing += new EventHandler(Document_Closing);
 				OnDocumentAdded(new DocumentEventArgs(document));
 				OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
 			}
@@ -147,7 +147,7 @@ namespace NClass.DiagramEditor
 			if (documents.Remove(document))
 			{
 				documentHistory.Remove(document);
-				document.Closing -= new EventHandler(document_Closing);
+				document.Closing -= new EventHandler(Document_Closing);
 				OnDocumentRemoved(new DocumentEventArgs(document));
 				if (activeDocument == document)
 				{
@@ -176,7 +176,7 @@ namespace NClass.DiagramEditor
 				{
 					IDocument document = documents[documents.Count - 1];
 					documents.RemoveAt(documents.Count - 1);
-					document.Closing -= new EventHandler(document_Closing);
+					document.Closing -= new EventHandler(Document_Closing);
 					OnDocumentRemoved(new DocumentEventArgs(document));
 				}
 
@@ -209,7 +209,7 @@ namespace NClass.DiagramEditor
 						document = documents[documents.Count - 2];
 						documents.RemoveAt(documents.Count - 2);
 					}
-					document.Closing -= new EventHandler(document_Closing);
+					document.Closing -= new EventHandler(Document_Closing);
 					OnDocumentRemoved(new DocumentEventArgs(document));
 				}
 

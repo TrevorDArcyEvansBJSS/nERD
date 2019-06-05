@@ -44,13 +44,13 @@ namespace NClass.GUI
 		{
 			InitializeComponent();
 
-			tabbedWindow.Canvas.ZoomChanged += new EventHandler(canvas_ZoomChanged);
+			tabbedWindow.Canvas.ZoomChanged += new EventHandler(Canvas_ZoomChanged);
 			tabbedWindow.DocumentManager = docManager;
 
 			Workspace.Default.ActiveProjectChanged += delegate { UpdateTitleBar(); };
 			Workspace.Default.ActiveProjectStateChanged += delegate { UpdateTitleBar(); };
 			Workspace.Default.ProjectAdded += delegate { ShowModelExplorer = true; };
-			docManager.ActiveDocumentChanged += docManager_ActiveDocumentChanged;
+			docManager.ActiveDocumentChanged += DocManager_ActiveDocumentChanged;
 			modelExplorer.Workspace = Workspace.Default;
 			tabbedWindow.DocumentManager = docManager;
 			diagramNavigator.DocumentVisualizer = tabbedWindow.Canvas;
@@ -437,7 +437,7 @@ namespace NClass.GUI
 			}
 		}
 
-		private void docManager_ActiveDocumentChanged(object sender, DocumentEventArgs e)
+		private void DocManager_ActiveDocumentChanged(object sender, DocumentEventArgs e)
 		{
 			if (docManager.HasDocument)
 			{
@@ -482,13 +482,13 @@ namespace NClass.GUI
 			UpdateClipboardToolBar();
 		}
 
-		private void canvas_ZoomChanged(object sender, EventArgs e)
+		private void Canvas_ZoomChanged(object sender, EventArgs e)
 		{
 			toolZoom.ZoomValue = tabbedWindow.Canvas.Zoom;
 			toolZoomValue.Text = tabbedWindow.Canvas.ZoomPercentage + "%";
 		}
 
-		private void modelExplorer_DocumentOpening(object sender, DocumentEventArgs e)
+		private void ModelExplorer_DocumentOpening(object sender, DocumentEventArgs e)
 		{
 			docManager.AddOrActivate(e.Document);
 		}
