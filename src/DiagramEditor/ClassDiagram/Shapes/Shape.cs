@@ -503,7 +503,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 			if (CloneEntity(diagram))
 			{
 				Shape shape = diagram.ShapeList.FirstValue;
-				shape.Location = this.Location + offset;
+				shape.Location = new Point(offset);
 				shape.Size = this.Size;
 				shape.IsSelected = true;
 				return shape;
