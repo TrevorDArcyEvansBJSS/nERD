@@ -55,8 +55,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 			}
 		}
 
-		private void AddOperations(SingleInharitanceType derivedClass,
-			SingleInharitanceType baseClass)
+		private void AddOperations(SingleInheritanceType derivedClass,
+			SingleInheritanceType baseClass)
 		{
 			if (derivedClass == null || baseClass == null)
 				return;
@@ -72,7 +72,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 			}
 		}
 
-		public DialogResult ShowDialog(SingleInharitanceType inheritedClass)
+		public DialogResult ShowDialog(SingleInheritanceType inheritedClass)
 		{
 			if (inheritedClass == null)
 				return DialogResult.None;

@@ -67,14 +67,14 @@ namespace NClass.Core
 				throw new RelationshipException(Strings.ErrorNotAllowedChild);
 			if (!BaseType.IsAllowedParent)
 				throw new RelationshipException(Strings.ErrorNotAllowedParent);
-			if (First is SingleInharitanceType && ((SingleInharitanceType) First).HasExplicitBase)
+			if (First is SingleInheritanceType && ((SingleInheritanceType) First).HasExplicitBase)
 				throw new RelationshipException(Strings.ErrorMultipleBases);
-			if (First is SingleInharitanceType ^ Second is SingleInharitanceType ||
+			if (First is SingleInheritanceType ^ Second is SingleInheritanceType ||
 				First is InterfaceType ^ Second is InterfaceType)
 				throw new RelationshipException(Strings.ErrorInvalidBaseType);
 
-			if (First is SingleInharitanceType && Second is SingleInharitanceType) {
-				((SingleInharitanceType) First).Base = (SingleInharitanceType) Second;
+			if (First is SingleInheritanceType && Second is SingleInheritanceType) {
+				((SingleInheritanceType) First).Base = (SingleInheritanceType) Second;
 			}
 			else if (First is InterfaceType && Second is InterfaceType) {
 				((InterfaceType) First).AddBase((InterfaceType) Second);
@@ -85,8 +85,8 @@ namespace NClass.Core
 		{
 			base.OnDetaching(e);
 
-			if (First is SingleInharitanceType)
-				((SingleInharitanceType) First).Base = null;
+			if (First is SingleInheritanceType)
+				((SingleInheritanceType) First).Base = null;
 			else if (First is InterfaceType)
 				((InterfaceType) First).RemoveBase(Second as InterfaceType);
 		}

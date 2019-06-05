@@ -95,11 +95,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 			toolNewDestructor.Visible = parent.SupportsDestructors;
 			toolNewProperty.Visible = parent.SupportsProperties;
 			toolNewEvent.Visible = parent.SupportsEvents;
-			toolOverrideList.Visible = parent is SingleInharitanceType;
+			toolOverrideList.Visible = parent is SingleInheritanceType;
 			toolImplementList.Visible = parent is IInterfaceImplementer;
 			toolImplementList.Enabled = (parent is IInterfaceImplementer) &&
 				((IInterfaceImplementer) parent).ImplementsInterface;
-			toolSepAddNew.Visible = parent is SingleInharitanceType ||
+			toolSepAddNew.Visible = parent is SingleInheritanceType ||
 				parent is IInterfaceImplementer;
 
 			errorProvider.SetError(txtSyntax, null);
@@ -935,8 +935,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
 		private void toolOverrideList_Click(object sender, EventArgs e)
 		{
-			if (parent is SingleInharitanceType) {
-				SingleInharitanceType derivedType = (SingleInharitanceType) parent;
+			if (parent is SingleInheritanceType) {
+				SingleInheritanceType derivedType = (SingleInheritanceType) parent;
 				using (OverrideDialog dialog = new OverrideDialog())
 				{
 					if (dialog.ShowDialog(derivedType) == DialogResult.OK) {

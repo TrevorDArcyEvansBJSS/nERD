@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace NClass.Core
 {
-	public abstract class StructureType : SingleInharitanceType
+	public abstract class StructureType : SingleInheritanceType
 	{
 		/// <exception cref="BadSyntaxException">
 		/// The <paramref name="name"/> does not fit to the syntax.

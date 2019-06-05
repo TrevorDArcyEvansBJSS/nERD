@@ -71,7 +71,7 @@ namespace NClass.CSharp
 			get { return true; }
 		}
 
-		public override SingleInharitanceType Base
+		public override SingleInheritanceType Base
 		{
 			get
 			{

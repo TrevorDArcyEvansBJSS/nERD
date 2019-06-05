@@ -20,7 +20,7 @@ using NClass.Translations;
 
 namespace NClass.Core
 {
-	public abstract class ClassType : SingleInharitanceType
+	public abstract class ClassType : SingleInheritanceType
 	{
 		ClassModifier modifier = ClassModifier.None;
 		ClassType baseClass = null;
@@ -136,7 +136,7 @@ namespace NClass.Core
 		/// The base and derived types do not equal.-or-
 		/// The <paramref name="value"/> is descendant of the type.
 		/// </exception>
-		public override SingleInharitanceType Base
+		public override SingleInheritanceType Base
 		{
 			get
 			{

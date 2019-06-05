@@ -19,14 +19,14 @@ using NClass.Translations;
 
 namespace NClass.Core
 {
-	public abstract class SingleInharitanceType : CompositeType, IInterfaceImplementer
+	public abstract class SingleInheritanceType : CompositeType, IInterfaceImplementer
 	{
 		List<InterfaceType> interfaceList = new List<InterfaceType>();
 
 		/// <exception cref="BadSyntaxException">
 		/// The <paramref name="name"/> does not fit to the syntax.
 		/// </exception>
-		protected SingleInharitanceType(string name) : base(name)
+		protected SingleInheritanceType(string name) : base(name)
 		{
 		}
 
@@ -34,7 +34,7 @@ namespace NClass.Core
 		/// The base and derived types do not equal.-or-
 		/// The <paramref name="value"/> is descendant of the type.
 		/// </exception>
-		public abstract SingleInharitanceType Base
+		public abstract SingleInheritanceType Base
 		{
 			get;
 			set;
