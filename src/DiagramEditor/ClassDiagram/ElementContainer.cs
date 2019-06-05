@@ -59,7 +59,8 @@ namespace NClass.DiagramEditor.ClassDiagram
 					Shape pasted = shape.Paste(diagram, offset);
 					pastedShapes[shape] = pasted;
 					success |= (pasted != null);
-				}
+          offset += new Size(BaseOffset, BaseOffset);
+        }
 				foreach (Connection connection in connections)
 				{
 					Shape first = GetShape(connection.Relationship.First);
