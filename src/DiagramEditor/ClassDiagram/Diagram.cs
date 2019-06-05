@@ -807,7 +807,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
 			OnSelectionChanged(EventArgs.Empty);
 			OnClipboardAvailabilityChanged(EventArgs.Empty);
-			OnSatusChanged(EventArgs.Empty);
+			OnStatusChanged(EventArgs.Empty);
 
 			selectioning = false;
 			RedrawSuspended = false;
@@ -1117,7 +1117,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
 			OnSelectionChanged(EventArgs.Empty);
 			OnClipboardAvailabilityChanged(EventArgs.Empty);
-			OnSatusChanged(EventArgs.Empty);
+			OnStatusChanged(EventArgs.Empty);
 			Redraw();
 
 			selectioning = false;
@@ -1444,7 +1444,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 				selectedShapeCount--;
 				OnSelectionChanged(EventArgs.Empty);
 				OnClipboardAvailabilityChanged(EventArgs.Empty);
-				OnSatusChanged(EventArgs.Empty);
+				OnStatusChanged(EventArgs.Empty);
 			}
 			shape.Diagram = null;
 			shape.Modified -= new EventHandler(element_Modified);
@@ -1496,7 +1496,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 				selectedConnectionCount--;
 				OnSelectionChanged(EventArgs.Empty);
 				OnClipboardAvailabilityChanged(EventArgs.Empty);
-				OnSatusChanged(EventArgs.Empty);
+				OnStatusChanged(EventArgs.Empty);
 			}
 			connection.Diagram = null;
 			connection.Modified -= new EventHandler(element_Modified);
@@ -1526,7 +1526,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
 				OnSelectionChanged(EventArgs.Empty);
 				OnClipboardAvailabilityChanged(EventArgs.Empty);
-				OnSatusChanged(EventArgs.Empty);
+				OnStatusChanged(EventArgs.Empty);
 			}
 		}
 
@@ -1548,7 +1548,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
 				OnSelectionChanged(EventArgs.Empty);
 				OnClipboardAvailabilityChanged(EventArgs.Empty);
-				OnSatusChanged(EventArgs.Empty);
+				OnStatusChanged(EventArgs.Empty);
 			}
 		}
 
@@ -1820,7 +1820,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 			CloseWindows();
 		}
 
-		protected virtual void OnSatusChanged(EventArgs e)
+		protected virtual void OnStatusChanged(EventArgs e)
 		{
 			if (StatusChanged != null)
 				StatusChanged(this, e);
