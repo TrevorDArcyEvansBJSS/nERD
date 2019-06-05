@@ -90,7 +90,7 @@
     <Compile Include="Relationships\Direction.cs" />
     <Compile Include="Members\Constructor.cs" />
     <Compile Include="Members\Destructor.cs" />
-    <Compile Include="Entities\SingleInharitanceType.cs" />
+    <Compile Include="Entities\SingleInheritanceType.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="ReservedNameException.cs" />
     <Compile Include="Project.cs" />
