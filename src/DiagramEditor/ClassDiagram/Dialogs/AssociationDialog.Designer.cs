@@ -60,7 +60,7 @@
 			this.btnOK.TabIndex = 4;
 			this.btnOK.Text = "OK";
 			this.btnOK.UseVisualStyleBackColor = true;
-			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+			this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
 			// 
 			// txtStartRole
 			// 
@@ -116,8 +116,8 @@
 			this.picArrow.Size = new System.Drawing.Size(335, 15);
 			this.picArrow.TabIndex = 4;
 			this.picArrow.TabStop = false;
-			this.picArrow.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picArrow_MouseDown);
-			this.picArrow.Paint += new System.Windows.Forms.PaintEventHandler(this.picArrow_Paint);
+			this.picArrow.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PicArrow_MouseDown);
+			this.picArrow.Paint += new System.Windows.Forms.PaintEventHandler(this.PicArrow_Paint);
 			// 
 			// txtName
 			// 
