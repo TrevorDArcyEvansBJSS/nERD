@@ -1754,6 +1754,15 @@ namespace NClass.DiagramEditor.ClassDiagram
       AddConnection(new CommentConnection(commentRelationship, startShape, endShape));
     }
 
+    protected override void AddEntityRelationship(EntityRelationship dependency)
+    {
+      base.AddEntityRelationship(dependency);
+
+      Shape startShape = GetShape(dependency.First);
+      Shape endShape = GetShape(dependency.Second);
+      AddConnection(new EntityRelationshipConnection(dependency, startShape, endShape));
+    }
+
     protected override void OnEntityRemoved(EntityEventArgs e)
     {
       Shape shape = GetShape(e.Entity);

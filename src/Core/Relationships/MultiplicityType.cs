@@ -1,4 +1,4 @@
-// NClass - Free class diagram editor
+﻿// NClass - Free class diagram editor
 // Copyright (C) 2006-2009 Balazs Tihanyi
 // 
 // This program is free software; you can redistribute it and/or modify it under 
@@ -15,16 +15,11 @@
 
 namespace NClass.Core
 {
-  public enum RelationshipType
+  public enum MultiplicityType
   {
-    Association,
-    Composition,
-    Aggregation,
-    Generalization,
-    Realization,
-    Dependency,
-    Nesting,
-    Comment,
-    EntityRelationship
+    ZeroOrOne,  // +o
+    OneAndOnly, // ++
+    ZeroOrMany, // o<
+    OneOrMany   // +<
   }
 }

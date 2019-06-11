@@ -158,6 +158,13 @@ namespace NClass.DiagramEditor.ClassDiagram
         case RelationshipType.Comment:
           CreateCommentRelationship();
           break;
+
+        case RelationshipType.EntityRelationship:
+          CreateEntityRelationship();
+          break;
+
+        default:
+          throw new ArgumentOutOfRangeException($"Unknown RelationshipType: {type}");
       }
       created = true;
       diagram.Redraw();
@@ -301,6 +308,21 @@ namespace NClass.DiagramEditor.ClassDiagram
       else if (shape2 != null)
       {
         diagram.AddCommentRelationship(shape2.Comment, first.Entity);
+      }
+      else
+      {
+        MessageBox.Show(Strings.ErrorCannotCreateRelationship);
+      }
+    }
+
+    private void CreateEntityRelationship()
+    {
+      TypeShape shape1 = first as TypeShape;
+      TypeShape shape2 = second as TypeShape;
+
+      if (shape1 != null && shape2 != null)
+      {
+        diagram.AddEntityRelationship(shape1.TypeBase, shape2.TypeBase);
       }
       else
       {

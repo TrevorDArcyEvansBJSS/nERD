@@ -19,7 +19,7 @@ using NClass.Translations;
 
 namespace NClass.Core
 {
-	public sealed class DependencyRelationship : TypeRelationship
+  public sealed class DependencyRelationship : TypeRelationship
 	{
 		/// <exception cref="ArgumentNullException">
 		/// <paramref name="first"/> is null.-or-
