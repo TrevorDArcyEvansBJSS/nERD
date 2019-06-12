@@ -674,6 +674,15 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Entity Relationship.
+        /// </summary>
+        public static string EditEntityRelationship {
+            get {
+                return ResourceManager.GetString("EditEntityRelationship", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit text:.
         /// </summary>
         public static string EditText {

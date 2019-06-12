@@ -14,6 +14,7 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram.Dialogs;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
 using System;
 
@@ -37,6 +38,29 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     protected override bool IsDashed
     {
       get { return false; }
+    }
+
+    protected override void OnDoubleClick(AbsoluteMouseEventArgs e)
+    {
+      base.OnDoubleClick(e);
+
+      if (!e.Handled)
+      {
+        ShowEditDialog();
+      }
+    }
+
+    protected internal override void ShowEditor()
+    {
+      ShowEditDialog();
+    }
+
+    public void ShowEditDialog()
+    {
+      using (var dialog = new EntityRelationshipDialog(_relationship))
+      {
+        dialog.ShowDialog();
+      }
     }
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)

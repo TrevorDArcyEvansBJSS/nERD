@@ -77,6 +77,12 @@
     <Compile Include="ClassDiagram\ContextMenus\DiagramContextMenu.cs" />
     <Compile Include="ClassDiagram\ConnectionCreator.cs" />
     <Compile Include="ClassDiagram\ClearTypeMode.cs" />
+    <Compile Include="ClassDiagram\Dialogs\EntityRelationshipDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClassDiagram\Dialogs\EntityRelationshipDialog.Designer.cs">
+      <DependentUpon>EntityRelationshipDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClassDiagram\Editors\FloatingEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -128,9 +134,7 @@
     <Compile Include="ClassDiagram\Dialogs\OverrideDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ClassDiagram\Dialogs\DiagramPrintDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="ClassDiagram\Dialogs\DiagramPrintDialog.cs" />
     <Compile Include="ClassDiagram\Dialogs\DiagramPrintDialog.Designer.cs">
       <DependentUpon>DiagramPrintDialog.cs</DependentUpon>
     </Compile>
@@ -261,6 +265,10 @@
     <EmbeddedResource Include="Canvas.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Canvas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ClassDiagram\Dialogs\EntityRelationshipDialog.resx">
+      <DependentUpon>EntityRelationshipDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ClassDiagram\Dialogs\AssociationDialog.resx">
       <DependentUpon>AssociationDialog.cs</DependentUpon>
