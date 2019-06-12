@@ -202,7 +202,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
           {
             case MultiplicityType.ZeroOrOne:
               {
-                g.DrawLine(pen, -OptionalCircleDiameter / 2, OptionalCircleDiameter / 2, OptionalCircleDiameter / 2, OptionalCircleDiameter / 2);
+                g.DrawLine(pen, -OptionalCircleDiameter / 2, 2* OptionalCircleDiameter, OptionalCircleDiameter / 2, 2* OptionalCircleDiameter);
                 g.FillEllipse(brush, -OptionalCircleDiameter / 2, OptionalCircleDiameter / 2, OptionalCircleDiameter, OptionalCircleDiameter);
                 g.DrawEllipse(pen, -OptionalCircleDiameter / 2, OptionalCircleDiameter / 2, OptionalCircleDiameter, OptionalCircleDiameter);
               }
