@@ -73,7 +73,41 @@ namespace NClass.Core
 
     public override string ToString()
     {
-      return string.Format("{0}: {1} +--< {2}", Strings.EntityRelationship, First.Name, Second.Name);
+      return $"{Strings.EntityRelationship}: [{First.Name}]{StartMultiplicityAsString()}----{EndMultiplicityAsString()}[{Second.Name}]";
+    }
+
+    private string StartMultiplicityAsString()
+    {
+      switch (StartMultiplicity)
+      {
+        case MultiplicityType.ZeroOrOne:
+          return "+o";
+        case MultiplicityType.OneAndOnly:
+          return "++";
+        case MultiplicityType.ZeroOrMany:
+          return "o<";
+        case MultiplicityType.OneOrMany:
+          return "+<";
+        default:
+          throw new ArgumentOutOfRangeException($"Unknown MultiplicityType: {StartMultiplicity}");
+      }
+    }
+
+    private string EndMultiplicityAsString()
+    {
+      switch (EndMultiplicity)
+      {
+        case MultiplicityType.ZeroOrOne:
+          return "o+";
+        case MultiplicityType.OneAndOnly:
+          return "++";
+        case MultiplicityType.ZeroOrMany:
+          return ">o";
+        case MultiplicityType.OneOrMany:
+          return ">+";
+        default:
+          throw new ArgumentOutOfRangeException($"Unknown MultiplicityType: {EndMultiplicity}");
+      }
     }
   }
 }
