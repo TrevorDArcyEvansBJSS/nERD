@@ -17,6 +17,7 @@ namespace NClass.Core
 {
   public enum MultiplicityType
   {
+    // https://www.vertabelo.com/blog/technical-articles/crow-s-foot-notation
     ZeroOrOne,  // +o
     OneAndOnly, // ++
     ZeroOrMany, // o<
