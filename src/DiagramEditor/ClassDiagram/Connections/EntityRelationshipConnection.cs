@@ -23,11 +23,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
   {
     private readonly EntityRelationship _relationship;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="relationship"/> is null.-or-
-    /// <paramref name="startShape"/> is null.-or-
-    /// <paramref name="endShape"/> is null.
-    /// </exception>
     public EntityRelationshipConnection(EntityRelationship relationship, Shape startShape, Shape endShape)
       : base(relationship, startShape, endShape)
     {
@@ -41,7 +36,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override bool IsDashed
     {
-      get { return true; }
+      get { return false; }
     }
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
