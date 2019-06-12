@@ -238,6 +238,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 			//toolNewCommentRelationship.Checked = true;
 		}
 
+		private void mnuNewEntityRelationship_Click(object sender, EventArgs e)
+		{
+			diagram.CreateConnection(RelationshipType.EntityRelationship);
+			//toolNewCommentRelationship.Checked = true;
+		}
+
 		private void mnuMembersFormat_DropDownOpening(object sender, EventArgs e)
 		{
 			mnuShowType.Checked = DiagramEditor.Settings.Default.ShowType;

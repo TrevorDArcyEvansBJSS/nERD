@@ -66,6 +66,8 @@
     <Compile Include="Members\MemberType.cs" />
     <Compile Include="RelationshipEventArgs.cs" />
     <Compile Include="Relationships\AssociationType.cs" />
+    <Compile Include="Relationships\EntityRelationship.cs" />
+    <Compile Include="Relationships\MultiplicityType.cs" />
     <Compile Include="Relationships\RelationshipType.cs" />
     <Compile Include="LangaugeManager.cs" />
     <Compile Include="ProjectItemEventArgs.cs" />

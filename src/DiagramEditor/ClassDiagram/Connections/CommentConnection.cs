@@ -13,55 +13,54 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Collections.Generic;
 using NClass.Core;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
+using System;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
-	internal sealed class CommentConnection : Connection
-	{
-		CommentRelationship relationship;
+  internal sealed class CommentConnection : Connection
+  {
+    CommentRelationship relationship;
 
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="relationship"/> is null.-or-
-		/// <paramref name="startShape"/> is null.-or-
-		/// <paramref name="endShape"/> is null.
-		/// </exception>
-		public CommentConnection(CommentRelationship relationship, Shape startShape, Shape endShape)
-			: base(relationship, startShape, endShape)
-		{
-			this.relationship = relationship;
-		}
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="relationship"/> is null.-or-
+    /// <paramref name="startShape"/> is null.-or-
+    /// <paramref name="endShape"/> is null.
+    /// </exception>
+    public CommentConnection(CommentRelationship relationship, Shape startShape, Shape endShape)
+      : base(relationship, startShape, endShape)
+    {
+      this.relationship = relationship;
+    }
 
-		internal CommentRelationship CommentRelationship
-		{
-			get { return relationship; }
-		}
+    internal CommentRelationship CommentRelationship
+    {
+      get { return relationship; }
+    }
 
-		protected internal override Relationship Relationship
-		{
-			get { return relationship; }
-		}
+    protected internal override Relationship Relationship
+    {
+      get { return relationship; }
+    }
 
-		protected override bool IsDashed
-		{
-			get { return true; }
-		}
+    protected override bool IsDashed
+    {
+      get { return true; }
+    }
 
-		protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
-		{
-			Comment comment = first.Entity as Comment;
-			if (comment != null)
-			{
-				CommentRelationship clone = relationship.Clone(comment, second.Entity);
-				return diagram.InsertCommentRelationship(clone);
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
+    protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
+    {
+      Comment comment = first.Entity as Comment;
+      if (comment != null)
+      {
+        CommentRelationship clone = relationship.Clone(comment, second.Entity);
+        return diagram.InsertCommentRelationship(clone);
+      }
+      else
+      {
+        return false;
+      }
+    }
+  }
 }
