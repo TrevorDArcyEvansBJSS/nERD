@@ -34,19 +34,10 @@ namespace NClass.Core
       language = null;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="language"/> is null.
-    /// </exception>
     public Model(Language language) : this(null, language)
     {
     }
 
-    /// <exception cref="ArgumentException">
-    /// <paramref name="name"/> cannot be empty string.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="language"/> is null.
-    /// </exception>
     public Model(string name, Language language)
     {
       if (language == null)
@@ -315,9 +306,6 @@ namespace NClass.Core
       OnRelationAdded(new RelationshipEventArgs(relationship));
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> or <paramref name="second"/> is null.
-    /// </exception>
     public AssociationRelationship AddAssociation(TypeBase first, TypeBase second)
     {
       AssociationRelationship association = new AssociationRelationship(first, second);
@@ -344,9 +332,6 @@ namespace NClass.Core
       }
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> or <paramref name="second"/> is null.
-    /// </exception>
     public AssociationRelationship AddComposition(TypeBase first, TypeBase second)
     {
       AssociationRelationship composition = new AssociationRelationship(
@@ -356,9 +341,6 @@ namespace NClass.Core
       return composition;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> or <paramref name="second"/> is null.
-    /// </exception>
     public AssociationRelationship AddAggregation(TypeBase first, TypeBase second)
     {
       AssociationRelationship aggregation = new AssociationRelationship(
@@ -409,8 +391,7 @@ namespace NClass.Core
     /// <exception cref="ArgumentNullException">
     /// <paramref name="implementer"/> or <paramref name="baseType"/> is null.
     /// </exception>
-    public RealizationRelationship AddRealization(TypeBase implementer,
-      InterfaceType baseType)
+    public RealizationRelationship AddRealization(TypeBase implementer, InterfaceType baseType)
     {
       RealizationRelationship realization = new RealizationRelationship(
         implementer, baseType);
@@ -438,9 +419,6 @@ namespace NClass.Core
       }
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> or <paramref name="second"/> is null.
-    /// </exception>
     public DependencyRelationship AddDependency(TypeBase first, TypeBase second)
     {
       DependencyRelationship dependency = new DependencyRelationship(first, second);
@@ -456,8 +434,10 @@ namespace NClass.Core
 
     public bool InsertDependency(DependencyRelationship dependency)
     {
-      if (dependency != null && !relationships.Contains(dependency) &&
-        entities.Contains(dependency.First) && entities.Contains(dependency.Second))
+      if (dependency != null &&
+        !relationships.Contains(dependency) &&
+        entities.Contains(dependency.First) &&
+        entities.Contains(dependency.Second))
       {
         AddDependency(dependency);
         return true;
@@ -528,9 +508,6 @@ namespace NClass.Core
       }
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="comment"/> or <paramref name="entity"/> is null.
-    /// </exception>
     public virtual CommentRelationship AddCommentRelationship(Comment comment, IEntity entity)
     {
       CommentRelationship commentRelationship = new CommentRelationship(comment, entity);
@@ -604,9 +581,6 @@ namespace NClass.Core
       Deserialize(node);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     private void Serialize(XmlElement node)
     {
       if (node == null)
@@ -740,8 +714,7 @@ namespace NClass.Core
       if (root == null)
         throw new ArgumentNullException("root");
 
-      XmlNodeList nodeList = root.SelectNodes(
-        "Relationships/Relationship|Relations/Relation"); // old file format
+      XmlNodeList nodeList = root.SelectNodes("Relationships/Relationship|Relations/Relation"); // old file format
 
       foreach (XmlElement node in nodeList)
       {
@@ -819,9 +792,6 @@ namespace NClass.Core
       }
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     private void SaveEntitites(XmlElement node)
     {
       if (node == null)
@@ -840,9 +810,6 @@ namespace NClass.Core
       node.AppendChild(entitiesChild);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="root"/> is null.
-    /// </exception>
     private void SaveRelationships(XmlNode root)
     {
       if (root == null)
