@@ -34,7 +34,8 @@ namespace NClass.Core
       language = null;
     }
 
-    public Model(Language language) : this(null, language)
+    public Model(Language language) :
+      this(null, language)
     {
     }
 
@@ -106,13 +107,13 @@ namespace NClass.Core
       }
     }
 
-    void IModifiable.Clean()
+    public void Clean()
     {
       isDirty = false;
       //TODO: tagokat is tisztítani!
     }
 
-    void IProjectItem.Close()
+    public void Close()
     {
       OnClosing(EventArgs.Empty);
     }

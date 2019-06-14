@@ -17,28 +17,34 @@ using System;
 
 namespace NClass.DiagramEditor
 {
-	public interface IEditable
-	{
-		bool IsEmpty { get; }
+  public interface IEditable
+  {
+    bool IsEmpty { get; }
 
-		bool CanCutToClipboard { get; }
+    bool CanCutToClipboard { get; }
 
-		bool CanCopyToClipboard { get; }
+    bool CanCopyToClipboard { get; }
 
-		bool CanPasteFromClipboard { get; }
+    bool CanPasteFromClipboard { get; }
 
-		
-		event EventHandler ClipboardAvailabilityChanged;
+    bool CanUndo { get; }
 
-		
-		void Cut();
+    bool CanRedo { get; }
 
-		void Copy();
+    event EventHandler ClipboardAvailabilityChanged;
 
-		void Paste();
+    void Cut();
 
-		void SelectAll();
+    void Copy();
 
-		void DeleteSelectedElements();
-	}
+    void Paste();
+
+    void SelectAll();
+
+    void Undo();
+
+    void Redo();
+
+    void DeleteSelectedElements();
+  }
 }

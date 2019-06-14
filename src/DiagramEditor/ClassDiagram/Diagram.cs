@@ -29,7 +29,7 @@ using NClass.Translations;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
-  public class Diagram : Model, IDocument, IEditable, IPrintable
+  public sealed class Diagram : Model, IDocument, IEditable, IPrintable
   {
     private enum State
     {
@@ -82,23 +82,15 @@ namespace NClass.DiagramEditor.ClassDiagram
       SelectionPen.DashPattern = new float[] { DashSize, DashSize };
     }
 
-    protected Diagram()
+    private Diagram()
     {
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="language"/> is null.
-    /// </exception>
-    public Diagram(Language language) : base(language)
+    public Diagram(Language language) :
+      base(language)
     {
     }
 
-    /// <exception cref="ArgumentException">
-    /// <paramref name="name"/> cannot be empty string.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="language"/> is null.
-    /// </exception>
     public Diagram(string name, Language language) : base(name, language)
     {
     }
@@ -108,7 +100,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       get { return shapes; }
     }
 
-    protected internal ElementList<Shape> ShapeList
+    internal ElementList<Shape> ShapeList
     {
       get { return shapes; }
     }
@@ -118,7 +110,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       get { return connections; }
     }
 
-    protected internal ElementList<Connection> ConnectionList
+    internal ElementList<Connection> ConnectionList
     {
       get { return connections; }
     }
@@ -1285,23 +1277,23 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void AddShape(Shape shape)
     {
       shape.Diagram = this;
-      shape.Modified += new EventHandler(element_Modified);
-      shape.Activating += new EventHandler(element_Activating);
-      shape.Dragging += new MoveEventHandler(shape_Dragging);
-      shape.Resizing += new ResizeEventHandler(shape_Resizing);
-      shape.SelectionChanged += new EventHandler(shape_SelectionChanged);
+      shape.Modified += new EventHandler(Element_Modified);
+      shape.Activating += new EventHandler(Element_Activating);
+      shape.Dragging += new MoveEventHandler(Shape_Dragging);
+      shape.Resizing += new ResizeEventHandler(Shape_Resizing);
+      shape.SelectionChanged += new EventHandler(Shape_SelectionChanged);
       shapes.AddFirst(shape);
       RecalculateSize();
     }
 
-    private void element_Modified(object sender, EventArgs e)
+    private void Element_Modified(object sender, EventArgs e)
     {
       if (!RedrawSuspended)
         RequestRedrawIfNeeded();
       OnModified(EventArgs.Empty);
     }
 
-    private void element_Activating(object sender, EventArgs e)
+    private void Element_Activating(object sender, EventArgs e)
     {
       foreach (Shape shape in shapes)
       {
@@ -1316,7 +1308,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       ActiveElement = (DiagramElement)sender;
     }
 
-    private void shape_Dragging(object sender, MoveEventArgs e)
+    private void Shape_Dragging(object sender, MoveEventArgs e)
     {
       Size offset = e.Offset;
 
@@ -1374,7 +1366,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       RecalculateSize();
     }
 
-    private void shape_Resizing(object sender, ResizeEventArgs e)
+    private void Shape_Resizing(object sender, ResizeEventArgs e)
     {
       if (Settings.Default.UsePrecisionSnapping && Control.ModifierKeys != Keys.Shift)
       {
@@ -1447,11 +1439,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         OnStatusChanged(EventArgs.Empty);
       }
       shape.Diagram = null;
-      shape.Modified -= new EventHandler(element_Modified);
-      shape.Activating -= new EventHandler(element_Activating);
-      shape.Dragging -= new MoveEventHandler(shape_Dragging);
-      shape.Resizing -= new ResizeEventHandler(shape_Resizing);
-      shape.SelectionChanged -= new EventHandler(shape_SelectionChanged);
+      shape.Modified -= new EventHandler(Element_Modified);
+      shape.Activating -= new EventHandler(Element_Activating);
+      shape.Dragging -= new MoveEventHandler(Shape_Dragging);
+      shape.Resizing -= new ResizeEventHandler(Shape_Resizing);
+      shape.SelectionChanged -= new EventHandler(Shape_SelectionChanged);
       shapes.Remove(shape);
       RecalculateSize();
     }
@@ -1480,11 +1472,11 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void AddConnection(Connection connection)
     {
       connection.Diagram = this;
-      connection.Modified += new EventHandler(element_Modified);
-      connection.Activating += new EventHandler(element_Activating);
-      connection.SelectionChanged += new EventHandler(connection_SelectionChanged);
-      connection.RouteChanged += new EventHandler(connection_RouteChanged);
-      connection.BendPointMove += new BendPointEventHandler(connection_BendPointMove);
+      connection.Modified += new EventHandler(Element_Modified);
+      connection.Activating += new EventHandler(Element_Activating);
+      connection.SelectionChanged += new EventHandler(Connection_SelectionChanged);
+      connection.RouteChanged += new EventHandler(Connection_RouteChanged);
+      connection.BendPointMove += new BendPointEventHandler(Connection_BendPointMove);
       connections.AddFirst(connection);
       RecalculateSize();
     }
@@ -1499,16 +1491,16 @@ namespace NClass.DiagramEditor.ClassDiagram
         OnStatusChanged(EventArgs.Empty);
       }
       connection.Diagram = null;
-      connection.Modified -= new EventHandler(element_Modified);
-      connection.Activating += new EventHandler(element_Activating);
-      connection.SelectionChanged -= new EventHandler(connection_SelectionChanged);
-      connection.RouteChanged -= new EventHandler(connection_RouteChanged);
-      connection.BendPointMove -= new BendPointEventHandler(connection_BendPointMove);
+      connection.Modified -= new EventHandler(Element_Modified);
+      connection.Activating += new EventHandler(Element_Activating);
+      connection.SelectionChanged -= new EventHandler(Connection_SelectionChanged);
+      connection.RouteChanged -= new EventHandler(Connection_RouteChanged);
+      connection.BendPointMove -= new BendPointEventHandler(Connection_BendPointMove);
       connections.Remove(connection);
       RecalculateSize();
     }
 
-    private void shape_SelectionChanged(object sender, EventArgs e)
+    private void Shape_SelectionChanged(object sender, EventArgs e)
     {
       if (!selectioning)
       {
@@ -1530,7 +1522,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
     }
 
-    private void connection_SelectionChanged(object sender, EventArgs e)
+    private void Connection_SelectionChanged(object sender, EventArgs e)
     {
       if (!selectioning)
       {
@@ -1552,7 +1544,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
     }
 
-    private void connection_RouteChanged(object sender, EventArgs e)
+    private void Connection_RouteChanged(object sender, EventArgs e)
     {
       Connection connection = (Connection)sender;
       connection.ValidatePosition(DiagramPadding);
@@ -1560,7 +1552,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       RecalculateSize();
     }
 
-    private void connection_BendPointMove(object sender, BendPointEventArgs e)
+    private void Connection_BendPointMove(object sender, BendPointEventArgs e)
     {
       if (e.BendPoint.X < DiagramPadding)
         e.BendPoint.X = DiagramPadding;
@@ -1809,60 +1801,88 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
     }
 
-    protected virtual void OnOffsetChanged(EventArgs e)
+    private void OnOffsetChanged(EventArgs e)
     {
       if (OffsetChanged != null)
         OffsetChanged(this, e);
       UpdateWindowPosition();
     }
 
-    protected virtual void OnSizeChanged(EventArgs e)
+    private void OnSizeChanged(EventArgs e)
     {
       if (SizeChanged != null)
         SizeChanged(this, e);
     }
 
-    protected virtual void OnZoomChanged(EventArgs e)
+    private void OnZoomChanged(EventArgs e)
     {
       if (ZoomChanged != null)
         ZoomChanged(this, e);
       CloseWindows();
     }
 
-    protected virtual void OnStatusChanged(EventArgs e)
+    private void OnStatusChanged(EventArgs e)
     {
       if (StatusChanged != null)
         StatusChanged(this, e);
     }
 
-    protected virtual void OnSelectionChanged(EventArgs e)
+    private void OnSelectionChanged(EventArgs e)
     {
       if (SelectionChanged != null)
         SelectionChanged(this, e);
     }
 
-    protected virtual void OnNeedsRedraw(EventArgs e)
+    private void OnNeedsRedraw(EventArgs e)
     {
       if (NeedsRedraw != null)
         NeedsRedraw(this, e);
     }
 
-    protected virtual void OnClipboardAvailabilityChanged(EventArgs e)
+    private void OnClipboardAvailabilityChanged(EventArgs e)
     {
       if (ClipboardAvailabilityChanged != null)
         ClipboardAvailabilityChanged(this, e);
     }
 
-    protected virtual void OnShowingWindow(PopupWindowEventArgs e)
+    private void OnShowingWindow(PopupWindowEventArgs e)
     {
       if (ShowingWindow != null)
         ShowingWindow(this, e);
     }
 
-    protected virtual void OnHidingWindow(PopupWindowEventArgs e)
+    private void OnHidingWindow(PopupWindowEventArgs e)
     {
       if (HidingWindow != null)
         HidingWindow(this, e);
+    }
+
+    public bool CanUndo
+    {
+      get
+      {
+        // TODO   CanUndo
+        return IsDirty;
+      }
+    }
+
+    public bool CanRedo
+    {
+      get
+      {
+        // TODO   CanRedo
+        return true;
+      }
+    }
+
+    public void Undo()
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Redo()
+    {
+      throw new NotImplementedException();
     }
   }
 }
