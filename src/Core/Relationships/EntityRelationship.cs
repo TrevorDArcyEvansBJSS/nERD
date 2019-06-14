@@ -21,8 +21,39 @@ namespace NClass.Core
 {
   public sealed class EntityRelationship : TypeRelationship
   {
-    public MultiplicityType StartMultiplicity { get; set; }
-    public MultiplicityType EndMultiplicity { get; set; }
+    private MultiplicityType startMultiplicity;
+    private MultiplicityType endMultiplicity;
+
+    public MultiplicityType StartMultiplicity
+    {
+      get
+      {
+        return startMultiplicity;
+      }
+      set
+      {
+        if (startMultiplicity != value)
+        {
+          startMultiplicity = value;
+          Changed();
+        }
+      }
+    }
+    public MultiplicityType EndMultiplicity
+    {
+      get
+      {
+        return endMultiplicity;
+      }
+      set
+      {
+        if (endMultiplicity != value)
+        {
+          endMultiplicity = value;
+          Changed();
+        }
+      }
+    }
 
     internal EntityRelationship(TypeBase first, TypeBase second) :
       base(first, second)
