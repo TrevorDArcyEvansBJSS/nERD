@@ -18,31 +18,24 @@ using System.Xml;
 
 namespace NClass.Core
 {
-	public interface IProjectItem : IModifiable
-	{
-		event EventHandler Renamed;
-		event EventHandler Closing;
+  public interface IProjectItem : IModifiable
+  {
+    event EventHandler Renamed;
+    event EventHandler Closing;
 
-		string Name { get; }
+    string Name { get; }
 
-		Project Project { get; set; }
+    Project Project { get; set; }
 
-		bool IsUntitled { get; }
+    bool IsUntitled { get; }
 
+    void Close();
 
-		void Close();
+    void Serialize(XmlElement node);
 
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="node"/> is null.
-		/// </exception>+
-		void Serialize(XmlElement node);
-
-		/// <exception cref="InvalidDataException">
-		/// The serialized format is corrupt and could not be loaded.
-		/// </exception>
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="node"/> is null.
-		/// </exception>
-		void Deserialize(XmlElement node);
-	}
+    /// <exception cref="InvalidDataException">
+    /// The serialized format is corrupt and could not be loaded.
+    /// </exception>
+    void Deserialize(XmlElement node);
+  }
 }

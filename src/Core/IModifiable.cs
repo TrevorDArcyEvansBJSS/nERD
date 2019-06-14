@@ -17,12 +17,12 @@ using System;
 
 namespace NClass.Core
 {
-	public interface IModifiable
-	{
-		event EventHandler Modified;
+  public interface IModifiable
+  {
+    event EventHandler Modified;
 
-		bool IsDirty { get; }
+    bool IsDirty { get; }
 
-		void Clean();
-	}
+    void Clean();
+  }
 }
