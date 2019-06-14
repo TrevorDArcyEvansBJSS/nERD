@@ -26,6 +26,7 @@ using NClass.DiagramEditor.ClassDiagram.Connections;
 using NClass.DiagramEditor.ClassDiagram.ContextMenus;
 using NClass.DiagramEditor.ClassDiagram.Editors;
 using NClass.Translations;
+using System.Linq;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
@@ -1175,6 +1176,16 @@ namespace NClass.DiagramEditor.ClassDiagram
       {
         Copy();
       }
+      // Ctrl + Z
+      else if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
+      {
+        Undo();
+      }
+      // Ctrl + Y
+      else if (e.KeyCode == Keys.Y && e.Modifiers == Keys.Control)
+      {
+        Redo();
+      }
       // Ctrl + V
       else if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
       {
@@ -1861,8 +1872,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       get
       {
-        // TODO   CanUndo
-        return IsDirty;
+        return UndoModels.Any();
       }
     }
 
@@ -1877,12 +1887,33 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void Undo()
     {
-      throw new NotImplementedException();
+      if (!CanUndo)
+      {
+        return;
+      }
+
+      Reset();
+
+      var xmlElem = UndoModels.Pop();
+      Deserialize(xmlElem);
     }
 
     public void Redo()
     {
+      if (!CanRedo)
+      {
+        return;
+      }
+
       throw new NotImplementedException();
+    }
+
+    protected override void Reset()
+    {
+      base.Reset();
+
+      connections.Clear();
+      shapes.Clear();
     }
   }
 }

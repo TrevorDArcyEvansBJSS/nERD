@@ -18,6 +18,8 @@ namespace NClass.Core
     bool isDirty = false;
     bool loading = false;
 
+    protected Stack<XmlElement> UndoModels = new Stack<XmlElement>();
+
     public event EventHandler Modified;
     public event EventHandler Renamed;
     public event EventHandler Closing;
@@ -572,17 +574,7 @@ namespace NClass.Core
       }
     }
 
-    void IProjectItem.Serialize(XmlElement node)
-    {
-      Serialize(node);
-    }
-
-    void IProjectItem.Deserialize(XmlElement node)
-    {
-      Deserialize(node);
-    }
-
-    private void Serialize(XmlElement node)
+    public void Serialize(XmlElement node)
     {
       if (node == null)
         throw new ArgumentNullException("root");
@@ -604,10 +596,7 @@ namespace NClass.Core
     /// <exception cref="InvalidDataException">
     /// The save format is corrupt and could not be loaded.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
-    private void Deserialize(XmlElement node)
+    public void Deserialize(XmlElement node)
     {
       if (node == null)
         throw new ArgumentNullException("root");
@@ -642,9 +631,6 @@ namespace NClass.Core
 
     /// <exception cref="InvalidDataException">
     /// The save format is corrupt and could not be loaded.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="root"/> is null.
     /// </exception>
     private void LoadEntitites(XmlNode root)
     {
@@ -706,9 +692,6 @@ namespace NClass.Core
 
     /// <exception cref="InvalidDataException">
     /// The save format is corrupt and could not be loaded.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="root"/> is null.
     /// </exception>
     private void LoadRelationships(XmlNode root)
     {
@@ -879,7 +862,16 @@ namespace NClass.Core
     {
       isDirty = true;
       if (Modified != null)
+      {
         Modified(this, e);
+      }
+
+      if (!Loading)
+      {
+        var xmlElem = new XmlDocument().CreateElement("Undo");
+        Serialize(xmlElem);
+        UndoModels.Push(xmlElem);
+      }
     }
 
     protected virtual void OnRenamed(EventArgs e)
@@ -892,6 +884,12 @@ namespace NClass.Core
     {
       if (Closing != null)
         Closing(this, e);
+    }
+
+    protected virtual void Reset()
+    {
+      relationships.Clear();
+      entities.Clear();
     }
 
     public override string ToString()
