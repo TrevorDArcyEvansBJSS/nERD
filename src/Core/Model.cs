@@ -20,6 +20,7 @@ namespace NClass.Core
 
     protected Stack<XmlElement> UndoModels = new Stack<XmlElement>();
 
+    public event EventHandler PreModified;
     public event EventHandler Modified;
     public event EventHandler Renamed;
     public event EventHandler Closing;
@@ -65,6 +66,7 @@ namespace NClass.Core
       {
         if (name != value && value != null)
         {
+          OnPreModified(EventArgs.Empty);
           name = value;
           OnRenamed(EventArgs.Empty);
           OnModified(EventArgs.Empty);
@@ -130,6 +132,11 @@ namespace NClass.Core
       get { return relationships; }
     }
 
+    private void ElementPreChanged(object sender, EventArgs e)
+    {
+      OnPreModified(e);
+    }
+
     private void ElementChanged(object sender, EventArgs e)
     {
       OnModified(e);
@@ -137,7 +144,9 @@ namespace NClass.Core
 
     private void AddEntity(IEntity entity)
     {
+      OnEntityPreAdded(new EntityEventArgs(entity));
       entities.Add(entity);
+      entity.PreModified += new EventHandler(ElementPreChanged);
       entity.Modified += new EventHandler(ElementChanged);
       OnEntityAdded(new EntityEventArgs(entity));
     }
@@ -304,7 +313,9 @@ namespace NClass.Core
 
     private void AddRelationship(Relationship relationship)
     {
+      OnRelationPreAdded(new RelationshipEventArgs(relationship));
       relationships.Add(relationship);
+      relationship.PreModified += new EventHandler(ElementPreChanged);
       relationship.Modified += new EventHandler(ElementChanged);
       OnRelationAdded(new RelationshipEventArgs(relationship));
     }
@@ -356,9 +367,6 @@ namespace NClass.Core
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="derivedType"/> or <paramref name="baseType"/> is null.
-    /// </exception>
     public GeneralizationRelationship AddGeneralization(CompositeType derivedType,
       CompositeType baseType)
     {
@@ -390,9 +398,6 @@ namespace NClass.Core
 
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="implementer"/> or <paramref name="baseType"/> is null.
     /// </exception>
     public RealizationRelationship AddRealization(TypeBase implementer, InterfaceType baseType)
     {
@@ -540,8 +545,10 @@ namespace NClass.Core
 
     public void RemoveEntity(IEntity entity)
     {
+      OnEntityPreRemoved(new EntityEventArgs(entity));
       if (entities.Remove(entity))
       {
+        entity.PreModified -= new EventHandler(ElementPreChanged);
         entity.Modified -= new EventHandler(ElementChanged);
         RemoveRelationships(entity);
         OnEntityRemoved(new EntityEventArgs(entity));
@@ -555,7 +562,9 @@ namespace NClass.Core
         Relationship relationship = relationships[i];
         if (relationship.First == entity || relationship.Second == entity)
         {
+          OnRelationPreRemoved(new RelationshipEventArgs(relationship));
           relationship.Detach();
+          relationship.PreModified -= new EventHandler(ElementPreChanged);
           relationship.Modified -= new EventHandler(ElementChanged);
           relationships.RemoveAt(i--);
           OnRelationRemoved(new RelationshipEventArgs(relationship));
@@ -567,7 +576,9 @@ namespace NClass.Core
     {
       if (relationships.Contains(relationship))
       {
+        OnRelationPreRemoved(new RelationshipEventArgs(relationship));
         relationship.Detach();
+        relationship.PreModified -= new EventHandler(ElementPreChanged);
         relationship.Modified -= new EventHandler(ElementChanged);
         relationships.Remove(relationship);
         OnRelationRemoved(new RelationshipEventArgs(relationship));
@@ -817,11 +828,21 @@ namespace NClass.Core
       root.AppendChild(relationsChild);
     }
 
+    protected virtual void OnEntityPreAdded(EntityEventArgs e)
+    {
+      OnPreModified(EventArgs.Empty);
+    }
+
     protected virtual void OnEntityAdded(EntityEventArgs e)
     {
       if (EntityAdded != null)
         EntityAdded(this, e);
       OnModified(EventArgs.Empty);
+    }
+
+    protected virtual void OnEntityPreRemoved(EntityEventArgs e)
+    {
+      OnPreModified(EventArgs.Empty);
     }
 
     protected virtual void OnEntityRemoved(EntityEventArgs e)
@@ -831,11 +852,21 @@ namespace NClass.Core
       OnModified(EventArgs.Empty);
     }
 
+    protected virtual void OnRelationPreAdded(RelationshipEventArgs e)
+    {
+      OnPreModified(EventArgs.Empty);
+    }
+
     protected virtual void OnRelationAdded(RelationshipEventArgs e)
     {
       if (RelationAdded != null)
         RelationAdded(this, e);
       OnModified(EventArgs.Empty);
+    }
+
+    protected virtual void OnRelationPreRemoved(RelationshipEventArgs e)
+    {
+      OnPreModified(EventArgs.Empty);
     }
 
     protected virtual void OnRelationRemoved(RelationshipEventArgs e)
@@ -858,12 +889,11 @@ namespace NClass.Core
       OnModified(EventArgs.Empty);
     }
 
-    protected virtual void OnModified(EventArgs e)
+    protected virtual void OnPreModified(EventArgs e)
     {
-      isDirty = true;
-      if (Modified != null)
+      if (PreModified != null)
       {
-        Modified(this, e);
+        PreModified(this, e);
       }
 
       if (!Loading)
@@ -871,6 +901,15 @@ namespace NClass.Core
         var xmlElem = new XmlDocument().CreateElement("Undo");
         Serialize(xmlElem);
         UndoModels.Push(xmlElem);
+      }
+    }
+
+    protected virtual void OnModified(EventArgs e)
+    {
+      isDirty = true;
+      if (Modified != null)
+      {
+        Modified(this, e);
       }
     }
 

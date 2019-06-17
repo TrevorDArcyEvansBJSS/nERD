@@ -34,6 +34,7 @@ namespace NClass.Core
       {
         if (startMultiplicity != value)
         {
+          PreChanged();
           startMultiplicity = value;
           Changed();
         }
@@ -49,6 +50,7 @@ namespace NClass.Core
       {
         if (endMultiplicity != value)
         {
+          PreChanged();
           endMultiplicity = value;
           Changed();
         }
@@ -87,12 +89,12 @@ namespace NClass.Core
     {
       base.Deserialize(node);
 
-      RaiseChangedEvent = false;
+      RaisePreChangedEvent = RaiseChangedEvent = false;
 
       StartMultiplicity = (MultiplicityType)Enum.Parse(typeof(MultiplicityType), node["StartMultiplicity"].InnerText);
       EndMultiplicity = (MultiplicityType)Enum.Parse(typeof(MultiplicityType), node["EndMultiplicity"].InnerText);
 
-      RaiseChangedEvent = true;
+      RaisePreChangedEvent = RaiseChangedEvent = true;
     }
 
     public EntityRelationship Clone(TypeBase first, TypeBase second)

@@ -23,7 +23,9 @@ namespace NClass.Core
     bool isDirty = false;
     bool initializing = false;
     int dontRaiseRequestCount = 0;
+    int dontRaisePreRequestCount = 0;
 
+    public event EventHandler PreModified;
     public event EventHandler Modified;
 
     public bool IsDirty
@@ -41,6 +43,24 @@ namespace NClass.Core
     {
       get { return initializing; }
       set { initializing = value; }
+    }
+
+    protected bool RaisePreChangedEvent
+    {
+      get
+      {
+        return (dontRaisePreRequestCount == 0);
+      }
+      set
+      {
+        if (!value)
+          dontRaisePreRequestCount++;
+        else if (dontRaisePreRequestCount > 0)
+          dontRaisePreRequestCount--;
+
+        if (RaisePreChangedEvent)
+          OnPreModified(EventArgs.Empty);
+      }
     }
 
     protected bool RaiseChangedEvent
@@ -61,6 +81,17 @@ namespace NClass.Core
       }
     }
 
+    protected void PreChanged()
+    {
+      if (!Initializing)
+      {
+        if (RaisePreChangedEvent)
+        {
+          OnPreModified(EventArgs.Empty);
+        }
+      }
+    }
+
     protected void Changed()
     {
       if (!Initializing)
@@ -70,6 +101,12 @@ namespace NClass.Core
         else
           isDirty = true;
       }
+    }
+
+    private void OnPreModified(EventArgs e)
+    {
+      if (PreModified != null)
+        PreModified(this, e);
     }
 
     private void OnModified(EventArgs e)

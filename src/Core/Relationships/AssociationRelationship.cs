@@ -69,6 +69,7 @@ namespace NClass.Core
       {
         if (direction != value)
         {
+          PreChanged();
           direction = value;
           Changed();
         }
@@ -85,6 +86,7 @@ namespace NClass.Core
       {
         if (associationType != value)
         {
+          PreChanged();
           associationType = value;
           Changed();
         }
@@ -120,6 +122,7 @@ namespace NClass.Core
 
         if (startRole != value)
         {
+          PreChanged();
           startRole = value;
           Changed();
         }
@@ -139,6 +142,7 @@ namespace NClass.Core
 
         if (endRole != value)
         {
+          PreChanged();
           endRole = value;
           Changed();
         }
@@ -158,6 +162,7 @@ namespace NClass.Core
 
         if (startMultiplicity != value)
         {
+          PreChanged();
           startMultiplicity = value;
           Changed();
         }
@@ -177,6 +182,7 @@ namespace NClass.Core
 
         if (endMultiplicity != value)
         {
+          PreChanged();
           endMultiplicity = value;
           Changed();
         }
@@ -185,6 +191,8 @@ namespace NClass.Core
 
     public void Reverse()
     {
+      PreChanged();
+
       //TODO: ne az õsosztályon kereszül érje el, egyszerûbb lenne saját taggal
       IEntity first = First;
       First = Second;
@@ -264,7 +272,7 @@ namespace NClass.Core
 
       XmlElement child = node["Direction"];
 
-      RaiseChangedEvent = false;
+      RaisePreChangedEvent = RaiseChangedEvent = false;
       if (child != null)
       {
         // Old file format
@@ -318,7 +326,7 @@ namespace NClass.Core
       {
         // Wrong format
       }
-      RaiseChangedEvent = true;
+      RaisePreChangedEvent = RaiseChangedEvent = true;
     }
 
     private void OnReversed(EventArgs e)

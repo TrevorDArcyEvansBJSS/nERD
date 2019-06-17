@@ -82,6 +82,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       endShape.Move += ShapeMoving;
       endShape.Resize += EndShapeResizing;
 
+      relationship.PreModified += delegate { OnPreModified(EventArgs.Empty); };
       relationship.Modified += delegate { OnModified(EventArgs.Empty); };
 
       relationship.Detaching += delegate
@@ -314,6 +315,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     private void ShapeMoving(object sender, MoveEventArgs e)
     {
+      OnPreModified(EventArgs.Empty);
       Reroute();
       OnRouteChanged(EventArgs.Empty);
       OnModified(EventArgs.Empty);
@@ -321,6 +323,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     private void StartShapeResizing(object sender, ResizeEventArgs e)
     {
+      OnPreModified(EventArgs.Empty);
+
       foreach (BendPoint bendPoint in bendPoints)
       {
         if (!bendPoint.RelativeToStartShape)
@@ -335,6 +339,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     private void EndShapeResizing(object sender, ResizeEventArgs e)
     {
+      OnPreModified(EventArgs.Empty);
+
       foreach (BendPoint bendPoint in bendPoints.GetReversedList())
       {
         if (bendPoint.RelativeToStartShape)
@@ -351,6 +357,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     {
       if (bendPoints.Count > 0)
       {
+        OnPreModified(EventArgs.Empty);
         ClearBendPoints();
         Reroute();
         OnRouteChanged(EventArgs.Empty);
@@ -1350,6 +1357,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       {
         if (point.AutoPosition)
         {
+          OnPreModified(EventArgs.Empty);
           point.AutoPosition = false;
           Reroute();
           OnRouteChanged(EventArgs.Empty);
@@ -1371,6 +1379,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       {
         if (!point.AutoPosition)
         {
+          OnPreModified(EventArgs.Empty);
           if (point == FirstBendPoint && !bendPoints.SecondValue.RelativeToStartShape ||
             point == LastBendPoint && bendPoints.SecondLastValue.RelativeToStartShape)
           {
@@ -1542,6 +1551,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
         if (selectedBendPoint.Location != newLocation)
         {
+          OnPreModified(EventArgs.Empty);
+
           if (!copied && Control.ModifierKeys == Keys.Control)
           {
             BendPoint newPoint = (BendPoint)selectedBendPoint.Clone();

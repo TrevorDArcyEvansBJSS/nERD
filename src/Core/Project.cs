@@ -32,6 +32,7 @@ namespace NClass.Core
     bool isReadOnly = false;
     bool loading = false;
 
+    public event EventHandler PreModified;
     public event EventHandler Modified;
     public event EventHandler Renamed;
     public event EventHandler FileStateChanged;
@@ -63,6 +64,7 @@ namespace NClass.Core
       {
         if (name != value && value != null && value.Length > 0)
         {
+          OnPreModified(EventArgs.Empty);
           name = value;
           isUntitled = false;
           OnRenamed(EventArgs.Empty);
@@ -180,8 +182,10 @@ namespace NClass.Core
       if (items.Contains(item))
         throw new ArgumentException("The project already contains this item.");
 
+      OnPreModified(EventArgs.Empty);
       item.Project = this;
-      item.Modified += new EventHandler(item_Modified);
+      item.PreModified += new EventHandler(Item_PreModified);
+      item.Modified += new EventHandler(Item_Modified);
       items.Add(item);
 
       OnItemAdded(new ProjectItemEventArgs(item));
@@ -192,14 +196,21 @@ namespace NClass.Core
     {
       if (items.Remove(item))
       {
+        OnPreModified(EventArgs.Empty);
         item.Close();
-        item.Modified -= new EventHandler(item_Modified);
+        item.PreModified -= new EventHandler(Item_PreModified);
+        item.Modified -= new EventHandler(Item_Modified);
         OnItemRemoved(new ProjectItemEventArgs(item));
         OnModified(EventArgs.Empty);
       }
     }
 
-    private void item_Modified(object sender, EventArgs e)
+    private void Item_PreModified(object sender, EventArgs e)
+    {
+      OnPreModified(EventArgs.Empty);
+    }
+
+    private void Item_Modified(object sender, EventArgs e)
     {
       isDirty = true;
       OnModified(EventArgs.Empty);
@@ -411,6 +422,15 @@ namespace NClass.Core
         {
           throw new InvalidDataException("Invalid type or assembly of ProjectItem.", ex);
         }
+      }
+    }
+
+    private void OnPreModified(EventArgs e)
+    {
+      if (!loading)
+      {
+        if (PreModified != null)
+          PreModified(this, e);
       }
     }
 

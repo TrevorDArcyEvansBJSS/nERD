@@ -13,20 +13,19 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Xml;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using NClass.Core;
-using NClass.DiagramEditor.ClassDiagram.Shapes;
-using NClass.DiagramEditor.ClassDiagram.Dialogs;
 using NClass.DiagramEditor.ClassDiagram.Connections;
 using NClass.DiagramEditor.ClassDiagram.ContextMenus;
-using NClass.DiagramEditor.ClassDiagram.Editors;
+using NClass.DiagramEditor.ClassDiagram.Dialogs;
+using NClass.DiagramEditor.ClassDiagram.Shapes;
 using NClass.Translations;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
@@ -1288,6 +1287,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void AddShape(Shape shape)
     {
       shape.Diagram = this;
+      shape.PreModified += new EventHandler(Element_PreModified);
       shape.Modified += new EventHandler(Element_Modified);
       shape.Activating += new EventHandler(Element_Activating);
       shape.Dragging += new MoveEventHandler(Shape_Dragging);
@@ -1295,6 +1295,11 @@ namespace NClass.DiagramEditor.ClassDiagram
       shape.SelectionChanged += new EventHandler(Shape_SelectionChanged);
       shapes.AddFirst(shape);
       RecalculateSize();
+    }
+
+    private void Element_PreModified(object sender, EventArgs e)
+    {
+      OnPreModified(EventArgs.Empty);
     }
 
     private void Element_Modified(object sender, EventArgs e)
@@ -1450,6 +1455,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         OnStatusChanged(EventArgs.Empty);
       }
       shape.Diagram = null;
+      shape.PreModified -= new EventHandler(Element_PreModified);
       shape.Modified -= new EventHandler(Element_Modified);
       shape.Activating -= new EventHandler(Element_Activating);
       shape.Dragging -= new MoveEventHandler(Shape_Dragging);
@@ -1483,6 +1489,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void AddConnection(Connection connection)
     {
       connection.Diagram = this;
+      connection.PreModified += new EventHandler(Element_PreModified);
       connection.Modified += new EventHandler(Element_Modified);
       connection.Activating += new EventHandler(Element_Activating);
       connection.SelectionChanged += new EventHandler(Connection_SelectionChanged);
@@ -1502,6 +1509,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         OnStatusChanged(EventArgs.Empty);
       }
       connection.Diagram = null;
+      connection.PreModified -= new EventHandler(Element_PreModified);
       connection.Modified -= new EventHandler(Element_Modified);
       connection.Activating += new EventHandler(Element_Activating);
       connection.SelectionChanged -= new EventHandler(Connection_SelectionChanged);
