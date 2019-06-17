@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NClass.GUI</RootNamespace>
-    <AssemblyName>NClass</AssemblyName>
+    <AssemblyName>nERD</AssemblyName>
     <StartupObject>NClass.GUI.Program</StartupObject>
     <ApplicationIcon>
     </ApplicationIcon>
