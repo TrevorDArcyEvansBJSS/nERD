@@ -545,12 +545,13 @@ namespace NClass.Core
 
     public void RemoveEntity(IEntity entity)
     {
+      RemoveRelationships(entity);
+
       OnEntityPreRemoved(new EntityEventArgs(entity));
       if (entities.Remove(entity))
       {
         entity.PreModified -= new EventHandler(ElementPreChanged);
         entity.Modified -= new EventHandler(ElementChanged);
-        RemoveRelationships(entity);
         OnEntityRemoved(new EntityEventArgs(entity));
       }
     }
