@@ -795,7 +795,7 @@ namespace NClass.GUI
       // 
       this.mnuAbout.Name = "mnuAbout";
       this.mnuAbout.Size = new System.Drawing.Size(174, 22);
-      this.mnuAbout.Text = "&About NClass...";
+      this.mnuAbout.Text = "&About nERD...";
       this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
       // 
       // standardToolStrip
@@ -1069,7 +1069,7 @@ namespace NClass.GUI
       this.MinimumSize = new System.Drawing.Size(500, 300);
       this.Name = "MainForm";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-      this.Text = "NClass";
+      this.Text = "nERD";
       this.Load += new System.EventHandler(this.MainForm_Load);
       this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
       this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);

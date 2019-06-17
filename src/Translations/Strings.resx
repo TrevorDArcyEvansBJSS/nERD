@@ -527,7 +527,7 @@
   </data>
   <data name="CheckingForUpdates" xml:space="preserve">
     <value>Checking for Updates</value>
-    <comment>MessageBox caption then checking for new versions of NClass</comment>
+    <comment>MessageBox caption then checking for new versions of nERD</comment>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
@@ -652,7 +652,7 @@
     <comment>The type of a class member</comment>
   </data>
   <data name="AboutNClass" xml:space="preserve">
-    <value>About NClass</value>
+    <value>About nERD</value>
     <comment>Caption text of the About dialog</comment>
   </data>
   <data name="AddNewStructure" xml:space="preserve">
@@ -686,7 +686,7 @@
     <value>&amp;Enum</value>
   </data>
   <data name="MenuAbout" xml:space="preserve">
-    <value>&amp;About NClass...</value>
+    <value>&amp;About nERD...</value>
   </data>
   <data name="ErrorCannotSaveFile" xml:space="preserve">
     <value>Cannot save file with unspecified path.</value>
@@ -972,7 +972,7 @@ A crash log and recovery files have been created in the Application Data directo
     <value>Zoom &amp;Out</value>
   </data>
   <data name="NClassProjectFiles" xml:space="preserve">
-    <value>NClass Project Files</value>
+    <value>nERD Project Files</value>
   </data>
   <data name="ErrorBlankFilename" xml:space="preserve">
     <value>File name cannot be empty.</value>

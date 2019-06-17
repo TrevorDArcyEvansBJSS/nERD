@@ -68,7 +68,7 @@ namespace NClass.GUI
 
     public static string GetVersionString()
     {
-      return string.Format($"NClass {CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Revision}");
+      return string.Format($"nERD {CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Revision}");
     }
 
     private static void LoadFiles(string[] args)

@@ -167,7 +167,7 @@
       this.Name = "AboutDialog";
       this.ShowInTaskbar = false;
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-      this.Text = "About NClass";
+      this.Text = "About nERD";
       ((System.ComponentModel.ISupportInitialize)(this.picEmail)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.picHomepage)).EndInit();
       this.ResumeLayout(false);

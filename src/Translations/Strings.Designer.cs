@@ -61,7 +61,7 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About NClass.
+        ///   Looks up a localized string similar to About nERD.
         /// </summary>
         public static string AboutNClass {
             get {
@@ -1441,7 +1441,7 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;About NClass....
+        ///   Looks up a localized string similar to &amp;About nERD....
         /// </summary>
         public static string MenuAbout {
             get {

@@ -300,13 +300,13 @@ namespace NClass.GUI
         string projectName = Workspace.Default.ActiveProject.Name;
 
         if (Workspace.Default.ActiveProject.IsDirty)
-          this.Text = projectName + "* - NClass";
+          this.Text = projectName + "* - nERD";
         else
-          this.Text = projectName + " - NClass";
+          this.Text = projectName + " - nERD";
       }
       else
       {
-        this.Text = "NClass";
+        this.Text = "nERD";
       }
     }
 
