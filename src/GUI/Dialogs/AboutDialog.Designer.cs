@@ -28,6 +28,7 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutDialog));
       this.lblTitle = new System.Windows.Forms.Label();
       this.btnClose = new System.Windows.Forms.Button();
       this.lblCopyright = new System.Windows.Forms.Label();
@@ -37,8 +38,10 @@
       this.picHomepage = new System.Windows.Forms.PictureBox();
       this.lblStatus = new System.Windows.Forms.Label();
       this.lblTranslator = new System.Windows.Forms.Label();
+      this.picnERD = new System.Windows.Forms.PictureBox();
       ((System.ComponentModel.ISupportInitialize)(this.picEmail)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.picHomepage)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picnERD)).BeginInit();
       this.SuspendLayout();
       // 
       // lblTitle
@@ -49,7 +52,7 @@
       this.lblTitle.Name = "lblTitle";
       this.lblTitle.Size = new System.Drawing.Size(360, 68);
       this.lblTitle.TabIndex = 8;
-      this.lblTitle.Text = "NClass vX.X";
+      this.lblTitle.Text = "nERD vX.X";
       this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // btnClose
@@ -154,6 +157,17 @@
       this.lblTranslator.TabIndex = 13;
       this.lblTranslator.Text = "Translator";
       // 
+      // picnERD
+      // 
+      this.picnERD.Image = ((System.Drawing.Image)(resources.GetObject("picnERD.Image")));
+      this.picnERD.Location = new System.Drawing.Point(21, 33);
+      this.picnERD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+      this.picnERD.Name = "picnERD";
+      this.picnERD.Size = new System.Drawing.Size(48, 49);
+      this.picnERD.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+      this.picnERD.TabIndex = 14;
+      this.picnERD.TabStop = false;
+      // 
       // AboutDialog
       // 
       this.AcceptButton = this.btnClose;
@@ -161,6 +175,7 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.CancelButton = this.btnClose;
       this.ClientSize = new System.Drawing.Size(556, 335);
+      this.Controls.Add(this.picnERD);
       this.Controls.Add(this.lblTranslator);
       this.Controls.Add(this.lblStatus);
       this.Controls.Add(this.picHomepage);
@@ -180,6 +195,7 @@
       this.Text = "About nERD";
       ((System.ComponentModel.ISupportInitialize)(this.picEmail)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.picHomepage)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.picnERD)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -196,6 +212,6 @@
     private System.Windows.Forms.PictureBox picHomepage;
     private System.Windows.Forms.Label lblStatus;
     private System.Windows.Forms.Label lblTranslator;
-
+    private System.Windows.Forms.PictureBox picnERD;
   }
 }

@@ -117,4 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="picnERD.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAW
+        JQAAFiUBSVIk8AAAA+ZJREFUWEfVl9tTGmcYh/3neteZpldtOu1Mk4vm0JhJmmisUTnI+bAnlKMYBA9j
+        ggFBnRQ1IB5RiK5RY5WGhFRJSauJNml70fl1WRBYwWpTpNPfzDMDA+/3Pry7++1S879Oo0iMayISubfV
+        TZNYjLO6FXxKxFEnoaorIZJKcMW0gq8t8SzmOBpldHUkpDIpRK41SHoTBVxZpKpTnoRc0Qrj/Q1YfMmy
+        mDlUeuZ0JFQqOdzjCXjDqTwenu0sEwVI2lBZCauZwl3vGKbZXwRMHkFw4QVamm9UWMJCYzQ4i7XEHs9q
+        hqelsE9egtDLK9Nco62HxaTJL2az0piejWA7/Y5n6xBPkz+DIhWC5pLGq+8nQ9ANCK9bMBIywWrR5xfp
+        sDKIRmN4vfcHdotIpV+DppSCZlaNGCmHA3ekjf9MQkfewANWgam4FYvJexid7jokQWNp8RHe/f4nz87u
+        GxhoYXMbIccrjwdppxMvKRKdzXUnk9DQ13A/dhOBVWVeYH07gNBcPydB5Bex2xisPGaxv7+PNkYlbM5N
+        YndsDDs+X15gq7kJ9oZjDoeavIy+yDl4lupKBBKvpjA5PwCbtbD3220GaNUtgkU7GDXezMxgLxgsEUjW
+        XoL95uXyEkriArqmPkZf9Dwn8E1ZgR93Y5iO+mArmkRxOgwavI3F8DYSOVLg+edncef6BWG9WHoRtokP
+        0DV75liB1N4yQpNuDLidgkXadFL8uryM31j2WIHkRx/CWHuuUD/oc0Jv/6JUYDMj0C8QeJae5852ackE
+        Oi0U2MBwqYDLVSIQ/eQMGGm9cI2MBNV5vkiAuwoOCfyQmgFFiQWFNm6XzL3MSgwN/q3AwpefgWk91Pwg
+        Pn8PGMelsgLrL8a4TUYkKDS1UQiOBmE1FW5AdjOJJa+7rED06kXQrbfKNz9IRsLYdT0nYOEF2MQQSFJ4
+        thsZAom1n/BsYwehB2GhhFGPWH9PXiBFU1i83QBGfsINyefrhbW7kReY2+wFQTQLCttpApvsNuKr6Ty8
+        RNHhyEjMO2y8AKtVgVbcPlnzg/j9fbC5JNDphYUGUofHked4Et3KEivwnf8hLMbCk1FHmxZ+nRyMSvgD
+        3ju0XouFhxuIhRN5Hk0IGb4XgLm9MAmvu7tSzXUIeVcR9q8XGPq+LG7nCDInaK60MqHVeox0sxjpOY5l
+        DHROQSmv0NiLQ8g1uGuc5Zg7Ehc9CrW8dKOqWDRiNRyysBDFBI9ZNgylWHi5nkoUTUq03xrnMWZoGAdT
+        PwgV98ie+8rpR/atAsSVAI+21gMl92cl91H1Iq2XQf6VG4qWKoz9qKhlrf9d83+fmpq/AJM1xRsk3r2x
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
 </root>
