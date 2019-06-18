@@ -57,7 +57,7 @@ namespace NClass.Core
       }
     }
 
-    internal EntityRelationship(TypeBase first, TypeBase second) :
+    internal EntityRelationship(ClassType first, ClassType second) :
       base(first, second)
     {
       Attach();
@@ -72,6 +72,7 @@ namespace NClass.Core
     {
       get { return true; }
     }
+
     protected internal override void Serialize(XmlElement node)
     {
       base.Serialize(node);
@@ -97,7 +98,7 @@ namespace NClass.Core
       RaisePreChangedEvent = RaiseChangedEvent = true;
     }
 
-    public EntityRelationship Clone(TypeBase first, TypeBase second)
+    public EntityRelationship Clone(ClassType first, ClassType second)
     {
       EntityRelationship dependency = new EntityRelationship(first, second);
       dependency.CopyFrom(this);

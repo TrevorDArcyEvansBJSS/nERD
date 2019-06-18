@@ -455,7 +455,7 @@ namespace NClass.Core
       }
     }
 
-    public EntityRelationship AddEntityRelationship(TypeBase first, TypeBase second)
+    public EntityRelationship AddEntityRelationship(ClassType first, ClassType second)
     {
       var dependency = new EntityRelationship(first, second);
 
@@ -764,7 +764,7 @@ namespace NClass.Core
               break;
 
             case "EntityRelationship":
-              relationship = AddEntityRelationship(first as TypeBase, second as TypeBase);
+              relationship = AddEntityRelationship(first as ClassType, second as ClassType);
               break;
 
             default:

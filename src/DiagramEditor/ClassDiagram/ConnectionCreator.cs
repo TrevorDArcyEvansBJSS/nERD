@@ -317,12 +317,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateEntityRelationship()
     {
-      TypeShape shape1 = first as TypeShape;
-      TypeShape shape2 = second as TypeShape;
+      var shape1 = first as ClassShape;
+      var shape2 = second as ClassShape;
 
       if (shape1 != null && shape2 != null)
       {
-        diagram.AddEntityRelationship(shape1.TypeBase, shape2.TypeBase);
+        diagram.AddEntityRelationship(shape1.ClassType, shape2.ClassType);
       }
       else
       {
