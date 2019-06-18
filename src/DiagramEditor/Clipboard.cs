@@ -14,39 +14,35 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Collections.Generic;
 
 namespace NClass.DiagramEditor
 {
-	public static class Clipboard
-	{
-		static IClipboardItem item = null;
+  public static class Clipboard
+  {
+    static IClipboardItem item = null;
 
-		public static IClipboardItem Item
-		{
-			get { return Clipboard.item; }
-			set { Clipboard.item = value; }
-		}
+    public static IClipboardItem Item
+    {
+      get { return Clipboard.item; }
+      set { Clipboard.item = value; }
+    }
 
-		public static bool IsEmpty
-		{
-			get { return (item == null); }
-		}
+    public static bool IsEmpty
+    {
+      get { return (item == null); }
+    }
 
-		public static void Clear()
-		{
-			item = null;
-		}
+    public static void Clear()
+    {
+      item = null;
+    }
 
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="document"/> is null.
-		/// </exception>
-		public static void Paste(IDocument document)
-		{
-			if (document == null)
-				throw new ArgumentNullException("document");
+    public static void Paste(IDocument document)
+    {
+      if (document == null)
+        throw new ArgumentNullException("document");
 
-			item.Paste(document);
-		}
-	}
+      item.Paste(document);
+    }
+  }
 }

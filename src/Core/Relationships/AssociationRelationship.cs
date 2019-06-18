@@ -29,19 +29,12 @@ namespace NClass.Core
 
     public event EventHandler Reversed;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> or <paramref name="second"/> is null.
-    /// </exception>
     internal AssociationRelationship(TypeBase first, TypeBase second)
       : base(first, second)
     {
       Attach();
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> is null.-or-
-    /// <paramref name="second"/> is null.
-    /// </exception>
     internal AssociationRelationship(TypeBase first, TypeBase second, AssociationType type)
       : base(first, second)
     {
@@ -222,9 +215,6 @@ namespace NClass.Core
       return association;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     protected internal override void Serialize(XmlElement node)
     {
       base.Serialize(node);
@@ -263,9 +253,6 @@ namespace NClass.Core
       }
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     protected internal override void Deserialize(XmlElement node)
     {
       base.Deserialize(node);

@@ -230,9 +230,6 @@ namespace NClass.Core
       Deserialize(node);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     protected internal virtual void Serialize(XmlElement node)
     {
       if (node == null)
@@ -256,9 +253,6 @@ namespace NClass.Core
     /// </exception>
     /// <exception cref="InvalidOperationException">
     /// The XML document is corrupt.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
     /// </exception>
     protected internal virtual void Deserialize(XmlElement node)
     {

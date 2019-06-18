@@ -35,9 +35,6 @@ namespace NClass.Java
 
     static Regex fieldRegex = new Regex(FieldPattern, RegexOptions.ExplicitCapture);
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
-    /// </exception>
     internal JavaField(CompositeType parent) : this("newField", parent)
     {
     }
@@ -47,9 +44,6 @@ namespace NClass.Java
     /// </exception>
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
     /// </exception>
     internal JavaField(string name, CompositeType parent) : base(name, parent)
     {

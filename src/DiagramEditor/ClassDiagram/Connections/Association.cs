@@ -13,15 +13,15 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram.ContextMenus;
+using NClass.DiagramEditor.ClassDiagram.Dialogs;
+using NClass.DiagramEditor.ClassDiagram.Shapes;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using NClass.Core;
-using NClass.DiagramEditor.ClassDiagram.Shapes;
-using NClass.DiagramEditor.ClassDiagram.ContextMenus;
-using NClass.DiagramEditor.ClassDiagram.Dialogs;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
@@ -49,11 +49,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       linePen.LineJoin = LineJoin.MiterClipped;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="association"/> is null.-or-
-    /// <paramref name="startShape"/> is null.-or-
-    /// <paramref name="endShape"/> is null.
-    /// </exception>
     public Association(AssociationRelationship association, Shape startShape, Shape endShape)
       : base(association, startShape, endShape)
     {

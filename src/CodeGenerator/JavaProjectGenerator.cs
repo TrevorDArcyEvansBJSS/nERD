@@ -13,36 +13,29 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.IO;
-using System.Collections.Generic;
 using NClass.Core;
-using NClass.CSharp;
 
 namespace NClass.CodeGenerator
 {
-	internal sealed class JavaProjectGenerator : ProjectGenerator
-	{
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="model"/> is null.
-		/// </exception>
-		public JavaProjectGenerator(Model model) : base(model)
-		{
-		}
+  internal sealed class JavaProjectGenerator : ProjectGenerator
+  {
+    public JavaProjectGenerator(Model model) : base(model)
+    {
+    }
 
-		public override string RelativeProjectFileName
-		{
-			get { return null; }
-		}
+    public override string RelativeProjectFileName
+    {
+      get { return null; }
+    }
 
-		protected override SourceFileGenerator CreateSourceFileGenerator(TypeBase type)
-		{
-			return new JavaSourceFileGenerator(type, RootNamespace);
-		}
+    protected override SourceFileGenerator CreateSourceFileGenerator(TypeBase type)
+    {
+      return new JavaSourceFileGenerator(type, RootNamespace);
+    }
 
-		protected override bool GenerateProjectFiles(string location)
-		{
-			return true;
-		}
-	}
+    protected override bool GenerateProjectFiles(string location)
+    {
+      return true;
+    }
+  }
 }

@@ -32,9 +32,6 @@ namespace NClass.Java
 
     static Regex methodRegex = new Regex(MethodPattern, RegexOptions.ExplicitCapture);
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
-    /// </exception>
     internal JavaMethod(CompositeType parent) : this("newMethod", parent)
     {
     }
@@ -44,9 +41,6 @@ namespace NClass.Java
     /// </exception>
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
     /// </exception>
     internal JavaMethod(string name, CompositeType parent) : base(name, parent)
     {

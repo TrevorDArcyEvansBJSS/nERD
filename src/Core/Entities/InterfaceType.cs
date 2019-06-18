@@ -13,9 +13,9 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
 using System.Collections.Generic;
-using NClass.Translations;
 
 namespace NClass.Core
 {
@@ -113,9 +113,6 @@ namespace NClass.Core
     /// The language of <paramref name="_base"/> does not equal.-or-
     /// <paramref name="_base"/> is earlier added base.-or-
     /// <paramref name="_base"/> is descendant of the interface.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="_base"/> is null.
     /// </exception>
     internal void AddBase(InterfaceType _base)
     {

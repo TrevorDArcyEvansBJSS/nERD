@@ -15,7 +15,6 @@
 
 using NClass.Core;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
-using System;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
@@ -23,11 +22,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
   {
     CommentRelationship relationship;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="relationship"/> is null.-or-
-    /// <paramref name="startShape"/> is null.-or-
-    /// <paramref name="endShape"/> is null.
-    /// </exception>
     public CommentConnection(CommentRelationship relationship, Shape startShape, Shape endShape)
       : base(relationship, startShape, endShape)
     {

@@ -13,13 +13,13 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.Translations;
 using System;
-using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using NClass.Core;
-using NClass.Translations;
+using System.Xml.Serialization;
 
 namespace NClass.CSharp
 {
@@ -413,10 +413,6 @@ namespace NClass.CSharp
     /// <exception cref="ArgumentException">
     /// The language does not support explicit interface implementation.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="operation"/> is null.-or-
-    /// <paramref name="newParent"/> is null.
-    /// </exception>
     protected override Operation Implement(Operation operation, CompositeType newParent, bool explicitly)
     {
       if (newParent == null)
@@ -441,9 +437,6 @@ namespace NClass.CSharp
 
     /// <exception cref="ArgumentException">
     /// <paramref name="operation"/> cannot be overridden.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="operation"/> is null.
     /// </exception>
     protected override Operation Override(Operation operation, CompositeType newParent)
     {

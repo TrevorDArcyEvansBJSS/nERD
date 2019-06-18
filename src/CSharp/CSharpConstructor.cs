@@ -13,11 +13,11 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.Translations;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using NClass.Core;
-using NClass.Translations;
 
 namespace NClass.CSharp
 {
@@ -29,14 +29,10 @@ namespace NClass.CSharp
       @"(?<name>" + CSharpLanguage.NamePattern + ")" +
       @"\((?(static)|(?<args>.*))\)" + CSharpLanguage.DeclarationEnding;
 
-    static Regex constructorRegex =
-      new Regex(ConstructorPattern, RegexOptions.ExplicitCapture);
+    static Regex constructorRegex = new Regex(ConstructorPattern, RegexOptions.ExplicitCapture);
 
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
     /// </exception>
     internal CSharpConstructor(CompositeType parent) : base(parent)
     {

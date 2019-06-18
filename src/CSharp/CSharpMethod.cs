@@ -13,11 +13,11 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.Translations;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using NClass.Core;
-using NClass.Translations;
 
 namespace NClass.CSharp
 {
@@ -55,9 +55,6 @@ namespace NClass.CSharp
     bool isConversionOperator = false;
     bool isExplicitImplementation = false;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
-    /// </exception>
     internal CSharpMethod(CompositeType parent) : this("NewMethod", parent)
     {
     }

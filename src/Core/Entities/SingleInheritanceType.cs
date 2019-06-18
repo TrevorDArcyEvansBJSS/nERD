@@ -13,9 +13,9 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
 using System.Collections.Generic;
-using NClass.Translations;
 
 namespace NClass.Core
 {
@@ -67,9 +67,6 @@ namespace NClass.Core
     /// The language of <paramref name="interfaceType"/> does not equal.-or-
     /// <paramref name="interfaceType"/> is earlier implemented interface.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="interfaceType"/> is null.
-    /// </exception>
     public virtual void AddInterface(InterfaceType interfaceType)
     {
       if (interfaceType == null)
@@ -95,9 +92,6 @@ namespace NClass.Core
 
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="operation"/> does not equal.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="operation"/> is null.
     /// </exception>
     public Operation Implement(Operation operation, bool explicitly)
     {
@@ -128,9 +122,6 @@ namespace NClass.Core
     /// <exception cref="ArgumentException">
     /// <paramref name="operation"/> cannot be overridden.-or-
     /// The language of <paramref name="operation"/> does not equal.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="operation"/> is null.
     /// </exception>
     public Operation Override(Operation operation)
     {

@@ -13,50 +13,47 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.DiagramEditor;
 using System;
 using System.Windows.Forms;
-using NClass.DiagramEditor;
 
 namespace NClass.GUI
 {
-	public abstract class Plugin
-	{
-		NClassEnvironment environment;
+  public abstract class Plugin
+  {
+    NClassEnvironment environment;
 
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="environment"/> is null.
-		/// </exception>
-		protected Plugin(NClassEnvironment environment)
-		{
-			if (environment == null)
-				throw new ArgumentNullException("environment");
+    protected Plugin(NClassEnvironment environment)
+    {
+      if (environment == null)
+        throw new ArgumentNullException("environment");
 
-			this.environment = environment;
-		}
+      this.environment = environment;
+    }
 
-		protected NClassEnvironment NClassEnvironment
-		{
-			get { return environment; }
-		}
+    protected NClassEnvironment NClassEnvironment
+    {
+      get { return environment; }
+    }
 
-		protected Workspace Workspace
-		{
-			get { return environment.Workspace; }
-		}
+    protected Workspace Workspace
+    {
+      get { return environment.Workspace; }
+    }
 
-		protected DocumentManager DocumentManager
-		{
-			get { return environment.DocumentManager; }
-		}
+    protected DocumentManager DocumentManager
+    {
+      get { return environment.DocumentManager; }
+    }
 
-		public abstract bool IsAvailable
-		{
-			get;
-		}
+    public abstract bool IsAvailable
+    {
+      get;
+    }
 
-		public abstract ToolStripItem MenuItem
-		{
-			get;
-		}
-	}
+    public abstract ToolStripItem MenuItem
+    {
+      get;
+    }
+  }
 }

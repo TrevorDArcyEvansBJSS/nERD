@@ -13,64 +13,61 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
 using System.Windows.Forms;
-using NClass.Translations;
 
 namespace NClass.GUI
 {
-	public abstract class SimplePlugin : Plugin
-	{
-		ToolStripMenuItem menuItem;
+  public abstract class SimplePlugin : Plugin
+  {
+    ToolStripMenuItem menuItem;
 
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="environment"/> is null.
-		/// </exception>
-		protected SimplePlugin(NClassEnvironment environment) : base(environment)
-		{
-			menuItem = new ToolStripMenuItem();
-			menuItem.Text = MenuText;
-			menuItem.ToolTipText = string.Format(Strings.PluginTooltip, Name, Author);
-			menuItem.Click += new EventHandler(menuItem_Click);
-		}
+    protected SimplePlugin(NClassEnvironment environment) : base(environment)
+    {
+      menuItem = new ToolStripMenuItem();
+      menuItem.Text = MenuText;
+      menuItem.ToolTipText = string.Format(Strings.PluginTooltip, Name, Author);
+      menuItem.Click += new EventHandler(menuItem_Click);
+    }
 
-		public override ToolStripItem MenuItem
-		{
-			get { return menuItem; }
-		}
+    public override ToolStripItem MenuItem
+    {
+      get { return menuItem; }
+    }
 
-		private void menuItem_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				Launch();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, Strings.UnknownError,
-					MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
+    private void menuItem_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        Launch();
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show(ex.Message, Strings.UnknownError,
+          MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
 
-		#region Abstract members
+    #region Abstract members
 
-		public abstract string Name
-		{
-			get;
-		}
+    public abstract string Name
+    {
+      get;
+    }
 
-		public abstract string Author
-		{
-			get;
-		}
+    public abstract string Author
+    {
+      get;
+    }
 
-		public abstract string MenuText
-		{
-			get;
-		}
+    public abstract string MenuText
+    {
+      get;
+    }
 
-		protected abstract void Launch();
+    protected abstract void Launch();
 
-		#endregion
-	}
+    #endregion
+  }
 }

@@ -15,7 +15,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 
 namespace NClass.Core
@@ -179,9 +178,6 @@ namespace NClass.Core
 
     public abstract DelegateType Clone();
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     protected internal override void Serialize(XmlElement node)
     {
       base.Serialize(node);
@@ -203,9 +199,6 @@ namespace NClass.Core
     /// </exception>
     /// <exception cref="InvalidOperationException">
     /// The XML document is corrupt.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
     /// </exception>
     protected internal override void Deserialize(XmlElement node)
     {

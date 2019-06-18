@@ -203,9 +203,6 @@ namespace NClass.DiagramEditor.ClassDiagram
       Draw(g, false, Style.CurrentStyle);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="style"/> is null.
-    /// </exception>
     public void Draw(IGraphics g, Style style)
     {
       if (style == null)

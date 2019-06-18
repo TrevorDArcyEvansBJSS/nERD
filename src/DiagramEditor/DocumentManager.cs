@@ -80,9 +80,6 @@ namespace NClass.DiagramEditor
       Close(document);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="document"/> is null.
-    /// </exception>
     public void AddOrActivate(IDocument document)
     {
       if (document == null)

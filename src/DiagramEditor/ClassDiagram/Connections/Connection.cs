@@ -13,16 +13,15 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram.ContextMenus;
+using NClass.DiagramEditor.ClassDiagram.Shapes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Xml;
-using NClass.Core;
-using NClass.DiagramEditor.ClassDiagram.Shapes;
-using NClass.DiagramEditor.ClassDiagram.ContextMenus;
-using NClass.DiagramEditor.ClassDiagram.Editors;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
@@ -57,11 +56,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public event EventHandler RouteChanged;
     public event BendPointEventHandler BendPointMove;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="relationship"/> is null.-or-
-    /// <paramref name="startShape"/> is null.-or-
-    /// <paramref name="endShape"/> is null.
-    /// </exception>
     protected Connection(Relationship relationship, Shape startShape, Shape endShape)
     {
       if (relationship == null)

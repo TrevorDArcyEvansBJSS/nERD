@@ -22,10 +22,6 @@ namespace NClass.Core
     TypeBase first;
     TypeBase second;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="first"/> is null.-or-
-    /// <paramref name="second"/> is null.
-    /// </exception>
     protected TypeRelationship(TypeBase first, TypeBase second)
     {
       if (first == null)

@@ -13,115 +13,121 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.Translations;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using NClass.Core;
-using NClass.Translations;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-	public abstract partial class TreeDialog : Form
-	{
-		bool checkingLocked = false;
+  public abstract partial class TreeDialog : Form
+  {
+    bool checkingLocked = false;
 
-		public TreeDialog()
-		{
-			InitializeComponent();
-			treOperations.ImageList = Icons.IconList;
-		}
+    public TreeDialog()
+    {
+      InitializeComponent();
+      treOperations.ImageList = Icons.IconList;
+    }
 
-		protected TreeView OperationTree
-		{
-			get { return treOperations; }
-		}
+    protected TreeView OperationTree
+    {
+      get { return treOperations; }
+    }
 
-        public IEnumerable<Operation> GetSelectedOperations()
+    public IEnumerable<Operation> GetSelectedOperations()
+    {
+      for (int parent = 0; parent < treOperations.Nodes.Count; parent++)
+      {
+        TreeNode parentNode = treOperations.Nodes[parent];
+
+        for (int child = 0; child < parentNode.Nodes.Count; child++)
         {
-            for (int parent = 0; parent < treOperations.Nodes.Count; parent++) {
-                TreeNode parentNode = treOperations.Nodes[parent];
+          if (parentNode.Nodes[child].Tag is Operation &&
+              parentNode.Nodes[child].Checked)
+          {
+            yield return (Operation)parentNode.Nodes[child].Tag;
+          }
+        }
+      }
+    }
 
-                for (int child = 0; child < parentNode.Nodes.Count; child++) {
-                    if (parentNode.Nodes[child].Tag is Operation &&
-                        parentNode.Nodes[child].Checked) {
-                        yield return (Operation) parentNode.Nodes[child].Tag;
-                    }
-                }
+    protected TreeNode CreateOperationNode(TreeNode parentNode, Operation operation)
+    {
+      if (parentNode == null)
+        throw new ArgumentNullException("parentNode");
+      if (operation == null)
+        throw new ArgumentNullException("operation");
+
+      TreeNode child = parentNode.Nodes.Add(operation.GetUmlDescription());
+      int imageIndex = Icons.GetImageIndex(operation);
+
+      child.Tag = operation;
+      child.ImageIndex = imageIndex;
+      child.SelectedImageIndex = imageIndex;
+      child.ToolTipText = operation.ToString();
+
+      return child;
+    }
+
+    protected void RemoveEmptyNodes()
+    {
+      for (int i = 0; i < OperationTree.Nodes.Count; i++)
+      {
+        if (OperationTree.Nodes[i].Nodes.Count == 0)
+          OperationTree.Nodes.RemoveAt(i--);
+      }
+    }
+
+    protected virtual void UpdateTexts()
+    {
+      btnOK.Text = Strings.ButtonOK;
+      btnCancel.Text = Strings.ButtonCancel;
+    }
+
+    protected override void OnLoad(EventArgs e)
+    {
+      base.OnLoad(e);
+      UpdateTexts();
+    }
+
+    private void treMembers_AfterCheck(object sender, TreeViewEventArgs e)
+    {
+      if (!checkingLocked)
+      {
+        checkingLocked = true;
+
+        TreeNode node = e.Node;
+        TreeNode parentNode = e.Node.Parent;
+
+        if (parentNode != null)
+        {
+          if (!node.Checked)
+          {
+            parentNode.Checked = false;
+          }
+          else
+          {
+            bool allChecked = true;
+
+            foreach (TreeNode neighbour in parentNode.Nodes)
+            {
+              if (!neighbour.Checked)
+              {
+                allChecked = false;
+                break;
+              }
             }
+            parentNode.Checked = allChecked;
+          }
         }
 
-        /// <exception cref="ArgumentNullException">
-		/// <paramref name="parentNode"/> is null.-or-
-		/// <paramref name="operation"/> is null.
-		/// </exception>
-		protected TreeNode CreateOperationNode(TreeNode parentNode, Operation operation)
-		{
-			if (parentNode == null)
-				throw new ArgumentNullException("parentNode");
-			if (operation == null)
-				throw new ArgumentNullException("operation");
+        foreach (TreeNode child in node.Nodes)
+          child.Checked = node.Checked;
 
-			TreeNode child = parentNode.Nodes.Add(operation.GetUmlDescription());
-			int imageIndex = Icons.GetImageIndex(operation);
-
-			child.Tag = operation;
-			child.ImageIndex = imageIndex;
-			child.SelectedImageIndex = imageIndex;
-			child.ToolTipText = operation.ToString();
-
-			return child;
-		}
-
-		protected void RemoveEmptyNodes()
-		{
-			for (int i = 0; i < OperationTree.Nodes.Count; i++) {
-				if (OperationTree.Nodes[i].Nodes.Count == 0)
-					OperationTree.Nodes.RemoveAt(i--);
-			}
-		}
-
-		protected virtual void UpdateTexts()
-		{
-			btnOK.Text = Strings.ButtonOK;
-			btnCancel.Text = Strings.ButtonCancel;
-		}
-
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-			UpdateTexts();
-		}
-
-		private void treMembers_AfterCheck(object sender, TreeViewEventArgs e)
-		{
-			if (!checkingLocked) {
-				checkingLocked = true;
-
-				TreeNode node = e.Node;
-				TreeNode parentNode = e.Node.Parent;
-
-				if (parentNode != null) {
-					if (!node.Checked) {
-						parentNode.Checked = false;
-					}
-					else {
-						bool allChecked = true;
-
-						foreach (TreeNode neighbour in parentNode.Nodes) {
-							if (!neighbour.Checked) {
-								allChecked = false;
-								break;
-							}
-						}
-						parentNode.Checked = allChecked;
-					}
-				}
-
-				foreach (TreeNode child in node.Nodes)
-					child.Checked = node.Checked;
-
-				checkingLocked = false;
-			}
-		}
-	}
+        checkingLocked = false;
+      }
+    }
+  }
 }

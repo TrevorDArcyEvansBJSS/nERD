@@ -35,9 +35,6 @@ namespace NClass.CSharp
 
     static Regex fieldRegex = new Regex(FieldPattern, RegexOptions.ExplicitCapture);
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
-    /// </exception>
     internal CSharpField(CompositeType parent) : this("newField", parent)
     {
     }
@@ -47,9 +44,6 @@ namespace NClass.CSharp
     /// </exception>
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
     /// </exception>
     internal CSharpField(string name, CompositeType parent) : base(name, parent)
     {

@@ -13,10 +13,10 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Xml;
-using System.Drawing;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
+using System;
+using System.Drawing;
+using System.Xml;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
@@ -37,9 +37,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     bool autoPosition = true;
     Size relativePosition = Size.Empty;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="relativeShape"/> is null.
-    /// </exception>
     public BendPoint(Shape relativeShape, bool relativeToStartShape)
     {
       if (relativeShape == null)
@@ -49,9 +46,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       this.relativeToStartShape = relativeToStartShape;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="relativeShape"/> is null.
-    /// </exception>
     public BendPoint(Shape relativeShape, bool relativeToStartShape, bool autoPosition)
       : this(relativeShape, relativeToStartShape)
     {

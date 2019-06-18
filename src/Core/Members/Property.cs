@@ -31,9 +31,6 @@ namespace NClass.Core
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
-    /// </exception>
     protected Property(string name, CompositeType parent) : base(name, parent)
     {
     }

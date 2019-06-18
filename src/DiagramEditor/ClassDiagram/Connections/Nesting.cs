@@ -13,10 +13,9 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Drawing;
 using NClass.Core;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
+using System.Drawing;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
@@ -29,11 +28,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     NestingRelationship nesting;
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="nesting"/> is null.-or-
-    /// <paramref name="startShape"/> is null.-or-
-    /// <paramref name="endShape"/> is null.
-    /// </exception>
     public Nesting(NestingRelationship nesting, Shape startShape, Shape endShape)
       : base(nesting, startShape, endShape)
     {

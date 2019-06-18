@@ -35,9 +35,6 @@ namespace NClass.Java
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
     /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parent"/> is null.
-    /// </exception>
     internal JavaConstructor(CompositeType parent) : base(parent)
     {
     }

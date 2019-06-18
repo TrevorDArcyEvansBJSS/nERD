@@ -50,9 +50,6 @@ namespace NClass.Core
       get;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="value"/> is null.
-    /// </exception>
     public CompositeType Parent
     {
       get

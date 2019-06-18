@@ -13,21 +13,16 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
 using System.Drawing;
 
 namespace NClass.DiagramEditor
 {
-	public interface IPrintable
-	{
-		/// <exception cref="ArgumentNullException">
-		/// <paramref name="g"/> is null.-or-
-		/// <paramref name="style"/> is null.
-		/// </exception>
-		void Print(IGraphics g, bool selectedOnly, Style style);
+  public interface IPrintable
+  {
+    void Print(IGraphics g, bool selectedOnly, Style style);
 
-		RectangleF GetPrintingArea(bool selectedOnly);
+    RectangleF GetPrintingArea(bool selectedOnly);
 
-		void ShowPrintDialog();
-	}
+    void ShowPrintDialog();
+  }
 }

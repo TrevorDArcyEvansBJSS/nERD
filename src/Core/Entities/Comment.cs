@@ -13,9 +13,9 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
 using System.Xml;
-using NClass.Translations;
 
 namespace NClass.Core
 {
@@ -80,9 +80,6 @@ namespace NClass.Core
       Deserialize(node);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     internal void Serialize(XmlElement node)
     {
       if (node == null)
@@ -100,9 +97,6 @@ namespace NClass.Core
     /// </exception>
     /// <exception cref="InvalidOperationException">
     /// The XML document is corrupt.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
     /// </exception>
     internal void Deserialize(XmlElement node)
     {

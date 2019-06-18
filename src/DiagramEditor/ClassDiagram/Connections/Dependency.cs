@@ -13,11 +13,10 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using NClass.Core;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
@@ -33,11 +32,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       linePen.LineJoin = LineJoin.MiterClipped;
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="dependency"/> is null.-or-
-    /// <paramref name="startShape"/> is null.-or-
-    /// <paramref name="endShape"/> is null.
-    /// </exception>
     public Dependency(DependencyRelationship dependency, Shape startShape, Shape endShape)
       : base(dependency, startShape, endShape)
     {

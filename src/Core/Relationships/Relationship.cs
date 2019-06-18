@@ -102,9 +102,6 @@ namespace NClass.Core
       Deserialize(node);
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     protected internal virtual void Serialize(XmlElement node)
     {
       if (node == null)
@@ -119,9 +116,6 @@ namespace NClass.Core
       OnSerializing(new SerializeEventArgs(node));
     }
 
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="node"/> is null.
-    /// </exception>
     protected internal virtual void Deserialize(XmlElement node)
     {
       if (node == null)

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using NClass.Translations;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml;
 using System.IO;
-using NClass.Translations;
+using System.Xml;
 
 namespace NClass.Core
 {
@@ -485,9 +484,6 @@ namespace NClass.Core
 
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="parentType"/> or <paramref name="innerType"/> is null.
     /// </exception>
     public NestingRelationship AddNesting(CompositeType parentType, TypeBase innerType)
     {
