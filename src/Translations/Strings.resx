@@ -1164,4 +1164,7 @@ Do you still want to continue?</value>
   <data name="EditEntityRelationship" xml:space="preserve">
     <value>Edit Entity Relationship</value>
   </data>
+  <data name="Author2" xml:space="preserve">
+    <value>Trevor D'Arcy-Evans</value>
+  </data>
 </root>

@@ -259,6 +259,15 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trevor D&apos;Arcy-Evans.
+        /// </summary>
+        public static string Author2 {
+            get {
+                return ResourceManager.GetString("Author2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Zoom.
         /// </summary>
         public static string AutoZoom {
@@ -2422,7 +2431,7 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NClass Project Files.
+        ///   Looks up a localized string similar to nERD Project Files.
         /// </summary>
         public static string NClassProjectFiles {
             get {
