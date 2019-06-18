@@ -1889,7 +1889,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       get
       {
         // TODO   CanRedo
-        return true;
+        return false;
       }
     }
 

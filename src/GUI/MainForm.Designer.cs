@@ -538,7 +538,7 @@ namespace NClass.GUI
       this.mnuRedo.ShortcutKeyDisplayString = "Ctrl+Y";
       this.mnuRedo.Size = new System.Drawing.Size(167, 22);
       this.mnuRedo.Text = "&Redo";
-      this.mnuRedo.Visible = true;
+      this.mnuRedo.Visible = false;
       this.mnuRedo.Click += new System.EventHandler(this.mnuRedo_Click);
       // 
       // mnuSepReso
