@@ -14,36 +14,26 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Xml;
 
 namespace NClass.Core
 {
   public abstract class Element : IModifiable
   {
-    bool isDirty = false;
-    bool initializing = false;
-    int dontRaiseRequestCount = 0;
-    int dontRaisePreRequestCount = 0;
+    private int dontRaiseRequestCount = 0;
+    private int dontRaisePreRequestCount = 0;
 
     public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
 
-    public bool IsDirty
-    {
-      get { return isDirty; }
-    }
+    public bool IsDirty { get; private set; } = false;
 
     public virtual void Clean()
     {
-      isDirty = false;
+      IsDirty = false;
       //TODO: tagok tisztítása
     }
 
-    protected bool Initializing
-    {
-      get { return initializing; }
-      set { initializing = value; }
-    }
+    protected bool Initializing { get; set; } = false;
 
     protected bool RaisePreChangedEvent
     {
@@ -76,7 +66,7 @@ namespace NClass.Core
         else if (dontRaiseRequestCount > 0)
           dontRaiseRequestCount--;
 
-        if (RaiseChangedEvent && isDirty)
+        if (RaiseChangedEvent && IsDirty)
           OnModified(EventArgs.Empty);
       }
     }
@@ -99,7 +89,7 @@ namespace NClass.Core
         if (RaiseChangedEvent)
           OnModified(EventArgs.Empty);
         else
-          isDirty = true;
+          IsDirty = true;
       }
     }
 
@@ -111,7 +101,7 @@ namespace NClass.Core
 
     private void OnModified(EventArgs e)
     {
-      isDirty = true;
+      IsDirty = true;
       if (Modified != null)
         Modified(this, e);
     }
