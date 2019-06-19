@@ -22,9 +22,9 @@ namespace NClass.Core
 {
   public abstract class TypeBase : LanguageElement, IEntity
   {
-    string name;
-    AccessModifier access = AccessModifier.Public;
-    CompositeType nestingParent = null;
+    private string name;
+    private AccessModifier access = AccessModifier.Public;
+    private CompositeType nestingParent = null;
 
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
