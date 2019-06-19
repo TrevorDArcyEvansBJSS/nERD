@@ -40,31 +40,27 @@ namespace NClass.DiagramEditor.ClassDiagram
       Dragging
     }
 
-    const int DiagramPadding = 10;
-    const int PrecisionSize = 10;
-    const int MaximalPrecisionDistance = 500;
-    const float DashSize = 3;
-    static readonly Size MinSize = new Size(3000, 2000);
+    private const int DiagramPadding = 10;
+    private const int PrecisionSize = 10;
+    private const int MaximalPrecisionDistance = 500;
+    private const float DashSize = 3;
+    private static readonly Size MinSize = new Size(3000, 2000);
+
     public static readonly Pen SelectionPen;
 
-    ElementList<Shape> shapes = new ElementList<Shape>();
-    ElementList<Connection> connections = new ElementList<Connection>();
-    DiagramElement activeElement = null;
-    Point offset = Point.Empty;
-    float zoom = 1.0F;
-    Size size = MinSize;
-
-    State state = State.Normal;
-    bool selectioning = false;
-    RectangleF selectionFrame = RectangleF.Empty;
-    PointF mouseLocation = PointF.Empty;
-    bool redrawSuspended = false;
-    int selectedShapeCount = 0;
-    int selectedConnectionCount = 0;
-    Rectangle shapeOutline = Rectangle.Empty;
-    EntityType shapeType;
-    EntityType newShapeType = EntityType.Class;
-    ConnectionCreator connectionCreator = null;
+    private DiagramElement activeElement = null;
+    private Point offset = Point.Empty;
+    private float zoom = 1.0F;
+    private Size size = MinSize;
+    private State state = State.Normal;
+    private bool selectioning = false;
+    private RectangleF selectionFrame = RectangleF.Empty;
+    private PointF mouseLocation = PointF.Empty;
+    private bool redrawSuspended = false;
+    private Rectangle shapeOutline = Rectangle.Empty;
+    private EntityType shapeType;
+    private EntityType newShapeType = EntityType.Class;
+    private ConnectionCreator connectionCreator = null;
 
     public event EventHandler OffsetChanged;
     public event EventHandler SizeChanged;
@@ -82,6 +78,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       SelectionPen.DashPattern = new float[] { DashSize, DashSize };
     }
 
+    // required for XML deserialisation
     private Diagram()
     {
     }
@@ -91,29 +88,24 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
     }
 
-    public Diagram(string name, Language language) : base(name, language)
+    public Diagram(string name, Language language) : 
+      base(name, language)
     {
     }
 
     public IEnumerable<Shape> Shapes
     {
-      get { return shapes; }
+      get { return ShapeList; }
     }
 
-    internal ElementList<Shape> ShapeList
-    {
-      get { return shapes; }
-    }
+    internal ElementList<Shape> ShapeList { get; } = new ElementList<Shape>();
 
     public IEnumerable<Connection> Connections
     {
-      get { return connections; }
+      get { return ConnectionList; }
     }
 
-    internal ElementList<Connection> ConnectionList
-    {
-      get { return connections; }
-    }
+    internal ElementList<Connection> ConnectionList { get; } = new ElementList<Connection>();
 
     public Point Offset
     {
@@ -214,12 +206,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public int ShapeCount
     {
-      get { return shapes.Count; }
+      get { return ShapeList.Count; }
     }
 
     public int ConnectionCount
     {
-      get { return connections.Count; }
+      get { return ConnectionList.Count; }
     }
 
     public DiagramElement ActiveElement
@@ -243,9 +235,9 @@ namespace NClass.DiagramEditor.ClassDiagram
       get
       {
         if (SelectedConnectionCount > 0)
-          return connections.FirstValue;
+          return ConnectionList.FirstValue;
         else if (SelectedShapeCount > 0)
-          return shapes.FirstValue;
+          return ShapeList.FirstValue;
         else
           return null;
       }
@@ -261,24 +253,18 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public int SelectedElementCount
     {
-      get { return selectedShapeCount + selectedConnectionCount; }
+      get { return SelectedShapeCount + SelectedConnectionCount; }
     }
 
-    public int SelectedShapeCount
-    {
-      get { return selectedShapeCount; }
-    }
+    public int SelectedShapeCount { get; private set; } = 0;
 
-    public int SelectedConnectionCount
-    {
-      get { return selectedConnectionCount; }
-    }
+    public int SelectedConnectionCount { get; private set; } = 0;
 
     public string GetSelectedElementName()
     {
       if (HasSelectedElement && SelectedElementCount == 1)
       {
-        foreach (Shape shape in shapes)
+        foreach (Shape shape in ShapeList)
         {
           if (shape.IsSelected)
             return shape.Entity.Name;
@@ -290,22 +276,22 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public IEnumerable<Shape> GetSelectedShapes()
     {
-      return shapes.GetSelectedElements();
+      return ShapeList.GetSelectedElements();
     }
 
     public IEnumerable<Connection> GetSelectedConnections()
     {
-      return connections.GetSelectedElements();
+      return ConnectionList.GetSelectedElements();
     }
 
     public IEnumerable<DiagramElement> GetSelectedElements()
     {
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape.IsSelected)
           yield return shape;
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (connection.IsSelected)
           yield return connection;
@@ -314,31 +300,31 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private IEnumerable<DiagramElement> GetElementsInDisplayOrder()
     {
-      foreach (Shape shape in shapes.GetSelectedElements())
+      foreach (Shape shape in ShapeList.GetSelectedElements())
         yield return shape;
 
-      foreach (Connection connection in connections.GetSelectedElements())
+      foreach (Connection connection in ConnectionList.GetSelectedElements())
         yield return connection;
 
-      foreach (Connection connection in connections.GetUnselectedElements())
+      foreach (Connection connection in ConnectionList.GetUnselectedElements())
         yield return connection;
 
-      foreach (Shape shape in shapes.GetUnselectedElements())
+      foreach (Shape shape in ShapeList.GetUnselectedElements())
         yield return shape;
     }
 
     private IEnumerable<DiagramElement> GetElementsInReversedDisplayOrder()
     {
-      foreach (Shape shape in shapes.GetUnselectedElementsReversed())
+      foreach (Shape shape in ShapeList.GetUnselectedElementsReversed())
         yield return shape;
 
-      foreach (Connection connection in connections.GetUnselectedElementsReversed())
+      foreach (Connection connection in ConnectionList.GetUnselectedElementsReversed())
         yield return connection;
 
-      foreach (Connection connection in connections.GetSelectedElementsReversed())
+      foreach (Connection connection in ConnectionList.GetSelectedElementsReversed())
         yield return connection;
 
-      foreach (Shape shape in shapes.GetSelectedElementsReversed())
+      foreach (Shape shape in ShapeList.GetSelectedElementsReversed())
         yield return shape;
     }
 
@@ -412,12 +398,12 @@ namespace NClass.DiagramEditor.ClassDiagram
       GraphicsState savedState = g.Save();
       g.ResetTransform();
       g.SmoothingMode = SmoothingMode.None;
-      foreach (Shape shape in shapes.GetSelectedElementsReversed())
+      foreach (Shape shape in ShapeList.GetSelectedElementsReversed())
       {
         if (clip.IntersectsWith(shape.GetVisibleArea(Zoom)))
           shape.DrawSelectionLines(g, Zoom, Offset);
       }
-      foreach (Connection connection in connections.GetSelectedElementsReversed())
+      foreach (Connection connection in ConnectionList.GetSelectedElementsReversed())
       {
         if (clip.IntersectsWith(connection.GetVisibleArea(Zoom)))
           connection.DrawSelectionLines(g, Zoom, Offset);
@@ -490,12 +476,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void Print(IGraphics g, bool selectedOnly, Style style)
     {
-      foreach (Shape shape in shapes.GetReversedList())
+      foreach (Shape shape in ShapeList.GetReversedList())
       {
         if (!selectedOnly || shape.IsSelected)
           shape.Draw(g, false, style);
       }
-      foreach (Connection connection in connections.GetReversedList())
+      foreach (Connection connection in ConnectionList.GetReversedList())
       {
         if (!selectedOnly || connection.IsSelected)
           connection.Draw(g, false, style);
@@ -507,7 +493,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       const int Padding = 500;
       int rightMax = MinSize.Width, bottomMax = MinSize.Height;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         Rectangle area = shape.GetLogicalArea();
         if (area.Right + Padding > rightMax)
@@ -515,7 +501,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         if (area.Bottom + Padding > bottomMax)
           bottomMax = area.Bottom + Padding;
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         Rectangle area = connection.GetLogicalArea();
         if (area.Right + Padding > rightMax)
@@ -534,11 +520,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         int left = Size.Width;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           left = Math.Min(left, shape.Left);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Left = left;
         }
@@ -554,11 +540,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         int right = 0;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           right = Math.Max(right, shape.Right);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Right = right;
         }
@@ -574,11 +560,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         int top = Size.Height;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           top = Math.Min(top, shape.Top);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Top = top;
         }
@@ -594,11 +580,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         int bottom = 0;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           bottom = Math.Max(bottom, shape.Bottom);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Bottom = bottom;
         }
@@ -614,13 +600,13 @@ namespace NClass.DiagramEditor.ClassDiagram
         int center = 0;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           center += (shape.Top + shape.Bottom) / 2;
         }
         center /= SelectedShapeCount;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Top = center - shape.Height / 2;
         }
@@ -636,13 +622,13 @@ namespace NClass.DiagramEditor.ClassDiagram
         int center = 0;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           center += (shape.Left + shape.Right) / 2;
         }
         center /= SelectedShapeCount;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Left = center - shape.Width / 2;
         }
@@ -658,11 +644,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         int maxWidth = 0;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           maxWidth = Math.Max(maxWidth, shape.Width);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Width = maxWidth;
         }
@@ -677,11 +663,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         int maxHeight = 0;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           maxHeight = Math.Max(maxHeight, shape.Height);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Height = maxHeight;
         }
@@ -697,12 +683,12 @@ namespace NClass.DiagramEditor.ClassDiagram
         Size maxSize = Size.Empty;
         RedrawSuspended = true;
 
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           maxSize.Width = Math.Max(maxSize.Width, shape.Width);
           maxSize.Height = Math.Max(maxSize.Height, shape.Height);
         }
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Size = maxSize;
         }
@@ -714,7 +700,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     public void AutoSizeOfSelectedShapes()
     {
       RedrawSuspended = true;
-      foreach (Shape shape in shapes.GetSelectedElements())
+      foreach (Shape shape in ShapeList.GetSelectedElements())
       {
         shape.AutoWidth();
         shape.AutoHeight();
@@ -725,7 +711,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     public void AutoWidthOfSelectedShapes()
     {
       RedrawSuspended = true;
-      foreach (Shape shape in shapes.GetSelectedElements())
+      foreach (Shape shape in ShapeList.GetSelectedElements())
       {
         shape.AutoWidth();
       }
@@ -735,7 +721,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     public void AutoHeightOfSelectedShapes()
     {
       RedrawSuspended = true;
-      foreach (Shape shape in shapes.GetSelectedElements())
+      foreach (Shape shape in ShapeList.GetSelectedElements())
       {
         shape.AutoHeight();
       }
@@ -752,7 +738,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       RedrawSuspended = true;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape.IsSelected || !selectedOnly)
           shape.Collapse();
@@ -771,7 +757,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       RedrawSuspended = true;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape.IsSelected || !selectedOnly)
           shape.Expand();
@@ -785,17 +771,17 @@ namespace NClass.DiagramEditor.ClassDiagram
       RedrawSuspended = true;
       selectioning = true;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         shape.IsSelected = true;
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         connection.IsSelected = true;
       }
 
-      selectedShapeCount = shapes.Count;
-      selectedConnectionCount = connections.Count;
+      SelectedShapeCount = ShapeList.Count;
+      SelectedConnectionCount = ConnectionList.Count;
 
       OnSelectionChanged(EventArgs.Empty);
       OnClipboardAvailabilityChanged(EventArgs.Empty);
@@ -823,17 +809,17 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       if (HasSelectedElement && (!showConfirmation || ConfirmDelete()))
       {
-        if (selectedShapeCount > 0)
+        if (SelectedShapeCount > 0)
         {
-          foreach (Shape shape in shapes.GetModifiableList())
+          foreach (Shape shape in ShapeList.GetModifiableList())
           {
             if (shape.IsSelected)
               RemoveEntity(shape.Entity);
           }
         }
-        if (selectedConnectionCount > 0)
+        if (SelectedConnectionCount > 0)
         {
-          foreach (Connection connection in connections.GetModifiableList())
+          foreach (Connection connection in ConnectionList.GetModifiableList())
           {
             if (connection.IsSelected)
               RemoveRelationship(connection.Relationship);
@@ -853,7 +839,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       if (Loading)
         return;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape.NeedsRedraw)
         {
@@ -861,7 +847,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           return;
         }
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (connection.NeedsRedraw)
         {
@@ -927,12 +913,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void DeselectAll()
     {
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         shape.IsSelected = false;
         shape.IsActive = false;
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         connection.IsSelected = false;
         connection.IsActive = false;
@@ -942,7 +928,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void DeselectAllOthers(DiagramElement onlySelected)
     {
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape != onlySelected)
         {
@@ -950,7 +936,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           shape.IsActive = false;
         }
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (connection != onlySelected)
         {
@@ -1096,15 +1082,15 @@ namespace NClass.DiagramEditor.ClassDiagram
         Math.Max(selectionFrame.Top, selectionFrame.Bottom));
       selectioning = true;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape.TrySelect(selectionFrame))
-          selectedShapeCount++;
+          SelectedShapeCount++;
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (connection.TrySelect(selectionFrame))
-          selectedConnectionCount++;
+          SelectedConnectionCount++;
       }
 
       OnSelectionChanged(EventArgs.Empty);
@@ -1232,7 +1218,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       RectangleF area = Rectangle.Empty;
       bool first = true;
 
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (!selectedOnly || shape.IsSelected)
         {
@@ -1247,7 +1233,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           }
         }
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (!selectedOnly || connection.IsSelected)
         {
@@ -1293,7 +1279,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       shape.Dragging += new MoveEventHandler(Shape_Dragging);
       shape.Resizing += new ResizeEventHandler(Shape_Resizing);
       shape.SelectionChanged += new EventHandler(Shape_SelectionChanged);
-      shapes.AddFirst(shape);
+      ShapeList.AddFirst(shape);
       RecalculateSize();
     }
 
@@ -1306,12 +1292,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void Element_Activating(object sender, EventArgs e)
     {
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape != sender)
           shape.IsActive = false;
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (connection != sender)
           connection.IsActive = false;
@@ -1328,7 +1314,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       {
         Shape shape = (Shape)sender;
 
-        foreach (Shape otherShape in shapes.GetUnselectedElements())
+        foreach (Shape otherShape in ShapeList.GetUnselectedElements())
         {
           int xDist = otherShape.X - (shape.X + offset.Width);
           int yDist = otherShape.Y - (shape.Y + offset.Height);
@@ -1355,21 +1341,21 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
 
       // Get maxmimal avaiable offset for the selected elements
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         offset = shape.GetMaximalOffset(offset, DiagramPadding);
       }
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         offset = connection.GetMaximalOffset(offset, DiagramPadding);
       }
       if (!offset.IsEmpty)
       {
-        foreach (Shape shape in shapes.GetSelectedElements())
+        foreach (Shape shape in ShapeList.GetSelectedElements())
         {
           shape.Offset(offset);
         }
-        foreach (Connection connection in connections.GetSelectedElements())
+        foreach (Connection connection in ConnectionList.GetSelectedElements())
         {
           connection.Offset(offset);
         }
@@ -1387,7 +1373,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         // Horizontal resizing
         if (change.Width != 0)
         {
-          foreach (Shape otherShape in shapes.GetUnselectedElements())
+          foreach (Shape otherShape in ShapeList.GetUnselectedElements())
           {
             if (otherShape != shape)
             {
@@ -1411,7 +1397,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         // Vertical resizing
         if (change.Height != 0)
         {
-          foreach (Shape otherShape in shapes.GetUnselectedElements())
+          foreach (Shape otherShape in ShapeList.GetUnselectedElements())
           {
             if (otherShape != shape)
             {
@@ -1444,7 +1430,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
       if (shape.IsSelected)
       {
-        selectedShapeCount--;
+        SelectedShapeCount--;
         OnSelectionChanged(EventArgs.Empty);
         OnClipboardAvailabilityChanged(EventArgs.Empty);
         OnStatusChanged(EventArgs.Empty);
@@ -1456,14 +1442,14 @@ namespace NClass.DiagramEditor.ClassDiagram
       shape.Dragging -= new MoveEventHandler(Shape_Dragging);
       shape.Resizing -= new ResizeEventHandler(Shape_Resizing);
       shape.SelectionChanged -= new EventHandler(Shape_SelectionChanged);
-      shapes.Remove(shape);
+      ShapeList.Remove(shape);
       RecalculateSize();
     }
 
     //TODO: legyenek inkább hivatkozások a shape-ekhez
     private Shape GetShape(IEntity entity)
     {
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in ShapeList)
       {
         if (shape.Entity == entity)
           return shape;
@@ -1473,7 +1459,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private Connection GetConnection(Relationship relationship)
     {
-      foreach (Connection connection in connections)
+      foreach (Connection connection in ConnectionList)
       {
         if (connection.Relationship == relationship)
           return connection;
@@ -1490,7 +1476,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       connection.SelectionChanged += new EventHandler(Connection_SelectionChanged);
       connection.RouteChanged += new EventHandler(Connection_RouteChanged);
       connection.BendPointMove += new BendPointEventHandler(Connection_BendPointMove);
-      connections.AddFirst(connection);
+      ConnectionList.AddFirst(connection);
       RecalculateSize();
     }
 
@@ -1498,7 +1484,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       if (connection.IsSelected)
       {
-        selectedConnectionCount--;
+        SelectedConnectionCount--;
         OnSelectionChanged(EventArgs.Empty);
         OnClipboardAvailabilityChanged(EventArgs.Empty);
         OnStatusChanged(EventArgs.Empty);
@@ -1510,7 +1496,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       connection.SelectionChanged -= new EventHandler(Connection_SelectionChanged);
       connection.RouteChanged -= new EventHandler(Connection_RouteChanged);
       connection.BendPointMove -= new BendPointEventHandler(Connection_BendPointMove);
-      connections.Remove(connection);
+      ConnectionList.Remove(connection);
       RecalculateSize();
     }
 
@@ -1522,12 +1508,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
         if (shape.IsSelected)
         {
-          selectedShapeCount++;
-          shapes.ShiftToFirstPlace(shape);
+          SelectedShapeCount++;
+          ShapeList.ShiftToFirstPlace(shape);
         }
         else
         {
-          selectedShapeCount--;
+          SelectedShapeCount--;
         }
 
         OnSelectionChanged(EventArgs.Empty);
@@ -1544,12 +1530,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
         if (connection.IsSelected)
         {
-          selectedConnectionCount++;
-          connections.ShiftToFirstPlace(connection);
+          SelectedConnectionCount++;
+          ConnectionList.ShiftToFirstPlace(connection);
         }
         else
         {
-          selectedConnectionCount--;
+          SelectedConnectionCount--;
         }
 
         OnSelectionChanged(EventArgs.Empty);
@@ -1576,7 +1562,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       // Snap bend points to others if possible
       if (Settings.Default.UsePrecisionSnapping && Control.ModifierKeys != Keys.Shift)
       {
-        foreach (Connection connection in connections.GetSelectedElements())
+        foreach (Connection connection in ConnectionList.GetSelectedElements())
         {
           foreach (BendPoint point in connection.BendPoints)
           {
@@ -1661,7 +1647,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
 
       RecalculateSize();
-      return shapes.FirstValue;
+      return ShapeList.FirstValue;
     }
 
     protected override void AddClass(ClassType newClass)
@@ -1794,7 +1780,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         XmlElement positionsNode = e.Node["Positions"];
         if (positionsNode != null)
         {
-          LinkedListNode<Shape> currentShapeNode = shapes.Last;
+          LinkedListNode<Shape> currentShapeNode = ShapeList.Last;
           foreach (XmlElement shapeNode in positionsNode.SelectNodes("Shape"))
           {
             if (currentShapeNode == null)
@@ -1803,7 +1789,7 @@ namespace NClass.DiagramEditor.ClassDiagram
             currentShapeNode = currentShapeNode.Previous;
           }
 
-          LinkedListNode<Connection> currentConnecitonNode = connections.Last;
+          LinkedListNode<Connection> currentConnecitonNode = ConnectionList.Last;
           foreach (XmlElement connectionNode in positionsNode.SelectNodes("Connection"))
           {
             if (currentConnecitonNode == null)
@@ -1918,8 +1904,8 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       base.Reset();
 
-      connections.Clear();
-      shapes.Clear();
+      ConnectionList.Clear();
+      ShapeList.Clear();
     }
   }
 }
