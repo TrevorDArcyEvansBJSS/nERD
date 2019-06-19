@@ -20,8 +20,8 @@ namespace NClass.Core
 {
   public abstract class Relationship : Element, ISerializableElement
   {
-    string label = string.Empty;
-    bool attached = false;
+    private string label = string.Empty;
+    private bool attached = false;
 
     public event EventHandler Attaching;
     public event EventHandler Detaching;
