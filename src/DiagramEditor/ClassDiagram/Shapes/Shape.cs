@@ -33,18 +33,18 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     }
 
     public const int SelectionMargin = 12;
-    static readonly Pen selectionSquarePen = new Pen(Color.Black);
+    private static readonly Pen selectionSquarePen = new Pen(Color.Black);
     protected static readonly float[] borderDashPattern = new float[] { 3, 3 };
     protected static readonly SolidBrush shadowBrush = new SolidBrush(Color.Gray);
     protected static readonly Size defaultMinSize = new Size(50, 50);
 
-    Point location;
-    Size size;
-    ResizeMode resizeMode = ResizeMode.None;
-    Size minimumSize = defaultMinSize;
-    PointF mouseDownLocation = PointF.Empty;
-    bool mouseLeaved = true;
-    Cursor cursor = Cursors.Default;
+    private Point location;
+    private Size size;
+    private ResizeMode resizeMode = ResizeMode.None;
+    private Size minimumSize = defaultMinSize;
+    private PointF mouseDownLocation = PointF.Empty;
+    private bool mouseLeaved = true;
+    private Cursor cursor = Cursors.Default;
 
     public event MoveEventHandler Move;
     public event MoveEventHandler Dragging;
