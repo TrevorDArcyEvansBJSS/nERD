@@ -27,14 +27,8 @@ namespace NClass.DiagramEditor.ClassDiagram
   {
     protected const float UndreadableZoom = 0.25F;
     internal static Graphics Graphics = null; // Graphics object for text measuring
-
-    Diagram diagram;
-    bool isSelected = false;
-    bool isActive = false;
-    bool isDirty = true;
-    bool isMousePressed = false;
-    bool needsRedraw = true;
-
+    private bool isSelected = false;
+    private bool isActive = false;
     protected DiagramElementOperation _currentOperation = DiagramElementOperation.None;
 
     public event EventHandler BeginUndoableOperation;
@@ -49,11 +43,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     public event AbsoluteMouseEventHandler MouseUp;
     public event AbsoluteMouseEventHandler DoubleClick;
 
-    public Diagram Diagram
-    {
-      get { return diagram; }
-      set { diagram = value; }
-    }
+    public Diagram Diagram { get; set; }
 
     public bool IsSelected
     {
@@ -98,25 +88,15 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
     }
 
-    public bool IsDirty
-    {
-      get { return isDirty; }
-    }
+    public bool IsDirty { get; private set; } = true;
 
-    public bool NeedsRedraw
-    {
-      get { return needsRedraw; }
-      protected internal set { needsRedraw = value; }
-    }
+    public bool NeedsRedraw { get; protected internal set; } = true;
 
-    protected bool IsMousePressed
-    {
-      get { return isMousePressed; }
-    }
+    protected bool IsMousePressed { get; private set; } = false;
 
     public virtual void Clean()
     {
-      isDirty = false;
+      IsDirty = false;
     }
 
     public virtual void SelectPrevious()
@@ -240,7 +220,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     protected virtual void OnModified(EventArgs e)
     {
-      isDirty = true;
+      IsDirty = true;
       NeedsRedraw = true;
       if (Modified != null)
         Modified(this, e);
@@ -278,7 +258,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     protected virtual void OnMouseDown(AbsoluteMouseEventArgs e)
     {
-      isMousePressed = true;
+      IsMousePressed = true;
       IsSelected = true;
 
       if (MouseDown != null)
@@ -293,7 +273,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     protected virtual void OnMouseUp(AbsoluteMouseEventArgs e)
     {
-      isMousePressed = false;
+      IsMousePressed = false;
       if (MouseUp != null)
         MouseUp(this, e);
     }
