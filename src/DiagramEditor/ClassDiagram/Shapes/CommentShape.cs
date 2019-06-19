@@ -27,18 +27,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   internal sealed class CommentShape : Shape
   {
-    const int PaddingSize = 10;
-    const int DefaultWidth = 160;
-    const int DefaultHeight = 75;
-
-    static CommentEditor editor = new CommentEditor();
-    static Pen borderPen = new Pen(Color.Black);
-    static SolidBrush backgroundBrush = new SolidBrush(Color.White);
-    static SolidBrush textBrush = new SolidBrush(Color.Black);
-    static StringFormat format = new StringFormat(StringFormat.GenericTypographic);
-
-    Comment comment;
-    bool editorShowed = false;
+    private const int PaddingSize = 10;
+    private const int DefaultWidth = 160;
+    private const int DefaultHeight = 75;
+    private static readonly CommentEditor editor = new CommentEditor();
+    private static readonly Pen borderPen = new Pen(Color.Black);
+    private static readonly SolidBrush backgroundBrush = new SolidBrush(Color.White);
+    private static readonly SolidBrush textBrush = new SolidBrush(Color.Black);
+    private static StringFormat format = new StringFormat(StringFormat.GenericTypographic);
+    private bool editorShowed = false;
 
     static CommentShape()
     {
@@ -46,25 +43,23 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       format.FormatFlags = StringFormatFlags.LineLimit;
     }
 
-    internal CommentShape(Comment comment) : base(comment)
+    internal CommentShape(Comment comment) :
+      base(comment)
     {
-      this.comment = comment;
+      this.Comment = comment;
     }
 
     public override IEntity Entity
     {
-      get { return comment; }
+      get { return Comment; }
     }
 
-    public Comment Comment
-    {
-      get { return comment; }
-    }
+    public Comment Comment { get; }
 
     public string Text
     {
-      get { return comment.Text; }
-      set { comment.Text = value; }
+      get { return Comment.Text; }
+      set { Comment.Text = value; }
     }
 
     protected override Size DefaultSize
