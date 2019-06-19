@@ -29,9 +29,7 @@ namespace NClass.DiagramEditor
   {
     public const float MinZoom = 0.1F;
     public const float MaxZoom = 4.0F;
-    const int DiagramPadding = 10;
-
-    static Pen borderPen;
+    private static readonly Pen borderPen;
 
     static Canvas()
     {
@@ -44,8 +42,8 @@ namespace NClass.DiagramEditor
     public event EventHandler VisibleAreaChanged;
     public event EventHandler MouseHWheel;
 
-    IDocument document = null;
-    List<PopupWindow> windows = new List<PopupWindow>();
+    private IDocument document = null;
+    private readonly List<PopupWindow> windows = new List<PopupWindow>();
 
     public Canvas()
     {
