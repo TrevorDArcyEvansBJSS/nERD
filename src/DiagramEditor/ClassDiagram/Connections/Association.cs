@@ -27,21 +27,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Association : Connection
   {
-    const int DiamondWidth = 10;
-    const int DiamondHeight = 18;
-    static readonly Point[] diamondPoints = 
+    private const int DiamondWidth = 10;
+    private const int DiamondHeight = 18;
+    private static readonly Point[] diamondPoints = 
     {
       new Point(0, 0),
       new Point(DiamondWidth / 2, DiamondHeight / 2),
       new Point(0, DiamondHeight),
       new Point(-DiamondWidth / 2, DiamondHeight / 2)
     };
-    static Pen linePen = new Pen(Color.Black);
-    static SolidBrush lineBrush = new SolidBrush(Color.Black);
-    static SolidBrush textBrush = new SolidBrush(Color.Black);
-    static StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
-
-    AssociationRelationship association;
+    private static readonly Pen linePen = new Pen(Color.Black);
+    private static readonly SolidBrush lineBrush = new SolidBrush(Color.Black);
+    private static readonly SolidBrush textBrush = new SolidBrush(Color.Black);
+    private static readonly StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
 
     static Association()
     {
@@ -52,18 +50,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Association(AssociationRelationship association, Shape startShape, Shape endShape)
       : base(association, startShape, endShape)
     {
-      this.association = association;
+      this.AssociationRelationship = association;
       association.Reversed += new EventHandler(Association_Reversed);
     }
 
-    internal AssociationRelationship AssociationRelationship
-    {
-      get { return association; }
-    }
+    internal AssociationRelationship AssociationRelationship { get; }
 
     protected internal override Relationship Relationship
     {
-      get { return association; }
+      get { return AssociationRelationship; }
     }
 
     protected override Size StartCapSize
@@ -140,7 +135,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
       if (firstType != null && secondType != null)
       {
-        AssociationRelationship clone = association.Clone(firstType, secondType);
+        AssociationRelationship clone = AssociationRelationship.Clone(firstType, secondType);
         return diagram.InsertAssociation(clone);
       }
       else
@@ -278,12 +273,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       linePen.Color = style.RelationshipColor;
       linePen.Width = style.RelationshipWidth;
 
-      if (association.IsAggregation)
+      if (AssociationRelationship.IsAggregation)
       {
         g.FillPolygon(Brushes.White, diamondPoints);
         g.DrawPolygon(linePen, diamondPoints);
       }
-      else if (association.IsComposition)
+      else if (AssociationRelationship.IsComposition)
       {
         lineBrush.Color = style.RelationshipColor;
 
@@ -294,7 +289,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override void DrawEndCap(IGraphics g, bool onScreen, Style style)
     {
-      if (association.Direction == Direction.Unidirectional)
+      if (AssociationRelationship.Direction == Direction.Unidirectional)
       {
         linePen.Color = style.RelationshipColor;
         linePen.Width = style.RelationshipWidth;
