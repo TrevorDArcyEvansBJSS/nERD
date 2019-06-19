@@ -23,7 +23,8 @@ namespace NClass.Core
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
     /// </exception>
-    protected Destructor(CompositeType parent) : base(null, parent)
+    protected Destructor(CompositeType parent) :
+      base(null, parent)
     {
     }
 
