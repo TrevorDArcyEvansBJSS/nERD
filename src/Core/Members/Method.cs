@@ -26,7 +26,8 @@ namespace NClass.Core
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
     /// </exception>
-    protected Method(string name, CompositeType parent) : base(name, parent)
+    protected Method(string name, CompositeType parent) :
+      base(name, parent)
     {
     }
 
