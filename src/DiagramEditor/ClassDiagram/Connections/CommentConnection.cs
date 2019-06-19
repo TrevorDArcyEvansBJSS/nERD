@@ -20,22 +20,17 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class CommentConnection : Connection
   {
-    CommentRelationship relationship;
-
     public CommentConnection(CommentRelationship relationship, Shape startShape, Shape endShape)
       : base(relationship, startShape, endShape)
     {
-      this.relationship = relationship;
+      this.CommentRelationship = relationship;
     }
 
-    internal CommentRelationship CommentRelationship
-    {
-      get { return relationship; }
-    }
+    internal CommentRelationship CommentRelationship { get; }
 
     protected internal override Relationship Relationship
     {
-      get { return relationship; }
+      get { return CommentRelationship; }
     }
 
     protected override bool IsDashed
@@ -48,7 +43,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       Comment comment = first.Entity as Comment;
       if (comment != null)
       {
-        CommentRelationship clone = relationship.Clone(comment, second.Entity);
+        CommentRelationship clone = CommentRelationship.Clone(comment, second.Entity);
         return diagram.InsertCommentRelationship(clone);
       }
       else
