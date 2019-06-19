@@ -23,13 +23,6 @@ using System.Xml;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
-    public enum DiagramElementOperation
-    {
-      None = 0,
-      Dragging = 1,
-      Resizing = 2
-    }
-
   public abstract class DiagramElement : IModifiable
   {
     protected const float UndreadableZoom = 0.25F;
