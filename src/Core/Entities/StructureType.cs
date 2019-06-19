@@ -14,7 +14,6 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace NClass.Core
