@@ -47,7 +47,8 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private static void LoadImages()
     {
-      images = new Bitmap[] {
+      images = new Bitmap[]
+      {
         Properties.Resources.DefaultConst,
         Properties.Resources.PublicConst,
         Properties.Resources.ProtintConst,
@@ -147,12 +148,12 @@ namespace NClass.DiagramEditor.ClassDiagram
         Properties.Resources.PrivateDelegate,
 
         Properties.Resources.DefaultDestructor, // 84.
-				Properties.Resources.PrivateDestructor, // 85.
-				Properties.Resources.Interface24,       // 86.
-				Properties.Resources.EnumItem,          // 87.
-				Properties.Resources.Parameter,         // 88.
-				Properties.Resources.Class              // 89.
-			};
+        Properties.Resources.PrivateDestructor, // 85.
+        Properties.Resources.Interface24,       // 86.
+        Properties.Resources.EnumItem,          // 87.
+        Properties.Resources.Parameter,         // 88.
+        Properties.Resources.Class              // 89.
+      };
 
       imageList = new ImageList();
       imageList.ColorDepth = ColorDepth.Depth32Bit;
