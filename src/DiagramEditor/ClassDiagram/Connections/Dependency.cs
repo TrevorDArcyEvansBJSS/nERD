@@ -22,9 +22,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Dependency : Connection
   {
-    static Pen linePen = new Pen(Color.Black);
-
-    DependencyRelationship dependency;
+    private static readonly Pen linePen = new Pen(Color.Black);
 
     static Dependency()
     {
@@ -35,17 +33,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Dependency(DependencyRelationship dependency, Shape startShape, Shape endShape)
       : base(dependency, startShape, endShape)
     {
-      this.dependency = dependency;
+      this.DependencyRelationship = dependency;
     }
 
-    internal DependencyRelationship DependencyRelationship
-    {
-      get { return dependency; }
-    }
+    internal DependencyRelationship DependencyRelationship { get; }
 
     protected internal override Relationship Relationship
     {
-      get { return dependency; }
+      get { return DependencyRelationship; }
     }
 
     protected override bool IsDashed
@@ -72,7 +67,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
       if (firstType != null && secondType != null)
       {
-        DependencyRelationship clone = dependency.Clone(firstType, secondType);
+        DependencyRelationship clone = DependencyRelationship.Clone(firstType, secondType);
         return diagram.InsertDependency(clone);
       }
       else
