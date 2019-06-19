@@ -1,4 +1,19 @@
-﻿using NClass.Translations;
+﻿// NClass - Free class diagram editor
+// Copyright (C) 2006-2009 Balazs Tihanyi
+// 
+// This program is free software; you can redistribute it and/or modify it under 
+// the terms of the GNU General Public License as published by the Free Software 
+// Foundation; either version 3 of the License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful, but WITHOUT 
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+// FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with 
+// this program; if not, write to the Free Software Foundation, Inc., 
+// 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+using NClass.Translations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,14 +24,9 @@ namespace NClass.Core
   //TODO: átdolgozni
   public class Model : IProjectItem
   {
-    string name;
-    Language language;
-    List<IEntity> entities = new List<IEntity>();
-    List<Relationship> relationships = new List<Relationship>();
-    Project project = null;
-    bool isDirty = false;
-    bool loading = false;
-
+    private string name;
+    private readonly List<IEntity> entities = new List<IEntity>();
+    private readonly List<Relationship> relationships = new List<Relationship>();
     protected Stack<XmlElement> UndoModels = new Stack<XmlElement>();
 
     public event EventHandler BeginUndoableOperation;
@@ -30,10 +40,11 @@ namespace NClass.Core
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
+    // required for XML deserialisation
     protected Model()
     {
       name = Strings.Untitled;
-      language = null;
+      Language = null;
     }
 
     public Model(Language language) :
@@ -49,7 +60,7 @@ namespace NClass.Core
         throw new ArgumentException("Name cannot empty string.");
 
       this.name = name;
-      this.language = language;
+      this.Language = language;
     }
 
     public string Name
@@ -73,16 +84,9 @@ namespace NClass.Core
       }
     }
 
-    public Language Language
-    {
-      get { return language; }
-    }
+    public Language Language { get; private set; }
 
-    public Project Project
-    {
-      get { return project; }
-      set { project = value; }
-    }
+    public Project Project { get; set; } = null;
 
     public bool IsUntitled
     {
@@ -92,15 +96,9 @@ namespace NClass.Core
       }
     }
 
-    public bool IsDirty
-    {
-      get { return isDirty; }
-    }
+    public bool IsDirty { get; private set; } = false;
 
-    protected bool Loading
-    {
-      get { return loading; }
-    }
+    protected bool Loading { get; private set; } = false;
 
     public bool IsEmpty
     {
@@ -112,7 +110,7 @@ namespace NClass.Core
 
     public void Clean()
     {
-      isDirty = false;
+      IsDirty = false;
       //TODO: tagokat is tisztítani!
     }
 
@@ -159,7 +157,7 @@ namespace NClass.Core
 
     public bool InsertClass(ClassType newClass)
     {
-      if (newClass != null && !entities.Contains(newClass) && newClass.Language == language)
+      if (newClass != null && !entities.Contains(newClass) && newClass.Language == Language)
       {
         AddClass(newClass);
         return true;
@@ -188,7 +186,7 @@ namespace NClass.Core
     public bool InsertStructure(StructureType structure)
     {
       if (structure != null && !entities.Contains(structure) &&
-        structure.Language == language)
+        structure.Language == Language)
       {
         AddStructure(structure);
         return true;
@@ -214,7 +212,7 @@ namespace NClass.Core
     public bool InsertInterface(InterfaceType newInterface)
     {
       if (newInterface != null && !entities.Contains(newInterface) &&
-        newInterface.Language == language)
+        newInterface.Language == Language)
       {
         AddInterface(newInterface);
         return true;
@@ -240,7 +238,7 @@ namespace NClass.Core
     public bool InsertEnum(EnumType newEnum)
     {
       if (newEnum != null && !entities.Contains(newEnum) &&
-        newEnum.Language == language)
+        newEnum.Language == Language)
       {
         AddEnum(newEnum);
         return true;
@@ -269,7 +267,7 @@ namespace NClass.Core
     public bool InsertDelegate(DelegateType newDelegate)
     {
       if (newDelegate != null && !entities.Contains(newDelegate) &&
-        newDelegate.Language == language)
+        newDelegate.Language == Language)
       {
         AddDelegate(newDelegate);
         return true;
@@ -603,7 +601,7 @@ namespace NClass.Core
     {
       if (node == null)
         throw new ArgumentNullException("root");
-      loading = true;
+      Loading = true;
 
       XmlElement nameElement = node["Name"];
       if (nameElement == null || nameElement.InnerText == "")
@@ -618,7 +616,7 @@ namespace NClass.Core
         if (language == null)
           throw new InvalidDataException("Invalid project language.");
 
-        this.language = language;
+        this.Language = language;
       }
       catch (Exception ex)
       {
@@ -629,7 +627,7 @@ namespace NClass.Core
       LoadRelationships(node);
 
       OnDeserializing(new SerializeEventArgs(node));
-      loading = false;
+      Loading = false;
     }
 
     /// <exception cref="InvalidDataException">
@@ -863,7 +861,7 @@ namespace NClass.Core
 
     protected void OnBeginUndoableOperation(object sender, EventArgs e)
     {
-      if (loading)
+      if (Loading)
       {
         return;
       }
@@ -883,7 +881,7 @@ namespace NClass.Core
 
     protected virtual void OnModified(EventArgs e)
     {
-      isDirty = true;
+      IsDirty = true;
       if (Modified != null)
       {
         Modified(this, e);
