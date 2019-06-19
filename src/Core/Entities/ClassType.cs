@@ -22,9 +22,9 @@ namespace NClass.Core
 {
   public abstract class ClassType : SingleInheritanceType
   {
-    ClassModifier modifier = ClassModifier.None;
-    ClassType baseClass = null;
-    int derivedClassCount = 0;
+    private ClassModifier modifier = ClassModifier.None;
+    private ClassType baseClass = null;
+    private int derivedClassCount = 0;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
