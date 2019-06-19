@@ -20,10 +20,10 @@ namespace NClass.Core
 {
   public abstract class Member : LanguageElement
   {
-    string name;
-    string type;
-    AccessModifier access = AccessModifier.Default;
-    CompositeType parent;
+    private string name;
+    private string type;
+    private AccessModifier access = AccessModifier.Default;
+    private CompositeType parent;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
