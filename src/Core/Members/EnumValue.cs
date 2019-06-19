@@ -17,7 +17,7 @@ namespace NClass.Core
 {
   public abstract class EnumValue : LanguageElement
   {
-    string name = null;
+    private string name = null;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="declaration"/> does not fit to the syntax.
