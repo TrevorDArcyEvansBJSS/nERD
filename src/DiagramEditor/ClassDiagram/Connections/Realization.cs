@@ -22,9 +22,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Realization : Connection
   {
-    static Pen linePen = new Pen(Color.Black);
-
-    RealizationRelationship realization;
+    private static readonly Pen linePen = new Pen(Color.Black);
 
     static Realization()
     {
@@ -35,17 +33,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Realization(RealizationRelationship realization, Shape startShape, Shape endShape)
       : base(realization, startShape, endShape)
     {
-      this.realization = realization;
+      this.RealizationRelationship = realization;
     }
 
-    internal RealizationRelationship RealizationRelationship
-    {
-      get { return realization; }
-    }
+    internal RealizationRelationship RealizationRelationship { get; }
 
     protected internal override Relationship Relationship
     {
-      get { return realization; }
+      get { return RealizationRelationship; }
     }
 
     protected override bool IsDashed
@@ -79,7 +74,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
       if (firstType != null && secondType != null)
       {
-        RealizationRelationship clone = realization.Clone(firstType, secondType);
+        RealizationRelationship clone = RealizationRelationship.Clone(firstType, secondType);
         return diagram.InsertRealization(clone);
       }
       else
