@@ -20,24 +20,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public sealed class ClassShape : CompositeTypeShape
   {
-    ClassType _class;
-
     internal ClassShape(ClassType classType)
       : base(classType)
     {
-      _class = classType;
+      ClassType = classType;
       UpdateMinSize();
     }
 
     public override CompositeType CompositeType
     {
-      get { return _class; }
+      get { return ClassType; }
     }
 
-    public ClassType ClassType
-    {
-      get { return _class; }
-    }
+    public ClassType ClassType { get; }
 
     protected override bool CloneEntity(Diagram diagram)
     {
@@ -56,7 +51,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override int GetBorderWidth(Style style)
     {
-      switch (_class.Modifier)
+      switch (ClassType.Modifier)
       {
         case ClassModifier.Abstract:
           return style.AbstractClassBorderWidth;
@@ -75,7 +70,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override bool IsBorderDashed(Style style)
     {
-      switch (_class.Modifier)
+      switch (ClassType.Modifier)
       {
         case ClassModifier.Abstract:
           return style.IsAbstractClassBorderDashed;
@@ -99,7 +94,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override Font GetNameFont(Style style)
     {
-      if (_class.Modifier == ClassModifier.Abstract)
+      if (ClassType.Modifier == ClassModifier.Abstract)
         return style.AbstractNameFont;
       else
         return base.GetNameFont(style);
