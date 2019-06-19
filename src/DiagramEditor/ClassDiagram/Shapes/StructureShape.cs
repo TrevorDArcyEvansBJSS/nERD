@@ -20,23 +20,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   internal sealed class StructureShape : CompositeTypeShape
   {
-    StructureType structure;
-
-    internal StructureShape(StructureType structure) : base(structure)
+    internal StructureShape(StructureType structure) :
+      base(structure)
     {
-      this.structure = structure;
+      this.StructureType = structure;
       UpdateMinSize();
     }
 
     public override CompositeType CompositeType
     {
-      get { return structure; }
+      get { return StructureType; }
     }
 
-    public StructureType StructureType
-    {
-      get { return structure; }
-    }
+    public StructureType StructureType { get; }
 
     protected override bool CloneEntity(Diagram diagram)
     {
