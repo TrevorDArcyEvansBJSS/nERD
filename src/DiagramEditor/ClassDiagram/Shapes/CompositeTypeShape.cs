@@ -23,14 +23,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public abstract class CompositeTypeShape : TypeShape
   {
-    const int AccessSpacing = 12;
-
-    static CompositeTypeEditor typeEditor = new CompositeTypeEditor();
-    static MemberEditor memberEditor = new MemberEditor();
-    static MembersDialog membersDialog = new MembersDialog();
-    static SolidBrush memberBrush = new SolidBrush(Color.Black);
-    static StringFormat accessFormat = new StringFormat(StringFormat.GenericTypographic);
-    static Pen selectionPen = new Pen(Color.Black);
+    private const int AccessSpacing = 12;
+    private static readonly CompositeTypeEditor typeEditor = new CompositeTypeEditor();
+    private static readonly MemberEditor memberEditor = new MemberEditor();
+    private static readonly MembersDialog membersDialog = new MembersDialog();
+    private static readonly SolidBrush memberBrush = new SolidBrush(Color.Black);
+    private static readonly StringFormat accessFormat = new StringFormat(StringFormat.GenericTypographic);
+    private static readonly Pen selectionPen = new Pen(Color.Black);
 
     static CompositeTypeShape()
     {
