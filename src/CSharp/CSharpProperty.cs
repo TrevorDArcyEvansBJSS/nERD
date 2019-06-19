@@ -203,7 +203,7 @@ namespace NClass.CSharp
             RaisePreChangedEvent = RaiseChangedEvent = false;
             if (value)
               AccessModifier = AccessModifier.Default;
-            PreChanged();
+            OnBeginUndoableOperation();
             isExplicitImplementation = value;
             Changed();
           }

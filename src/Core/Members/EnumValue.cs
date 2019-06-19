@@ -39,7 +39,7 @@ namespace NClass.Core
       {
         if (name != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           name = value;
           Changed();
         }

@@ -62,7 +62,7 @@ namespace NClass.Core
       {
         if (direction != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           direction = value;
           Changed();
         }
@@ -79,7 +79,7 @@ namespace NClass.Core
       {
         if (associationType != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           associationType = value;
           Changed();
         }
@@ -115,7 +115,7 @@ namespace NClass.Core
 
         if (startRole != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           startRole = value;
           Changed();
         }
@@ -135,7 +135,7 @@ namespace NClass.Core
 
         if (endRole != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           endRole = value;
           Changed();
         }
@@ -155,7 +155,7 @@ namespace NClass.Core
 
         if (startMultiplicity != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           startMultiplicity = value;
           Changed();
         }
@@ -175,7 +175,7 @@ namespace NClass.Core
 
         if (endMultiplicity != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           endMultiplicity = value;
           Changed();
         }
@@ -184,7 +184,7 @@ namespace NClass.Core
 
     public void Reverse()
     {
-      PreChanged();
+      OnBeginUndoableOperation();
 
       //TODO: ne az õsosztályon kereszül érje el, egyszerûbb lenne saját taggal
       IEntity first = First;

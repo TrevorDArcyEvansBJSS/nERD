@@ -51,7 +51,7 @@ namespace NClass.Core
 
         if (newName != name)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           name = newName;
           Changed();
         }
@@ -73,7 +73,7 @@ namespace NClass.Core
 
         if (newType != type)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           type = newType;
           Changed();
         }
@@ -90,7 +90,7 @@ namespace NClass.Core
       {
         if (modifier != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           modifier = value;
           Changed();
         }
@@ -110,7 +110,7 @@ namespace NClass.Core
 
         if (defaultValue != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           defaultValue = value;
           Changed();
         }

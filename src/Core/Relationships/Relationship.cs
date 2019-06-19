@@ -58,7 +58,7 @@ namespace NClass.Core
 
         if (label != value && SupportsLabel)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           label = value;
           Changed();
         }

@@ -112,7 +112,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= OperationModifier.Static;
           else
@@ -146,7 +146,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= OperationModifier.Hider;
           else
@@ -180,7 +180,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= OperationModifier.Virtual;
           else
@@ -214,7 +214,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= OperationModifier.Abstract;
           else
@@ -248,7 +248,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= OperationModifier.Override;
           else
@@ -282,7 +282,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= OperationModifier.Sealed;
           else
@@ -328,7 +328,7 @@ namespace NClass.Core
     {
       if (modifier != OperationModifier.None)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         modifier = OperationModifier.None;
         Changed();
       }

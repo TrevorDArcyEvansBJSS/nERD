@@ -59,7 +59,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       location = Point.Empty;
       size = DefaultSize;
 
-      entity.Modified += delegate { OnPreModified(EventArgs.Empty); };
       entity.Modified += delegate { OnModified(EventArgs.Empty); };
 
       entity.Serializing += delegate (object sender, SerializeEventArgs e)
@@ -108,7 +107,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       {
         if (location != value)
         {
-          OnPreModified(EventArgs.Empty);
           Size offset = new Size(value.X - X, value.Y - Y);
           mouseDownLocation += offset;
           location = value;
@@ -128,7 +126,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       {
         if (location.X != value)
         {
-          OnPreModified(EventArgs.Empty);
           Size offset = new Size(value - X, 0);
           mouseDownLocation.X += offset.Width;
           location.X = value;
@@ -148,7 +145,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       {
         if (location.Y != value)
         {
-          OnPreModified(EventArgs.Empty);
           Size offset = new Size(0, value - Y);
           mouseDownLocation.Y += offset.Height;
           location.Y = value;
@@ -173,7 +169,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
         if (size != value)
         {
-          OnPreModified(EventArgs.Empty);
           Size change = new Size(value.Width - Width, value.Height - Height);
           if (IsResizing) //TODO: ez kell?
             mouseDownLocation += change;
@@ -197,7 +192,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
         if (size.Width != value)
         {
-          OnPreModified(EventArgs.Empty);
           Size change = new Size(value - Width, 0);
           if (IsResizing) //TODO: ez kell?
             mouseDownLocation.X += change.Width;
@@ -221,7 +215,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
         if (size.Height != value)
         {
-          OnPreModified(EventArgs.Empty);
           Size change = new Size(0, value - Height);
           if (IsResizing) //TODO: ez kell?
             mouseDownLocation.Y += change.Height;
@@ -581,7 +574,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (pressed)
         {
           e.Handled = true;
+          var oldResizing = IsResizing;
           resizeMode = GetResizeMode(e);
+          if (oldResizing != IsResizing)
+          {
+            _currentOperation = DiagramElementOperation.Resizing;
+            OnBeginUndoableOperation(EventArgs.Empty);
+          }
           Cursor.Current = cursor;
           OnMouseDown(e);
         }
@@ -711,6 +710,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
           (int)(e.X - mouseDownLocation.X),
           (int)(e.Y - mouseDownLocation.Y));
 
+        if (_currentOperation == DiagramElementOperation.None)
+        {
+          _currentOperation = DiagramElementOperation.Dragging;
+          OnBeginUndoableOperation(EventArgs.Empty);
+        }
+
         OnDragging(new MoveEventArgs(offset));
       }
     }
@@ -719,6 +724,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       base.OnMouseUp(e);
       resizeMode = ResizeMode.None;
+      _currentOperation = DiagramElementOperation.None;
     }
 
     protected override void OnDoubleClick(AbsoluteMouseEventArgs e)

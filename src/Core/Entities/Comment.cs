@@ -58,7 +58,7 @@ namespace NClass.Core
 
         if (text != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           text = value;
           Changed();
         }

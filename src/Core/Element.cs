@@ -25,7 +25,7 @@ namespace NClass.Core
     int dontRaiseRequestCount = 0;
     int dontRaisePreRequestCount = 0;
 
-    public event EventHandler PreModified;
+    public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
 
     public bool IsDirty
@@ -59,7 +59,7 @@ namespace NClass.Core
           dontRaisePreRequestCount--;
 
         if (RaisePreChangedEvent)
-          OnPreModified(EventArgs.Empty);
+          OnBeginUndoableOperation(EventArgs.Empty);
       }
     }
 
@@ -81,13 +81,13 @@ namespace NClass.Core
       }
     }
 
-    protected void PreChanged()
+    protected void OnBeginUndoableOperation()
     {
       if (!Initializing)
       {
         if (RaisePreChangedEvent)
         {
-          OnPreModified(EventArgs.Empty);
+          OnBeginUndoableOperation(EventArgs.Empty);
         }
       }
     }
@@ -103,10 +103,10 @@ namespace NClass.Core
       }
     }
 
-    private void OnPreModified(EventArgs e)
+    private void OnBeginUndoableOperation(EventArgs e)
     {
-      if (PreModified != null)
-        PreModified(this, e);
+      if (BeginUndoableOperation != null)
+        BeginUndoableOperation(this, e);
     }
 
     private void OnModified(EventArgs e)

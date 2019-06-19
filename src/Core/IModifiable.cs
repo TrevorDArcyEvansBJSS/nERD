@@ -19,7 +19,7 @@ namespace NClass.Core
 {
   public interface IModifiable
   {
-    event EventHandler PreModified;
+    event EventHandler BeginUndoableOperation;
     event EventHandler Modified;
 
     bool IsDirty { get; }

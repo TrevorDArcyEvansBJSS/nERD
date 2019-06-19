@@ -133,14 +133,14 @@ namespace NClass.Core
       if (_base.Language != this.Language)
         throw new RelationshipException(Strings.ErrorLanguagesDoNotEqual);
 
-      PreChanged();
+      OnBeginUndoableOperation();
       BaseList.Add(_base);
       Changed();
     }
 
     internal bool RemoveBase(InterfaceType _base)
     {
-      PreChanged();
+      OnBeginUndoableOperation();
       if (BaseList.Remove(_base))
       {
         Changed();

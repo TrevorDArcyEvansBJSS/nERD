@@ -117,7 +117,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= FieldModifier.Static;
           else
@@ -151,7 +151,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= FieldModifier.Hider;
           else
@@ -185,7 +185,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= FieldModifier.Readonly;
           else
@@ -219,7 +219,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= FieldModifier.Constant;
           else
@@ -253,7 +253,7 @@ namespace NClass.Core
 
         try
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           if (value)
             modifier |= FieldModifier.Volatile;
           else
@@ -280,7 +280,7 @@ namespace NClass.Core
         if (initialValue != value &&
           (!string.IsNullOrEmpty(value) || !string.IsNullOrEmpty(initialValue)))
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           initialValue = value;
           Changed();
         }
@@ -299,7 +299,7 @@ namespace NClass.Core
     {
       if (modifier != FieldModifier.None)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         modifier = FieldModifier.None;
         Changed();
       }

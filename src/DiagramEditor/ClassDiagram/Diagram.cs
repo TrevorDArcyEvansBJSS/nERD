@@ -1287,7 +1287,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void AddShape(Shape shape)
     {
       shape.Diagram = this;
-      shape.PreModified += new EventHandler(Element_PreModified);
+      shape.BeginUndoableOperation += new EventHandler(OnBeginUndoableOperation);
       shape.Modified += new EventHandler(Element_Modified);
       shape.Activating += new EventHandler(Element_Activating);
       shape.Dragging += new MoveEventHandler(Shape_Dragging);
@@ -1295,11 +1295,6 @@ namespace NClass.DiagramEditor.ClassDiagram
       shape.SelectionChanged += new EventHandler(Shape_SelectionChanged);
       shapes.AddFirst(shape);
       RecalculateSize();
-    }
-
-    private void Element_PreModified(object sender, EventArgs e)
-    {
-      OnPreModified(EventArgs.Empty);
     }
 
     private void Element_Modified(object sender, EventArgs e)
@@ -1455,7 +1450,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         OnStatusChanged(EventArgs.Empty);
       }
       shape.Diagram = null;
-      shape.PreModified -= new EventHandler(Element_PreModified);
+      shape.BeginUndoableOperation -= new EventHandler(OnBeginUndoableOperation);
       shape.Modified -= new EventHandler(Element_Modified);
       shape.Activating -= new EventHandler(Element_Activating);
       shape.Dragging -= new MoveEventHandler(Shape_Dragging);
@@ -1489,7 +1484,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void AddConnection(Connection connection)
     {
       connection.Diagram = this;
-      connection.PreModified += new EventHandler(Element_PreModified);
+      connection.BeginUndoableOperation += new EventHandler(OnBeginUndoableOperation);
       connection.Modified += new EventHandler(Element_Modified);
       connection.Activating += new EventHandler(Element_Activating);
       connection.SelectionChanged += new EventHandler(Connection_SelectionChanged);
@@ -1509,7 +1504,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         OnStatusChanged(EventArgs.Empty);
       }
       connection.Diagram = null;
-      connection.PreModified -= new EventHandler(Element_PreModified);
+      connection.BeginUndoableOperation -= new EventHandler(OnBeginUndoableOperation);
       connection.Modified -= new EventHandler(Element_Modified);
       connection.Activating += new EventHandler(Element_Activating);
       connection.SelectionChanged -= new EventHandler(Connection_SelectionChanged);

@@ -93,7 +93,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (collapsed != value)
         {
           Size oldSize = Size;
-          OnPreModified(EventArgs.Empty);
+          OnBeginUndoableOperation(EventArgs.Empty);
           collapsed = value;
           OnResize(new ResizeEventArgs(Size - oldSize));
           OnModified(EventArgs.Empty);

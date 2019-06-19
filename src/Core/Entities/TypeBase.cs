@@ -54,7 +54,7 @@ namespace NClass.Core
 
         if (newName != name)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           name = newName;
           Changed();
         }
@@ -82,7 +82,7 @@ namespace NClass.Core
 
         if (access != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           access = value;
           Changed();
         }
@@ -133,7 +133,7 @@ namespace NClass.Core
             throw new RelationshipException(Strings.ErrorCyclicNesting);
           }
 
-          PreChanged();
+          OnBeginUndoableOperation();
           if (nestingParent != null)
             nestingParent.RemoveNestedChild(this);
           nestingParent = value;

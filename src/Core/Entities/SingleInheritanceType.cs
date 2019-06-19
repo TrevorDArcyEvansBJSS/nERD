@@ -78,14 +78,14 @@ namespace NClass.Core
           throw new RelationshipException(Strings.ErrorCannotAddSameInterface);
       }
 
-      PreChanged();
+      OnBeginUndoableOperation();
       InterfaceList.Add(interfaceType);
       Changed();
     }
 
     public void RemoveInterface(InterfaceType interfaceType)
     {
-      PreChanged();
+      OnBeginUndoableOperation();
       if (InterfaceList.Remove(interfaceType))
         Changed();
     }

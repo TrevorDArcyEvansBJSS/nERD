@@ -32,7 +32,7 @@ namespace NClass.Core
     bool isReadOnly = false;
     bool loading = false;
 
-    public event EventHandler PreModified;
+    public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
     public event EventHandler Renamed;
     public event EventHandler FileStateChanged;
@@ -64,7 +64,7 @@ namespace NClass.Core
       {
         if (name != value && value != null && value.Length > 0)
         {
-          OnPreModified(EventArgs.Empty);
+          OnBeginUndoableOperation(EventArgs.Empty);
           name = value;
           isUntitled = false;
           OnRenamed(EventArgs.Empty);
@@ -182,9 +182,9 @@ namespace NClass.Core
       if (items.Contains(item))
         throw new ArgumentException("The project already contains this item.");
 
-      OnPreModified(EventArgs.Empty);
+      OnBeginUndoableOperation(EventArgs.Empty);
       item.Project = this;
-      item.PreModified += new EventHandler(Item_PreModified);
+      item.BeginUndoableOperation += delegate { OnBeginUndoableOperation(EventArgs.Empty); };
       item.Modified += new EventHandler(Item_Modified);
       items.Add(item);
 
@@ -196,18 +196,13 @@ namespace NClass.Core
     {
       if (items.Remove(item))
       {
-        OnPreModified(EventArgs.Empty);
+        OnBeginUndoableOperation(EventArgs.Empty);
         item.Close();
-        item.PreModified -= new EventHandler(Item_PreModified);
+        item.BeginUndoableOperation -= delegate { OnBeginUndoableOperation(EventArgs.Empty); };
         item.Modified -= new EventHandler(Item_Modified);
         OnItemRemoved(new ProjectItemEventArgs(item));
         OnModified(EventArgs.Empty);
       }
-    }
-
-    private void Item_PreModified(object sender, EventArgs e)
-    {
-      OnPreModified(EventArgs.Empty);
     }
 
     private void Item_Modified(object sender, EventArgs e)
@@ -425,12 +420,12 @@ namespace NClass.Core
       }
     }
 
-    private void OnPreModified(EventArgs e)
+    private void OnBeginUndoableOperation(EventArgs e)
     {
       if (!loading)
       {
-        if (PreModified != null)
-          PreModified(this, e);
+        if (BeginUndoableOperation != null)
+          BeginUndoableOperation(this, e);
       }
     }
 

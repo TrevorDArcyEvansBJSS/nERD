@@ -63,7 +63,7 @@ namespace NClass.Core
 
         if (parent != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           parent = value;
           Changed();
         }
@@ -86,7 +86,7 @@ namespace NClass.Core
 
         if (newName != name)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           name = newName;
           Changed();
         }
@@ -99,7 +99,7 @@ namespace NClass.Core
       {
         if (name != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           name = value;
           Changed();
         }
@@ -126,7 +126,7 @@ namespace NClass.Core
 
         if (newType != type)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           type = newType;
           Changed();
         }
@@ -139,7 +139,7 @@ namespace NClass.Core
       {
         if (type != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           type = value;
           Changed();
         }
@@ -172,7 +172,7 @@ namespace NClass.Core
 
         if (access != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           access = value;
           Changed();
         }

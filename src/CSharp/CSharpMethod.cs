@@ -264,7 +264,7 @@ namespace NClass.CSharp
 
             if (value)
               AccessModifier = AccessModifier.Default;
-            PreChanged();
+            OnBeginUndoableOperation();
             isExplicitImplementation = value;
             Changed();
           }

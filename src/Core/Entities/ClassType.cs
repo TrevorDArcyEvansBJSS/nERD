@@ -57,7 +57,7 @@ namespace NClass.Core
           if (value == ClassModifier.Sealed && IsSuperClass)
             throw new BadSyntaxException(Strings.ErrorInvalidModifier);
 
-          PreChanged();
+          OnBeginUndoableOperation();
           modifier = value;
           Changed();
         }
@@ -172,7 +172,7 @@ namespace NClass.Core
 
         if (value == null)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           baseClass.derivedClassCount--;
           baseClass = null;
           Changed();
@@ -195,7 +195,7 @@ namespace NClass.Core
         if (value.Language != this.Language)
           throw new RelationshipException(Strings.ErrorLanguagesDoNotEqual);
 
-        PreChanged();
+        OnBeginUndoableOperation();
         baseClass = value;
         baseClass.derivedClassCount++;
         Changed();

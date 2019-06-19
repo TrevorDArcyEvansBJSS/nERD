@@ -53,7 +53,7 @@ namespace NClass.Core
 
         if (newReturnType != returnType)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           returnType = newReturnType;
           Changed();
         }
@@ -106,8 +106,8 @@ namespace NClass.Core
     {
       Parameter parameter = argumentList.Add(declaration);
 
-      PreChanged();
-      parameter.PreModified += delegate { PreChanged(); };
+      OnBeginUndoableOperation();
+      parameter.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
       parameter.Modified += delegate { Changed(); };
       Changed();
       return parameter;
@@ -121,7 +121,7 @@ namespace NClass.Core
     /// </exception>
     public Parameter ModifyParameter(Parameter parameter, string declaration)
     {
-      PreChanged();
+      OnBeginUndoableOperation();
       Parameter modified = argumentList.ModifyParameter(parameter, declaration);
       Changed();
 
@@ -130,7 +130,7 @@ namespace NClass.Core
 
     public void RemoveParameter(Parameter parameter)
     {
-      PreChanged();
+      OnBeginUndoableOperation();
       argumentList.Remove(parameter);
       Changed();
     }
@@ -139,7 +139,7 @@ namespace NClass.Core
     {
       if (item is Parameter && MoveUp(argumentList, item))
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         Changed();
         return true;
       }
@@ -153,7 +153,7 @@ namespace NClass.Core
     {
       if (item is Parameter)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
       }
 
       if (item is Parameter && MoveDown(argumentList, item))

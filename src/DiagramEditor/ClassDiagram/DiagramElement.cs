@@ -23,6 +23,13 @@ using System.Xml;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
+    public enum DiagramElementOperation
+    {
+      None = 0,
+      Dragging = 1,
+      Resizing = 2
+    }
+
   public abstract class DiagramElement : IModifiable
   {
     protected const float UndreadableZoom = 0.25F;
@@ -35,7 +42,9 @@ namespace NClass.DiagramEditor.ClassDiagram
     bool isMousePressed = false;
     bool needsRedraw = true;
 
-    public event EventHandler PreModified;
+    protected DiagramElementOperation _currentOperation = DiagramElementOperation.None;
+
+    public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
     public event EventHandler SelectionChanged;
     public event EventHandler Activating;
@@ -236,12 +245,6 @@ namespace NClass.DiagramEditor.ClassDiagram
     [Obsolete]
     protected internal abstract void Deserialize(XmlElement node);
 
-    protected virtual void OnPreModified(EventArgs e)
-    {
-      if (PreModified != null)
-        PreModified(this, e);
-    }
-
     protected virtual void OnModified(EventArgs e)
     {
       isDirty = true;
@@ -306,6 +309,12 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       if (DoubleClick != null)
         DoubleClick(this, e);
+    }
+
+    protected virtual void OnBeginUndoableOperation(EventArgs e)
+    {
+      if (BeginUndoableOperation != null)
+        BeginUndoableOperation(this, e);
     }
 
     internal abstract void MousePressed(AbsoluteMouseEventArgs e);

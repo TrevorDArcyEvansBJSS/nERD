@@ -205,9 +205,9 @@ namespace NClass.Core
     {
       if (field != null && !FieldList.Contains(field))
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         fields.Add(field);
-        field.PreModified += delegate { PreChanged(); };
+        field.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
         field.Modified += delegate { Changed(); };
         Changed();
       }
@@ -217,9 +217,9 @@ namespace NClass.Core
     {
       if (operation != null && !OperationList.Contains(operation))
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         operations.Add(operation);
-        operation.PreModified += delegate { PreChanged(); };
+        operation.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
         operation.Modified += delegate { Changed(); };
         Changed();
       }
@@ -245,13 +245,13 @@ namespace NClass.Core
     {
       if (member is Field)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         if (FieldList.Remove((Field)member))
           Changed();
       }
       else if (member is Operation)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         if (OperationList.Remove((Operation)member))
           Changed();
       }
@@ -261,7 +261,7 @@ namespace NClass.Core
     {
       if (type != null && !nestedChilds.Contains(type))
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         nestedChilds.Add(type);
         Changed();
       }
@@ -271,7 +271,7 @@ namespace NClass.Core
     {
       if (type != null)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
       }
 
       if (type != null && nestedChilds.Remove(type))
@@ -296,7 +296,7 @@ namespace NClass.Core
     {
       if (item is Field)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         if (MoveUp(FieldList, item))
         {
           Changed();
@@ -305,7 +305,7 @@ namespace NClass.Core
       }
       else if (item is Operation)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         if (MoveUp(OperationList, item))
         {
           Changed();
@@ -319,7 +319,7 @@ namespace NClass.Core
     {
       if (item is Field)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         if (MoveDown(FieldList, item))
         {
           Changed();
@@ -328,7 +328,7 @@ namespace NClass.Core
       }
       else if (item is Operation)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         if (MoveDown(OperationList, item))
         {
           Changed();
@@ -343,21 +343,21 @@ namespace NClass.Core
       switch (sortingMode)
       {
         case SortingMode.ByName:
-          PreChanged();
+          OnBeginUndoableOperation();
           FieldList.Sort(MemberComparisonByName);
           OperationList.Sort(MemberComparisonByName);
           Changed();
           break;
 
         case SortingMode.ByAccess:
-          PreChanged();
+          OnBeginUndoableOperation();
           FieldList.Sort(MemberComparisonByAccess);
           OperationList.Sort(MemberComparisonByAccess);
           Changed();
           break;
 
         case SortingMode.ByKind:
-          PreChanged();
+          OnBeginUndoableOperation();
           FieldList.Sort(MemberComparisonByKind);
           OperationList.Sort(MemberComparisonByKind);
           Changed();

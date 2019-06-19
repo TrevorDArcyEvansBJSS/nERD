@@ -80,9 +80,9 @@ namespace NClass.Core
             throw new ReservedNameException(newValue.Name);
         }
 
-        PreChanged();
+        OnBeginUndoableOperation();
         values.Add(newValue);
-        newValue.PreModified += delegate { PreChanged(); };
+        newValue.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
         newValue.Modified += delegate { Changed(); };
         Changed();
       }
@@ -127,7 +127,7 @@ namespace NClass.Core
       }
       else
       {
-        PreChanged();
+        OnBeginUndoableOperation();
         values[index] = newValue;
         Changed();
         return true;
@@ -136,7 +136,7 @@ namespace NClass.Core
 
     public void RemoveValue(EnumValue value)
     {
-      PreChanged();
+      OnBeginUndoableOperation();
       if (values.Remove(value))
         Changed();
     }
@@ -145,7 +145,7 @@ namespace NClass.Core
     {
       if (item is EnumValue)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
       }
 
       if (item is EnumValue && MoveUp(values, item))
@@ -163,7 +163,7 @@ namespace NClass.Core
     {
       if (item is EnumValue)
       {
-        PreChanged();
+        OnBeginUndoableOperation();
       }
 
       if (item is EnumValue && MoveDown(values, item))

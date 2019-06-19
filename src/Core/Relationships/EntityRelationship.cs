@@ -34,7 +34,7 @@ namespace NClass.Core
       {
         if (startMultiplicity != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           startMultiplicity = value;
           Changed();
         }
@@ -50,7 +50,7 @@ namespace NClass.Core
       {
         if (endMultiplicity != value)
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           endMultiplicity = value;
           Changed();
         }
