@@ -24,13 +24,10 @@ namespace NClass.Core
 {
   public sealed class Project : IModifiable
   {
-    string name;
-    FileInfo projectFile = null;
-    List<IProjectItem> items = new List<IProjectItem>();
-    bool isDirty = false;
-    bool isUntitled = true;
-    bool isReadOnly = false;
-    bool loading = false;
+    private string name;
+    private FileInfo projectFile = null;
+    private readonly List<IProjectItem> items = new List<IProjectItem>();
+    private bool loading = false;
 
     public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
@@ -66,22 +63,16 @@ namespace NClass.Core
         {
           OnBeginUndoableOperation(EventArgs.Empty);
           name = value;
-          isUntitled = false;
+          IsUntitled = false;
           OnRenamed(EventArgs.Empty);
           OnModified(EventArgs.Empty);
         }
       }
     }
 
-    public bool IsUntitled
-    {
-      get { return isUntitled; }
-    }
+    public bool IsUntitled { get; private set; } = true;
 
-    public bool IsReadOnly
-    {
-      get { return isReadOnly; }
-    }
+    public bool IsReadOnly { get; private set; } = false;
 
     public string FilePath
     {
@@ -134,10 +125,7 @@ namespace NClass.Core
       }
     }
 
-    public bool IsDirty
-    {
-      get { return isDirty; }
-    }
+    public bool IsDirty { get; private set; } = false;
 
     public IEnumerable<IProjectItem> Items
     {
@@ -160,9 +148,9 @@ namespace NClass.Core
       {
         item.Clean();
       }
-      if (isDirty)
+      if (IsDirty)
       {
-        isDirty = false;
+        IsDirty = false;
         OnFileStateChanged(EventArgs.Empty);
       }
     }
@@ -207,7 +195,7 @@ namespace NClass.Core
 
     private void Item_Modified(object sender, EventArgs e)
     {
-      isDirty = true;
+      IsDirty = true;
       OnModified(EventArgs.Empty);
     }
 
@@ -259,7 +247,7 @@ namespace NClass.Core
           Project oldProject = LoadWithPreviousFormat(root);
           oldProject.FilePath = fileName;
           oldProject.name = Path.GetFileNameWithoutExtension(fileName);
-          oldProject.isUntitled = false;
+          oldProject.IsUntitled = false;
           return oldProject;
         }
       }
@@ -276,7 +264,7 @@ namespace NClass.Core
       }
       project.loading = false;
       project.FilePath = fileName;
-      project.isReadOnly = project.projectFile.IsReadOnly;
+      project.IsReadOnly = project.projectFile.IsReadOnly;
 
       return project;
     }
@@ -302,7 +290,7 @@ namespace NClass.Core
       }
       project.Add(projectItem);
       project.loading = false;
-      project.isReadOnly = true;
+      project.IsReadOnly = true;
       return project;
     }
 
@@ -345,7 +333,7 @@ namespace NClass.Core
         throw new IOException(Strings.ErrorCouldNotSaveFile, ex);
       }
 
-      isReadOnly = false;
+      IsReadOnly = false;
       FilePath = fileName;
       Clean();
     }
@@ -379,7 +367,7 @@ namespace NClass.Core
     /// </exception>
     private void Deserialize(XmlElement node)
     {
-      isUntitled = false;
+      IsUntitled = false;
 
       XmlElement nameElement = node["Name"];
       if (nameElement == null || nameElement.InnerText == "")
@@ -433,7 +421,7 @@ namespace NClass.Core
     {
       if (!loading)
       {
-        isDirty = true;
+        IsDirty = true;
         if (Modified != null)
           Modified(this, e);
       }
