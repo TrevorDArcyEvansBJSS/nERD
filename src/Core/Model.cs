@@ -871,6 +871,14 @@ namespace NClass.Core
       var xmlElem = new XmlDocument().CreateElement("Undo");
       Serialize(xmlElem);
       UndoModels.Push(xmlElem);
+
+      OnBeginUndoableOperation(EventArgs.Empty);
+    }
+
+    protected void OnBeginUndoableOperation(EventArgs e)
+    {
+      if (BeginUndoableOperation != null)
+        BeginUndoableOperation(this, e);
     }
 
     protected virtual void OnModified(EventArgs e)

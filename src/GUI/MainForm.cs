@@ -362,6 +362,7 @@ namespace NClass.GUI
       toolZoomOut.Enabled = docManager.HasDocument;
       toolZoomValue.Enabled = docManager.HasDocument;
       toolAutoZoom.Enabled = docManager.HasDocument && !docManager.ActiveDocument.IsEmpty;
+      toolUndo.Enabled = docManager.HasDocument && docManager.ActiveDocument.CanUndo;
     }
 
     private void UpdateClipboardToolBar()
@@ -444,8 +445,8 @@ namespace NClass.GUI
         Workspace.Default.ActiveProject = docManager.ActiveDocument.Project;
         docManager.ActiveDocument.Modified += ActiveDocument_Modified;
         docManager.ActiveDocument.StatusChanged += ActiveDocument_StatusChanged;
-        docManager.ActiveDocument.ClipboardAvailabilityChanged +=
-          ActiveDocument_ClipboardAvailabilityChanged;
+        docManager.ActiveDocument.ClipboardAvailabilityChanged += ActiveDocument_ClipboardAvailabilityChanged;
+        docManager.ActiveDocument.BeginUndoableOperation += ActiveDocument_BeginUndoableOperation;
       }
       else
       {
@@ -457,13 +458,18 @@ namespace NClass.GUI
       {
         oldDocument.Modified -= ActiveDocument_Modified;
         oldDocument.StatusChanged -= ActiveDocument_StatusChanged;
-        oldDocument.ClipboardAvailabilityChanged -=
-          ActiveDocument_ClipboardAvailabilityChanged;
+        oldDocument.ClipboardAvailabilityChanged -= ActiveDocument_ClipboardAvailabilityChanged;
+        oldDocument.BeginUndoableOperation -= ActiveDocument_BeginUndoableOperation;
       }
 
       UpdateStatusBar();
       UpdateDynamicMenus();
       UpdateClipboardToolBar();
+      UpdateStandardToolStrip();
+    }
+
+    private void ActiveDocument_BeginUndoableOperation(object sender, EventArgs e)
+    {
       UpdateStandardToolStrip();
     }
 
@@ -895,6 +901,14 @@ namespace NClass.GUI
       if (docManager.HasDocument)
       {
         docManager.ActiveDocument.Paste();
+      }
+    }
+
+    private void toolUndo_Click(object sender, EventArgs e)
+    {
+      if (docManager.HasDocument)
+      {
+        docManager.ActiveDocument.Undo();
       }
     }
 

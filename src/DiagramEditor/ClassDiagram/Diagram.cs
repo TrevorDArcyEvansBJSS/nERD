@@ -1899,6 +1899,9 @@ namespace NClass.DiagramEditor.ClassDiagram
 
       var xmlElem = UndoModels.Pop();
       Deserialize(xmlElem);
+
+      // fire event so UI updates
+      OnBeginUndoableOperation(EventArgs.Empty);
     }
 
     public void Redo()

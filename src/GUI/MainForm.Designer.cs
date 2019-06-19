@@ -992,7 +992,8 @@ namespace NClass.GUI
       this.toolUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.toolUndo.Name = "toolUndo";
       this.toolUndo.Size = new System.Drawing.Size(23, 22);
-      this.toolUndo.Visible = false;
+      this.toolUndo.Visible = true;
+      this.toolUndo.Click += new System.EventHandler(this.toolUndo_Click);
       // 
       // toolRedo
       // 
