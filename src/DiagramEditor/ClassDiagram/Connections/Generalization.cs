@@ -22,9 +22,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Generalization : Connection
   {
-    static Pen linePen = new Pen(Color.Black);
-
-    GeneralizationRelationship generalization;
+    private static readonly Pen linePen = new Pen(Color.Black);
 
     static Generalization()
     {
@@ -35,17 +33,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Generalization(GeneralizationRelationship generalization, Shape startShape, Shape endShape)
       : base(generalization, startShape, endShape)
     {
-      this.generalization = generalization;
+      this.GeneralizationRelationship = generalization;
     }
 
-    internal GeneralizationRelationship GeneralizationRelationship
-    {
-      get { return generalization; }
-    }
+    internal GeneralizationRelationship GeneralizationRelationship { get; }
 
     protected internal override Relationship Relationship
     {
-      get { return generalization; }
+      get { return GeneralizationRelationship; }
     }
 
     protected override Size EndCapSize
@@ -74,7 +69,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
       if (firstType != null && secondType != null)
       {
-        GeneralizationRelationship clone = generalization.Clone(firstType, secondType);
+        GeneralizationRelationship clone = GeneralizationRelationship.Clone(firstType, secondType);
         return diagram.InsertGeneralization(clone);
       }
       else
