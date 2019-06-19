@@ -19,8 +19,8 @@ namespace NClass.Core
 {
   public abstract class TypeRelationship : Relationship
   {
-    TypeBase first;
-    TypeBase second;
+    private TypeBase first;
+    private TypeBase second;
 
     protected TypeRelationship(TypeBase first, TypeBase second)
     {
