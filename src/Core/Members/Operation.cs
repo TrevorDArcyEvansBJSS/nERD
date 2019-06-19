@@ -19,18 +19,16 @@ namespace NClass.Core
 {
   public abstract class Operation : Member
   {
-    OperationModifier modifier = OperationModifier.None;
-    ArgumentList argumentList;
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
     /// </exception>
-    protected Operation(string name, CompositeType parent) : base(name, parent)
+    protected Operation(string name, CompositeType parent) :
+      base(name, parent)
     {
-      argumentList = Language.CreateParameterCollection();
+      ArgumentList = Language.CreateParameterCollection();
     }
 
     public bool HasParameter
@@ -41,10 +39,7 @@ namespace NClass.Core
       }
     }
 
-    protected ArgumentList ArgumentList
-    {
-      get { return argumentList; }
-    }
+    protected ArgumentList ArgumentList { get; private set; }
 
     /// <exception cref="BadSyntaxException">
     /// Cannot set access visibility.
@@ -81,16 +76,13 @@ namespace NClass.Core
       }
     }
 
-    public OperationModifier Modifier
-    {
-      get { return modifier; }
-    }
+    public OperationModifier Modifier { get; private set; } = OperationModifier.None;
 
     public sealed override bool IsModifierless
     {
       get
       {
-        return (modifier == OperationModifier.None);
+        return (Modifier == OperationModifier.None);
       }
     }
 
@@ -101,28 +93,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & OperationModifier.Static) != 0);
+        return ((Modifier & OperationModifier.Static) != 0);
       }
       set
       {
         if (value == IsStatic)
           return;
 
-        OperationModifier previousModifier = modifier;
+        OperationModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= OperationModifier.Static;
+            Modifier |= OperationModifier.Static;
           else
-            modifier &= ~OperationModifier.Static;
+            Modifier &= ~OperationModifier.Static;
           Language.ValidateOperation(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -135,28 +127,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & OperationModifier.Hider) != 0);
+        return ((Modifier & OperationModifier.Hider) != 0);
       }
       set
       {
         if (value == IsHider)
           return;
 
-        OperationModifier previousModifier = modifier;
+        OperationModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= OperationModifier.Hider;
+            Modifier |= OperationModifier.Hider;
           else
-            modifier &= ~OperationModifier.Hider;
+            Modifier &= ~OperationModifier.Hider;
           Language.ValidateOperation(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -169,28 +161,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & OperationModifier.Virtual) != 0);
+        return ((Modifier & OperationModifier.Virtual) != 0);
       }
       set
       {
         if (value == IsVirtual)
           return;
 
-        OperationModifier previousModifier = modifier;
+        OperationModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= OperationModifier.Virtual;
+            Modifier |= OperationModifier.Virtual;
           else
-            modifier &= ~OperationModifier.Virtual;
+            Modifier &= ~OperationModifier.Virtual;
           Language.ValidateOperation(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -203,28 +195,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & OperationModifier.Abstract) != 0);
+        return ((Modifier & OperationModifier.Abstract) != 0);
       }
       set
       {
         if (value == IsAbstract)
           return;
 
-        OperationModifier previousModifier = modifier;
+        OperationModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= OperationModifier.Abstract;
+            Modifier |= OperationModifier.Abstract;
           else
-            modifier &= ~OperationModifier.Abstract;
+            Modifier &= ~OperationModifier.Abstract;
           Language.ValidateOperation(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -237,28 +229,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & OperationModifier.Override) != 0);
+        return ((Modifier & OperationModifier.Override) != 0);
       }
       set
       {
         if (value == IsOverride)
           return;
 
-        OperationModifier previousModifier = modifier;
+        OperationModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= OperationModifier.Override;
+            Modifier |= OperationModifier.Override;
           else
-            modifier &= ~OperationModifier.Override;
+            Modifier &= ~OperationModifier.Override;
           Language.ValidateOperation(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -271,28 +263,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & OperationModifier.Sealed) != 0);
+        return ((Modifier & OperationModifier.Sealed) != 0);
       }
       set
       {
         if (value == IsSealed)
           return;
 
-        OperationModifier previousModifier = modifier;
+        OperationModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= OperationModifier.Sealed;
+            Modifier |= OperationModifier.Sealed;
           else
-            modifier &= ~OperationModifier.Sealed;
+            Modifier &= ~OperationModifier.Sealed;
           Language.ValidateOperation(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -326,10 +318,10 @@ namespace NClass.Core
 
     public virtual void ClearModifiers()
     {
-      if (modifier != OperationModifier.None)
+      if (Modifier != OperationModifier.None)
       {
         OnBeginUndoableOperation();
-        modifier = OperationModifier.None;
+        Modifier = OperationModifier.None;
         Changed();
       }
     }
@@ -339,8 +331,8 @@ namespace NClass.Core
       base.CopyFrom(member);
 
       Operation operation = (Operation)member;
-      modifier = operation.modifier;
-      argumentList = operation.argumentList.Clone();
+      Modifier = operation.Modifier;
+      ArgumentList = operation.ArgumentList.Clone();
     }
 
     public abstract Operation Clone(CompositeType newParent);
