@@ -17,10 +17,10 @@ namespace NClass.Core
 {
   public abstract class Parameter : LanguageElement
   {
-    string type;
-    string name;
-    ParameterModifier modifier;
-    string defaultValue;
+    private string type;
+    private string name;
+    private ParameterModifier modifier;
+    private string defaultValue;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> or <paramref name="type"/> 
