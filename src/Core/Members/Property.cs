@@ -65,7 +65,7 @@ namespace NClass.Core
         {
           if (value)
             isWriteonly = false;
-          PreChanged();
+          OnBeginUndoableOperation();
           isReadonly = value;
           Changed();
         }
@@ -84,7 +84,7 @@ namespace NClass.Core
         {
           if (value)
             isReadonly = false;
-          PreChanged();
+          OnBeginUndoableOperation();
           isWriteonly = value;
           Changed();
         }
@@ -108,7 +108,7 @@ namespace NClass.Core
         if (value == AccessModifier.Default || (value != Access &&
           WriteAccess == AccessModifier.Default && !IsReadonly && !IsWriteonly))
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           readAccess = value;
           Changed();
         }
@@ -136,7 +136,7 @@ namespace NClass.Core
         if (value == AccessModifier.Default || (value != Access &&
           ReadAccess == AccessModifier.Default && !IsReadonly && !IsWriteonly))
         {
-          PreChanged();
+          OnBeginUndoableOperation();
           writeAccess = value;
           Changed();
         }
