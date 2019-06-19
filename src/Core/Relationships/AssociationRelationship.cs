@@ -22,10 +22,12 @@ namespace NClass.Core
 {
   public sealed class AssociationRelationship : TypeRelationship
   {
-    AssociationType associationType = AssociationType.Association;
-    Direction direction = Direction.Unidirectional;
-    string startRole, endRole;
-    string startMultiplicity, endMultiplicity;
+    private AssociationType associationType = AssociationType.Association;
+    private Direction direction = Direction.Unidirectional;
+    private string startRole;
+    private string endRole;
+    private string startMultiplicity;
+    private string endMultiplicity;
 
     public event EventHandler Reversed;
 
