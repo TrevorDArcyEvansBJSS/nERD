@@ -20,10 +20,10 @@ namespace NClass.Core
 {
   public abstract class Property : Operation
   {
-    bool isReadonly = false;
-    bool isWriteonly = false;
-    AccessModifier readAccess = AccessModifier.Default;
-    AccessModifier writeAccess = AccessModifier.Default;
+    private bool isReadonly = false;
+    private bool isWriteonly = false;
+    private AccessModifier readAccess = AccessModifier.Default;
+    private AccessModifier writeAccess = AccessModifier.Default;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -31,7 +31,8 @@ namespace NClass.Core
     /// <exception cref="ArgumentException">
     /// The language of <paramref name="parent"/> does not equal.
     /// </exception>
-    protected Property(string name, CompositeType parent) : base(name, parent)
+    protected Property(string name, CompositeType parent) :
+      base(name, parent)
     {
     }
 
