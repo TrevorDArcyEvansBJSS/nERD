@@ -21,12 +21,11 @@ namespace NClass.Core
 {
   public abstract class SingleInheritanceType : CompositeType, IInterfaceImplementer
   {
-    List<InterfaceType> interfaceList = new List<InterfaceType>();
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
-    protected SingleInheritanceType(string name) : base(name)
+    protected SingleInheritanceType(string name) :
+      base(name)
     {
     }
 
@@ -45,21 +44,18 @@ namespace NClass.Core
       get;
     }
 
-    protected List<InterfaceType> InterfaceList
-    {
-      get { return interfaceList; }
-    }
+    protected List<InterfaceType> InterfaceList { get; } = new List<InterfaceType>();
 
     public IEnumerable<InterfaceType> Interfaces
     {
-      get { return interfaceList; }
+      get { return InterfaceList; }
     }
 
     public bool ImplementsInterface
     {
       get
       {
-        return (interfaceList.Count > 0);
+        return (InterfaceList.Count > 0);
       }
     }
 
