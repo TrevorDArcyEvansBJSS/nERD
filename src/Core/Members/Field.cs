@@ -20,8 +20,7 @@ namespace NClass.Core
 {
   public abstract class Field : Member
   {
-    FieldModifier modifier = FieldModifier.None;
-    string initialValue = null;
+    private string initialValue = null;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -86,16 +85,13 @@ namespace NClass.Core
       }
     }
 
-    public FieldModifier Modifier
-    {
-      get { return modifier; }
-    }
+    public FieldModifier Modifier { get; private set; } = FieldModifier.None;
 
     public sealed override bool IsModifierless
     {
       get
       {
-        return (modifier == FieldModifier.None);
+        return (Modifier == FieldModifier.None);
       }
     }
 
@@ -106,28 +102,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & FieldModifier.Static) != 0);
+        return ((Modifier & FieldModifier.Static) != 0);
       }
       set
       {
         if (value == IsStatic)
           return;
 
-        FieldModifier previousModifier = modifier;
+        FieldModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= FieldModifier.Static;
+            Modifier |= FieldModifier.Static;
           else
-            modifier &= ~FieldModifier.Static;
+            Modifier &= ~FieldModifier.Static;
           Language.ValidateField(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -140,28 +136,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & FieldModifier.Hider) != 0);
+        return ((Modifier & FieldModifier.Hider) != 0);
       }
       set
       {
         if (value == IsHider)
           return;
 
-        FieldModifier previousModifier = modifier;
+        FieldModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= FieldModifier.Hider;
+            Modifier |= FieldModifier.Hider;
           else
-            modifier &= ~FieldModifier.Hider;
+            Modifier &= ~FieldModifier.Hider;
           Language.ValidateField(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -174,28 +170,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & FieldModifier.Readonly) != 0);
+        return ((Modifier & FieldModifier.Readonly) != 0);
       }
       set
       {
         if (value == IsReadonly)
           return;
 
-        FieldModifier previousModifier = modifier;
+        FieldModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= FieldModifier.Readonly;
+            Modifier |= FieldModifier.Readonly;
           else
-            modifier &= ~FieldModifier.Readonly;
+            Modifier &= ~FieldModifier.Readonly;
           Language.ValidateField(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -208,28 +204,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & FieldModifier.Constant) != 0);
+        return ((Modifier & FieldModifier.Constant) != 0);
       }
       set
       {
         if (value == IsConstant)
           return;
 
-        FieldModifier previousModifier = modifier;
+        FieldModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= FieldModifier.Constant;
+            Modifier |= FieldModifier.Constant;
           else
-            modifier &= ~FieldModifier.Constant;
+            Modifier &= ~FieldModifier.Constant;
           Language.ValidateField(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -242,28 +238,28 @@ namespace NClass.Core
     {
       get
       {
-        return ((modifier & FieldModifier.Volatile) != 0);
+        return ((Modifier & FieldModifier.Volatile) != 0);
       }
       set
       {
         if (value == IsVolatile)
           return;
 
-        FieldModifier previousModifier = modifier;
+        FieldModifier previousModifier = Modifier;
 
         try
         {
           OnBeginUndoableOperation();
           if (value)
-            modifier |= FieldModifier.Volatile;
+            Modifier |= FieldModifier.Volatile;
           else
-            modifier &= ~FieldModifier.Volatile;
+            Modifier &= ~FieldModifier.Volatile;
           Language.ValidateField(this);
           Changed();
         }
         catch
         {
-          modifier = previousModifier;
+          Modifier = previousModifier;
           throw;
         }
       }
@@ -297,10 +293,10 @@ namespace NClass.Core
 
     public virtual void ClearModifiers()
     {
-      if (modifier != FieldModifier.None)
+      if (Modifier != FieldModifier.None)
       {
         OnBeginUndoableOperation();
-        modifier = FieldModifier.None;
+        Modifier = FieldModifier.None;
         Changed();
       }
     }
@@ -324,7 +320,7 @@ namespace NClass.Core
       base.CopyFrom(member);
 
       Field field = (Field)member;
-      modifier = field.modifier;
+      Modifier = field.Modifier;
       initialValue = field.initialValue;
     }
 
