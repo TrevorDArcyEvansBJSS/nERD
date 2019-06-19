@@ -20,8 +20,8 @@ namespace NClass.Core
 {
   public sealed class CommentRelationship : Relationship
   {
-    Comment comment;
-    IEntity entity;
+    private Comment comment;
+    private IEntity entity;
 
     internal CommentRelationship(Comment comment, IEntity entity)
     {
