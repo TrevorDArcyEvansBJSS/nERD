@@ -20,24 +20,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public sealed class InterfaceShape : CompositeTypeShape
   {
-    InterfaceType _interface;
-
     internal InterfaceShape(InterfaceType interfaceType)
       : base(interfaceType)
     {
-      _interface = interfaceType;
+      InterfaceType = interfaceType;
       UpdateMinSize();
     }
 
     public override CompositeType CompositeType
     {
-      get { return _interface; }
+      get { return InterfaceType; }
     }
 
-    public InterfaceType InterfaceType
-    {
-      get { return _interface; }
-    }
+    public InterfaceType InterfaceType { get; }
 
     protected override bool CloneEntity(Diagram diagram)
     {
