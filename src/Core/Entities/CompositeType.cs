@@ -23,9 +23,7 @@ namespace NClass.Core
 {
   public abstract class CompositeType : TypeBase
   {
-    List<Field> fields = new List<Field>();
-    List<Operation> operations = new List<Operation>();
-    List<TypeBase> nestedChilds = new List<TypeBase>();
+    private readonly List<TypeBase> nestedChilds = new List<TypeBase>();
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -41,7 +39,8 @@ namespace NClass.Core
     {
       get
       {
-        return (
+        return
+        (
           SupportsMethods || SupportsConstuctors || SupportsDestructors ||
           SupportsProperties || SupportsEvents
         );
@@ -68,34 +67,28 @@ namespace NClass.Core
 
     public abstract AccessModifier DefaultMemberAccess { get; }
 
-    protected List<Field> FieldList
-    {
-      get { return fields; }
-    }
+    protected List<Field> FieldList { get; } = new List<Field>();
 
     public IEnumerable<Field> Fields
     {
-      get { return fields; }
+      get { return FieldList; }
     }
 
     public int FieldCount
     {
-      get { return fields.Count; }
+      get { return FieldList.Count; }
     }
 
-    protected List<Operation> OperationList
-    {
-      get { return operations; }
-    }
+    protected List<Operation> OperationList { get; } = new List<Operation>();
 
     public IEnumerable<Operation> Operations
     {
-      get { return operations; }
+      get { return OperationList; }
     }
 
     public int OperationCount
     {
-      get { return operations.Count; }
+      get { return OperationList.Count; }
     }
 
     public int MemberCount
@@ -165,38 +158,38 @@ namespace NClass.Core
       {
         case MemberType.Field:
           Field field = AddField();
-          fields.RemoveAt(FieldCount - 1);
-          fields.Insert(index, field);
+          FieldList.RemoveAt(FieldCount - 1);
+          FieldList.Insert(index, field);
           break;
 
         case MemberType.Method:
           Method method = AddMethod();
-          operations.RemoveAt(OperationCount - 1);
-          operations.Insert(index, method);
+          OperationList.RemoveAt(OperationCount - 1);
+          OperationList.Insert(index, method);
           break;
 
         case MemberType.Constructor:
           Constructor constructor = AddConstructor();
-          operations.RemoveAt(OperationCount - 1);
-          operations.Insert(index, constructor);
+          OperationList.RemoveAt(OperationCount - 1);
+          OperationList.Insert(index, constructor);
           break;
 
         case MemberType.Destructor:
           Destructor destructor = AddDestructor();
-          operations.RemoveAt(OperationCount - 1);
-          operations.Insert(index, destructor);
+          OperationList.RemoveAt(OperationCount - 1);
+          OperationList.Insert(index, destructor);
           break;
 
         case MemberType.Property:
           Property property = AddProperty();
-          operations.RemoveAt(OperationCount - 1);
-          operations.Insert(index, property);
+          OperationList.RemoveAt(OperationCount - 1);
+          OperationList.Insert(index, property);
           break;
 
         case MemberType.Event:
           Event _event = AddEvent();
-          operations.RemoveAt(OperationCount - 1);
-          operations.Insert(index, _event);
+          OperationList.RemoveAt(OperationCount - 1);
+          OperationList.Insert(index, _event);
           break;
       }
     }
@@ -206,7 +199,7 @@ namespace NClass.Core
       if (field != null && !FieldList.Contains(field))
       {
         OnBeginUndoableOperation();
-        fields.Add(field);
+        FieldList.Add(field);
         field.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
         field.Modified += delegate { Changed(); };
         Changed();
@@ -218,7 +211,7 @@ namespace NClass.Core
       if (operation != null && !OperationList.Contains(operation))
       {
         OnBeginUndoableOperation();
-        operations.Add(operation);
+        OperationList.Add(operation);
         operation.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
         operation.Modified += delegate { Changed(); };
         Changed();
@@ -227,16 +220,16 @@ namespace NClass.Core
 
     public Field GetField(int index)
     {
-      if (index >= 0 && index < fields.Count)
-        return fields[index];
+      if (index >= 0 && index < FieldList.Count)
+        return FieldList[index];
       else
         return null;
     }
 
     public Operation GetOperation(int index)
     {
-      if (index >= 0 && index < operations.Count)
-        return operations[index];
+      if (index >= 0 && index < OperationList.Count)
+        return OperationList[index];
       else
         return null;
     }
@@ -431,16 +424,16 @@ namespace NClass.Core
       base.CopyFrom(type);
 
       CompositeType compositeType = (CompositeType)type;
-      fields.Clear();
-      fields.Capacity = compositeType.fields.Capacity;
-      operations.Clear();
-      operations.Capacity = compositeType.operations.Capacity;
+      FieldList.Clear();
+      FieldList.Capacity = compositeType.FieldList.Capacity;
+      OperationList.Clear();
+      OperationList.Capacity = compositeType.OperationList.Capacity;
 
-      foreach (Field field in compositeType.fields)
+      foreach (Field field in compositeType.FieldList)
       {
         AddField(field.Clone(this));
       }
-      foreach (Operation operation in compositeType.operations)
+      foreach (Operation operation in compositeType.OperationList)
       {
         AddOperation(operation.Clone(this));
       }
