@@ -21,27 +21,22 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Nesting : Connection
   {
-    const int Radius = 9;
-    const int Diameter = Radius * 2;
-    const int CrossSize = 8;
-    static Pen linePen = new Pen(Color.Black);
-
-    NestingRelationship nesting;
+    private const int Radius = 9;
+    private const int Diameter = Radius * 2;
+    private const int CrossSize = 8;
+    private static Pen linePen = new Pen(Color.Black);
 
     public Nesting(NestingRelationship nesting, Shape startShape, Shape endShape)
       : base(nesting, startShape, endShape)
     {
-      this.nesting = nesting;
+      this.NestingRelationship = nesting;
     }
 
-    internal NestingRelationship NestingRelationship
-    {
-      get { return nesting; }
-    }
+    internal NestingRelationship NestingRelationship { get; }
 
     protected internal override Relationship Relationship
     {
-      get { return nesting; }
+      get { return NestingRelationship; }
     }
 
     protected override Size StartCapSize
@@ -72,7 +67,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
       if (firstType != null && secondType != null)
       {
-        NestingRelationship clone = nesting.Clone(firstType, secondType);
+        NestingRelationship clone = NestingRelationship.Clone(firstType, secondType);
         return diagram.InsertNesting(clone);
       }
       else
