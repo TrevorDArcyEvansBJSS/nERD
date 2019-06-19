@@ -19,7 +19,8 @@ namespace NClass.Core
 {
   public sealed class DependencyRelationship : TypeRelationship
   {
-    internal DependencyRelationship(TypeBase first, TypeBase second) : base(first, second)
+    internal DependencyRelationship(TypeBase first, TypeBase second) :
+      base(first, second)
     {
       Attach();
     }
