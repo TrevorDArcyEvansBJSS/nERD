@@ -1,7 +1,11 @@
-﻿using Layouts.Lang;
+﻿using EpForceDirectedGraph.cs;
+using Layouts.Lang;
 using Layouts.Properties;
+using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram;
 using NClass.GUI;
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Layouts
@@ -39,7 +43,37 @@ namespace Layouts
         return;
       }
 
-      // TODO   Layout
+      var graph = new Graph();
+      var diagram = (Diagram)DocumentManager.ActiveDocument;
+
+      // add nodes
+      diagram
+        .Entities
+        .ToList()
+        .ForEach(x =>
+        {
+          graph.AddNode(new Node(x.Name));
+        });
+
+      // add edges
+      diagram
+        .Relationships
+        .ToList()
+        .ForEach(x =>
+        {
+          graph.CreateEdge(x.First.Name, x.Second.Name);
+        });
+
+      var physics = new ForceDirected2D(graph, 81.76f, 40000.0f, 0.5f);
+      var renderer = new NullRenderer(physics);
+
+      const int MaxIterations = 10000;
+      foreach (var _ in Enumerable.Range(0, MaxIterations))
+      {
+        renderer.Draw(0.05f);
+      }
+
+      // TODO   update diagram
     }
   }
 }
