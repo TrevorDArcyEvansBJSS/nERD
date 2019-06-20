@@ -44,7 +44,7 @@ namespace EpForceDirectedGraph.cs
     {
     }
 
-    public override Point GetPoint(Node iNode)
+    public override Point GetPoint(INode iNode)
     {
       if (!(m_nodePoints.ContainsKey(iNode.Id)))
       {
@@ -61,7 +61,7 @@ namespace EpForceDirectedGraph.cs
       BoundingBox boundingBox = new BoundingBox();
       FDGVector3 bottomLeft = FDGVector3.Identity().Multiply(BoundingBox.DefaultBB * -1.0f) as FDGVector3;
       FDGVector3 topRight = FDGVector3.Identity().Multiply(BoundingBox.DefaultBB) as FDGVector3;
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         FDGVector3 position = GetPoint(n).Position as FDGVector3;
         if (position.X < bottomLeft.X)

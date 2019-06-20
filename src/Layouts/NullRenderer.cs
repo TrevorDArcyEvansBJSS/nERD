@@ -6,7 +6,7 @@ namespace Layouts
 {
   public sealed class NullRenderer : AbstractRenderer
   {
-    private readonly IDictionary<Node, AbstractVector> _nodePos = new Dictionary<Node, AbstractVector>();
+    private readonly IDictionary<INode, AbstractVector> _nodePos = new Dictionary<INode, AbstractVector>();
 
     public NullRenderer(IForceDirected iForceDirected) :
       base(iForceDirected)
@@ -22,11 +22,11 @@ namespace Layouts
     {
     }
 
-    protected override void DrawEdge(Edge iEdge, AbstractVector iPosition1, AbstractVector iPosition2)
+    protected override void DrawEdge(IEdge iEdge, AbstractVector iPosition1, AbstractVector iPosition2)
     {
     }
 
-    protected override void DrawNode(Node iNode, AbstractVector iPosition)
+    protected override void DrawNode(INode iNode, AbstractVector iPosition)
     {
       if (_nodePos.ContainsKey(iNode))
       {

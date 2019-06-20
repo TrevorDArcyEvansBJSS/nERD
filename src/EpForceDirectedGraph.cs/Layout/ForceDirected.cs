@@ -66,9 +66,9 @@ namespace EpForceDirectedGraph.cs
       Graph.Clear();
     }
 
-    public abstract Point GetPoint(Node iNode);
+    public abstract Point GetPoint(INode iNode);
 
-    public Spring GetSpring(Edge iEdge)
+    public Spring GetSpring(IEdge iEdge)
     {
       if (!(m_edgeSprings.ContainsKey(iEdge.Id)))
       {
@@ -78,7 +78,7 @@ namespace EpForceDirectedGraph.cs
         var fromEdges = Graph.GetEdges(iEdge.Source, iEdge.Target);
         if (fromEdges != null)
         {
-          foreach (Edge e in fromEdges)
+          foreach (var e in fromEdges)
           {
             if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
             {
@@ -96,7 +96,7 @@ namespace EpForceDirectedGraph.cs
         var toEdges = Graph.GetEdges(iEdge.Target, iEdge.Source);
         if (toEdges != null)
         {
-          foreach (Edge e in toEdges)
+          foreach (var e in toEdges)
           {
             if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
             {
@@ -120,10 +120,10 @@ namespace EpForceDirectedGraph.cs
     // TODO: change this for group only after node grouping
     protected void ApplyCoulombsLaw()
     {
-      foreach (Node n1 in Graph.Nodes)
+      foreach (var n1 in Graph.Nodes)
       {
         Point point1 = GetPoint(n1);
-        foreach (Node n2 in Graph.Nodes)
+        foreach (var n2 in Graph.Nodes)
         {
           Point point2 = GetPoint(n2);
           if (point1 != point2)
@@ -163,7 +163,7 @@ namespace EpForceDirectedGraph.cs
 
     protected void ApplyHookesLaw()
     {
-      foreach (Edge e in Graph.Edges)
+      foreach (var e in Graph.Edges)
       {
         Spring spring = GetSpring(e);
         AbstractVector d = spring.Point2.Position - spring.Point1.Position;
@@ -195,7 +195,7 @@ namespace EpForceDirectedGraph.cs
 
     protected void AttractToCentre()
     {
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         Point point = GetPoint(n);
         if (!point.Node.Pinned)
@@ -212,7 +212,7 @@ namespace EpForceDirectedGraph.cs
 
     protected void UpdateVelocity(float iTimeStep)
     {
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         Point point = GetPoint(n);
         point.Velocity.Add(point.Acceleration * iTimeStep);
@@ -223,7 +223,7 @@ namespace EpForceDirectedGraph.cs
 
     protected void UpdatePosition(float iTimeStep)
     {
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         Point point = GetPoint(n);
         point.Position.Add(point.Velocity * iTimeStep);
@@ -233,7 +233,7 @@ namespace EpForceDirectedGraph.cs
     protected float GetTotalEnergy()
     {
       float energy = 0.0f;
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         Point point = GetPoint(n);
         float speed = point.Velocity.Magnitude();
@@ -260,7 +260,7 @@ namespace EpForceDirectedGraph.cs
 
     public void EachEdge(EdgeAction del)
     {
-      foreach (Edge e in Graph.Edges)
+      foreach (var e in Graph.Edges)
       {
         del(e, GetSpring(e));
       }
@@ -268,7 +268,7 @@ namespace EpForceDirectedGraph.cs
 
     public void EachNode(NodeAction del)
     {
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         del(n, GetPoint(n));
       }
@@ -277,7 +277,7 @@ namespace EpForceDirectedGraph.cs
     public NearestPoint Nearest(AbstractVector position)
     {
       NearestPoint min = new NearestPoint();
-      foreach (Node n in Graph.Nodes)
+      foreach (var n in Graph.Nodes)
       {
         Point point = GetPoint(n);
         float distance = (point.Position - position).Magnitude();

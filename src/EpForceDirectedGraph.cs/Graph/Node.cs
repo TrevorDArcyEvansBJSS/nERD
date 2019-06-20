@@ -37,7 +37,7 @@ An Interface for the Node Class.
 
 namespace EpForceDirectedGraph.cs
 {
-  public sealed class Node
+  public sealed class Node : INode
   {
     public string Id { get; private set; }
     public NodeData Data { get; private set; }
@@ -61,7 +61,7 @@ namespace EpForceDirectedGraph.cs
       return Id.GetHashCode();
     }
 
-    public override bool Equals(System.Object obj)
+    public override bool Equals(object obj)
     {
       // If parameter is null return false.
       if (obj == null)
@@ -70,7 +70,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       // If parameter cannot be cast to Point return false.
-      Node p = obj as Node;
+      INode p = obj as INode;
       if (p is null)
       {
         return false;
@@ -78,41 +78,6 @@ namespace EpForceDirectedGraph.cs
 
       // Return true if the fields match:
       return (Id == p.Id);
-    }
-
-    public bool Equals(Node p)
-    {
-      // If parameter is null return false:
-      if (p is null)
-      {
-        return false;
-      }
-
-      // Return true if the fields match:
-      return (Id == p.Id);
-    }
-
-    public static bool operator ==(Node a, Node b)
-    {
-      // If both are null, or both are same instance, return true.
-      if (ReferenceEquals(a, b))
-      {
-        return true;
-      }
-
-      // If one is null, but not both, return false.
-      if (((object)a == null) || ((object)b == null))
-      {
-        return false;
-      }
-
-      // Return true if the fields match:
-      return a.Id == b.Id;
-    }
-
-    public static bool operator !=(Node a, Node b)
-    {
-      return !(a == b);
     }
   }
 }

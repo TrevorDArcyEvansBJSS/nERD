@@ -51,9 +51,11 @@
     <Compile Include="Graph\GraphData.cs" />
     <Compile Include="Graph\Node.cs" />
     <Compile Include="Graph\NodeData.cs" />
+    <Compile Include="Interfaces\IEdge.cs" />
     <Compile Include="Interfaces\IForceDirected.cs" />
     <Compile Include="Interfaces\IGraph.cs" />
     <Compile Include="Interfaces\IGraphEventListener.cs" />
+    <Compile Include="Interfaces\INode.cs" />
     <Compile Include="Interfaces\IRenderer.cs" />
     <Compile Include="Interfaces\IVector.cs" />
     <Compile Include="Layout\AbstractRenderer.cs" />

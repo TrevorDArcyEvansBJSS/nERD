@@ -37,8 +37,8 @@ An Interface for the IForceDirected.
 
 namespace EpForceDirectedGraph.cs
 {
-  public delegate void EdgeAction(Edge edge, Spring spring);
-  public delegate void NodeAction(Node edge, Point point);
+  public delegate void EdgeAction(IEdge edge, Spring spring);
+  public delegate void NodeAction(INode edge, Point point);
 
   public interface IForceDirected
   {

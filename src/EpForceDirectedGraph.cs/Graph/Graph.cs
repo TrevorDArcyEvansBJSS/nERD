@@ -43,14 +43,14 @@ namespace EpForceDirectedGraph.cs
 {
   public sealed class Graph : IGraph
   {
-    public IEnumerable<Node> Nodes => mNodes;
-    public IEnumerable<Edge> Edges => mEdges;
+    public IEnumerable<INode> Nodes => mNodes;
+    public IEnumerable<IEdge> Edges => mEdges;
 
-    private readonly List<Node> mNodes = new List<Node>();
-    private readonly List<Edge> mEdges = new List<Edge>();
+    private readonly List<INode> mNodes = new List<INode>();
+    private readonly List<IEdge> mEdges = new List<IEdge>();
 
-    private readonly Dictionary<string, Node> m_nodeSet = new Dictionary<string, Node>();
-    private readonly Dictionary<string, Dictionary<string, List<Edge>>> m_adjacencySet= new Dictionary<string, Dictionary<string, List<Edge>>>();
+    private readonly Dictionary<string, INode> m_nodeSet = new Dictionary<string, INode>();
+    private readonly Dictionary<string, Dictionary<string, List<IEdge>>> m_adjacencySet= new Dictionary<string, Dictionary<string, List<IEdge>>>();
     private readonly List<IGraphEventListener> m_eventListeners= new List<IGraphEventListener>();
 
     private int m_nextNodeId = 0;
@@ -63,7 +63,7 @@ namespace EpForceDirectedGraph.cs
       m_adjacencySet.Clear();
     }
 
-    public Node AddNode(Node iNode)
+    public INode AddNode(INode iNode)
     {
       if (!m_nodeSet.ContainsKey(iNode.Id))
       {
@@ -71,23 +71,24 @@ namespace EpForceDirectedGraph.cs
       }
 
       m_nodeSet[iNode.Id] = iNode;
+
       Notify();
 
       return iNode;
     }
 
-    public Edge AddEdge(Edge iEdge)
+    public IEdge AddEdge(IEdge iEdge)
     {
       if (!mEdges.Contains(iEdge))
         mEdges.Add(iEdge);
 
       if (!(m_adjacencySet.ContainsKey(iEdge.Source.Id)))
       {
-        m_adjacencySet[iEdge.Source.Id] = new Dictionary<string, List<Edge>>();
+        m_adjacencySet[iEdge.Source.Id] = new Dictionary<string, List<IEdge>>();
       }
       if (!(m_adjacencySet[iEdge.Source.Id].ContainsKey(iEdge.Target.Id)))
       {
-        m_adjacencySet[iEdge.Source.Id][iEdge.Target.Id] = new List<Edge>();
+        m_adjacencySet[iEdge.Source.Id][iEdge.Target.Id] = new List<IEdge>();
       }
 
       if (!m_adjacencySet[iEdge.Source.Id][iEdge.Target.Id].Contains(iEdge))
@@ -124,8 +125,8 @@ namespace EpForceDirectedGraph.cs
           return;
         if (!m_nodeSet.ContainsKey(listTrav.Second))
           return;
-        Node node1 = m_nodeSet[listTrav.First];
-        Node node2 = m_nodeSet[listTrav.Second];
+        var node1 = m_nodeSet[listTrav.First];
+        var node2 = m_nodeSet[listTrav.Second];
         CreateEdge(node1, node2, listTrav.Third);
       }
     }
@@ -138,58 +139,59 @@ namespace EpForceDirectedGraph.cs
           return;
         if (!m_nodeSet.ContainsKey(listTrav.Second))
           return;
-        Node node1 = m_nodeSet[listTrav.First];
-        Node node2 = m_nodeSet[listTrav.Second];
+
+        var node1 = m_nodeSet[listTrav.First];
+        var node2 = m_nodeSet[listTrav.Second];
         CreateEdge(node1, node2);
       }
     }
 
-    public Node CreateNode(NodeData data)
+    public INode CreateNode(NodeData data)
     {
-      Node tNewNode = new Node(m_nextNodeId.ToString(), data);
+      var tNewNode = new Node(m_nextNodeId.ToString(), data);
       m_nextNodeId++;
       AddNode(tNewNode);
 
       return tNewNode;
     }
 
-    public Node CreateNode(string label)
+    public INode CreateNode(string label)
     {
       NodeData data = new NodeData();
       data.Label = label;
-      Node tNewNode = new Node(m_nextNodeId.ToString(), data);
+      var tNewNode = new Node(m_nextNodeId.ToString(), data);
       m_nextNodeId++;
       AddNode(tNewNode);
 
       return tNewNode;
     }
 
-    public Edge CreateEdge(Node iSource, Node iTarget, EdgeData iData = null)
+    public IEdge CreateEdge(INode iSource, INode iTarget, EdgeData iData = null)
     {
       if (iSource == null || iTarget == null)
         return null;
 
-      Edge tNewEdge = new Edge(m_nextEdgeId.ToString(), iSource, iTarget, iData);
+      var tNewEdge = new Edge(m_nextEdgeId.ToString(), iSource, iTarget, iData);
       m_nextEdgeId++;
       AddEdge(tNewEdge);
 
       return tNewEdge;
     }
 
-    public Edge CreateEdge(string iSource, string iTarget, EdgeData iData = null)
+    public IEdge CreateEdge(string iSource, string iTarget, EdgeData iData = null)
     {
       if (!m_nodeSet.ContainsKey(iSource))
         return null;
       if (!m_nodeSet.ContainsKey(iTarget))
         return null;
 
-      Node node1 = m_nodeSet[iSource];
-      Node node2 = m_nodeSet[iTarget];
+      var node1 = m_nodeSet[iSource];
+      var node2 = m_nodeSet[iTarget];
 
       return CreateEdge(node1, node2, iData);
     }
 
-    public IEnumerable<Edge> GetEdges(Node iNode1, Node iNode2)
+    public IEnumerable<IEdge> GetEdges(INode iNode1, INode iNode2)
     {
       if (m_adjacencySet.ContainsKey(iNode1.Id) && m_adjacencySet[iNode1.Id].ContainsKey(iNode2.Id))
       {
@@ -198,27 +200,27 @@ namespace EpForceDirectedGraph.cs
       return null;
     }
 
-    public IEnumerable<Edge> GetEdges(Node iNode)
+    public IEnumerable<IEdge> GetEdges(INode iNode)
     {
-      List<Edge> retEdgeList = new List<Edge>();
+      var retEdgeList = new List<IEdge>();
       if (m_adjacencySet.ContainsKey(iNode.Id))
       {
-        foreach (KeyValuePair<string, List<Edge>> keyPair in m_adjacencySet[iNode.Id])
+        foreach (var keyPair in m_adjacencySet[iNode.Id])
         {
-          foreach (Edge e in keyPair.Value)
+          foreach (var e in keyPair.Value)
           {
             retEdgeList.Add(e);
           }
         }
       }
 
-      foreach (KeyValuePair<string, Dictionary<string, List<Edge>>> keyValuePair in m_adjacencySet)
+      foreach (var keyValuePair in m_adjacencySet)
       {
         if (keyValuePair.Key != iNode.Id)
         {
-          foreach (KeyValuePair<string, List<Edge>> keyPair in m_adjacencySet[keyValuePair.Key])
+          foreach (var keyPair in m_adjacencySet[keyValuePair.Key])
           {
-            foreach (Edge e in keyPair.Value)
+            foreach (var e in keyPair.Value)
             {
               retEdgeList.Add(e);
             }
@@ -230,7 +232,7 @@ namespace EpForceDirectedGraph.cs
       return retEdgeList.AsEnumerable();
     }
 
-    public void RemoveNode(Node iNode)
+    public void RemoveNode(INode iNode)
     {
       if (m_nodeSet.ContainsKey(iNode.Id))
       {
@@ -240,9 +242,9 @@ namespace EpForceDirectedGraph.cs
       DetachNode(iNode);
     }
 
-    public void DetachNode(Node iNode)
+    public void DetachNode(INode iNode)
     {
-      mEdges.ForEach(delegate (Edge e)
+      mEdges.ForEach(delegate (IEdge e)
       {
         if (e.Source.Id == iNode.Id || e.Target.Id == iNode.Id)
         {
@@ -253,14 +255,14 @@ namespace EpForceDirectedGraph.cs
       Notify();
     }
 
-    public void RemoveEdge(Edge iEdge)
+    public void RemoveEdge(IEdge iEdge)
     {
       mEdges.Remove(iEdge);
-      foreach (KeyValuePair<string, Dictionary<string, List<Edge>>> x in m_adjacencySet)
+      foreach (var x in m_adjacencySet)
       {
-        foreach (KeyValuePair<string, List<Edge>> y in x.Value)
+        foreach (var y in x.Value)
         {
-          List<Edge> tEdges = y.Value;
+          List<IEdge> tEdges = y.Value;
           tEdges.Remove(iEdge);
           if (tEdges.Count == 0)
           {
@@ -278,10 +280,10 @@ namespace EpForceDirectedGraph.cs
       Notify();
     }
 
-    public Node GetNode(string label)
+    public INode GetNode(string label)
     {
-      Node retNode = null;
-      mNodes.ForEach(delegate (Node n)
+      INode retNode = null;
+      mNodes.ForEach(delegate (INode n)
       {
         if (n.Data.Label == label)
         {
@@ -291,10 +293,10 @@ namespace EpForceDirectedGraph.cs
       return retNode;
     }
 
-    public Edge GetEdge(string label)
+    public IEdge GetEdge(string label)
     {
-      Edge retEdge = null;
-      mEdges.ForEach(delegate (Edge e)
+      IEdge retEdge = null;
+      mEdges.ForEach(delegate (IEdge e)
       {
         if (e.Data.Label == label)
         {
@@ -304,19 +306,19 @@ namespace EpForceDirectedGraph.cs
       return retEdge;
     }
 
-    public void Merge(Graph iMergeGraph)
+    public void Merge(IGraph iMergeGraph)
     {
-      foreach (Node n in iMergeGraph.Nodes)
+      foreach (var n in iMergeGraph.Nodes)
       {
-        Node mergeNode = new Node(m_nextNodeId.ToString(), n.Data);
+        var mergeNode = new Node(m_nextNodeId.ToString(), n.Data);
         AddNode(mergeNode);
         m_nextNodeId++;
         mergeNode.Data.OrigID = n.Id;
       }
 
-      foreach (Edge e in iMergeGraph.Edges)
+      foreach (var e in iMergeGraph.Edges)
       {
-        Node fromNode = mNodes.Find(delegate (Node n)
+        var fromNode = mNodes.Find(delegate (INode n)
         {
           if (e.Source.Id == n.Data.OrigID)
           {
@@ -325,7 +327,7 @@ namespace EpForceDirectedGraph.cs
           return false;
         });
 
-        Node toNode = mNodes.Find(delegate (Node n)
+        var toNode = mNodes.Find(delegate (INode n)
         {
           if (e.Target.Id == n.Data.OrigID)
           {
@@ -334,23 +336,23 @@ namespace EpForceDirectedGraph.cs
           return false;
         });
 
-        Edge tNewEdge = AddEdge(new Edge(m_nextEdgeId.ToString(), fromNode, toNode, e.Data));
+        var tNewEdge = AddEdge(new Edge(m_nextEdgeId.ToString(), fromNode, toNode, e.Data));
         m_nextEdgeId++;
       }
     }
 
-    public void FilterNodes(Predicate<Node> match)
+    public void FilterNodes(Predicate<INode> match)
     {
-      foreach (Node n in mNodes)
+      foreach (var n in mNodes)
       {
         if (!match(n))
           RemoveNode(n);
       }
     }
 
-    public void FilterEdges(Predicate<Edge> match)
+    public void FilterEdges(Predicate<IEdge> match)
     {
-      foreach (Edge e in mEdges)
+      foreach (var e in mEdges)
       {
         if (!match(e))
           RemoveEdge(e);

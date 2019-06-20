@@ -39,7 +39,7 @@ namespace EpForceDirectedGraph.cs
 {
   public sealed class NearestPoint
   {
-    public Node Node { get; set; } = null;
+    public INode Node { get; set; } = null;
     public Point Point { get; set; } = null;
     public float? Distance { get; set; } = null;
   }

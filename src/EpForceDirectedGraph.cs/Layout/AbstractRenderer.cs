@@ -50,18 +50,18 @@ namespace EpForceDirectedGraph.cs
     {
       forceDirected.Calculate(iTimeStep);
       Clear();
-      forceDirected.EachEdge(delegate (Edge edge, Spring spring)
+      forceDirected.EachEdge(delegate (IEdge edge, Spring spring)
       {
         DrawEdge(edge, spring.Point1.Position, spring.Point2.Position);
       });
-      forceDirected.EachNode(delegate (Node node, Point point)
+      forceDirected.EachNode(delegate (INode node, Point point)
       {
         DrawNode(node, point.Position);
       });
     }
 
     public abstract void Clear();
-    protected abstract void DrawEdge(Edge iEdge, AbstractVector iPosition1, AbstractVector iPosition2);
-    protected abstract void DrawNode(Node iNode, AbstractVector iPosition);
+    protected abstract void DrawEdge(IEdge iEdge, AbstractVector iPosition1, AbstractVector iPosition2);
+    protected abstract void DrawNode(INode iNode, AbstractVector iPosition);
   }
 }

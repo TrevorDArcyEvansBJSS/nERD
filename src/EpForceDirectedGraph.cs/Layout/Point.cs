@@ -39,7 +39,7 @@ namespace EpForceDirectedGraph.cs
 {
   public sealed class Point
   {
-    public Point(AbstractVector iPosition, AbstractVector iVelocity, AbstractVector iAcceleration, Node iNode)
+    public Point(AbstractVector iPosition, AbstractVector iVelocity, AbstractVector iAcceleration, INode iNode)
     {
       Position = iPosition;
       Node = iNode;
@@ -52,7 +52,7 @@ namespace EpForceDirectedGraph.cs
       return Position.GetHashCode();
     }
 
-    public override bool Equals(System.Object obj)
+    public override bool Equals(object obj)
     {
       // If parameter is null return false.
       if (obj == null)
@@ -112,7 +112,7 @@ namespace EpForceDirectedGraph.cs
     }
 
     public AbstractVector Position { get; set; }
-    public Node Node { get; private set; }
+    public INode Node { get; private set; }
 
     public float Mass
     {
