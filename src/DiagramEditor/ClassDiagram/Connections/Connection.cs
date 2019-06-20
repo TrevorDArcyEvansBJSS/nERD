@@ -93,14 +93,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       Reroute();
     }
 
-    protected internal abstract Relationship Relationship
+    public abstract Relationship Relationship
     {
       get;
     }
 
-    protected Shape StartShape { get; private set; }
+    public Shape StartShape { get; private set; }
 
-    protected Shape EndShape { get; private set; }
+    public Shape EndShape { get; private set; }
 
     public IEnumerable<BendPoint> BendPoints
     {

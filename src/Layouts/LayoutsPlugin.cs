@@ -48,20 +48,20 @@ namespace Layouts
 
       // add nodes
       diagram
-        .Entities
+        .Shapes
         .ToList()
         .ForEach(x =>
         {
-          graph.AddNode(new Node(x.Name));
+          graph.AddNode(new Node(x.Entity.Name));
         });
 
       // add edges
       diagram
-        .Relationships
+        .Connections
         .ToList()
         .ForEach(x =>
         {
-          graph.CreateEdge(x.First.Name, x.Second.Name);
+          graph.CreateEdge(x.Relationship.First.Name, x.Relationship.Second.Name);
         });
 
       var physics = new ForceDirected2D(graph, 81.76f, 40000.0f, 0.5f);
@@ -73,7 +73,15 @@ namespace Layouts
         renderer.Draw(0.05f);
       }
 
-      // TODO   update diagram
+      // update diagram
+      diagram
+        .Shapes
+        .ToList()
+        .ForEach(x =>
+        {
+          var newPos = renderer.PositionById(x.Entity.Name);
+          x.Location = new System.Drawing.Point((int)newPos.X, (int)newPos.Y);
+        });
     }
   }
 }

@@ -28,7 +28,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     internal CommentRelationship CommentRelationship { get; }
 
-    protected internal override Relationship Relationship
+    public override Relationship Relationship
     {
       get { return CommentRelationship; }
     }

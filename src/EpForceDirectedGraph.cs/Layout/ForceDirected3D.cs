@@ -63,7 +63,7 @@ namespace EpForceDirectedGraph.cs
       FDGVector3 topRight = FDGVector3.Identity().Multiply(BoundingBox.DefaultBB) as FDGVector3;
       foreach (Node n in Graph.Nodes)
       {
-        FDGVector3 position = GetPoint(n).position as FDGVector3;
+        FDGVector3 position = GetPoint(n).Position as FDGVector3;
         if (position.X < bottomLeft.X)
           bottomLeft.X = position.X;
         if (position.Y < bottomLeft.Y)

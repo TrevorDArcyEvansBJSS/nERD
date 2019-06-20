@@ -34,7 +34,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     internal NestingRelationship NestingRelationship { get; }
 
-    protected internal override Relationship Relationship
+    public override Relationship Relationship
     {
       get { return NestingRelationship; }
     }

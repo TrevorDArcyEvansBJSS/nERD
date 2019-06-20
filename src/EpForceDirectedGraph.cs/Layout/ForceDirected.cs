@@ -128,7 +128,7 @@ namespace EpForceDirectedGraph.cs
           Point point2 = GetPoint(n2);
           if (point1 != point2)
           {
-            AbstractVector d = point1.position - point2.position;
+            AbstractVector d = point1.Position - point2.Position;
             float distance = d.Magnitude() + 0.1f;
             AbstractVector direction = d.Normalize();
             if (n1.Pinned && n2.Pinned)
@@ -166,7 +166,7 @@ namespace EpForceDirectedGraph.cs
       foreach (Edge e in Graph.Edges)
       {
         Spring spring = GetSpring(e);
-        AbstractVector d = spring.Point2.position - spring.Point1.position;
+        AbstractVector d = spring.Point2.Position - spring.Point1.Position;
         float displacement = spring.Length - d.Magnitude();
         AbstractVector direction = d.Normalize();
 
@@ -200,7 +200,7 @@ namespace EpForceDirectedGraph.cs
         Point point = GetPoint(n);
         if (!point.Node.Pinned)
         {
-          AbstractVector direction = point.position * -1.0f;
+          AbstractVector direction = point.Position * -1.0f;
           //point.ApplyForce(direction * ((float)Math.Sqrt((double)(Repulsion / 100.0f))));
 
           float displacement = direction.Magnitude();
@@ -226,7 +226,7 @@ namespace EpForceDirectedGraph.cs
       foreach (Node n in Graph.Nodes)
       {
         Point point = GetPoint(n);
-        point.position.Add(point.Velocity * iTimeStep);
+        point.Position.Add(point.Velocity * iTimeStep);
       }
     }
 
@@ -280,7 +280,7 @@ namespace EpForceDirectedGraph.cs
       foreach (Node n in Graph.Nodes)
       {
         Point point = GetPoint(n);
-        float distance = (point.position - position).Magnitude();
+        float distance = (point.Position - position).Magnitude();
         if (min.Distance == null || distance < min.Distance)
         {
           min.Node = n;

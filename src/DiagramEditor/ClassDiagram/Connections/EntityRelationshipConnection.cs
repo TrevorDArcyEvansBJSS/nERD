@@ -33,7 +33,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       _relationship = relationship;
     }
 
-    protected internal override Relationship Relationship
+    public override Relationship Relationship
     {
       get { return _relationship; }
     }

@@ -53,6 +53,7 @@ namespace EpForceDirectedGraph.cs
           iniPosition = FDGVector2.Random() as FDGVector2;
         m_nodePoints[iNode.Id] = new Point(iniPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode);
       }
+
       return m_nodePoints[iNode.Id];
     }
 
@@ -63,7 +64,7 @@ namespace EpForceDirectedGraph.cs
       FDGVector2 topRight = FDGVector2.Identity().Multiply(BoundingBox.DefaultBB) as FDGVector2;
       foreach (Node n in Graph.Nodes)
       {
-        FDGVector2 position = GetPoint(n).position as FDGVector2;
+        FDGVector2 position = GetPoint(n).Position as FDGVector2;
 
         if (position.X < bottomLeft.X)
           bottomLeft.X = position.X;

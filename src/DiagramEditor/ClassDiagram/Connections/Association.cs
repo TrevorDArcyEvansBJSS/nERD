@@ -56,7 +56,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     internal AssociationRelationship AssociationRelationship { get; }
 
-    protected internal override Relationship Relationship
+    public override Relationship Relationship
     {
       get { return AssociationRelationship; }
     }

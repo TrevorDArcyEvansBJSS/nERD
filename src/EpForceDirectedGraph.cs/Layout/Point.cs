@@ -41,7 +41,7 @@ namespace EpForceDirectedGraph.cs
   {
     public Point(AbstractVector iPosition, AbstractVector iVelocity, AbstractVector iAcceleration, Node iNode)
     {
-      position = iPosition;
+      Position = iPosition;
       Node = iNode;
       Velocity = iVelocity;
       Acceleration = iAcceleration;
@@ -49,7 +49,7 @@ namespace EpForceDirectedGraph.cs
 
     public override int GetHashCode()
     {
-      return position.GetHashCode();
+      return Position.GetHashCode();
     }
 
     public override bool Equals(System.Object obj)
@@ -68,7 +68,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       // Return true if the fields match:
-      return position == p.position;
+      return Position == p.Position;
     }
 
     public bool Equals(Point p)
@@ -80,7 +80,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       // Return true if the fields match:
-      return position == p.position;
+      return Position == p.Position;
     }
 
     public static bool operator ==(Point a, Point b)
@@ -98,7 +98,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       // Return true if the fields match:
-      return (a.position == b.position);
+      return (a.Position == b.Position);
     }
 
     public static bool operator !=(Point a, Point b)
@@ -111,7 +111,7 @@ namespace EpForceDirectedGraph.cs
       Acceleration.Add(force / Mass);
     }
 
-    public AbstractVector position { get; set; }
+    public AbstractVector Position { get; set; }
     public Node Node { get; private set; }
 
     public float Mass

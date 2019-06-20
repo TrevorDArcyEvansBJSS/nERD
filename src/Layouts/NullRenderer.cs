@@ -1,5 +1,6 @@
 ﻿using EpForceDirectedGraph.cs;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Layouts
 {
@@ -10,6 +11,11 @@ namespace Layouts
     public NullRenderer(IForceDirected iForceDirected) :
       base(iForceDirected)
     {
+    }
+
+    public AbstractVector PositionById(string id)
+    {
+      return _nodePos.SingleOrDefault(x => x.Key.Id == id).Value;
     }
 
     public override void Clear()

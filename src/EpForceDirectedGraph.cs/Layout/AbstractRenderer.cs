@@ -52,11 +52,11 @@ namespace EpForceDirectedGraph.cs
       Clear();
       forceDirected.EachEdge(delegate (Edge edge, Spring spring)
       {
-        DrawEdge(edge, spring.Point1.position, spring.Point2.position);
+        DrawEdge(edge, spring.Point1.Position, spring.Point2.Position);
       });
       forceDirected.EachNode(delegate (Node node, Point point)
       {
-        DrawNode(node, point.position);
+        DrawNode(node, point.Position);
       });
     }
 
