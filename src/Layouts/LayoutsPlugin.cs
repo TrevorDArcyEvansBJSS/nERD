@@ -10,8 +10,8 @@ namespace Layouts
   {
     private readonly ToolStripMenuItem _menuItem;
 
-    public LayoutsPlugin(NClassEnvironment environment)
-      : base(environment)
+    public LayoutsPlugin(NClassEnvironment environment) :
+      base(environment)
     {
       _menuItem = new ToolStripMenuItem
       {
@@ -19,7 +19,7 @@ namespace Layouts
         Image = Resources.Layouts_16,
         ToolTipText = Strings.Menu_ToolTip
       };
-      _menuItem.Click += MenuItem_Click;
+      _menuItem.DropDownItems.Add(Strings.ForceDirected_Menu_Title, null, DoForceDirectedLayout);
     }
 
     public override bool IsAvailable
@@ -32,9 +32,9 @@ namespace Layouts
       get { return _menuItem; }
     }
 
-    private void MenuItem_Click(object sender, EventArgs e)
+    private void DoForceDirectedLayout(object sender, EventArgs e)
     {
-      if(!DocumentManager.HasDocument)
+      if (!DocumentManager.HasDocument)
       {
         return;
       }

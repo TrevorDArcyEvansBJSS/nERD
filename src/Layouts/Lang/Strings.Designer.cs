@@ -61,6 +61,15 @@ namespace Layouts.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Force directed layout.
+        /// </summary>
+        internal static string ForceDirected_Menu_Title {
+            get {
+                return ResourceManager.GetString("ForceDirected_Menu_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layouts.
         /// </summary>
         internal static string Menu_Title {
