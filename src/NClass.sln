@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFExport", "PDFExport\PDFE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Layouts", "Layouts\Layouts.csproj", "{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EpForceDirectedGraph.cs", "EpForceDirectedGraph.cs\EpForceDirectedGraph.cs.csproj", "{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,6 +140,18 @@ Global
 		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|x86.ActiveCfg = Release|Any CPU
 		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|x86.Build.0 = Release|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{5101EF75-EA7D-439A-A5BE-8FCC7F5931C5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

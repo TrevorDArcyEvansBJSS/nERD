@@ -66,6 +66,10 @@
       <Project>{F52A7548-E60A-485B-9C84-1D2871416DB7}</Project>
       <Name>DiagramEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EpForceDirectedGraph.cs\EpForceDirectedGraph.cs.csproj">
+      <Project>{5101ef75-ea7d-439a-a5be-8fcc7f5931c5}</Project>
+      <Name>EpForceDirectedGraph.cs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GUI\GUI.csproj">
       <Project>{a2918ce1-6894-4fc9-a864-4651769d0274}</Project>
       <Name>GUI</Name>
