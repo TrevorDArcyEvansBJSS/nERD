@@ -52,9 +52,15 @@ namespace EpForceDirectedGraph.cs
     private readonly Dictionary<string, INode> m_nodeSet = new Dictionary<string, INode>();
     private readonly Dictionary<string, Dictionary<string, List<IEdge>>> m_adjacencySet= new Dictionary<string, Dictionary<string, List<IEdge>>>();
     private readonly List<IGraphEventListener> m_eventListeners= new List<IGraphEventListener>();
+    private readonly ICreator mCreator;
 
     private int m_nextNodeId = 0;
     private int m_nextEdgeId = 0;
+
+    public Graph(ICreator creator)
+    {
+      mCreator = creator;
+    }
 
     public void Clear()
     {
@@ -148,7 +154,7 @@ namespace EpForceDirectedGraph.cs
 
     public INode CreateNode(NodeData data)
     {
-      var tNewNode = new Node(m_nextNodeId.ToString(), data);
+      var tNewNode = mCreator.CreateNode(m_nextNodeId.ToString(), data);
       m_nextNodeId++;
       AddNode(tNewNode);
 
@@ -159,7 +165,7 @@ namespace EpForceDirectedGraph.cs
     {
       NodeData data = new NodeData();
       data.Label = label;
-      var tNewNode = new Node(m_nextNodeId.ToString(), data);
+      var tNewNode = mCreator.CreateNode(m_nextNodeId.ToString(), data);
       m_nextNodeId++;
       AddNode(tNewNode);
 
@@ -171,7 +177,7 @@ namespace EpForceDirectedGraph.cs
       if (iSource == null || iTarget == null)
         return null;
 
-      var tNewEdge = new Edge(m_nextEdgeId.ToString(), iSource, iTarget, iData);
+      var tNewEdge = mCreator.CreateEdge(m_nextEdgeId.ToString(), iSource, iTarget, iData);
       m_nextEdgeId++;
       AddEdge(tNewEdge);
 
@@ -310,7 +316,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in iMergeGraph.Nodes)
       {
-        var mergeNode = new Node(m_nextNodeId.ToString(), n.Data);
+        var mergeNode = mCreator.CreateNode(m_nextNodeId.ToString(), n.Data);
         AddNode(mergeNode);
         m_nextNodeId++;
         mergeNode.Data.OrigID = n.Id;
@@ -336,7 +342,7 @@ namespace EpForceDirectedGraph.cs
           return false;
         });
 
-        var tNewEdge = AddEdge(new Edge(m_nextEdgeId.ToString(), fromNode, toNode, e.Data));
+        var tNewEdge = AddEdge(mCreator.CreateEdge(m_nextEdgeId.ToString(), fromNode, toNode, e.Data));
         m_nextEdgeId++;
       }
     }

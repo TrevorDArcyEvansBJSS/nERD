@@ -45,12 +45,14 @@
     <Compile Include="General\SingletonHolder.cs" />
     <Compile Include="General\Triple.cs" />
     <Compile Include="General\Util.cs" />
+    <Compile Include="Graph\Creator.cs" />
     <Compile Include="Graph\Edge.cs" />
     <Compile Include="Graph\EdgeData.cs" />
     <Compile Include="Graph\Graph.cs" />
     <Compile Include="Graph\GraphData.cs" />
     <Compile Include="Graph\Node.cs" />
     <Compile Include="Graph\NodeData.cs" />
+    <Compile Include="Interfaces\ICreator.cs" />
     <Compile Include="Interfaces\IEdge.cs" />
     <Compile Include="Interfaces\IForceDirected.cs" />
     <Compile Include="Interfaces\IGraph.cs" />

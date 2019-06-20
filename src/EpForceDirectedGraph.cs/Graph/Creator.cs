@@ -1,9 +1,9 @@
 ﻿/*! 
-@file IGraph.cs
+@file Creator.cs
 @author Woong Gyu La a.k.a Chris. <juhgiyo@gmail.com>
 		<http://github.com/juhgiyo/epForceDirectedGraph.cs>
 @date August 08, 2013
-@brief Graph Interface
+@brief Node Interface
 @version 1.0
 
 @section LICENSE
@@ -32,37 +32,21 @@ THE SOFTWARE.
 
 @section DESCRIPTION
 
-An Interface for the IGraph.
+An Interface for the Creator Class.
 */
-
-using System;
-using System.Collections.Generic;
 
 namespace EpForceDirectedGraph.cs
 {
-  public interface IGraph
+  public sealed class Creator : ICreator
   {
-    void Clear();
-    INode AddNode(INode iNode);
-    IEdge AddEdge(IEdge iEdge);
-    void CreateNodes(IEnumerable<NodeData> iDataList);
-    void CreateNodes(IEnumerable<string> iNameList);
-    void CreateEdges(IEnumerable<Triple<string, string, EdgeData>> iDataList);
-    void CreateEdges(IEnumerable<Pair<string, string>> iDataList);
-    INode CreateNode(NodeData data);
-    INode CreateNode(string name);
-    IEdge CreateEdge(INode iSource, INode iTarget, EdgeData iData = null);
-    IEdge CreateEdge(string iSource, string iTarget, EdgeData iData = null);
-    IEnumerable<IEdge> GetEdges(INode iNode1, INode iNode2);
-    void RemoveNode(INode iNode);
-    void DetachNode(INode iNode);
-    void RemoveEdge(IEdge iEdge);
-    void Merge(IGraph iMergeGraph);
-    void FilterNodes(Predicate<INode> match);
-    void FilterEdges(Predicate<IEdge> match);
-    void AddGraphListener(IGraphEventListener iListener);
+    public IEdge CreateEdge(string iId, INode iSource, INode iTarget, EdgeData iData = null)
+    {
+      return new Edge(iId, iSource, iTarget, iData);
+    }
 
-    IEnumerable<INode> Nodes { get; }
-    IEnumerable<IEdge> Edges { get; }
+    public INode CreateNode(string iId, NodeData iData = null)
+    {
+      return new Node(iId, iData);
+    }
   }
 }

@@ -43,7 +43,8 @@ namespace Layouts
         return;
       }
 
-      var graph = new Graph();
+      var creator = new Creator();
+      var graph = new Graph(creator);
       var diagram = (Diagram)DocumentManager.ActiveDocument;
 
       // add nodes
