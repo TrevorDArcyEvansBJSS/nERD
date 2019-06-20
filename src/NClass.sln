@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29006.145
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{A2918CE1-6894-4FC9-A864-4651769D0274}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B3B7D798-3D52-47F0-B1A7-A91BC5FE184F} = {B3B7D798-3D52-47F0-B1A7-A91BC5FE184F}
@@ -21,6 +23,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramEditor", "DiagramEditor\DiagramEditor.csproj", "{F52A7548-E60A-485B-9C84-1D2871416DB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDFExport", "PDFExport\PDFExport.csproj", "{53E9092C-848E-4D6A-9E8A-2ECD71BAEF04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Layouts", "Layouts\Layouts.csproj", "{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,8 +126,23 @@ Global
 		{53E9092C-848E-4D6A-9E8A-2ECD71BAEF04}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{53E9092C-848E-4D6A-9E8A-2ECD71BAEF04}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{53E9092C-848E-4D6A-9E8A-2ECD71BAEF04}.Release|x86.ActiveCfg = Release|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Debug|x86.Build.0 = Debug|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|x86.ActiveCfg = Release|Any CPU
+		{D57B6C71-CF44-404C-94EB-CCBE4CFBADD7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EADA7637-7890-4F1E-85ED-4145C91CAAF2}
 	EndGlobalSection
 EndGlobal
