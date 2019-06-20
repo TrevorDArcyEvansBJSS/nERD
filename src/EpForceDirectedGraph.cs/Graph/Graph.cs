@@ -72,6 +72,7 @@ namespace EpForceDirectedGraph.cs
 
       m_nodeSet[iNode.Id] = iNode;
       Notify();
+
       return iNode;
     }
 
@@ -95,6 +96,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       Notify();
+
       return iEdge;
     }
 
@@ -147,6 +149,7 @@ namespace EpForceDirectedGraph.cs
       Node tNewNode = new Node(m_nextNodeId.ToString(), data);
       m_nextNodeId++;
       AddNode(tNewNode);
+
       return tNewNode;
     }
 
@@ -157,6 +160,7 @@ namespace EpForceDirectedGraph.cs
       Node tNewNode = new Node(m_nextNodeId.ToString(), data);
       m_nextNodeId++;
       AddNode(tNewNode);
+
       return tNewNode;
     }
 
@@ -168,6 +172,7 @@ namespace EpForceDirectedGraph.cs
       Edge tNewEdge = new Edge(m_nextEdgeId.ToString(), iSource, iTarget, iData);
       m_nextEdgeId++;
       AddEdge(tNewEdge);
+
       return tNewEdge;
     }
 
@@ -177,8 +182,10 @@ namespace EpForceDirectedGraph.cs
         return null;
       if (!m_nodeSet.ContainsKey(iTarget))
         return null;
+
       Node node1 = m_nodeSet[iSource];
       Node node2 = m_nodeSet[iTarget];
+
       return CreateEdge(node1, node2, iData);
     }
 

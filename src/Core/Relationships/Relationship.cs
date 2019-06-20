@@ -28,22 +28,9 @@ namespace NClass.Core
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
-    public abstract IEntity First
-    {
-      get;
-      protected set;
-    }
-
-    public abstract IEntity Second
-    {
-      get;
-      protected set;
-    }
-
-    public abstract RelationshipType RelationshipType
-    {
-      get;
-    }
+    public abstract IEntity First { get; protected set; }
+    public abstract IEntity Second { get; protected set; }
+    public abstract RelationshipType RelationshipType { get; }
 
     public virtual string Label
     {
