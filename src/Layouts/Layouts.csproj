@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoWaitCursor.cs" />
     <Compile Include="DiagramForceDirected2D.cs" />
     <Compile Include="Lang\Strings.Designer.cs">
       <AutoGen>True</AutoGen>

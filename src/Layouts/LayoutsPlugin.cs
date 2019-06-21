@@ -1,7 +1,6 @@
 ﻿using EpForceDirectedGraph.cs;
 using Layouts.Lang;
 using Layouts.Properties;
-using NClass.Core;
 using NClass.DiagramEditor.ClassDiagram;
 using NClass.GUI;
 using System;
@@ -43,54 +42,66 @@ namespace Layouts
         return;
       }
 
-      var graph = new Graph(new Creator());
-      var diagram = (Diagram)DocumentManager.ActiveDocument;
-
-      // add nodes
-      diagram
-        .Shapes
-        .ToList()
-        .ForEach(x =>
-        {
-          graph.AddNode(new Node(x.Entity.Id.ToString()));
-        });
-
-      // add edges
-      diagram
-        .Connections
-        .ToList()
-        .ForEach(x =>
-        {
-          var source = new Node(x.Relationship.First.Id.ToString());
-          var target = new Node(x.Relationship.Second.Id.ToString());
-          var edge = new Edge(x.Relationship.Id.ToString(), source, target);
-          graph.AddEdge(edge);
-        });
-
-      const float Stiffness = 81.76f;
-      const float Repulsion = 400000.0f;
-      const float Damping = 0.5f;
-      var physics = new DiagramForceDirected2D(graph, Stiffness, Repulsion, Damping);
-
-      const int MaxIterations = 10000;
-      foreach (var _ in Enumerable.Range(0, MaxIterations))
+      using (new AutoWaitCursor())
       {
-        physics.Calculate(0.05f);
+        var graph = new Graph(new Creator());
+        var diagram = (Diagram)DocumentManager.ActiveDocument;
+
+        // add nodes
+        diagram
+          .Shapes
+          .ToList()
+          .ForEach(x =>
+          {
+            var data = new NodeData
+            {
+              InitialPosition = new FDGVector2(x.Location.X, x.Location.Y)
+            };
+            var node = new Node(x.Entity.Id.ToString(), data);
+            graph.AddNode(node);
+          });
+
+        // add edges
+        diagram
+          .Connections
+          .ToList()
+          .ForEach(x =>
+          {
+            var source = new Node(x.Relationship.First.Id.ToString());
+            var target = new Node(x.Relationship.Second.Id.ToString());
+            var edge = new Edge(x.Relationship.Id.ToString(), source, target);
+            graph.AddEdge(edge);
+          });
+
+        const float Stiffness = 81.76f;
+        const float Repulsion = 400000.0f;
+        const float Damping = 0.5f;
+        var physics = new DiagramForceDirected2D(diagram, graph, Stiffness, Repulsion, Damping);
+
+        const int MaxIterations = 10000;
+        foreach (var _ in Enumerable.Range(0, MaxIterations))
+        {
+          physics.Calculate(0.05f);
+          if (physics.TotalEnergy < physics.Threshold)
+          {
+            break;
+          }
+        }
+
+        // update diagram
+        physics.EachNode(delegate (INode node, Point pos)
+        {
+          var nodeId = Guid.Parse(node.Id);
+          var shape = diagram.Shapes.Single(x => x.Entity.Id == nodeId);
+          shape.Location = new System.Drawing.Point((int)pos.Position.X, (int)pos.Position.Y);
+        });
+        physics.EachEdge(delegate (IEdge edge, Spring spring)
+        {
+          var connId = Guid.Parse(edge.Id);
+          var conn = diagram.Connections.Single(x => x.Relationship.Id == connId);
+          conn.AutoRoute();
+        });
       }
-
-      // update diagram
-      physics.EachNode(delegate (INode node, Point pos)
-      {
-        var nodeId = Guid.Parse(node.Id);
-        var shape = diagram.Shapes.Single(x => x.Entity.Id == nodeId);
-        shape.Location = new System.Drawing.Point((int)pos.Position.X, (int)pos.Position.Y);
-      });
-      physics.EachEdge(delegate (IEdge edge, Spring spring)
-      {
-        var connId = Guid.Parse(edge.Id);
-        var conn = diagram.Connections.Single(x => x.Relationship.Id == connId);
-        conn.AutoRoute();
-      });
     }
   }
 }

@@ -47,11 +47,10 @@ namespace EpForceDirectedGraph.cs
     float Repulsion { get; }
     float Damping { get; }
     float Threshold { get; set; }
-    bool WithinThreshold { get; }
+    float TotalEnergy { get; }
     void Clear();
     void Calculate(float iTimeStep);
     void EachEdge(EdgeAction del);
     void EachNode(NodeAction del);
-    NearestPoint Nearest(AbstractVector position);
   }
 }

@@ -45,8 +45,7 @@ namespace EpForceDirectedGraph.cs
     public float Repulsion { get; set; }
     public float Damping { get; set; }
     public float Threshold { get; set; } = 0.01f;
-    public bool WithinThreshold { get; private set; }
-    public IGraph Graph { get; protected set; }
+    public IGraph Graph { get; private set; }
 
     protected readonly Dictionary<string, Point> m_nodePoints = new Dictionary<string, Point>();
     protected readonly Dictionary<string, Spring> m_edgeSprings = new Dictionary<string, Spring>();
@@ -66,59 +65,55 @@ namespace EpForceDirectedGraph.cs
       Graph.Clear();
     }
 
-    public abstract Point GetPoint(INode iNode);
+    protected abstract Point GetPoint(INode iNode);
 
-    public Spring GetSpring(IEdge iEdge)
+    private Spring GetSpring(IEdge iEdge)
     {
-      if (!(m_edgeSprings.ContainsKey(iEdge.Id)))
+      if (m_edgeSprings.ContainsKey(iEdge.Id))
       {
-        float length = iEdge.Data.Length;
-        Spring existingSpring = null;
-
-        var fromEdges = Graph.GetEdges(iEdge.Source, iEdge.Target);
-        if (fromEdges != null)
-        {
-          foreach (var e in fromEdges)
-          {
-            if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
-            {
-              existingSpring = m_edgeSprings[e.Id];
-              break;
-            }
-          }
-        }
-
-        if (existingSpring != null)
-        {
-          return new Spring(existingSpring.Point1, existingSpring.Point2, 0.0f, 0.0f);
-        }
-
-        var toEdges = Graph.GetEdges(iEdge.Target, iEdge.Source);
-        if (toEdges != null)
-        {
-          foreach (var e in toEdges)
-          {
-            if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
-            {
-              existingSpring = m_edgeSprings[e.Id];
-              break;
-            }
-          }
-        }
-
-        if (existingSpring != null)
-        {
-          return new Spring(existingSpring.Point2, existingSpring.Point1, 0.0f, 0.0f);
-        }
-
-        m_edgeSprings[iEdge.Id] = new Spring(GetPoint(iEdge.Source), GetPoint(iEdge.Target), length, Stiffness);
+        return m_edgeSprings[iEdge.Id];
       }
+
+      Spring existingSpring = null;
+
+      var fromEdges = Graph.GetEdges(iEdge.Source, iEdge.Target);
+      foreach (var e in fromEdges)
+      {
+        if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
+        {
+          existingSpring = m_edgeSprings[e.Id];
+          break;
+        }
+      }
+
+      if (existingSpring != null)
+      {
+        return new Spring(existingSpring.Point1, existingSpring.Point2, 0.0f, 0.0f);
+      }
+
+      var toEdges = Graph.GetEdges(iEdge.Target, iEdge.Source);
+      foreach (var e in toEdges)
+      {
+        if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
+        {
+          existingSpring = m_edgeSprings[e.Id];
+          break;
+        }
+      }
+
+      if (existingSpring != null)
+      {
+        return new Spring(existingSpring.Point2, existingSpring.Point1, 0.0f, 0.0f);
+      }
+
+      float length = iEdge.Data.Length;
+      m_edgeSprings[iEdge.Id] = new Spring(GetPoint(iEdge.Source), GetPoint(iEdge.Target), length, Stiffness);
 
       return m_edgeSprings[iEdge.Id];
     }
 
     // TODO: change this for group only after node grouping
-    protected void ApplyCoulombsLaw()
+    private void ApplyCoulombsLaw()
     {
       foreach (var n1 in Graph.Nodes)
       {
@@ -126,42 +121,39 @@ namespace EpForceDirectedGraph.cs
         foreach (var n2 in Graph.Nodes)
         {
           Point point2 = GetPoint(n2);
-          if (point1 != point2)
+          if (point1 == point2)
           {
-            AbstractVector d = point1.Position - point2.Position;
-            float distance = d.Magnitude() + 0.1f;
-            AbstractVector direction = d.Normalize();
-            if (n1.Pinned && n2.Pinned)
-            {
-              point1.ApplyForce(direction * 0.0f);
-              point2.ApplyForce(direction * 0.0f);
-            }
-            else if (n1.Pinned)
-            {
-              point1.ApplyForce(direction * 0.0f);
-              //point2.ApplyForce((direction * Repulsion) / (distance * distance * -1.0f));
-              point2.ApplyForce((direction * Repulsion) / (distance * -1.0f));
-            }
-            else if (n2.Pinned)
-            {
-              //point1.ApplyForce((direction * Repulsion) / (distance * distance));
-              point1.ApplyForce((direction * Repulsion) / (distance));
-              point2.ApplyForce(direction * 0.0f);
-            }
-            else
-            {
-              //                             point1.ApplyForce((direction * Repulsion) / (distance * distance * 0.5f));
-              //                             point2.ApplyForce((direction * Repulsion) / (distance * distance * -0.5f));
-              point1.ApplyForce((direction * Repulsion) / (distance * 0.5f));
-              point2.ApplyForce((direction * Repulsion) / (distance * -0.5f));
-            }
+            continue;
+          }
 
+          AbstractVector d = point1.Position - point2.Position;
+          float distance = d.Magnitude() + 0.1f;
+          AbstractVector direction = d.Normalize();
+          if (n1.Pinned && n2.Pinned)
+          {
+            point1.ApplyForce(direction * 0.0f);
+            point2.ApplyForce(direction * 0.0f);
+          }
+          else if (n1.Pinned)
+          {
+            point1.ApplyForce(direction * 0.0f);
+            point2.ApplyForce((direction * Repulsion) / (distance * -1.0f));
+          }
+          else if (n2.Pinned)
+          {
+            point1.ApplyForce((direction * Repulsion) / (distance));
+            point2.ApplyForce(direction * 0.0f);
+          }
+          else
+          {
+            point1.ApplyForce((direction * Repulsion) / (distance * 0.5f));
+            point2.ApplyForce((direction * Repulsion) / (distance * -0.5f));
           }
         }
       }
     }
 
-    protected void ApplyHookesLaw()
+    private void ApplyHookesLaw()
     {
       foreach (var e in Graph.Edges)
       {
@@ -193,24 +185,24 @@ namespace EpForceDirectedGraph.cs
       }
     }
 
-    protected void AttractToCentre()
+    private void AttractToCentre()
     {
       foreach (var n in Graph.Nodes)
       {
         Point point = GetPoint(n);
-        if (!point.Node.Pinned)
+        if (point.Node.Pinned)
         {
-          AbstractVector direction = point.Position * -1.0f;
-          //point.ApplyForce(direction * ((float)Math.Sqrt((double)(Repulsion / 100.0f))));
-
-          float displacement = direction.Magnitude();
-          direction = direction.Normalize();
-          point.ApplyForce(direction * (Stiffness * displacement * 0.4f));
+          continue;
         }
+
+        AbstractVector direction = point.Position * -1.0f;
+        float displacement = direction.Magnitude();
+        direction = direction.Normalize();
+        point.ApplyForce(direction * (Stiffness * displacement * 0.4f));
       }
     }
 
-    protected void UpdateVelocity(float iTimeStep)
+    private void UpdateVelocity(float iTimeStep)
     {
       foreach (var n in Graph.Nodes)
       {
@@ -221,7 +213,7 @@ namespace EpForceDirectedGraph.cs
       }
     }
 
-    protected void UpdatePosition(float iTimeStep)
+    private void UpdatePosition(float iTimeStep)
     {
       foreach (var n in Graph.Nodes)
       {
@@ -230,32 +222,30 @@ namespace EpForceDirectedGraph.cs
       }
     }
 
-    protected float GetTotalEnergy()
+    public float TotalEnergy
     {
-      float energy = 0.0f;
-      foreach (var n in Graph.Nodes)
+      get
       {
-        Point point = GetPoint(n);
-        float speed = point.Velocity.Magnitude();
-        energy += 0.5f * point.Mass * speed * speed;
-      }
+        float energy = 0.0f;
+        foreach (var n in Graph.Nodes)
+        {
+          Point point = GetPoint(n);
+          float speed = point.Velocity.Magnitude();
+          energy += 0.5f * point.Mass * speed * speed;
+        }
 
-      return energy;
+        return energy;
+      }
     }
 
-    public void Calculate(float iTimeStep) // time in second
+    // time step in second
+    public void Calculate(float iTimeStep)
     {
       ApplyCoulombsLaw();
       ApplyHookesLaw();
       AttractToCentre();
       UpdateVelocity(iTimeStep);
       UpdatePosition(iTimeStep);
-      if (GetTotalEnergy() < Threshold)
-      {
-        WithinThreshold = true;
-      }
-      else
-        WithinThreshold = false;
     }
 
     public void EachEdge(EdgeAction del)
@@ -272,23 +262,6 @@ namespace EpForceDirectedGraph.cs
       {
         del(n, GetPoint(n));
       }
-    }
-
-    public NearestPoint Nearest(AbstractVector position)
-    {
-      NearestPoint min = new NearestPoint();
-      foreach (var n in Graph.Nodes)
-      {
-        Point point = GetPoint(n);
-        float distance = (point.Position - position).Magnitude();
-        if (min.Distance == null || distance < min.Distance)
-        {
-          min.Node = n;
-          min.Point = point;
-          min.Distance = distance;
-        }
-      }
-      return min;
     }
   }
 }

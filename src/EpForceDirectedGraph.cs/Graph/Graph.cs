@@ -203,7 +203,7 @@ namespace EpForceDirectedGraph.cs
       {
         return m_adjacencySet[iNode1.Id][iNode2.Id];
       }
-      return null;
+      return Enumerable.Empty<IEdge>();
     }
 
     public IEnumerable<IEdge> GetEdges(INode iNode)
@@ -231,7 +231,6 @@ namespace EpForceDirectedGraph.cs
               retEdgeList.Add(e);
             }
           }
-
         }
       }
 
