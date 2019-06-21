@@ -53,6 +53,5 @@ namespace EpForceDirectedGraph.cs
     void EachEdge(EdgeAction del);
     void EachNode(NodeAction del);
     NearestPoint Nearest(AbstractVector position);
-    BoundingBox GetBoundingBox();
   }
 }

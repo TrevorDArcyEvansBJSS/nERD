@@ -55,32 +55,5 @@ namespace EpForceDirectedGraph.cs
       }
       return m_nodePoints[iNode.Id];
     }
-
-    public override BoundingBox GetBoundingBox()
-    {
-      BoundingBox boundingBox = new BoundingBox();
-      FDGVector3 bottomLeft = FDGVector3.Identity().Multiply(BoundingBox.DefaultBB * -1.0f) as FDGVector3;
-      FDGVector3 topRight = FDGVector3.Identity().Multiply(BoundingBox.DefaultBB) as FDGVector3;
-      foreach (var n in Graph.Nodes)
-      {
-        FDGVector3 position = GetPoint(n).Position as FDGVector3;
-        if (position.X < bottomLeft.X)
-          bottomLeft.X = position.X;
-        if (position.Y < bottomLeft.Y)
-          bottomLeft.Y = position.Y;
-        if (position.Z < bottomLeft.Z)
-          bottomLeft.Z = position.Z;
-        if (position.X > topRight.X)
-          topRight.X = position.X;
-        if (position.Y > topRight.Y)
-          topRight.Y = position.Y;
-        if (position.Z > topRight.Z)
-          topRight.Z = position.Z;
-      }
-      AbstractVector padding = (topRight - bottomLeft).Multiply(BoundingBox.DefaultPadding);
-      boundingBox.BottomLeftFront = bottomLeft.Subtract(padding);
-      boundingBox.TopRightBack = topRight.Add(padding);
-      return boundingBox;
-    }
   }
 }

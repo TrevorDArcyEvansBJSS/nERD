@@ -26,6 +26,7 @@ namespace NClass.Core
     public event EventHandler Modified;
 
     public bool IsDirty { get; private set; } = false;
+    public Guid Id { get; } = Guid.NewGuid();
 
     public virtual void Clean()
     {

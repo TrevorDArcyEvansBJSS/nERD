@@ -62,7 +62,6 @@
     <Compile Include="Interfaces\IVector.cs" />
     <Compile Include="Layout\AbstractRenderer.cs" />
     <Compile Include="Layout\AbstractVector.cs" />
-    <Compile Include="Layout\BoundingBox.cs" />
     <Compile Include="Layout\FDGVector2.cs" />
     <Compile Include="Layout\FDGVector3.cs" />
     <Compile Include="Layout\ForceDirected.cs" />

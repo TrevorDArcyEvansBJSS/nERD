@@ -11,9 +11,7 @@ namespace Layouts
     public NodeData Data { get; private set; } = new NodeData();
     public bool Pinned { get; set; } = false;
 
-    private Rectangle _boundingBox = new Rectangle(0, 0, 10, 10);
-    public Rectangle BoundingBox { get => _boundingBox; }
-    public DiagramNode(string iId, NodeData iData = null, Shape shape = null)
+    public DiagramNode(string iId, NodeData iData = null)
     {
       Id = iId;
 
@@ -23,11 +21,6 @@ namespace Layouts
         Data.Label = iData.Label;
         Data.Mass = iData.Mass;
       }
-
-      _boundingBox.X = shape?.Location.X ?? _boundingBox.X;
-      _boundingBox.Y = shape?.Location.Y ?? _boundingBox.Y;
-      _boundingBox.Width = shape?.Size.Width ?? _boundingBox.Width;
-      _boundingBox.Height = shape?.Size.Height ?? _boundingBox.Height;
     }
 
     public override int GetHashCode()

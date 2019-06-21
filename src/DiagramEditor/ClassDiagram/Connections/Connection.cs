@@ -329,7 +329,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       OnModified(EventArgs.Empty);
     }
 
-    internal void AutoRoute()
+    public void AutoRoute()
     {
       if (bendPoints.Count > 0)
       {

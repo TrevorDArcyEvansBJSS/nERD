@@ -290,7 +290,5 @@ namespace EpForceDirectedGraph.cs
       }
       return min;
     }
-
-    public abstract BoundingBox GetBoundingBox();
   }
 }
