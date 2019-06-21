@@ -834,8 +834,7 @@ namespace NClass.GUI
 
     private void mnuContents_Click(object sender, EventArgs e)
     {
-      MessageBox.Show(Strings.NotImplemented, "NClass",
-        MessageBoxButtons.OK, MessageBoxIcon.Information);
+      MessageBox.Show(Strings.NotImplemented, "NClass", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void mnuCheckForUpdates_Click(object sender, EventArgs e)

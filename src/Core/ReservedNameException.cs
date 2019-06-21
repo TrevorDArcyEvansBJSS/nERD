@@ -18,31 +18,26 @@ using System;
 
 namespace NClass.Core
 {
-  public class ReservedNameException : BadSyntaxException
+  public sealed class ReservedNameException : BadSyntaxException
   {
-    string name;
-
-    public ReservedNameException()
-      : base(Strings.ErrorReservedName)
+    public ReservedNameException() :
+      base(Strings.ErrorReservedName)
     {
-      name = null;
+      ReservedName = null;
     }
 
-    public ReservedNameException(string name)
-      : base(Strings.ErrorReservedName)
+    public ReservedNameException(string name) :
+      base(Strings.ErrorReservedName)
     {
-      this.name = name;
+      this.ReservedName = name;
     }
 
-    public ReservedNameException(string name, Exception innerException)
-      : base(Strings.ErrorReservedName, innerException)
+    public ReservedNameException(string name, Exception innerException) :
+      base(Strings.ErrorReservedName, innerException)
     {
-      this.name = name;
+      this.ReservedName = name;
     }
 
-    public string ReservedName
-    {
-      get { return name; }
-    }
+    public string ReservedName { get; }
   }
 }
