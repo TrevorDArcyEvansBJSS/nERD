@@ -43,7 +43,7 @@ namespace Layouts
         return;
       }
 
-      var creator = new Creator();
+      var creator = new DiagramCreator();
       var graph = new Graph(creator);
       var diagram = (Diagram)DocumentManager.ActiveDocument;
 
@@ -53,7 +53,8 @@ namespace Layouts
         .ToList()
         .ForEach(x =>
         {
-          graph.AddNode(new Node(x.Entity.Name));
+          // TODO   add Shape.Size to DiagramNode
+          graph.AddNode(new DiagramNode(x.Entity.Name, null, x));
         });
 
       // add edges
@@ -65,7 +66,7 @@ namespace Layouts
           graph.CreateEdge(x.Relationship.First.Name, x.Relationship.Second.Name);
         });
 
-      var physics = new ForceDirected2D(graph, 81.76f, 40000.0f, 0.5f);
+      var physics = new DiagramForceDirected2D(graph, 81.76f, 40000.0f, 0.5f);
       var renderer = new NullRenderer(physics);
 
       const int MaxIterations = 10000;
