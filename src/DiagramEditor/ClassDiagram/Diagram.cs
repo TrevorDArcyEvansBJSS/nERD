@@ -132,7 +132,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       {
         return size;
       }
-      protected set
+      set
       {
         if (value.Width < MinSize.Width) value.Width = MinSize.Width;
         if (value.Height < MinSize.Height) value.Height = MinSize.Height;

@@ -39,13 +39,13 @@ namespace NClass.Core
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
-    public virtual string Name
+    public override string Name
     {
       get
       {
         return name;
       }
-      protected set
+      set
       {
         string newName = Language.GetValidName(value, false);
 

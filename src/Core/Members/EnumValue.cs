@@ -29,13 +29,13 @@ namespace NClass.Core
       Initializing = false;
     }
 
-    public string Name
+    public override string Name
     {
       get
       {
         return name;
       }
-      protected set
+      set
       {
         if (name != value)
         {

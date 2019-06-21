@@ -19,6 +19,7 @@ namespace NClass.Core
 {
   public abstract class LanguageElement : Element
   {
+    public abstract string Name { get; set; }
     public abstract string GetDeclaration();
 
     public override string ToString()

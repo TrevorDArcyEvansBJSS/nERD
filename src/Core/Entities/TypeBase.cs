@@ -42,7 +42,7 @@ namespace NClass.Core
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
-    public virtual string Name
+    public override string Name
     {
       get
       {
@@ -146,7 +146,7 @@ namespace NClass.Core
 
     public bool IsNested
     {
-      get { return (NestingParent != null); }
+      get { return NestingParent != null; }
     }
 
     public abstract Language Language
