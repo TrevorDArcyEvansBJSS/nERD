@@ -1167,4 +1167,7 @@ Do you still want to continue?</value>
   <data name="Author2" xml:space="preserve">
     <value>Trevor D'Arcy-Evans</value>
   </data>
+  <data name="ErrorDuplicateName" xml:space="preserve">
+    <value>Entity with this name already exists</value>
+  </data>
 </root>

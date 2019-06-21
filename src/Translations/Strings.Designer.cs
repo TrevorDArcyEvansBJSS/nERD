@@ -936,6 +936,15 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entity with this name already exists.
+        /// </summary>
+        public static string ErrorDuplicateName {
+            get {
+                return ResourceManager.GetString("ErrorDuplicateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file name cannot be empty..
         /// </summary>
         public static string ErrorEmptyFilename {

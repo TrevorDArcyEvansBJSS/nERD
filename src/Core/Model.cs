@@ -17,6 +17,7 @@ using NClass.Translations;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace NClass.Core
@@ -131,16 +132,35 @@ namespace NClass.Core
 
     private void ElementChanged(object sender, EventArgs e)
     {
+      CheckForDuplicateEntityName(sender);
+
       OnModified(e);
     }
 
     private void AddEntity(IEntity entity)
     {
+      CheckForDuplicateEntityName(entity);
+
       OnBeginUndoableOperation(this, EventArgs.Empty);
       entities.Add(entity);
       entity.BeginUndoableOperation += new EventHandler(OnBeginUndoableOperation);
       entity.Modified += new EventHandler(ElementChanged);
       OnEntityAdded(new EntityEventArgs(entity));
+    }
+
+    private void CheckForDuplicateEntityName(object obj)
+    {
+      var entity = obj as TypeBase;
+
+      if (!Loading &&
+        entity is TypeBase &&
+        entities
+          .OfType<TypeBase>()
+          .Except(new[] { entity })
+          .Any(x => x.Name == entity?.Name))
+      {
+        throw new DuplicateTypeException(entity.Name);
+      }
     }
 
     public ClassType AddClass()

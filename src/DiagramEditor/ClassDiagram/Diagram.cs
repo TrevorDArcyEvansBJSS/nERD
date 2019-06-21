@@ -88,7 +88,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
     }
 
-    public Diagram(string name, Language language) : 
+    public Diagram(string name, Language language) :
       base(name, language)
     {
     }
@@ -974,16 +974,26 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void AddCreatedShape()
     {
-      DeselectAll();
-      Shape shape = AddShape(shapeType);
-      shape.Location = shapeOutline.Location;
-      RecalculateSize();
-      state = State.Normal;
+      try
+      {
+        DeselectAll();
+        Shape shape = AddShape(shapeType);
+        shape.Location = shapeOutline.Location;
+        RecalculateSize();
 
-      shape.IsSelected = true;
-      shape.IsActive = true;
-      if (shape is TypeShape) //TODO: nem szép
-        shape.ShowEditor();
+        shape.IsSelected = true;
+        shape.IsActive = true;
+        if (shape is TypeShape) //TODO: nem szép
+          shape.ShowEditor();
+      }
+      catch (DuplicateTypeException ex)
+      {
+        MessageBox.Show(ex.Message, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+      finally
+      {
+        state = State.Normal;
+      }
     }
 
     private void SelectElements(AbsoluteMouseEventArgs e)
@@ -1111,106 +1121,116 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void KeyDown(KeyEventArgs e)
     {
-      //TODO: ActiveElement.KeyDown() - de nem minden esetben (pl. törlésnél nem)
-      RedrawSuspended = true;
-
-      // Delete
-      if (e.KeyCode == Keys.Delete)
+      try
       {
-        if (SelectedElementCount >= 2 || ActiveElement == null ||
-          !ActiveElement.DeleteSelectedMember())
+        //TODO: ActiveElement.KeyDown() - de nem minden esetben (pl. törlésnél nem)
+        RedrawSuspended = true;
+
+        // Delete
+        if (e.KeyCode == Keys.Delete)
         {
-          DeleteSelectedElements();
+          if (SelectedElementCount >= 2 || ActiveElement == null ||
+            !ActiveElement.DeleteSelectedMember())
+          {
+            DeleteSelectedElements();
+          }
+        }
+        // Escape
+        else if (e.KeyCode == Keys.Escape)
+        {
+          state = State.Normal;
+          DeselectAll();
+          Redraw();
+        }
+        // Enter
+        else if (e.KeyCode == Keys.Enter && ActiveElement != null)
+        {
+          ActiveElement.ShowEditor();
+        }
+        // Up
+        else if (e.KeyCode == Keys.Up && ActiveElement != null)
+        {
+          if (e.Shift || e.Control)
+            ActiveElement.MoveUp();
+          else
+            ActiveElement.SelectPrevious();
+        }
+        // Down
+        else if (e.KeyCode == Keys.Down && ActiveElement != null)
+        {
+          if (e.Shift || e.Control)
+            ActiveElement.MoveDown();
+          else
+            ActiveElement.SelectNext();
+        }
+        // Ctrl + X
+        else if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
+        {
+          Cut();
+        }
+        // Ctrl + C
+        else if (e.KeyCode == Keys.C && e.Modifiers == Keys.Control)
+        {
+          Copy();
+        }
+        // Ctrl + Z
+        else if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
+        {
+          Undo();
+        }
+        // Ctrl + Y
+        else if (e.KeyCode == Keys.Y && e.Modifiers == Keys.Control)
+        {
+          Redo();
+        }
+        // Ctrl + V
+        else if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
+        {
+          Paste();
+        }
+        // Ctrl + Shift + ?
+        else if (e.Modifiers == (Keys.Control | Keys.Shift))
+        {
+          switch (e.KeyCode)
+          {
+            case Keys.A:
+              CreateShape();
+              break;
+
+            case Keys.C:
+              CreateShape(EntityType.Class);
+              break;
+
+            case Keys.S:
+              CreateShape(EntityType.Structure);
+              break;
+
+            case Keys.I:
+              CreateShape(EntityType.Interface);
+              break;
+
+            case Keys.E:
+              CreateShape(EntityType.Enum);
+              break;
+
+            case Keys.D:
+              CreateShape(EntityType.Delegate);
+              break;
+
+            case Keys.N:
+              CreateShape(EntityType.Comment);
+              break;
+          }
         }
       }
-      // Escape
-      else if (e.KeyCode == Keys.Escape)
+      catch (DuplicateTypeException ex)
       {
-        state = State.Normal;
-        DeselectAll();
-        Redraw();
+        MessageBox.Show(ex.Message, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-      // Enter
-      else if (e.KeyCode == Keys.Enter && ActiveElement != null)
+      finally
       {
-        ActiveElement.ShowEditor();
+        RedrawSuspended = false;
       }
-      // Up
-      else if (e.KeyCode == Keys.Up && ActiveElement != null)
-      {
-        if (e.Shift || e.Control)
-          ActiveElement.MoveUp();
-        else
-          ActiveElement.SelectPrevious();
-      }
-      // Down
-      else if (e.KeyCode == Keys.Down && ActiveElement != null)
-      {
-        if (e.Shift || e.Control)
-          ActiveElement.MoveDown();
-        else
-          ActiveElement.SelectNext();
-      }
-      // Ctrl + X
-      else if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
-      {
-        Cut();
-      }
-      // Ctrl + C
-      else if (e.KeyCode == Keys.C && e.Modifiers == Keys.Control)
-      {
-        Copy();
-      }
-      // Ctrl + Z
-      else if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control)
-      {
-        Undo();
-      }
-      // Ctrl + Y
-      else if (e.KeyCode == Keys.Y && e.Modifiers == Keys.Control)
-      {
-        Redo();
-      }
-      // Ctrl + V
-      else if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
-      {
-        Paste();
-      }
-      // Ctrl + Shift + ?
-      else if (e.Modifiers == (Keys.Control | Keys.Shift))
-      {
-        switch (e.KeyCode)
-        {
-          case Keys.A:
-            CreateShape();
-            break;
-
-          case Keys.C:
-            CreateShape(EntityType.Class);
-            break;
-
-          case Keys.S:
-            CreateShape(EntityType.Structure);
-            break;
-
-          case Keys.I:
-            CreateShape(EntityType.Interface);
-            break;
-
-          case Keys.E:
-            CreateShape(EntityType.Enum);
-            break;
-
-          case Keys.D:
-            CreateShape(EntityType.Delegate);
-            break;
-
-          case Keys.N:
-            CreateShape(EntityType.Comment);
-            break;
-        }
-      }
-      RedrawSuspended = false;
     }
 
     public RectangleF GetPrintingArea(bool selectedOnly)

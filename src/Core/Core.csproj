@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BadSyntaxException.cs" />
+    <Compile Include="DuplicateTypeException.cs" />
     <Compile Include="Entities\EntityType.cs" />
     <Compile Include="Members\MemberType.cs" />
     <Compile Include="RelationshipEventArgs.cs" />
