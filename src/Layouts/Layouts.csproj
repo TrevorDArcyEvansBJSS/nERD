@@ -44,10 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiagramCreator.cs" />
-    <Compile Include="DiagramEdge.cs" />
     <Compile Include="DiagramForceDirected2D.cs" />
-    <Compile Include="DiagramNode.cs" />
     <Compile Include="Lang\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -43,8 +43,7 @@ namespace Layouts
         return;
       }
 
-      var creator = new DiagramCreator();
-      var graph = new Graph(creator);
+      var graph = new Graph(new Creator());
       var diagram = (Diagram)DocumentManager.ActiveDocument;
 
       // add nodes
@@ -53,7 +52,7 @@ namespace Layouts
         .ToList()
         .ForEach(x =>
         {
-          graph.AddNode(new DiagramNode(x.Entity.Id.ToString()));
+          graph.AddNode(new Node(x.Entity.Id.ToString()));
         });
 
       // add edges
@@ -62,9 +61,9 @@ namespace Layouts
         .ToList()
         .ForEach(x =>
         {
-          var source = new DiagramNode(x.Relationship.First.Id.ToString());
-          var target = new DiagramNode(x.Relationship.Second.Id.ToString());
-          var edge = new DiagramEdge(x.Relationship.Id.ToString(), source, target);
+          var source = new Node(x.Relationship.First.Id.ToString());
+          var target = new Node(x.Relationship.Second.Id.ToString());
+          var edge = new Edge(x.Relationship.Id.ToString(), source, target);
           graph.AddEdge(edge);
         });
 
