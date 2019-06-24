@@ -1,5 +1,7 @@
 ﻿using EpForceDirectedGraph.cs;
 using NClass.DiagramEditor.ClassDiagram;
+using System;
+using System.Linq;
 
 namespace Layouts
 {
@@ -17,7 +19,15 @@ namespace Layouts
     {
       if (!mNodePoints.ContainsKey(iNode.Id))
       {
-        mNodePoints[iNode.Id] = new Particle(iNode.Data.InitialPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode);
+        var shape = _diagram.Shapes.Single(x => x.Entity.Id == Guid.Parse(iNode.Id));
+        mNodePoints[iNode.Id] = new Particle(iNode.Data.InitialPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode)
+        {
+          BoundingBox = new RectF(
+            iNode.Data.InitialPosition.X,
+            iNode.Data.InitialPosition.Y,
+            iNode.Data.InitialPosition.X + shape.Size.Width,
+            iNode.Data.InitialPosition.Y + shape.Size.Height)
+        };
       }
 
       return mNodePoints[iNode.Id];

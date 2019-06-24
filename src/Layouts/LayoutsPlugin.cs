@@ -79,7 +79,7 @@ namespace Layouts
         var physics = new DiagramForceDirected2D(diagram, graph, Stiffness, Repulsion, Damping);
 
         const int MaxIterations = 10000;
-        foreach (var _ in Enumerable.Range(0, MaxIterations))
+        foreach (var iteration in Enumerable.Range(0, MaxIterations))
         {
           physics.Calculate(0.05f);
           if (physics.TotalEnergy < physics.Threshold)

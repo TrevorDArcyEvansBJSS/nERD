@@ -36,6 +36,7 @@ An Interface for the ForceDirected Class.
 */
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EpForceDirectedGraph.cs
 {
@@ -218,7 +219,23 @@ namespace EpForceDirectedGraph.cs
       foreach (var n in Graph.Nodes)
       {
         Particle point = GetParticle(n);
-        point.Position.Add(point.Velocity * iTimeStep);
+
+        var otherNodes = Graph.Nodes.Except(new[] { n });
+        foreach (var otherNode in otherNodes)
+        {
+          var otherParticle = GetParticle(otherNode);
+          var otherBBox = otherParticle.BoundingBox;
+          if (otherBBox.Intersects(point.BoundingBox))
+          {
+            point.Velocity.SetZero();
+            otherParticle.Velocity.SetZero();
+            otherNode.Pinned = n.Pinned = true;
+          }
+          else
+          {
+            point.Position.Add(point.Velocity * iTimeStep);
+          }
+        }
       }
     }
 
