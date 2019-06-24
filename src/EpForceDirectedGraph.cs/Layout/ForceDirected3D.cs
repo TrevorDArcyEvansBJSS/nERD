@@ -44,7 +44,7 @@ namespace EpForceDirectedGraph.cs
     {
     }
 
-    protected override Particle GetPoint(INode iNode)
+    protected override Particle GetParticle(INode iNode)
     {
       if (!(mNodePoints.ContainsKey(iNode.Id)))
       {

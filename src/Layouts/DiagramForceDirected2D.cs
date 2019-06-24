@@ -13,7 +13,7 @@ namespace Layouts
       _diagram = diagram;
     }
 
-    protected override Particle GetPoint(INode iNode)
+    protected override Particle GetParticle(INode iNode)
     {
       if (!mNodePoints.ContainsKey(iNode.Id))
       {

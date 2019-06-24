@@ -65,7 +65,7 @@ namespace EpForceDirectedGraph.cs
       Graph.Clear();
     }
 
-    protected abstract Particle GetPoint(INode iNode);
+    protected abstract Particle GetParticle(INode iNode);
 
     private Spring GetSpring(IEdge iEdge)
     {
@@ -107,7 +107,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       float length = iEdge.Data.Length;
-      mEdgeSprings[iEdge.Id] = new Spring(GetPoint(iEdge.Source), GetPoint(iEdge.Target), length, Stiffness);
+      mEdgeSprings[iEdge.Id] = new Spring(GetParticle(iEdge.Source), GetParticle(iEdge.Target), length, Stiffness);
 
       return mEdgeSprings[iEdge.Id];
     }
@@ -117,10 +117,10 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n1 in Graph.Nodes)
       {
-        Particle point1 = GetPoint(n1);
+        Particle point1 = GetParticle(n1);
         foreach (var n2 in Graph.Nodes)
         {
-          Particle point2 = GetPoint(n2);
+          Particle point2 = GetParticle(n2);
           if (point1 == point2)
           {
             continue;
@@ -189,7 +189,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        Particle point = GetPoint(n);
+        Particle point = GetParticle(n);
         if (point.Node.Pinned)
         {
           continue;
@@ -206,7 +206,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        Particle point = GetPoint(n);
+        Particle point = GetParticle(n);
         point.Velocity.Add(point.Acceleration * iTimeStep);
         point.Velocity.Multiply(Damping);
         point.Acceleration.SetZero();
@@ -217,7 +217,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        Particle point = GetPoint(n);
+        Particle point = GetParticle(n);
         point.Position.Add(point.Velocity * iTimeStep);
       }
     }
@@ -229,7 +229,7 @@ namespace EpForceDirectedGraph.cs
         float energy = 0.0f;
         foreach (var n in Graph.Nodes)
         {
-          Particle point = GetPoint(n);
+          Particle point = GetParticle(n);
           float speed = point.Velocity.Magnitude();
           energy += 0.5f * point.Mass * speed * speed;
         }
@@ -260,7 +260,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        del(n, GetPoint(n));
+        del(n, GetParticle(n));
       }
     }
   }
