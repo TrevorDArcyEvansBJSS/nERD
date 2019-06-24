@@ -47,8 +47,8 @@ namespace EpForceDirectedGraph.cs
     IEdge AddEdge(IEdge iEdge);
     void CreateNodes(IEnumerable<NodeData> iDataList);
     void CreateNodes(IEnumerable<string> iNameList);
-    void CreateEdges(IEnumerable<Triple<string, string, EdgeData>> iDataList);
-    void CreateEdges(IEnumerable<Pair<string, string>> iDataList);
+    void CreateEdges(IEnumerable<Tuple<string, string, EdgeData>> iDataList);
+    void CreateEdges(IEnumerable<Tuple<string, string>> iDataList);
     INode CreateNode(NodeData data);
     INode CreateNode(string name);
     IEdge CreateEdge(INode iSource, INode iTarget, EdgeData iData = null);

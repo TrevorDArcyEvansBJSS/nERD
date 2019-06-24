@@ -123,31 +123,31 @@ namespace EpForceDirectedGraph.cs
       }
     }
 
-    public void CreateEdges(IEnumerable<Triple<string, string, EdgeData>> iDataList)
+    public void CreateEdges(IEnumerable<Tuple<string, string, EdgeData>> iDataList)
     {
       foreach (var listTrav in iDataList)
       {
-        if (!m_nodeSet.ContainsKey(listTrav.First))
+        if (!m_nodeSet.ContainsKey(listTrav.Item1))
           return;
-        if (!m_nodeSet.ContainsKey(listTrav.Second))
+        if (!m_nodeSet.ContainsKey(listTrav.Item2))
           return;
-        var node1 = m_nodeSet[listTrav.First];
-        var node2 = m_nodeSet[listTrav.Second];
-        CreateEdge(node1, node2, listTrav.Third);
+        var node1 = m_nodeSet[listTrav.Item1];
+        var node2 = m_nodeSet[listTrav.Item2];
+        CreateEdge(node1, node2, listTrav.Item3);
       }
     }
 
-    public void CreateEdges(IEnumerable<Pair<string, string>> iDataList)
+    public void CreateEdges(IEnumerable<Tuple<string, string>> iDataList)
     {
       foreach (var listTrav in iDataList)
       {
-        if (!m_nodeSet.ContainsKey(listTrav.First))
+        if (!m_nodeSet.ContainsKey(listTrav.Item1))
           return;
-        if (!m_nodeSet.ContainsKey(listTrav.Second))
+        if (!m_nodeSet.ContainsKey(listTrav.Item2))
           return;
 
-        var node1 = m_nodeSet[listTrav.First];
-        var node2 = m_nodeSet[listTrav.Second];
+        var node1 = m_nodeSet[listTrav.Item1];
+        var node2 = m_nodeSet[listTrav.Item2];
         CreateEdge(node1, node2);
       }
     }
