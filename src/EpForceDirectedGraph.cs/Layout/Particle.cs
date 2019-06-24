@@ -128,6 +128,18 @@ namespace EpForceDirectedGraph.cs
 
     public AbstractVector Velocity { get; private set; }
     public AbstractVector Acceleration { get; private set; }
-    public RectF BoundingBox { get; set; } = new RectF(0f, 10f, 0f, 10f);
+    public RectF BoundingBox
+    {
+      get
+      {
+        return new RectF(
+          Position.X,
+          Position.Y,
+          Position.X + Width,
+          Position.Y + Height);
+      }
+    }
+    public float Width { get; set; } = 10f;
+    public float Height { get; set; } = 10f;
   }
 }
