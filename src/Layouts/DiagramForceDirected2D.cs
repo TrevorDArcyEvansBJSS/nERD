@@ -15,12 +15,12 @@ namespace Layouts
 
     protected override Point GetPoint(INode iNode)
     {
-      if (!m_nodePoints.ContainsKey(iNode.Id))
+      if (!mNodePoints.ContainsKey(iNode.Id))
       {
-        m_nodePoints[iNode.Id] = new Point(iNode.Data.InitialPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode);
+        mNodePoints[iNode.Id] = new Point(iNode.Data.InitialPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode);
       }
 
-      return m_nodePoints[iNode.Id];
+      return mNodePoints[iNode.Id];
     }
   }
 }

@@ -46,14 +46,14 @@ namespace EpForceDirectedGraph.cs
 
     protected override Point GetPoint(INode iNode)
     {
-      if (!(m_nodePoints.ContainsKey(iNode.Id)))
+      if (!(mNodePoints.ContainsKey(iNode.Id)))
       {
         FDGVector3 iniPosition = iNode.Data.InitialPosition as FDGVector3;
         if (iniPosition == null)
           iniPosition = FDGVector3.Random() as FDGVector3;
-        m_nodePoints[iNode.Id] = new Point(iniPosition, FDGVector3.Zero(), FDGVector3.Zero(), iNode);
+        mNodePoints[iNode.Id] = new Point(iniPosition, FDGVector3.Zero(), FDGVector3.Zero(), iNode);
       }
-      return m_nodePoints[iNode.Id];
+      return mNodePoints[iNode.Id];
     }
   }
 }

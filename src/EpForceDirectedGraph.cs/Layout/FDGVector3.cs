@@ -62,7 +62,7 @@ namespace EpForceDirectedGraph.cs
       return (int)X ^ (int)Y ^ (int)Z;
     }
 
-    public override bool Equals(System.Object obj)
+    public override bool Equals(object obj)
     {
       // If parameter is null return false.
       if (obj == null)
@@ -72,7 +72,7 @@ namespace EpForceDirectedGraph.cs
 
       // If parameter cannot be cast to Point return false.
       FDGVector3 p = obj as FDGVector3;
-      if ((System.Object)p == null)
+      if (p is null)
       {
         return false;
       }
@@ -84,7 +84,7 @@ namespace EpForceDirectedGraph.cs
     public bool Equals(FDGVector3 p)
     {
       // If parameter is null return false:
-      if ((object)p == null)
+      if (p is null)
       {
         return false;
       }
@@ -96,13 +96,13 @@ namespace EpForceDirectedGraph.cs
     public static bool operator ==(FDGVector3 a, FDGVector3 b)
     {
       // If both are null, or both are same instance, return true.
-      if (System.Object.ReferenceEquals(a, b))
+      if (ReferenceEquals(a, b))
       {
         return true;
       }
 
       // If one is null, but not both, return false.
-      if (((object)a == null) || ((object)b == null))
+      if ((a is null) || (b is null))
       {
         return false;
       }

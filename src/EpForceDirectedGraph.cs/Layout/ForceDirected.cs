@@ -47,8 +47,8 @@ namespace EpForceDirectedGraph.cs
     public float Threshold { get; set; } = 0.01f;
     public IGraph Graph { get; private set; }
 
-    protected readonly Dictionary<string, Point> m_nodePoints = new Dictionary<string, Point>();
-    protected readonly Dictionary<string, Spring> m_edgeSprings = new Dictionary<string, Spring>();
+    protected readonly Dictionary<string, Point> mNodePoints = new Dictionary<string, Point>();
+    protected readonly Dictionary<string, Spring> mEdgeSprings = new Dictionary<string, Spring>();
 
     public ForceDirected(IGraph iGraph, float iStiffness, float iRepulsion, float iDamping)
     {
@@ -60,8 +60,8 @@ namespace EpForceDirectedGraph.cs
 
     public void Clear()
     {
-      m_nodePoints.Clear();
-      m_edgeSprings.Clear();
+      mNodePoints.Clear();
+      mEdgeSprings.Clear();
       Graph.Clear();
     }
 
@@ -69,9 +69,9 @@ namespace EpForceDirectedGraph.cs
 
     private Spring GetSpring(IEdge iEdge)
     {
-      if (m_edgeSprings.ContainsKey(iEdge.Id))
+      if (mEdgeSprings.ContainsKey(iEdge.Id))
       {
-        return m_edgeSprings[iEdge.Id];
+        return mEdgeSprings[iEdge.Id];
       }
 
       Spring existingSpring = null;
@@ -79,9 +79,9 @@ namespace EpForceDirectedGraph.cs
       var fromEdges = Graph.GetEdges(iEdge.Source, iEdge.Target);
       foreach (var e in fromEdges)
       {
-        if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
+        if (existingSpring == null && mEdgeSprings.ContainsKey(e.Id))
         {
-          existingSpring = m_edgeSprings[e.Id];
+          existingSpring = mEdgeSprings[e.Id];
           break;
         }
       }
@@ -94,9 +94,9 @@ namespace EpForceDirectedGraph.cs
       var toEdges = Graph.GetEdges(iEdge.Target, iEdge.Source);
       foreach (var e in toEdges)
       {
-        if (existingSpring == null && m_edgeSprings.ContainsKey(e.Id))
+        if (existingSpring == null && mEdgeSprings.ContainsKey(e.Id))
         {
-          existingSpring = m_edgeSprings[e.Id];
+          existingSpring = mEdgeSprings[e.Id];
           break;
         }
       }
@@ -107,9 +107,9 @@ namespace EpForceDirectedGraph.cs
       }
 
       float length = iEdge.Data.Length;
-      m_edgeSprings[iEdge.Id] = new Spring(GetPoint(iEdge.Source), GetPoint(iEdge.Target), length, Stiffness);
+      mEdgeSprings[iEdge.Id] = new Spring(GetPoint(iEdge.Source), GetPoint(iEdge.Target), length, Stiffness);
 
-      return m_edgeSprings[iEdge.Id];
+      return mEdgeSprings[iEdge.Id];
     }
 
     // TODO: change this for group only after node grouping
