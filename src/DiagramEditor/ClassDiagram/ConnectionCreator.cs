@@ -25,20 +25,13 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   internal class ConnectionCreator
   {
-    const int BorderOffset = 8;
-    const int BorderOffset2 = 12;
-    const int Radius = 5;
-    static readonly float[] dashPattern = new float[] { 3, 3 };
-    static readonly Pen firstPen;
-    static readonly Pen secondPen;
-    static readonly Pen arrowPen;
-
-    Diagram diagram;
-    RelationshipType type;
-    bool firstSelected = false;
-    bool created = false;
-    Shape first = null;
-    Shape second = null;
+    private const int BorderOffset = 8;
+    private const int BorderOffset2 = 12;
+    private const int Radius = 5;
+    private static readonly float[] dashPattern = new float[] { 3, 3 };
+    private static readonly Pen firstPen;
+    private static readonly Pen secondPen;
+    private static readonly Pen arrowPen;
 
     static ConnectionCreator()
     {
@@ -54,78 +47,82 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public ConnectionCreator(Diagram diagram, RelationshipType type)
     {
-      this.diagram = diagram;
-      this.type = type;
+      this.Diagram = diagram;
+      this.Type = type;
     }
 
-    public bool Created
-    {
-      get { return created; }
-    }
+    public bool Created { get; private set; } = false;
+
+    public Diagram Diagram { get; }
+
+    public RelationshipType Type { get; }
+    public bool FirstSelected { get; set; } = false;
+    public Shape First { get; set; } = null;
+    public Shape Second { get; set; } = null;
 
     public void MouseMove(AbsoluteMouseEventArgs e)
     {
       Point mouseLocation = new Point((int)e.X, (int)e.Y);
 
-      foreach (Shape shape in diagram.Shapes)
+      foreach (Shape shape in Diagram.Shapes)
       {
         if (shape.BorderRectangle.Contains(mouseLocation))
         {
-          if (!firstSelected)
+          if (!FirstSelected)
           {
-            if (first != shape)
+            if (First != shape)
             {
-              first = shape;
-              diagram.Redraw();
+              First = shape;
+              Diagram.Redraw();
             }
           }
           else
           {
-            if (second != shape)
+            if (Second != shape)
             {
-              second = shape;
-              diagram.Redraw();
+              Second = shape;
+              Diagram.Redraw();
             }
           }
           return;
         }
       }
 
-      if (!firstSelected)
+      if (!FirstSelected)
       {
-        if (first != null)
+        if (First != null)
         {
-          first = null;
-          diagram.Redraw();
+          First = null;
+          Diagram.Redraw();
         }
       }
       else
       {
-        if (second != null)
+        if (Second != null)
         {
-          second = null;
-          diagram.Redraw();
+          Second = null;
+          Diagram.Redraw();
         }
       }
     }
 
     public void MouseDown(AbsoluteMouseEventArgs e)
     {
-      if (!firstSelected)
+      if (!FirstSelected)
       {
-        if (first != null)
-          firstSelected = true;
+        if (First != null)
+          FirstSelected = true;
       }
       else
       {
-        if (second != null)
+        if (Second != null)
           CreateConnection();
       }
     }
 
     private void CreateConnection()
     {
-      switch (type)
+      switch (Type)
       {
         case RelationshipType.Association:
           CreateAssociation();
@@ -164,20 +161,20 @@ namespace NClass.DiagramEditor.ClassDiagram
           break;
 
         default:
-          throw new ArgumentOutOfRangeException($"Unknown RelationshipType: {type}");
+          throw new ArgumentOutOfRangeException($"Unknown RelationshipType: {Type}");
       }
-      created = true;
-      diagram.Redraw();
+      Created = true;
+      Diagram.Redraw();
     }
 
     private void CreateAssociation()
     {
-      TypeShape shape1 = first as TypeShape;
-      TypeShape shape2 = second as TypeShape;
+      TypeShape shape1 = First as TypeShape;
+      TypeShape shape2 = Second as TypeShape;
 
       if (shape1 != null && shape2 != null)
       {
-        diagram.AddAssociation(shape1.TypeBase, shape2.TypeBase);
+        Diagram.AddAssociation(shape1.TypeBase, shape2.TypeBase);
       }
       else
       {
@@ -187,12 +184,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateComposition()
     {
-      TypeShape shape1 = first as TypeShape;
-      TypeShape shape2 = second as TypeShape;
+      TypeShape shape1 = First as TypeShape;
+      TypeShape shape2 = Second as TypeShape;
 
       if (shape1 != null && shape2 != null)
       {
-        diagram.AddComposition(shape1.TypeBase, shape2.TypeBase);
+        Diagram.AddComposition(shape1.TypeBase, shape2.TypeBase);
       }
       else
       {
@@ -202,12 +199,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateAggregation()
     {
-      TypeShape shape1 = first as TypeShape;
-      TypeShape shape2 = second as TypeShape;
+      TypeShape shape1 = First as TypeShape;
+      TypeShape shape2 = Second as TypeShape;
 
       if (shape1 != null && shape2 != null)
       {
-        diagram.AddAggregation(shape1.TypeBase, shape2.TypeBase);
+        Diagram.AddAggregation(shape1.TypeBase, shape2.TypeBase);
       }
       else
       {
@@ -217,14 +214,14 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateGeneralization()
     {
-      CompositeTypeShape shape1 = first as CompositeTypeShape;
-      CompositeTypeShape shape2 = second as CompositeTypeShape;
+      CompositeTypeShape shape1 = First as CompositeTypeShape;
+      CompositeTypeShape shape2 = Second as CompositeTypeShape;
 
       if (shape1 != null && shape2 != null)
       {
         try
         {
-          diagram.AddGeneralization(shape1.CompositeType, shape2.CompositeType);
+          Diagram.AddGeneralization(shape1.CompositeType, shape2.CompositeType);
         }
         catch (RelationshipException)
         {
@@ -239,14 +236,14 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateRealization()
     {
-      TypeShape shape1 = first as TypeShape;
-      InterfaceShape shape2 = second as InterfaceShape;
+      TypeShape shape1 = First as TypeShape;
+      InterfaceShape shape2 = Second as InterfaceShape;
 
       if (shape1 != null && shape2 != null)
       {
         try
         {
-          diagram.AddRealization(shape1.TypeBase, shape2.InterfaceType);
+          Diagram.AddRealization(shape1.TypeBase, shape2.InterfaceType);
         }
         catch (RelationshipException)
         {
@@ -261,12 +258,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateDependency()
     {
-      TypeShape shape1 = first as TypeShape;
-      TypeShape shape2 = second as TypeShape;
+      TypeShape shape1 = First as TypeShape;
+      TypeShape shape2 = Second as TypeShape;
 
       if (shape1 != null && shape2 != null)
       {
-        diagram.AddDependency(shape1.TypeBase, shape2.TypeBase);
+        Diagram.AddDependency(shape1.TypeBase, shape2.TypeBase);
       }
       else
       {
@@ -276,14 +273,14 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateNesting()
     {
-      CompositeTypeShape shape1 = first as CompositeTypeShape;
-      TypeShape shape2 = second as TypeShape;
+      CompositeTypeShape shape1 = First as CompositeTypeShape;
+      TypeShape shape2 = Second as TypeShape;
 
       if (shape1 != null && shape2 != null)
       {
         try
         {
-          diagram.AddNesting(shape1.CompositeType, shape2.TypeBase);
+          Diagram.AddNesting(shape1.CompositeType, shape2.TypeBase);
         }
         catch (RelationshipException)
         {
@@ -298,16 +295,16 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateCommentRelationship()
     {
-      CommentShape shape1 = first as CommentShape;
-      CommentShape shape2 = second as CommentShape;
+      CommentShape shape1 = First as CommentShape;
+      CommentShape shape2 = Second as CommentShape;
 
       if (shape1 != null)
       {
-        diagram.AddCommentRelationship(shape1.Comment, second.Entity);
+        Diagram.AddCommentRelationship(shape1.Comment, Second.Entity);
       }
       else if (shape2 != null)
       {
-        diagram.AddCommentRelationship(shape2.Comment, first.Entity);
+        Diagram.AddCommentRelationship(shape2.Comment, First.Entity);
       }
       else
       {
@@ -317,12 +314,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void CreateEntityRelationship()
     {
-      var shape1 = first as ClassShape;
-      var shape2 = second as ClassShape;
+      var shape1 = First as ClassShape;
+      var shape2 = Second as ClassShape;
 
       if (shape1 != null && shape2 != null)
       {
-        diagram.AddEntityRelationship(shape1.ClassType, shape2.ClassType);
+        Diagram.AddEntityRelationship(shape1.ClassType, shape2.ClassType);
       }
       else
       {
@@ -332,26 +329,26 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void Draw(Graphics g)
     {
-      if (first != null)
+      if (First != null)
       {
-        Rectangle border = first.BorderRectangle;
+        Rectangle border = First.BorderRectangle;
         border.Inflate(BorderOffset, BorderOffset);
         g.DrawRectangle(firstPen, border);
       }
 
-      if (second != null)
+      if (Second != null)
       {
-        Rectangle border = second.BorderRectangle;
-        if (second == first)
+        Rectangle border = Second.BorderRectangle;
+        if (Second == First)
           border.Inflate(BorderOffset2, BorderOffset2);
         else
           border.Inflate(BorderOffset, BorderOffset);
         g.DrawRectangle(secondPen, border);
       }
 
-      if (first != null && second != null)
+      if (First != null && Second != null)
       {
-        g.DrawLine(arrowPen, first.CenterPoint, second.CenterPoint);
+        g.DrawLine(arrowPen, First.CenterPoint, Second.CenterPoint);
       }
     }
   }

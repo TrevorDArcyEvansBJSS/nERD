@@ -13,18 +13,15 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 using NClass.Translations;
+using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
   public abstract partial class ItemEditor : FloatingEditor
   {
-    bool needValidation = false;
-
     public ItemEditor()
     {
       InitializeComponent();
@@ -44,11 +41,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       set { txtDeclaration.SelectionStart = value; }
     }
 
-    protected bool NeedValidation
-    {
-      get { return needValidation; }
-      set { needValidation = value; }
-    }
+    protected bool NeedValidation { get; set; } = false;
 
     internal override void Init(DiagramElement element)
     {
@@ -92,7 +85,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
+          NeedValidation = false;
           HideEditor();
           e.Handled = true;
           break;
@@ -117,7 +110,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtDeclaration_TextChanged(object sender, EventArgs e)
     {
-      needValidation = true;
+      NeedValidation = true;
     }
 
     private void txtDeclaration_Validating(object sender, CancelEventArgs e)

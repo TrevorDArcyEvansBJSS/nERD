@@ -22,7 +22,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
   public class BorderedTextBox : UserControl
   {
-    private class TabTextBox : TextBox
+    private sealed class TabTextBox : TextBox
     {
       protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
       {
@@ -43,28 +43,25 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       }
     }
 
-    TabTextBox textBox = new TabTextBox();
-    Panel panel = new Panel();
-
     public BorderedTextBox()
     {
-      textBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-      textBox.BorderStyle = BorderStyle.FixedSingle;
-      textBox.Location = new Point(-1, -1);
-      textBox.AcceptsReturn = true;
-      panel.Dock = DockStyle.Fill;
-      panel.Size = textBox.Size - new Size(2, 0);
-      panel.Controls.Add(textBox);
+      TextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+      TextBox.BorderStyle = BorderStyle.FixedSingle;
+      TextBox.Location = new Point(-1, -1);
+      TextBox.AcceptsReturn = true;
+      Panel.Dock = DockStyle.Fill;
+      Panel.Size = TextBox.Size - new Size(2, 0);
+      Panel.Controls.Add(TextBox);
 
-      textBox.KeyDown += new KeyEventHandler(textBox_KeyDown);
-      textBox.TextChanged += new EventHandler(textBox_TextChanged);
-      textBox.Validating += new CancelEventHandler(textBox_Validating);
-      textBox.GotFocus += new EventHandler(textBox_GotFocus);
-      textBox.LostFocus += new EventHandler(textBox_LostFocus);
+      TextBox.KeyDown += new KeyEventHandler(textBox_KeyDown);
+      TextBox.TextChanged += new EventHandler(textBox_TextChanged);
+      TextBox.Validating += new CancelEventHandler(textBox_Validating);
+      TextBox.GotFocus += new EventHandler(textBox_GotFocus);
+      TextBox.LostFocus += new EventHandler(textBox_LostFocus);
 
       this.Padding = new Padding(1);
       this.BorderColor = SystemColors.ControlDark;
-      this.Controls.Add(panel);
+      this.Controls.Add(Panel);
     }
 
     [DefaultValue(typeof(Color), "ControlDark")]
@@ -77,34 +74,34 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
     [DefaultValue(typeof(Color), "Window")]
     public new Color BackColor
     {
-      get { return textBox.BackColor; }
-      set { textBox.BackColor = value; }
+      get { return TextBox.BackColor; }
+      set { TextBox.BackColor = value; }
     }
 
     public bool ReadOnly
     {
-      get { return textBox.ReadOnly; }
-      set { textBox.ReadOnly = value; }
+      get { return TextBox.ReadOnly; }
+      set { TextBox.ReadOnly = value; }
     }
 
     public override string Text
     {
-      get { return textBox.Text; }
-      set { textBox.Text = value; }
+      get { return TextBox.Text; }
+      set { TextBox.Text = value; }
     }
 
     [DefaultValue(true)]
     public bool AcceptsReturn
     {
-      get { return textBox.AcceptsReturn; }
-      set { textBox.AcceptsReturn = value; }
+      get { return TextBox.AcceptsReturn; }
+      set { TextBox.AcceptsReturn = value; }
     }
 
     [DefaultValue(false)]
     public bool AcceptsTab
     {
-      get { return textBox.AcceptsTab; }
-      set { textBox.AcceptsTab = value; }
+      get { return TextBox.AcceptsTab; }
+      set { TextBox.AcceptsTab = value; }
     }
 
     /// <exception cref="ArgumentOutOfRangeException">
@@ -112,9 +109,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
     /// </exception>
     public int SelectionStart
     {
-      get { return textBox.SelectionStart; }
-      set { textBox.SelectionStart = value; }
+      get { return TextBox.SelectionStart; }
+      set { TextBox.SelectionStart = value; }
     }
+
+    private TabTextBox TextBox { get; } = new TabTextBox();
+
+    public Panel Panel { get; } = new Panel();
 
     private void textBox_KeyDown(object sender, KeyEventArgs e)
     {
@@ -141,18 +142,17 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       OnValidating(e);
     }
 
-    protected override void SetBoundsCore(int x, int y,
-      int width, int height, BoundsSpecified specified)
+    protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-      base.SetBoundsCore(x, y, width, textBox.PreferredHeight, specified);
+      base.SetBoundsCore(x, y, width, TextBox.PreferredHeight, specified);
     }
 
     protected override void Dispose(bool disposing)
     {
       if (disposing)
       {
-        textBox.Dispose();
-        panel.Dispose();
+        TextBox.Dispose();
+        Panel.Dispose();
       }
       base.Dispose(disposing);
     }

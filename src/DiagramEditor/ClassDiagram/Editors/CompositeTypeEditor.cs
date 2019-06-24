@@ -13,21 +13,20 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
 using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram.Dialogs;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
 using NClass.Translations;
-using NClass.DiagramEditor.ClassDiagram.Dialogs;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
   public partial class CompositeTypeEditor : TypeEditor
   {
-    CompositeTypeShape shape = null;
-    bool needValidation = false;
+    public bool NeedValidation { get; set; } = false;
+    public CompositeTypeShape Shape { get; set; } = null;
 
     public CompositeTypeEditor()
     {
@@ -41,16 +40,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     internal override void Init(DiagramElement element)
     {
-      shape = (CompositeTypeShape)element;
+      Shape = (CompositeTypeShape)element;
       RefreshToolAvailability();
       RefreshValues();
     }
 
     private void RefreshToolAvailability()
     {
-      toolOverrideList.Visible = shape.CompositeType is SingleInheritanceType;
+      toolOverrideList.Visible = Shape.CompositeType is SingleInheritanceType;
 
-      IInterfaceImplementer implementer = shape.CompositeType as IInterfaceImplementer;
+      IInterfaceImplementer implementer = Shape.CompositeType as IInterfaceImplementer;
       if (implementer != null)
       {
         toolImplementList.Visible = true;
@@ -79,7 +78,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshValues()
     {
-      CompositeType type = shape.CompositeType;
+      CompositeType type = Shape.CompositeType;
       Language language = type.Language;
       SuspendLayout();
 
@@ -88,7 +87,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       txtName.SelectionStart = cursorPosition;
 
       SetError(null);
-      needValidation = false;
+      NeedValidation = false;
 
       bool hasMember = (type.MemberCount > 0);
       toolSortByAccess.Enabled = hasMember;
@@ -104,8 +103,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshVisibility()
     {
-      Language language = shape.CompositeType.Language;
-      CompositeType type = shape.CompositeType;
+      Language language = Shape.CompositeType.Language;
+      CompositeType type = Shape.CompositeType;
 
       toolVisibility.Image = Icons.GetImage(type);
       toolVisibility.Text = language.ValidAccessModifiers[type.AccessModifier];
@@ -180,9 +179,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshModifiers()
     {
-      Language language = shape.CompositeType.Language;
+      Language language = Shape.CompositeType.Language;
 
-      ClassType classType = shape.CompositeType as ClassType;
+      ClassType classType = Shape.CompositeType as ClassType;
       if (classType != null)
       {
         toolModifier.Visible = true;
@@ -234,7 +233,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       switch (NewMemberType)
       {
         case MemberType.Field:
-          if (shape.CompositeType.SupportsFields)
+          if (Shape.CompositeType.SupportsFields)
           {
             toolNewMember.Image = Properties.Resources.NewField;
             toolNewMember.Text = Strings.NewField;
@@ -243,7 +242,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case MemberType.Method:
-          if (shape.CompositeType.SupportsMethods)
+          if (Shape.CompositeType.SupportsMethods)
           {
             toolNewMember.Image = Properties.Resources.NewMethod;
             toolNewMember.Text = Strings.NewMethod;
@@ -252,7 +251,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case MemberType.Constructor:
-          if (shape.CompositeType.SupportsConstuctors)
+          if (Shape.CompositeType.SupportsConstuctors)
           {
             toolNewMember.Image = Properties.Resources.NewConstructor;
             toolNewMember.Text = Strings.NewConstructor;
@@ -261,7 +260,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case MemberType.Destructor:
-          if (shape.CompositeType.SupportsDestructors)
+          if (Shape.CompositeType.SupportsDestructors)
           {
             toolNewMember.Image = Properties.Resources.NewDestructor;
             toolNewMember.Text = Strings.NewDestructor;
@@ -270,7 +269,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case MemberType.Property:
-          if (shape.CompositeType.SupportsProperties)
+          if (Shape.CompositeType.SupportsProperties)
           {
             toolNewMember.Image = Properties.Resources.NewProperty;
             toolNewMember.Text = Strings.NewProperty;
@@ -279,7 +278,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case MemberType.Event:
-          if (shape.CompositeType.SupportsEvents)
+          if (Shape.CompositeType.SupportsEvents)
           {
             toolNewMember.Image = Properties.Resources.NewEvent;
             toolNewMember.Text = Strings.NewEvent;
@@ -295,12 +294,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
         toolNewMember.Text = Strings.NewMethod;
       }
 
-      toolNewField.Visible = shape.CompositeType.SupportsFields;
-      toolNewMethod.Visible = shape.CompositeType.SupportsMethods;
-      toolNewConstructor.Visible = shape.CompositeType.SupportsConstuctors;
-      toolNewDestructor.Visible = shape.CompositeType.SupportsDestructors;
-      toolNewProperty.Visible = shape.CompositeType.SupportsProperties;
-      toolNewEvent.Visible = shape.CompositeType.SupportsEvents;
+      toolNewField.Visible = Shape.CompositeType.SupportsFields;
+      toolNewMethod.Visible = Shape.CompositeType.SupportsMethods;
+      toolNewConstructor.Visible = Shape.CompositeType.SupportsConstuctors;
+      toolNewDestructor.Visible = Shape.CompositeType.SupportsDestructors;
+      toolNewProperty.Visible = Shape.CompositeType.SupportsProperties;
+      toolNewEvent.Visible = Shape.CompositeType.SupportsEvents;
     }
 
     public override void ValidateData()
@@ -311,12 +310,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private bool ValidateName()
     {
-      if (needValidation)
+      if (NeedValidation)
       {
-        var oldName = shape.CompositeType.Name;
+        var oldName = Shape.CompositeType.Name;
         try
         {
-          shape.CompositeType.Name = txtName.Text;
+          Shape.CompositeType.Name = txtName.Text;
           RefreshValues();
         }
         catch (BadSyntaxException ex)
@@ -326,7 +325,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
         }
         catch (DuplicateTypeException ex)
         {
-          shape.CompositeType.Name = oldName;
+          Shape.CompositeType.Name = oldName;
           SetError(ex.Message);
           return false;
         }
@@ -348,7 +347,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       {
         try
         {
-          shape.CompositeType.AccessModifier = access;
+          Shape.CompositeType.AccessModifier = access;
           RefreshValues();
         }
         catch (BadSyntaxException ex)
@@ -363,7 +362,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
     {
       if (ValidateName())
       {
-        ClassType classType = shape.CompositeType as ClassType;
+        ClassType classType = Shape.CompositeType as ClassType;
         if (classType != null)
         {
           try
@@ -393,13 +392,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
-          shape.HideEditor();
+          NeedValidation = false;
+          Shape.HideEditor();
           e.Handled = true;
           break;
 
         case Keys.Down:
-          shape.ActiveMemberIndex = 0;
+          Shape.ActiveMemberIndex = 0;
           e.Handled = true;
           break;
       }
@@ -473,7 +472,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtName_TextChanged(object sender, EventArgs e)
     {
-      needValidation = true;
+      NeedValidation = true;
     }
 
     private void txtName_Validating(object sender, CancelEventArgs e)
@@ -545,50 +544,50 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       switch (type)
       {
         case MemberType.Field:
-          if (shape.CompositeType.SupportsFields)
+          if (Shape.CompositeType.SupportsFields)
           {
-            shape.CompositeType.AddField();
-            shape.ActiveMemberIndex = shape.CompositeType.FieldCount - 1;
+            Shape.CompositeType.AddField();
+            Shape.ActiveMemberIndex = Shape.CompositeType.FieldCount - 1;
           }
           break;
 
         case MemberType.Method:
-          if (shape.CompositeType.SupportsMethods)
+          if (Shape.CompositeType.SupportsMethods)
           {
-            shape.CompositeType.AddMethod();
-            shape.ActiveMemberIndex = shape.CompositeType.MemberCount - 1;
+            Shape.CompositeType.AddMethod();
+            Shape.ActiveMemberIndex = Shape.CompositeType.MemberCount - 1;
           }
           break;
 
         case MemberType.Constructor:
-          if (shape.CompositeType.SupportsConstuctors)
+          if (Shape.CompositeType.SupportsConstuctors)
           {
-            shape.CompositeType.AddConstructor();
-            shape.ActiveMemberIndex = shape.CompositeType.MemberCount - 1;
+            Shape.CompositeType.AddConstructor();
+            Shape.ActiveMemberIndex = Shape.CompositeType.MemberCount - 1;
           }
           break;
 
         case MemberType.Destructor:
-          if (shape.CompositeType.SupportsDestructors)
+          if (Shape.CompositeType.SupportsDestructors)
           {
-            shape.CompositeType.AddDestructor();
-            shape.ActiveMemberIndex = shape.CompositeType.MemberCount - 1;
+            Shape.CompositeType.AddDestructor();
+            Shape.ActiveMemberIndex = Shape.CompositeType.MemberCount - 1;
           }
           break;
 
         case MemberType.Property:
-          if (shape.CompositeType.SupportsProperties)
+          if (Shape.CompositeType.SupportsProperties)
           {
-            shape.CompositeType.AddProperty();
-            shape.ActiveMemberIndex = shape.CompositeType.MemberCount - 1;
+            Shape.CompositeType.AddProperty();
+            Shape.ActiveMemberIndex = Shape.CompositeType.MemberCount - 1;
           }
           break;
 
         case MemberType.Event:
-          if (shape.CompositeType.SupportsEvents)
+          if (Shape.CompositeType.SupportsEvents)
           {
-            shape.CompositeType.AddEvent();
-            shape.ActiveMemberIndex = shape.CompositeType.MemberCount - 1;
+            Shape.CompositeType.AddEvent();
+            Shape.ActiveMemberIndex = Shape.CompositeType.MemberCount - 1;
           }
           break;
       }
@@ -632,7 +631,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void toolOverrideList_Click(object sender, EventArgs e)
     {
-      SingleInheritanceType type = shape.CompositeType as SingleInheritanceType;
+      SingleInheritanceType type = Shape.CompositeType as SingleInheritanceType;
       if (type != null)
       {
         using (OverrideDialog dialog = new OverrideDialog())
@@ -650,7 +649,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void toolImplementList_Click(object sender, EventArgs e)
     {
-      IInterfaceImplementer type = shape.CompositeType as IInterfaceImplementer;
+      IInterfaceImplementer type = Shape.CompositeType as IInterfaceImplementer;
       if (type != null)
       {
         using (ImplementDialog dialog = new ImplementDialog())
@@ -679,17 +678,17 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void toolSortByKind_Click(object sender, EventArgs e)
     {
-      shape.CompositeType.SortMembers(SortingMode.ByKind);
+      Shape.CompositeType.SortMembers(SortingMode.ByKind);
     }
 
     private void toolSortByAccess_Click(object sender, EventArgs e)
     {
-      shape.CompositeType.SortMembers(SortingMode.ByAccess);
+      Shape.CompositeType.SortMembers(SortingMode.ByAccess);
     }
 
     private void toolSortByName_Click(object sender, EventArgs e)
     {
-      shape.CompositeType.SortMembers(SortingMode.ByName);
+      Shape.CompositeType.SortMembers(SortingMode.ByName);
     }
 
     protected override void OnVisibleChanged(EventArgs e)

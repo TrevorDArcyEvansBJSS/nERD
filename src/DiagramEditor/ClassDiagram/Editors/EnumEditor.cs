@@ -25,11 +25,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
   public partial class EnumEditor : TypeEditor
   {
-    static readonly string newValueText = "« " + Strings.NewValue + " »";
+    private static readonly string newValueText = "« " + Strings.NewValue + " »";
 
-    EnumShape shape = null;
-    bool needValidation = false;
-    bool noNewValue = true;
+    internal EnumShape Shape { get; set; } = null;
+    public bool NeedValidation { get; set; } = false;
+    public bool NoNewValue { get; set; } = true;
 
     public EnumEditor()
     {
@@ -40,9 +40,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     internal override void Init(DiagramElement element)
     {
-      shape = (EnumShape)element;
+      Shape = (EnumShape)element;
       txtNewValue.Text = newValueText;
-      noNewValue = true;
+      NoNewValue = true;
       RefreshValues();
     }
 
@@ -53,7 +53,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshValues()
     {
-      EnumType type = shape.EnumType;
+      EnumType type = Shape.EnumType;
       Language language = type.Language;
       SuspendLayout();
 
@@ -62,7 +62,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       txtName.SelectionStart = cursorPosition;
 
       SetError(null);
-      needValidation = false;
+      NeedValidation = false;
 
       RefreshVisibility();
       ResumeLayout();
@@ -70,8 +70,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshVisibility()
     {
-      Language language = shape.EnumType.Language;
-      EnumType type = shape.EnumType;
+      Language language = Shape.EnumType.Language;
+      EnumType type = Shape.EnumType;
 
       toolVisibility.Image = Icons.GetImage(type);
       toolVisibility.Text = language.ValidAccessModifiers[type.AccessModifier];
@@ -146,12 +146,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private bool ValidateName()
     {
-      if (needValidation)
+      if (NeedValidation)
       {
-        var oldName = shape.EnumType.Name;
+        var oldName = Shape.EnumType.Name;
         try
         {
-          shape.EnumType.Name = txtName.Text;
+          Shape.EnumType.Name = txtName.Text;
           RefreshValues();
         }
         catch (BadSyntaxException ex)
@@ -161,7 +161,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
         }
         catch (DuplicateTypeException ex)
         {
-          shape.EnumType.Name = oldName;
+          Shape.EnumType.Name = oldName;
           SetError(ex.Message);
           return false;
         }
@@ -179,11 +179,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void AddNewValue()
     {
-      if (!noNewValue && ValidateName())
+      if (!NoNewValue && ValidateName())
       {
         try
         {
-          shape.EnumType.AddValue(txtNewValue.Text);
+          Shape.EnumType.AddValue(txtNewValue.Text);
           ClearNewValueField();
         }
         catch (BadSyntaxException ex)
@@ -205,7 +205,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       {
         try
         {
-          shape.EnumType.AccessModifier = access;
+          Shape.EnumType.AccessModifier = access;
           RefreshValues();
         }
         catch (BadSyntaxException ex)
@@ -256,8 +256,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
-          shape.HideEditor();
+          NeedValidation = false;
+          Shape.HideEditor();
           e.Handled = true;
           break;
 
@@ -270,12 +270,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtNewValue_TextChanged(object sender, EventArgs e)
     {
-      noNewValue = (txtNewValue.Text.Length == 0);
+      NoNewValue = (txtNewValue.Text.Length == 0);
     }
 
     private void txtNewValue_GotFocus(object sender, EventArgs e)
     {
-      if (noNewValue)
+      if (NoNewValue)
       {
         txtNewValue.Text = string.Empty;
       }
@@ -283,10 +283,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtNewValue_LostFocus(object sender, System.EventArgs e)
     {
-      if (noNewValue)
+      if (NoNewValue)
       {
         txtNewValue.Text = newValueText;
-        noNewValue = true;
+        NoNewValue = true;
       }
     }
 
@@ -305,13 +305,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
-          shape.HideEditor();
+          NeedValidation = false;
+          Shape.HideEditor();
           e.Handled = true;
           break;
 
         case Keys.Down:
-          shape.ActiveMemberIndex = 0;
+          Shape.ActiveMemberIndex = 0;
           e.Handled = true;
           break;
       }
@@ -319,7 +319,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtName_TextChanged(object sender, EventArgs e)
     {
-      needValidation = true;
+      NeedValidation = true;
     }
 
     private void txtName_Validating(object sender, CancelEventArgs e)

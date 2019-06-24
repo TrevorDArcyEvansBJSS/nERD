@@ -23,11 +23,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
   public partial class MembersDialog : Form
   {
-    CompositeType parent = null;
-    Member member = null;
-    bool locked = false;
-    int attributeCount = 0;
-    bool error = false;
+    public bool Locked { get; set; } = false;
+    public int AttributeCount { get; set; } = 0;
+    public bool Error { get; set; } = false;
+    public Member Member { get; set; } = null;
+    public CompositeType TypeParent { get; set; } = null;
 
     public event EventHandler ContentsChanged;
 
@@ -74,15 +74,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       btnClose.Text = Strings.ButtonClose;
     }
 
-    public void ShowDialog(CompositeType parent)
+    public void ShowDialog(CompositeType typeParent)
     {
-      if (parent == null)
+      if (typeParent == null)
         return;
 
-      this.parent = parent;
-      this.Text = string.Format(Strings.MembersOfType, parent.Name);
+      this.TypeParent = typeParent;
+      this.Text = string.Format(Strings.MembersOfType, typeParent.Name);
 
-      LanguageSpecificInitialization(parent.Language);
+      LanguageSpecificInitialization(typeParent.Language);
       FillMembersList();
       if (lstMembers.Items.Count > 0)
       {
@@ -90,22 +90,22 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         lstMembers.Items[0].Selected = true;
       }
 
-      toolNewField.Visible = parent.SupportsFields;
-      toolNewConstructor.Visible = parent.SupportsConstuctors;
-      toolNewDestructor.Visible = parent.SupportsDestructors;
-      toolNewProperty.Visible = parent.SupportsProperties;
-      toolNewEvent.Visible = parent.SupportsEvents;
-      toolOverrideList.Visible = parent is SingleInheritanceType;
-      toolImplementList.Visible = parent is IInterfaceImplementer;
-      toolImplementList.Enabled = (parent is IInterfaceImplementer) &&
-        ((IInterfaceImplementer)parent).ImplementsInterface;
-      toolSepAddNew.Visible = parent is SingleInheritanceType ||
-        parent is IInterfaceImplementer;
+      toolNewField.Visible = typeParent.SupportsFields;
+      toolNewConstructor.Visible = typeParent.SupportsConstuctors;
+      toolNewDestructor.Visible = typeParent.SupportsDestructors;
+      toolNewProperty.Visible = typeParent.SupportsProperties;
+      toolNewEvent.Visible = typeParent.SupportsEvents;
+      toolOverrideList.Visible = typeParent is SingleInheritanceType;
+      toolImplementList.Visible = typeParent is IInterfaceImplementer;
+      toolImplementList.Enabled = (typeParent is IInterfaceImplementer) &&
+        ((IInterfaceImplementer)typeParent).ImplementsInterface;
+      toolSepAddNew.Visible = typeParent is SingleInheritanceType ||
+        typeParent is IInterfaceImplementer;
 
       errorProvider.SetError(txtSyntax, null);
       errorProvider.SetError(txtName, null);
       errorProvider.SetError(cboType, null);
-      error = false;
+      Error = false;
 
       base.ShowDialog();
     }
@@ -249,12 +249,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
     private void FillMembersList()
     {
       lstMembers.Items.Clear();
-      attributeCount = 0;
+      AttributeCount = 0;
 
-      foreach (Field field in parent.Fields)
+      foreach (Field field in TypeParent.Fields)
         AddFieldToList(field);
 
-      foreach (Operation operation in parent.Operations)
+      foreach (Operation operation in TypeParent.Operations)
         AddOperationToList(operation);
 
       DisableFields();
@@ -265,16 +265,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       if (field == null)
         throw new ArgumentNullException("field");
 
-      ListViewItem item = lstMembers.Items.Insert(attributeCount, "");
+      ListViewItem item = lstMembers.Items.Insert(AttributeCount, "");
 
       item.Tag = field;
       item.ImageIndex = Icons.GetImageIndex(field);
       item.SubItems.Add(field.Name);
       item.SubItems.Add(field.Type);
-      item.SubItems.Add(parent.Language.GetAccessString(field.AccessModifier));
-      item.SubItems.Add(parent.Language.GetFieldModifierString(field.Modifier));
+      item.SubItems.Add(TypeParent.Language.GetAccessString(field.AccessModifier));
+      item.SubItems.Add(TypeParent.Language.GetFieldModifierString(field.Modifier));
       item.SubItems.Add("");
-      attributeCount++;
+      AttributeCount++;
 
       return item;
     }
@@ -290,36 +290,36 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       item.ImageIndex = Icons.GetImageIndex(operation);
       item.SubItems.Add(operation.Name);
       item.SubItems.Add(operation.Type);
-      item.SubItems.Add(parent.Language.GetAccessString(operation.AccessModifier));
-      item.SubItems.Add(parent.Language.GetOperationModifierString(operation.Modifier));
+      item.SubItems.Add(TypeParent.Language.GetAccessString(operation.AccessModifier));
+      item.SubItems.Add(TypeParent.Language.GetOperationModifierString(operation.Modifier));
 
       return item;
     }
 
     private void ShowNewMember(Member actualMember)
     {
-      if (locked || actualMember == null)
+      if (Locked || actualMember == null)
         return;
       else
-        member = actualMember;
+        Member = actualMember;
 
       RefreshValues();
     }
 
     private void RefreshValues()
     {
-      if (member == null)
+      if (Member == null)
         return;
 
-      locked = true;
+      Locked = true;
 
       txtSyntax.Enabled = true;
       txtName.Enabled = true;
-      txtSyntax.ReadOnly = (member is Destructor);
-      txtName.ReadOnly = (member == null || member.IsNameReadonly);
-      cboType.Enabled = (member != null && !member.IsTypeReadonly);
-      cboAccess.Enabled = (member != null && member.IsAccessModifiable);
-      txtInitialValue.Enabled = (member is Field);
+      txtSyntax.ReadOnly = (Member is Destructor);
+      txtName.ReadOnly = (Member == null || Member.IsNameReadonly);
+      cboType.Enabled = (Member != null && !Member.IsTypeReadonly);
+      cboAccess.Enabled = (Member != null && Member.IsAccessModifiable);
+      txtInitialValue.Enabled = (Member is Field);
       toolSortByKind.Enabled = true;
       toolSortByAccess.Enabled = true;
       toolSortByName.Enabled = true;
@@ -331,16 +331,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         toolSortByName.Enabled = true;
       }
 
-      txtSyntax.Text = member.ToString();
-      txtName.Text = member.Name;
-      cboType.Text = member.Type;
+      txtSyntax.Text = Member.ToString();
+      txtName.Text = Member.Name;
+      cboType.Text = Member.Type;
 
       // Access selection
-      cboAccess.SelectedItem = member.Language.ValidAccessModifiers[member.AccessModifier];
+      cboAccess.SelectedItem = Member.Language.ValidAccessModifiers[Member.AccessModifier];
 
-      if (member is Field)
+      if (Member is Field)
       {
-        Field field = (Field)member;
+        Field field = (Field)Member;
 
         grpFieldModifiers.Enabled = true;
         grpFieldModifiers.Visible = true;
@@ -353,9 +353,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         chkVolatile.Checked = field.IsVolatile;
         txtInitialValue.Text = field.InitialValue;
       }
-      else if (member is Operation)
+      else if (Member is Operation)
       {
-        Operation operation = (Operation)member;
+        Operation operation = (Operation)Member;
 
         grpOperationModifiers.Enabled = true;
         grpOperationModifiers.Visible = true;
@@ -372,13 +372,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
       RefreshMembersList();
 
-      locked = false;
+      Locked = false;
 
       errorProvider.SetError(txtSyntax, null);
       errorProvider.SetError(txtName, null);
       errorProvider.SetError(cboType, null);
       errorProvider.SetError(cboAccess, null);
-      error = false;
+      Error = false;
     }
 
     private void RefreshMembersList()
@@ -390,30 +390,30 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       else if (lstMembers.SelectedItems.Count > 0)
         item = lstMembers.SelectedItems[0];
 
-      if (item != null && member != null)
+      if (item != null && Member != null)
       {
-        item.ImageIndex = Icons.GetImageIndex(member);
+        item.ImageIndex = Icons.GetImageIndex(Member);
         item.SubItems[1].Text = txtName.Text;
         item.SubItems[2].Text = cboType.Text;
         item.SubItems[3].Text = cboAccess.Text;
-        if (member is Field)
+        if (Member is Field)
         {
-          item.SubItems[4].Text = member.Language.GetFieldModifierString(
-            ((Field)member).Modifier);
+          item.SubItems[4].Text = Member.Language.GetFieldModifierString(
+            ((Field)Member).Modifier);
         }
-        else if (member is Operation)
+        else if (Member is Operation)
         {
-          item.SubItems[4].Text = member.Language.GetOperationModifierString(
-            ((Operation)member).Modifier);
+          item.SubItems[4].Text = Member.Language.GetOperationModifierString(
+            ((Operation)Member).Modifier);
         }
       }
     }
 
     private void DisableFields()
     {
-      member = null;
+      Member = null;
 
-      locked = true;
+      Locked = true;
 
       txtSyntax.Text = null;
       txtName.Text = null;
@@ -440,7 +440,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       toolMoveDown.Enabled = false;
       toolDelete.Enabled = false;
 
-      locked = false;
+      Locked = false;
     }
 
     private void SwapListItems(ListViewItem item1, ListViewItem item2)
@@ -470,8 +470,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         int index = item.Index;
 
         if (item.Tag is Field)
-          attributeCount--;
-        parent.RemoveMember(item.Tag as Member);
+          AttributeCount--;
+        TypeParent.RemoveMember(item.Tag as Member);
         lstMembers.Items.Remove(item);
         OnContentsChanged(EventArgs.Empty);
 
@@ -495,14 +495,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       UpdateTexts();
       errorProvider.SetError(grpFieldModifiers, null);
       errorProvider.SetError(grpOperationModifiers, null);
-      error = false;
+      Error = false;
     }
 
     private void PropertiesDialog_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.Escape)
       {
-        if (error)
+        if (Error)
           RefreshValues();
         else
           this.Close();
@@ -515,15 +515,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void txtSyntax_Validating(object sender, CancelEventArgs e)
     {
-      if (!locked && member != null)
+      if (!Locked && Member != null)
       {
         try
         {
-          string oldValue = member.ToString();
+          string oldValue = Member.ToString();
 
-          member.InitFromString(txtSyntax.Text);
+          Member.InitFromString(txtSyntax.Text);
           errorProvider.SetError(txtSyntax, null);
-          error = false;
+          Error = false;
 
           RefreshValues();
           if (oldValue != txtSyntax.Text)
@@ -533,22 +533,22 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         {
           e.Cancel = true;
           errorProvider.SetError(txtSyntax, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void txtName_Validating(object sender, CancelEventArgs e)
     {
-      if (!locked && member != null)
+      if (!Locked && Member != null)
       {
         try
         {
-          string oldValue = member.Name;
+          string oldValue = Member.Name;
 
-          member.Name = txtName.Text;
+          Member.Name = txtName.Text;
           errorProvider.SetError(txtName, null);
-          error = false;
+          Error = false;
 
           RefreshValues();
           if (oldValue != txtName.Text)
@@ -558,24 +558,24 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         {
           e.Cancel = true;
           errorProvider.SetError(txtName, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void cboType_Validating(object sender, CancelEventArgs e)
     {
-      if (!locked && member != null)
+      if (!Locked && Member != null)
       {
         try
         {
-          string oldValue = member.Type;
+          string oldValue = Member.Type;
 
-          member.Type = cboType.Text;
+          Member.Type = cboType.Text;
           if (!cboType.Items.Contains(cboType.Text))
             cboType.Items.Add(cboType.Text);
           errorProvider.SetError(cboType, null);
-          error = false;
+          Error = false;
           cboType.Select(0, 0);
 
           RefreshValues();
@@ -586,7 +586,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         {
           e.Cancel = true;
           errorProvider.SetError(cboType, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
@@ -595,17 +595,17 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
     {
       int index = cboAccess.SelectedIndex;
 
-      if (!locked && member != null)
+      if (!Locked && Member != null)
       {
         try
         {
           string selectedModifierString = cboAccess.SelectedItem.ToString();
 
-          foreach (AccessModifier modifier in member.Language.ValidAccessModifiers.Keys)
+          foreach (AccessModifier modifier in Member.Language.ValidAccessModifiers.Keys)
           {
-            if (member.Language.ValidAccessModifiers[modifier] == selectedModifierString)
+            if (Member.Language.ValidAccessModifiers[modifier] == selectedModifierString)
             {
-              member.AccessModifier = modifier;
+              Member.AccessModifier = modifier;
               RefreshValues();
               OnContentsChanged(EventArgs.Empty);
               break;
@@ -615,7 +615,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         catch (BadSyntaxException ex)
         {
           errorProvider.SetError(cboAccess, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
@@ -626,165 +626,165 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       {
         errorProvider.SetError(cboAccess, null);
         RefreshValues();
-        error = false;
+        Error = false;
       }
     }
 
     private void chkFieldStatic_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Field)
+      if (!Locked && Member is Field)
       {
         try
         {
-          ((Field)member).IsStatic = chkFieldStatic.Checked;
+          ((Field)Member).IsStatic = chkFieldStatic.Checked;
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkReadonly_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Field)
+      if (!Locked && Member is Field)
       {
         try
         {
-          ((Field)member).IsReadonly = chkReadonly.Checked;
+          ((Field)Member).IsReadonly = chkReadonly.Checked;
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkConstant_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Field)
+      if (!Locked && Member is Field)
       {
         try
         {
-          ((Field)member).IsConstant = chkConstant.Checked;
+          ((Field)Member).IsConstant = chkConstant.Checked;
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkFieldHider_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Field)
+      if (!Locked && Member is Field)
       {
         try
         {
-          ((Field)member).IsHider = chkFieldHider.Checked;
+          ((Field)Member).IsHider = chkFieldHider.Checked;
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkVolatile_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Field)
+      if (!Locked && Member is Field)
       {
         try
         {
-          ((Field)member).IsVolatile = chkVolatile.Checked;
+          ((Field)Member).IsVolatile = chkVolatile.Checked;
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpFieldModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkOperationStatic_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Operation)
+      if (!Locked && Member is Operation)
       {
         try
         {
-          ((Operation)member).IsStatic = chkOperationStatic.Checked;
+          ((Operation)Member).IsStatic = chkOperationStatic.Checked;
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkVirtual_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Operation)
+      if (!Locked && Member is Operation)
       {
         try
         {
-          ((Operation)member).IsVirtual = chkVirtual.Checked;
+          ((Operation)Member).IsVirtual = chkVirtual.Checked;
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkAbstract_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Operation)
+      if (!Locked && Member is Operation)
       {
         try
         {
-          if (parent is ClassType &&
-            ((ClassType)parent).Modifier != ClassModifier.Abstract)
+          if (TypeParent is ClassType &&
+            ((ClassType)TypeParent).Modifier != ClassModifier.Abstract)
           {
             DialogResult result = MessageBox.Show(
               Strings.ChangingToAbstractConfirmation, Strings.Confirmation,
@@ -797,80 +797,80 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
             }
           }
 
-          ((Operation)member).IsAbstract = chkAbstract.Checked;
+          ((Operation)Member).IsAbstract = chkAbstract.Checked;
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkOperationHider_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Operation)
+      if (!Locked && Member is Operation)
       {
         try
         {
-          ((Operation)member).IsHider = chkOperationHider.Checked;
+          ((Operation)Member).IsHider = chkOperationHider.Checked;
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkOverride_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Operation)
+      if (!Locked && Member is Operation)
       {
         try
         {
-          ((Operation)member).IsOverride = chkOverride.Checked;
+          ((Operation)Member).IsOverride = chkOverride.Checked;
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
 
     private void chkSealed_CheckedChanged(object sender, EventArgs e)
     {
-      if (!locked && member is Operation)
+      if (!Locked && Member is Operation)
       {
         try
         {
-          ((Operation)member).IsSealed = chkSealed.Checked;
+          ((Operation)Member).IsSealed = chkSealed.Checked;
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, null);
-          error = false;
+          Error = false;
           OnContentsChanged(EventArgs.Empty);
         }
         catch (BadSyntaxException ex)
         {
           RefreshValues();
           errorProvider.SetError(grpOperationModifiers, ex.Message);
-          error = true;
+          Error = true;
         }
       }
     }
@@ -878,26 +878,26 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
     private void grpFieldModifiers_Validated(object sender, EventArgs e)
     {
       errorProvider.SetError(grpFieldModifiers, null);
-      error = false;
+      Error = false;
     }
 
     private void grpOperationModifiers_Validated(object sender, EventArgs e)
     {
       errorProvider.SetError(grpOperationModifiers, null);
-      error = false;
+      Error = false;
     }
 
     private void txtInitialValue_Validating(object sender, CancelEventArgs e)
     {
-      if (!locked && member is Field)
+      if (!Locked && Member is Field)
       {
         if (txtInitialValue.Text.Length > 0 && txtInitialValue.Text[0] == '"' &&
           !txtInitialValue.Text.EndsWith("\""))
         {
           txtInitialValue.Text += '"';
         }
-        string oldValue = ((Field)member).InitialValue;
-        ((Field)member).InitialValue = txtInitialValue.Text;
+        string oldValue = ((Field)Member).InitialValue;
+        ((Field)Member).InitialValue = txtInitialValue.Text;
 
         RefreshValues();
         if (oldValue != txtInitialValue.Text)
@@ -913,14 +913,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         ShowNewMember((Member)e.Item.Tag);
 
         toolDelete.Enabled = true;
-        if (e.ItemIndex < attributeCount)
+        if (e.ItemIndex < AttributeCount)
         {
           toolMoveUp.Enabled = (e.ItemIndex > 0);
-          toolMoveDown.Enabled = (e.ItemIndex < attributeCount - 1);
+          toolMoveDown.Enabled = (e.ItemIndex < AttributeCount - 1);
         }
         else
         {
-          toolMoveUp.Enabled = (e.ItemIndex > attributeCount);
+          toolMoveUp.Enabled = (e.ItemIndex > AttributeCount);
           toolMoveDown.Enabled = (e.ItemIndex < lstMembers.Items.Count - 1);
         }
       }
@@ -962,42 +962,42 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void toolNewField_Click(object sender, EventArgs e)
     {
-      if (parent.SupportsFields)
+      if (TypeParent.SupportsFields)
       {
-        Field field = parent.AddField();
+        Field field = TypeParent.AddField();
         AddNewField(field);
       }
     }
 
     private void toolNewMethod_Click(object sender, EventArgs e)
     {
-      Method method = parent.AddMethod();
+      Method method = TypeParent.AddMethod();
       AddNewOperation(method);
     }
 
     private void toolNewProperty_Click(object sender, EventArgs e)
     {
-      if (parent.SupportsProperties)
+      if (TypeParent.SupportsProperties)
       {
-        Property property = parent.AddProperty();
+        Property property = TypeParent.AddProperty();
         AddNewOperation(property);
       }
     }
 
     private void toolNewEvent_Click(object sender, EventArgs e)
     {
-      if (parent.SupportsEvents)
+      if (TypeParent.SupportsEvents)
       {
-        Event _event = parent.AddEvent();
+        Event _event = TypeParent.AddEvent();
         AddNewOperation(_event);
       }
     }
 
     private void toolNewConstructor_Click(object sender, EventArgs e)
     {
-      if (parent.SupportsConstuctors)
+      if (TypeParent.SupportsConstuctors)
       {
-        Method constructor = parent.AddConstructor();
+        Method constructor = TypeParent.AddConstructor();
         ListViewItem item = AddOperationToList(constructor);
 
         item.Focused = true;
@@ -1008,9 +1008,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void toolNewDestructor_Click(object sender, EventArgs e)
     {
-      if (parent.SupportsDestructors)
+      if (TypeParent.SupportsDestructors)
       {
-        Method destructor = parent.AddDestructor();
+        Method destructor = TypeParent.AddDestructor();
         ListViewItem item = AddOperationToList(destructor);
 
         item.Focused = true;
@@ -1021,9 +1021,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void toolOverrideList_Click(object sender, EventArgs e)
     {
-      if (parent is SingleInheritanceType)
+      if (TypeParent is SingleInheritanceType)
       {
-        SingleInheritanceType derivedType = (SingleInheritanceType)parent;
+        SingleInheritanceType derivedType = (SingleInheritanceType)TypeParent;
         using (OverrideDialog dialog = new OverrideDialog())
         {
           if (dialog.ShowDialog(derivedType) == DialogResult.OK)
@@ -1041,15 +1041,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void toolImplementList_Click(object sender, EventArgs e)
     {
-      if (parent is IInterfaceImplementer)
+      if (TypeParent is IInterfaceImplementer)
       {
         using (ImplementDialog dialog = new ImplementDialog())
         {
-          if (dialog.ShowDialog(parent as IInterfaceImplementer) == DialogResult.OK)
+          if (dialog.ShowDialog(TypeParent as IInterfaceImplementer) == DialogResult.OK)
           {
             foreach (Operation operation in dialog.GetSelectedOperations())
             {
-              Implement((IInterfaceImplementer)parent, operation,
+              Implement((IInterfaceImplementer)TypeParent, operation,
                 dialog.ImplementExplicitly);
             }
             OnContentsChanged(EventArgs.Empty);
@@ -1079,21 +1079,21 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void toolSortByKind_Click(object sender, EventArgs e)
     {
-      parent.SortMembers(SortingMode.ByKind);
+      TypeParent.SortMembers(SortingMode.ByKind);
       FillMembersList();
       OnContentsChanged(EventArgs.Empty);
     }
 
     private void toolSortByAccess_Click(object sender, EventArgs e)
     {
-      parent.SortMembers(SortingMode.ByAccess);
+      TypeParent.SortMembers(SortingMode.ByAccess);
       FillMembersList();
       OnContentsChanged(EventArgs.Empty);
     }
 
     private void toolSortByName_Click(object sender, EventArgs e)
     {
-      parent.SortMembers(SortingMode.ByName);
+      TypeParent.SortMembers(SortingMode.ByName);
       FillMembersList();
       OnContentsChanged(EventArgs.Empty);
     }
@@ -1112,12 +1112,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
           if (item1.Tag is Field && item2.Tag is Field ||
             item1.Tag is Operation && item2.Tag is Operation)
           {
-            locked = true;
-            parent.MoveUpItem(item1.Tag);
+            Locked = true;
+            TypeParent.MoveUpItem(item1.Tag);
             SwapListItems(item1, item2);
             item2.Focused = true;
             item2.Selected = true;
-            locked = false;
+            Locked = false;
             OnContentsChanged(EventArgs.Empty);
           }
         }
@@ -1138,12 +1138,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
           if (item1.Tag is Field && item2.Tag is Field ||
             item1.Tag is Operation && item2.Tag is Operation)
           {
-            locked = true;
-            parent.MoveDownItem(item1.Tag);
+            Locked = true;
+            TypeParent.MoveDownItem(item1.Tag);
             SwapListItems(item1, item2);
             item2.Focused = true;
             item2.Selected = true;
-            locked = false;
+            Locked = false;
             OnContentsChanged(EventArgs.Empty);
           }
         }

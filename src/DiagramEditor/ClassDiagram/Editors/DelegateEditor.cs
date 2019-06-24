@@ -13,13 +13,12 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Forms;
 using NClass.Core;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
 using NClass.Translations;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
@@ -27,9 +26,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
   {
     static readonly string newValueText = "« " + Strings.NewParameter + " »";
 
-    DelegateShape shape = null;
-    bool needValidation = false;
-    bool noNewValue = true;
+    public DelegateShape Shape { get; set; } = null;
+    public bool NeedValidation { get; set; } = false;
+    public bool NoNewValue { get; set; } = true;
 
     public DelegateEditor()
     {
@@ -40,9 +39,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     internal override void Init(DiagramElement element)
     {
-      shape = (DelegateShape)element;
+      Shape = (DelegateShape)element;
       txtNewParameter.Text = newValueText;
-      noNewValue = true;
+      NoNewValue = true;
       RefreshValues();
     }
 
@@ -53,7 +52,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshValues()
     {
-      DelegateType type = shape.DelegateType;
+      DelegateType type = Shape.DelegateType;
       Language language = type.Language;
       SuspendLayout();
 
@@ -67,7 +66,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       txtName.SelectionStart = cursorPosition;
 
       SetError(null);
-      needValidation = false;
+      NeedValidation = false;
 
       RefreshVisibility();
       ResumeLayout();
@@ -75,8 +74,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void RefreshVisibility()
     {
-      Language language = shape.DelegateType.Language;
-      DelegateType type = shape.DelegateType;
+      Language language = Shape.DelegateType.Language;
+      DelegateType type = Shape.DelegateType;
 
       toolVisibility.Image = Icons.GetImage(type);
       toolVisibility.Text = language.ValidAccessModifiers[type.AccessModifier];
@@ -151,13 +150,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private bool ValidateName()
     {
-      if (needValidation)
+      if (NeedValidation)
       {
-        var oldName = shape.DelegateType.Name;
+        var oldName = Shape.DelegateType.Name;
         try
         {
-          shape.DelegateType.Name = txtName.Text;
-          shape.DelegateType.ReturnType = txtReturnType.Text;
+          Shape.DelegateType.Name = txtName.Text;
+          Shape.DelegateType.ReturnType = txtReturnType.Text;
           RefreshValues();
         }
         catch (BadSyntaxException ex)
@@ -167,7 +166,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
         }
         catch (DuplicateTypeException ex)
         {
-          shape.DelegateType.Name = oldName;
+          Shape.DelegateType.Name = oldName;
           SetError(ex.Message);
           return false;
         }
@@ -185,11 +184,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void AddNewValue()
     {
-      if (!noNewValue && ValidateName())
+      if (!NoNewValue && ValidateName())
       {
         try
         {
-          shape.DelegateType.AddParameter(txtNewParameter.Text);
+          Shape.DelegateType.AddParameter(txtNewParameter.Text);
           ClearNewValueField();
         }
         catch (BadSyntaxException ex)
@@ -211,7 +210,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       {
         try
         {
-          shape.DelegateType.AccessModifier = access;
+          Shape.DelegateType.AccessModifier = access;
           RefreshValues();
         }
         catch (BadSyntaxException ex)
@@ -262,8 +261,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
-          shape.HideEditor();
+          NeedValidation = false;
+          Shape.HideEditor();
           e.Handled = true;
           break;
 
@@ -276,12 +275,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtNewValue_TextChanged(object sender, EventArgs e)
     {
-      noNewValue = (txtNewParameter.Text.Length == 0);
+      NoNewValue = (txtNewParameter.Text.Length == 0);
     }
 
     private void txtNewValue_GotFocus(object sender, EventArgs e)
     {
-      if (noNewValue)
+      if (NoNewValue)
       {
         txtNewParameter.Text = string.Empty;
       }
@@ -289,10 +288,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void txtNewValue_LostFocus(object sender, System.EventArgs e)
     {
-      if (noNewValue)
+      if (NoNewValue)
       {
         txtNewParameter.Text = newValueText;
-        noNewValue = true;
+        NoNewValue = true;
       }
     }
 
@@ -311,13 +310,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
-          shape.HideEditor();
+          NeedValidation = false;
+          Shape.HideEditor();
           e.Handled = true;
           break;
 
         case Keys.Down:
-          shape.ActiveMemberIndex = 0;
+          Shape.ActiveMemberIndex = 0;
           e.Handled = true;
           break;
       }
@@ -333,13 +332,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           break;
 
         case Keys.Escape:
-          needValidation = false;
-          shape.HideEditor();
+          NeedValidation = false;
+          Shape.HideEditor();
           e.Handled = true;
           break;
 
         case Keys.Down:
-          shape.ActiveMemberIndex = 0;
+          Shape.ActiveMemberIndex = 0;
           e.Handled = true;
           break;
       }
@@ -347,7 +346,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void declaration_TextChanged(object sender, EventArgs e)
     {
-      needValidation = true;
+      NeedValidation = true;
     }
 
     private void declaration_Validating(object sender, CancelEventArgs e)
