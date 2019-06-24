@@ -89,7 +89,7 @@ namespace Layouts
         }
 
         // update diagram
-        physics.EachNode(delegate (INode node, Point pos)
+        physics.EachNode(delegate (INode node, Particle pos)
         {
           var nodeId = Guid.Parse(node.Id);
           var shape = diagram.Shapes.Single(x => x.Entity.Id == nodeId);

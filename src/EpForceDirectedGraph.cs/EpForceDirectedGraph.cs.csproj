@@ -63,7 +63,6 @@
     <Compile Include="Layout\ForceDirected.cs" />
     <Compile Include="Layout\ForceDirected2D.cs" />
     <Compile Include="Layout\ForceDirected3D.cs" />
-    <Compile Include="Layout\NearestPoint.cs" />
     <Compile Include="Layout\Particle.cs" />
     <Compile Include="Layout\Spring.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

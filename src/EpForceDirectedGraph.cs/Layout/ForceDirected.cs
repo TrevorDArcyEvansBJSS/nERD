@@ -47,7 +47,7 @@ namespace EpForceDirectedGraph.cs
     public float Threshold { get; set; } = 0.01f;
     public IGraph Graph { get; private set; }
 
-    protected readonly Dictionary<string, Point> mNodePoints = new Dictionary<string, Point>();
+    protected readonly Dictionary<string, Particle> mNodePoints = new Dictionary<string, Particle>();
     protected readonly Dictionary<string, Spring> mEdgeSprings = new Dictionary<string, Spring>();
 
     public ForceDirected(IGraph iGraph, float iStiffness, float iRepulsion, float iDamping)
@@ -65,7 +65,7 @@ namespace EpForceDirectedGraph.cs
       Graph.Clear();
     }
 
-    protected abstract Point GetPoint(INode iNode);
+    protected abstract Particle GetPoint(INode iNode);
 
     private Spring GetSpring(IEdge iEdge)
     {
@@ -117,10 +117,10 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n1 in Graph.Nodes)
       {
-        Point point1 = GetPoint(n1);
+        Particle point1 = GetPoint(n1);
         foreach (var n2 in Graph.Nodes)
         {
-          Point point2 = GetPoint(n2);
+          Particle point2 = GetPoint(n2);
           if (point1 == point2)
           {
             continue;
@@ -189,7 +189,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        Point point = GetPoint(n);
+        Particle point = GetPoint(n);
         if (point.Node.Pinned)
         {
           continue;
@@ -206,7 +206,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        Point point = GetPoint(n);
+        Particle point = GetPoint(n);
         point.Velocity.Add(point.Acceleration * iTimeStep);
         point.Velocity.Multiply(Damping);
         point.Acceleration.SetZero();
@@ -217,7 +217,7 @@ namespace EpForceDirectedGraph.cs
     {
       foreach (var n in Graph.Nodes)
       {
-        Point point = GetPoint(n);
+        Particle point = GetPoint(n);
         point.Position.Add(point.Velocity * iTimeStep);
       }
     }
@@ -229,7 +229,7 @@ namespace EpForceDirectedGraph.cs
         float energy = 0.0f;
         foreach (var n in Graph.Nodes)
         {
-          Point point = GetPoint(n);
+          Particle point = GetPoint(n);
           float speed = point.Velocity.Magnitude();
           energy += 0.5f * point.Mass * speed * speed;
         }

@@ -44,14 +44,14 @@ namespace EpForceDirectedGraph.cs
     {
     }
 
-    protected override Point GetPoint(INode iNode)
+    protected override Particle GetPoint(INode iNode)
     {
       if (!(mNodePoints.ContainsKey(iNode.Id)))
       {
         FDGVector3 iniPosition = iNode.Data.InitialPosition as FDGVector3;
         if (iniPosition == null)
           iniPosition = FDGVector3.Random() as FDGVector3;
-        mNodePoints[iNode.Id] = new Point(iniPosition, FDGVector3.Zero(), FDGVector3.Zero(), iNode);
+        mNodePoints[iNode.Id] = new Particle(iniPosition, FDGVector3.Zero(), FDGVector3.Zero(), iNode);
       }
       return mNodePoints[iNode.Id];
     }

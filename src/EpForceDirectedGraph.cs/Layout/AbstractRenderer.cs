@@ -54,7 +54,7 @@ namespace EpForceDirectedGraph.cs
       {
         DrawEdge(edge, spring.Point1.Position, spring.Point2.Position);
       });
-      forceDirected.EachNode(delegate (INode node, Point point)
+      forceDirected.EachNode(delegate (INode node, Particle point)
       {
         DrawNode(node, point.Position);
       });

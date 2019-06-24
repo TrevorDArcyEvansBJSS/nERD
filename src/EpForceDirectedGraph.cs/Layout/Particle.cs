@@ -37,9 +37,9 @@ An Interface for the Point Class.
 
 namespace EpForceDirectedGraph.cs
 {
-  public sealed class Point
+  public sealed class Particle
   {
-    public Point(AbstractVector iPosition, AbstractVector iVelocity, AbstractVector iAcceleration, INode iNode)
+    public Particle(AbstractVector iPosition, AbstractVector iVelocity, AbstractVector iAcceleration, INode iNode)
     {
       Position = iPosition;
       Node = iNode;
@@ -61,7 +61,7 @@ namespace EpForceDirectedGraph.cs
       }
 
       // If parameter cannot be cast to Point return false.
-      Point p = obj as Point;
+      Particle p = obj as Particle;
       if ((System.Object)p == null)
       {
         return false;
@@ -71,7 +71,7 @@ namespace EpForceDirectedGraph.cs
       return Position == p.Position;
     }
 
-    public bool Equals(Point p)
+    public bool Equals(Particle p)
     {
       // If parameter is null return false:
       if ((object)p == null)
@@ -83,7 +83,7 @@ namespace EpForceDirectedGraph.cs
       return Position == p.Position;
     }
 
-    public static bool operator ==(Point a, Point b)
+    public static bool operator ==(Particle a, Particle b)
     {
       // If both are null, or both are same instance, return true.
       if (System.Object.ReferenceEquals(a, b))
@@ -101,7 +101,7 @@ namespace EpForceDirectedGraph.cs
       return (a.Position == b.Position);
     }
 
-    public static bool operator !=(Point a, Point b)
+    public static bool operator !=(Particle a, Particle b)
     {
       return !(a == b);
     }

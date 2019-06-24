@@ -13,11 +13,11 @@ namespace Layouts
       _diagram = diagram;
     }
 
-    protected override Point GetPoint(INode iNode)
+    protected override Particle GetPoint(INode iNode)
     {
       if (!mNodePoints.ContainsKey(iNode.Id))
       {
-        mNodePoints[iNode.Id] = new Point(iNode.Data.InitialPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode);
+        mNodePoints[iNode.Id] = new Particle(iNode.Data.InitialPosition, FDGVector2.Zero(), FDGVector2.Zero(), iNode);
       }
 
       return mNodePoints[iNode.Id];

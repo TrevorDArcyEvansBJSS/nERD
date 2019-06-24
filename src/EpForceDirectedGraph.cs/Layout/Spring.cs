@@ -39,12 +39,12 @@ namespace EpForceDirectedGraph.cs
 {
   public sealed class Spring
   {
-    public Point Point1 { get; private set; }
-    public Point Point2 { get; private set; }
+    public Particle Point1 { get; private set; }
+    public Particle Point2 { get; private set; }
     public float Length { get; private set; }
     public float K { get; private set; }
 
-    public Spring(Point iPoint1, Point iPoint2, float iLength, float iK)
+    public Spring(Particle iPoint1, Particle iPoint2, float iLength, float iK)
     {
       Point1 = iPoint1;
       Point2 = iPoint2;
