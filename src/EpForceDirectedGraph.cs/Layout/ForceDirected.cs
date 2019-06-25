@@ -216,24 +216,26 @@ namespace EpForceDirectedGraph.cs
 
     private void UpdatePosition(float iTimeStep)
     {
-      foreach (var n in Graph.Nodes)
+      foreach (var node in Graph.Nodes)
       {
-        Particle point = GetParticle(n);
+        var particle = GetParticle(node);
+        if (particle.Node.Pinned)
+        {
+          continue;
+        }
 
-        var otherNodes = Graph.Nodes.Except(new[] { n });
+        particle.Position.Add(particle.Velocity * iTimeStep);
+
+        var otherNodes = Graph.Nodes.Except(new[] { node });
         foreach (var otherNode in otherNodes)
         {
           var otherParticle = GetParticle(otherNode);
-          var otherBBox = otherParticle.BoundingBox;
-          if (otherBBox.Intersects(point.BoundingBox))
+          var otherBBox = otherParticle.BoundingBox.Inflate(10);
+          if (otherBBox.Intersects(particle.BoundingBox))
           {
-            point.Velocity.SetZero();
+            particle.Velocity.SetZero();
             otherParticle.Velocity.SetZero();
-            otherNode.Pinned = n.Pinned = true;
-          }
-          else
-          {
-            point.Position.Add(point.Velocity * iTimeStep);
+            otherNode.Pinned = node.Pinned = true;
           }
         }
       }
