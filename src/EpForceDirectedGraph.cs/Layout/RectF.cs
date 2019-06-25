@@ -34,9 +34,9 @@ namespace EpForceDirectedGraph.cs
       return new RectF(horiz[1], vert[1], horiz[2], vert[2]);
     }
 
-    public float Area()
+    public RectF Inflate(float amt)
     {
-      return (T - B) * (R - L);
+      return new RectF(L - amt / 2, B - amt / 2, R + amt / 2, T + amt / 2);
     }
   }
 }
