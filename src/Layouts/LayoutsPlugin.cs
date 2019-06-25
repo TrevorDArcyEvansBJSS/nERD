@@ -74,14 +74,15 @@ namespace Layouts
           });
 
         const float Stiffness = 81.76f;
-        const float Repulsion = 400000.0f;
+        const float Repulsion = 40000.0f;
         const float Damping = 0.5f;
         var physics = new DiagramForceDirected2D(diagram, graph, Stiffness, Repulsion, Damping);
 
         const int MaxIterations = 10000;
-        foreach (var iteration in Enumerable.Range(0, MaxIterations))
+        const float TimeStep = 0.01f;
+        foreach (var _ in Enumerable.Range(0, MaxIterations))
         {
-          physics.Calculate(0.05f);
+          physics.Calculate(TimeStep);
           if (physics.TotalEnergy < physics.Threshold)
           {
             break;
