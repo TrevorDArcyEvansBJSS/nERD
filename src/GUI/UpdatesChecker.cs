@@ -17,6 +17,7 @@ using NClass.Translations;
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -25,71 +26,28 @@ namespace NClass.GUI
 {
   public static class UpdatesChecker
   {
-    private const string VersionUrl = "https://github.com/TrevorDArcyEvansBJSS/nERD/version.xml";
+    private const string VersionUrl = "https://raw.githubusercontent.com/TrevorDArcyEvansBJSS/nERD/master/version.xml";
 
     private class VersionInfo
     {
-      Version mainVersion;
-      string translationVersion;
-      string versionName;
-      string notes;
-      string downloadPageUrl;
-
-      /// <exception cref="ArgumentException">
-      /// <paramref name="version"/> is an invalid value.
-      /// </exception>
-      public VersionInfo(string version, string translationVersion, string versionName,
-        string downloadPageUrl, string notes)
+      public VersionInfo(string version, string translationVersion, string versionName, string downloadPageUrl, string notes)
       {
-        if (version == null)
-          throw new ArgumentNullException("version");
-        if (translationVersion == null)
-          throw new ArgumentNullException("translationVersion");
-        if (versionName == null)
-          throw new ArgumentNullException("versionName");
-        if (downloadPageUrl == null)
-          throw new ArgumentNullException("downloadPageUrl");
-        if (notes == null)
-          throw new ArgumentNullException("notes");
-
-        try
-        {
-          this.mainVersion = new Version(version);
-        }
-        catch
-        {
-          throw new ArgumentException("Version string is invalid.", "version");
-        }
-        this.translationVersion = translationVersion;
-        this.versionName = versionName;
-        this.downloadPageUrl = downloadPageUrl;
-        this.notes = notes;
+        MainVersion = new Version(version);
+        TranslationVersion = translationVersion;
+        VersionName = versionName;
+        DownloadPageUrl = downloadPageUrl;
+        Notes = notes;
       }
 
-      public Version MainVersion
-      {
-        get { return mainVersion; }
-      }
+      public Version MainVersion { get; }
 
-      public string TranslationVersion
-      {
-        get { return translationVersion; }
-      }
+      public string TranslationVersion { get; }
 
-      public string VersionName
-      {
-        get { return versionName; }
-      }
+      public string VersionName { get; }
 
-      public string DownloadPageUrl
-      {
-        get { return downloadPageUrl; }
-      }
+      public string DownloadPageUrl { get; }
 
-      public string Notes
-      {
-        get { return notes; }
-      }
+      public string Notes { get; }
 
       public bool IsUpdated
       {
@@ -125,47 +83,43 @@ namespace NClass.GUI
       }
     }
 
-    /// <exception cref="WebException">
-    /// Could not connect to the server.
-    /// </exception>
-    /// <exception cref="InvalidDataException">
-    /// Could not read the version informations.
-    /// </exception>
     private static VersionInfo GetVersionManifestInfo()
     {
-      try
+      using (var downLoadUrl = new HttpRequestMessage(HttpMethod.Get, VersionUrl))
       {
-        XmlDocument document = new XmlDocument();
-        document.Load(VersionUrl);
-        XmlElement root = document.DocumentElement;
+        downLoadUrl.Headers.Add("Authorization",
+            "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Settings.Default.GitHubToken, "x-oauth-basic"))));
+        downLoadUrl.Headers.Add("User-Agent", "nERD-github-client");
 
-        // Get main version information
-        XmlElement versionElement = root["Version"];
-        string version = versionElement.InnerText;
+        using (var client = new HttpClient())
+        {
+          using (var contentResponse = client.SendAsync(downLoadUrl).Result)
+          {
+            var content = contentResponse.Content.ReadAsStringAsync().Result;
+            var document = new XmlDocument();
+            document.LoadXml(content);
+            var root = document.DocumentElement;
 
-        // Get translation version information
-        XmlNodeList translationElements = root.SelectNodes(
-          "TranslationVersions/" + Strings.TranslationName);
-        string translationVersion;
-        if (translationElements.Count == 0)
-          translationVersion = Strings.TranslationVersion;
-        else
-          translationVersion = translationElements[0].InnerText;
+            // Get main version information
+            var versionElement = root["Version"];
+            var version = versionElement.InnerText;
 
-        // Get other informations
-        string name = root["VersionName"].InnerText;
-        string url = root["DownloadPageUrl"].InnerText;
-        string notes = root["Notes"].InnerText.Trim();
+            // Get translation version information
+            XmlNodeList translationElements = root.SelectNodes("TranslationVersions/" + Strings.TranslationName);
+            string translationVersion;
+            if (translationElements.Count == 0)
+              translationVersion = Strings.TranslationVersion;
+            else
+              translationVersion = translationElements[0].InnerText;
 
-        return new VersionInfo(version, translationVersion, name, url, notes);
-      }
-      catch (WebException)
-      {
-        throw;
-      }
-      catch
-      {
-        throw new InvalidDataException();
+            // Get other informations
+            var name = root["VersionName"].InnerText;
+            var url = root["DownloadPageUrl"].InnerText;
+            var notes = root["Notes"].InnerText.Trim();
+
+            return new VersionInfo(version, translationVersion, name, url, notes);
+          }
+        }
       }
     }
 
@@ -183,13 +137,11 @@ namespace NClass.GUI
       }
       catch (WebException)
       {
-        MessageBox.Show(Strings.ErrorConnectToServer,
-          Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Strings.ErrorConnectToServer, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
       catch (InvalidDataException)
       {
-        MessageBox.Show(Strings.ErrorReadVersionData, Strings.Error,
-          MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(Strings.ErrorReadVersionData, Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -200,17 +152,14 @@ namespace NClass.GUI
         string text = GetVersionDescription(info);
         string caption = Strings.CheckingForUpdates;
 
-        DialogResult result = MessageBox.Show(text, caption,
-          MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+        DialogResult result = MessageBox.Show(text, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
         if (result == DialogResult.Yes)
           OpenUrl(info.DownloadPageUrl);
       }
       else
       {
-        MessageBox.Show(
-          Strings.NoUpdates, Strings.CheckingForUpdates,
-          MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(Strings.NoUpdates, Strings.CheckingForUpdates, MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
     }
 
@@ -221,8 +170,7 @@ namespace NClass.GUI
       if (info.IsMainProgramUpdated)
       {
         // Header text
-        builder.AppendFormat("{0}: {1}\n\n",
-          Strings.NewVersion, info.VersionName);
+        builder.AppendFormat("{0}: {1}\n\n", Strings.NewVersion, info.VersionName);
 
         // Main program's changes
         builder.Append(info.Notes);
