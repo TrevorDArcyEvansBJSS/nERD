@@ -29,27 +29,23 @@ namespace NClass.DiagramEditor
   {
     public const float MinZoom = 0.1F;
     public const float MaxZoom = 4.0F;
-    private static readonly Pen borderPen;
-
-    static Canvas()
+    private static readonly Pen BorderPen = new Pen(Color.FromArgb(128, Color.Black))
     {
-      borderPen = new Pen(Color.FromArgb(128, Color.Black));
-      borderPen.DashPattern = new float[] { 5, 5 };
-    }
+      DashPattern = new float[] { 5, 5 }
+    };
 
     public event EventHandler ZoomChanged;
     public event EventHandler DocumentRedrawed;
     public event EventHandler VisibleAreaChanged;
     public event EventHandler MouseHWheel;
 
-    private IDocument document = null;
-    private readonly List<PopupWindow> windows = new List<PopupWindow>();
+    private readonly List<PopupWindow> _windows = new List<PopupWindow>();
 
     public Canvas()
     {
       InitializeComponent();
-      this.SetStyle(ControlStyles.UserPaint, true);
-      this.DoubleBuffered = true;
+      SetStyle(ControlStyles.UserPaint, true);
+      DoubleBuffered = true;
 
       if (DiagramElement.Graphics == null)
       {
@@ -60,40 +56,45 @@ namespace NClass.DiagramEditor
     [Browsable(false)]
     public bool HasDocument
     {
-      get { return document != null; }
+      get { return _document != null; }
     }
 
+    private IDocument _document = null;
     [Browsable(false)]
     public IDocument Document
     {
       get
       {
-        return document;
+        return _document;
       }
       set
       {
-        if (document != value)
+        if (_document != value)
         {
-          if (document != null)
+          if (_document != null)
           {
-            document.CloseWindows();
-            document.OffsetChanged -= new EventHandler(document_OffsetChanged);
-            document.SizeChanged -= new EventHandler(document_SizeChanged);
-            document.ZoomChanged -= new EventHandler(document_ZoomChanged);
-            document.NeedsRedraw -= new EventHandler(document_NeedsRedraw);
-            document.ShowingWindow -= new PopupWindowEventHandler(document_ShowingWindow);
-            document.HidingWindow -= new PopupWindowEventHandler(document_HidingWindow);
+            _document.CloseWindows();
+            _document.OffsetChanged -= new EventHandler(document_OffsetChanged);
+            _document.SizeChanged -= new EventHandler(document_SizeChanged);
+            _document.ZoomChanged -= new EventHandler(document_ZoomChanged);
+            _document.NeedsRedraw -= new EventHandler(document_NeedsRedraw);
+            _document.ShowingWindow -= new PopupWindowEventHandler(document_ShowingWindow);
+            _document.HidingWindow -= new PopupWindowEventHandler(document_HidingWindow);
           }
-          document = value;
+          _document = value;
 
-          if (document != null)
+          if (_document != null)
           {
-            document.OffsetChanged += new EventHandler(document_OffsetChanged);
-            document.SizeChanged += new EventHandler(document_SizeChanged);
-            document.ZoomChanged += new EventHandler(document_ZoomChanged);
-            document.NeedsRedraw += new EventHandler(document_NeedsRedraw);
-            document.ShowingWindow += new PopupWindowEventHandler(document_ShowingWindow);
-            document.HidingWindow += new PopupWindowEventHandler(document_HidingWindow);
+            _document.OffsetChanged += new EventHandler(document_OffsetChanged);
+            _document.SizeChanged += new EventHandler(document_SizeChanged);
+            _document.ZoomChanged += new EventHandler(document_ZoomChanged);
+            _document.NeedsRedraw += new EventHandler(document_NeedsRedraw);
+            _document.ShowingWindow += new PopupWindowEventHandler(document_ShowingWindow);
+            _document.HidingWindow += new PopupWindowEventHandler(document_HidingWindow);
+          }
+          else
+          {
+            ContextMenuStrip = null;
           }
 
           SetScrolls();
@@ -224,9 +225,9 @@ namespace NClass.DiagramEditor
     private void document_ShowingWindow(object sender, PopupWindowEventArgs e)
     {
       PopupWindow window = e.Window;
-      if (!windows.Contains(window))
+      if (!_windows.Contains(window))
       {
-        windows.Add(window);
+        _windows.Add(window);
         if (ParentForm != null)
         {
           ParentForm.Controls.Add(window);
@@ -241,9 +242,9 @@ namespace NClass.DiagramEditor
     private void document_HidingWindow(object sender, PopupWindowEventArgs e)
     {
       PopupWindow window = e.Window;
-      if (windows.Contains(window))
+      if (_windows.Contains(window))
       {
-        windows.Remove(window);
+        _windows.Remove(window);
         if (ParentForm != null)
         {
           ParentForm.Controls.Remove(window);
@@ -374,7 +375,7 @@ namespace NClass.DiagramEditor
         selectedOnly &= Document.HasSelectedElement;
 
         Rectangle visibleRectangle = this.ClientRectangle;
-        RectangleF diagramRectangle = document.GetPrintingArea(selectedOnly);
+        RectangleF diagramRectangle = _document.GetPrintingArea(selectedOnly);
         visibleRectangle.Inflate(-Margin, -Margin);
 
         float scaleX = visibleRectangle.Width / diagramRectangle.Width;
@@ -502,7 +503,7 @@ namespace NClass.DiagramEditor
         Point point = this.PointToScreen(Point.Empty);
         Point absPos = ParentForm.PointToClient(point);
 
-        foreach (PopupWindow window in windows)
+        foreach (PopupWindow window in _windows)
         {
           window.ParentLocation = absPos;
         }
@@ -608,7 +609,7 @@ namespace NClass.DiagramEditor
     {
       base.OnKeyDown(e);
 
-      if (document != null)
+      if (_document != null)
       {
         if (e.Modifiers == Keys.Control)
         {
@@ -626,7 +627,7 @@ namespace NClass.DiagramEditor
           }
         }
 
-        document.KeyDown(e);
+        _document.KeyDown(e);
       }
     }
 
