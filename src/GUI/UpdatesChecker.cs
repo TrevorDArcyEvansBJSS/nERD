@@ -87,10 +87,6 @@ namespace NClass.GUI
     {
       using (var downLoadUrl = new HttpRequestMessage(HttpMethod.Get, VersionUrl))
       {
-        downLoadUrl.Headers.Add("Authorization",
-            "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Settings.Default.GitHubToken, "x-oauth-basic"))));
-        downLoadUrl.Headers.Add("User-Agent", "nERD-github-client");
-
         using (var client = new HttpClient())
         {
           using (var contentResponse = client.SendAsync(downLoadUrl).Result)

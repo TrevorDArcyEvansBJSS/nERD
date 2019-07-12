@@ -20,8 +20,5 @@
     <Setting Name="RememberOpenProjects" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="GitHubToken" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">dec6324a5fab3792fa3bc7184bd6ca340fefa792</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

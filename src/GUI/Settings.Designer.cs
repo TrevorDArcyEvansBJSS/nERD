@@ -92,14 +92,5 @@ namespace NClass.GUI {
                 this["RememberOpenProjects"] = value;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("dec6324a5fab3792fa3bc7184bd6ca340fefa792")]
-        public string GitHubToken {
-            get {
-                return ((string)(this["GitHubToken"]));
-            }
-        }
     }
 }
