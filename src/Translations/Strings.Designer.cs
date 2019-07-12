@@ -2566,7 +2566,7 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No updates are avaiable..
+        ///   Looks up a localized string similar to No updates are available..
         /// </summary>
         public static string NoUpdates {
             get {
@@ -2884,7 +2884,7 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2009-08-26.
+        ///   Looks up a localized string similar to 2019-07-15.
         /// </summary>
         public static string TranslationVersion {
             get {
