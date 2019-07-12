@@ -1,12 +1,14 @@
 <VersionInfo>
-  <Version>2.04.1823.0</Version>
-  <VersionName>2.04</VersionName>
-  <DownloadPageUrl>http://nclass.sourceforge.net/downloads.html</DownloadPageUrl>
+  <Version>3.0.0.0</Version>
+  <VersionName>3.0</VersionName>
+  <DownloadPageUrl>https://github.com/TrevorDArcyEvansBJSS/nERD/releases</DownloadPageUrl>
   <Notes>
-    + Optional parameters are supported + New AssemblyImporter plugin using NReflect * NClass sometimes eat the value 0 (zero) of enum values - fixed * Fixed a bug which lead to exceptions while exporting to PDF * Fixed a bug which crashed NClass when exporting a PDF while the file is opened by another process
+    * added Undo
+    * added support for ERD diagramming
+    * added force directed layout
   </Notes>
   <TranslationVersions>
-    <English>2009-08-26</English>
+    <English>2019-07-15</English>
     <Hungarian>2009-08-26</Hungarian>
     <Spanish>2009-08-26</Spanish>
     <BrazilianPortuguese>2009-07-30</BrazilianPortuguese>
