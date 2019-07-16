@@ -20,7 +20,30 @@ namespace NClass.Core
 {
   public sealed class State : Element, IEntity
   {
-    public string Name => Strings.State;
+    public State(string name)
+    {
+      Initializing = true;
+      Name = name;
+      Initializing = false;
+    }
+
+    private string _name;
+    public string Name
+    {
+      get
+      {
+        return _name;
+      }
+      set
+      {
+        if (_name != value)
+        {
+          OnBeginUndoableOperation();
+          _name = value;
+          Changed();
+        }
+      }
+    }
 
     public EntityType EntityType => EntityType.State;
 
@@ -29,12 +52,24 @@ namespace NClass.Core
 
     public void Deserialize(XmlElement node)
     {
+      var nameChild = node["Name"];
+      Name = nameChild?.InnerText;
+
       OnDeserializing(new SerializeEventArgs(node));
     }
 
     public void Serialize(XmlElement node)
     {
+      var child = node.OwnerDocument.CreateElement("Name");
+      child.InnerText = Name;
+      node.AppendChild(child);
+
       OnSerializing(new SerializeEventArgs(node));
+    }
+
+    public State Clone()
+    {
+      return new State(Name);
     }
 
     private void OnSerializing(SerializeEventArgs e)

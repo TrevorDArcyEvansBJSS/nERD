@@ -334,14 +334,14 @@ namespace NClass.Core
     #region State
     public State AddState()
     {
-      var state = new State();
+      var state = new State(Strings.State);
       AddState(state);
       return state;
     }
 
-    protected virtual void AddState(State comment)
+    protected virtual void AddState(State state)
     {
-      AddEntity(comment);
+      AddEntity(state);
     }
 
     public bool InsertState(State state)
@@ -763,6 +763,9 @@ namespace NClass.Core
 
         case "Comment":
           return AddComment();
+
+        case "State":
+          return AddState();
 
         default:
           throw new InvalidDataException("Invalid entity type: " + type);

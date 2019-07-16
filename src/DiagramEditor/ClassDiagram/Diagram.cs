@@ -31,7 +31,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   public sealed class Diagram : Model, IDocument, IEditable, IPrintable
   {
-    private enum State
+    private enum Mode
     {
       Normal,
       Multiselecting,
@@ -52,7 +52,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     private Point offset = Point.Empty;
     private float zoom = 1.0F;
     private Size size = MinSize;
-    private State state = State.Normal;
+    private Mode state = Mode.Normal;
     private bool selectioning = false;
     private RectangleF selectionFrame = RectangleF.Empty;
     private PointF mouseLocation = PointF.Empty;
@@ -384,12 +384,12 @@ namespace NClass.DiagramEditor.ClassDiagram
           element.Draw(graphics, true);
         element.NeedsRedraw = false;
       }
-      if (state == State.CreatingShape)
+      if (state == Mode.CreatingShape)
       {
         g.DrawRectangle(SelectionPen,
           shapeOutline.X, shapeOutline.Y, shapeOutline.Width, shapeOutline.Height);
       }
-      else if (state == State.CreatingConnection)
+      else if (state == Mode.CreatingConnection)
       {
         connectionCreator.Draw(g);
       }
@@ -409,7 +409,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           connection.DrawSelectionLines(g, Zoom, Offset);
       }
 
-      if (state == State.Multiselecting)
+      if (state == Mode.Multiselecting)
       {
         RectangleF frame = RectangleF.FromLTRB(
           Math.Min(selectionFrame.Left, selectionFrame.Right),
@@ -949,15 +949,15 @@ namespace NClass.DiagramEditor.ClassDiagram
     public void MouseDown(AbsoluteMouseEventArgs e)
     {
       RedrawSuspended = true;
-      if (state == State.CreatingShape)
+      if (state == Mode.CreatingShape)
       {
         AddCreatedShape();
       }
-      else if (state == State.CreatingConnection)
+      else if (state == Mode.CreatingConnection)
       {
         connectionCreator.MouseDown(e);
         if (connectionCreator.Created)
-          state = State.Normal;
+          state = Mode.Normal;
       }
       else
       {
@@ -992,7 +992,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
       finally
       {
-        state = State.Normal;
+        state = Mode.Normal;
       }
     }
 
@@ -1025,7 +1025,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
         if (e.Button == MouseButtons.Left)
         {
-          state = State.Multiselecting;
+          state = Mode.Multiselecting;
           selectionFrame.Location = e.Location;
           selectionFrame.Size = Size.Empty;
         }
@@ -1037,18 +1037,18 @@ namespace NClass.DiagramEditor.ClassDiagram
       RedrawSuspended = true;
 
       mouseLocation = e.Location;
-      if (state == State.Multiselecting)
+      if (state == Mode.Multiselecting)
       {
         selectionFrame = RectangleF.FromLTRB(
           selectionFrame.Left, selectionFrame.Top, e.X, e.Y);
         Redraw();
       }
-      else if (state == State.CreatingShape)
+      else if (state == Mode.CreatingShape)
       {
         shapeOutline.Location = new Point((int)e.X, (int)e.Y);
         Redraw();
       }
-      else if (state == State.CreatingConnection)
+      else if (state == Mode.CreatingConnection)
       {
         connectionCreator.MouseMove(e);
       }
@@ -1067,10 +1067,10 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       RedrawSuspended = true;
 
-      if (state == State.Multiselecting)
+      if (state == Mode.Multiselecting)
       {
         TrySelectElements();
-        state = State.Normal;
+        state = Mode.Normal;
       }
       else
       {
@@ -1138,7 +1138,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         // Escape
         else if (e.KeyCode == Keys.Escape)
         {
-          state = State.Normal;
+          state = Mode.Normal;
           DeselectAll();
           Redraw();
         }
@@ -1612,7 +1612,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void CreateShape(EntityType type)
     {
-      state = State.CreatingShape;
+      state = Mode.CreatingShape;
       shapeType = type;
       newShapeType = type;
 
@@ -1623,6 +1623,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         case EntityType.Enum:
         case EntityType.Interface:
         case EntityType.Structure:
+        case EntityType.State:
           shapeOutline = TypeShape.GetOutline(Style.CurrentStyle);
           break;
 
@@ -1713,10 +1714,16 @@ namespace NClass.DiagramEditor.ClassDiagram
       AddShape(new CommentShape(comment));
     }
 
+    protected override void AddState(State state)
+    {
+      base.AddState(state);
+      AddShape(new StateShape(state));
+    }
+
     public void CreateConnection(RelationshipType type)
     {
       connectionCreator = new ConnectionCreator(this, type);
-      state = State.CreatingConnection;
+      state = Mode.CreatingConnection;
     }
 
     protected override void AddAssociation(AssociationRelationship association)

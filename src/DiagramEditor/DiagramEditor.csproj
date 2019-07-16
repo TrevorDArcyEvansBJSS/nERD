@@ -163,6 +163,7 @@
     <Compile Include="ClassDiagram\Editors\EditorWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ClassDiagram\Shapes\StateShape.cs" />
     <Compile Include="GdiGraphics.cs" />
     <Compile Include="IGraphics.cs" />
     <Compile Include="IClipboardItem.cs" />
