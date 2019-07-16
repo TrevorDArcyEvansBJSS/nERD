@@ -190,6 +190,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         diagram.CreateShape(EntityType.Comment);
     }
 
+    private void mnuNewState_Click(object sender, EventArgs e)
+    {
+      diagram?.CreateShape(EntityType.State);
+    }
+
     private void mnuNewAssociation_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Association);

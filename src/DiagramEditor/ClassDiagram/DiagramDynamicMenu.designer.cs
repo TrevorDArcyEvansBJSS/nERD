@@ -34,6 +34,7 @@
       this.mnuNewEnum = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuNewDelegate = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuNewComment = new System.Windows.Forms.ToolStripMenuItem();
+      this.mnuNewState = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       this.mnuNewAssociation = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuNewComposition = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +67,7 @@
       this.toolNewEnum = new System.Windows.Forms.ToolStripButton();
       this.toolNewDelegate = new System.Windows.Forms.ToolStripButton();
       this.toolNewComment = new System.Windows.Forms.ToolStripButton();
+      this.toolNewState = new System.Windows.Forms.ToolStripButton();
       this.toolNewAssociation = new System.Windows.Forms.ToolStripButton();
       this.toolNewComposition = new System.Windows.Forms.ToolStripButton();
       this.toolNewAggregation = new System.Windows.Forms.ToolStripButton();
@@ -212,6 +214,7 @@
             this.toolNewEnum,
             this.toolNewDelegate,
             this.toolNewComment,
+            this.toolNewState,
             this.toolSepEntities,
             this.toolNewAssociation,
             this.toolNewComposition,
@@ -248,6 +251,7 @@
             this.mnuNewEnum,
             this.mnuNewDelegate,
             this.mnuNewComment,
+            this.mnuNewState,
             this.toolStripSeparator2,
             this.mnuNewAssociation,
             this.mnuNewComposition,
@@ -310,6 +314,14 @@
       this.mnuNewComment.Size = new System.Drawing.Size(191, 22);
       this.mnuNewComment.Text = "Commen&t";
       this.mnuNewComment.Click += new System.EventHandler(this.mnuNewComment_Click);
+      // 
+      // mnuNewState
+      // 
+      this.mnuNewState.Image = global::NClass.DiagramEditor.Properties.Resources.State;
+      this.mnuNewState.Name = "mnuNewState";
+      this.mnuNewState.Size = new System.Drawing.Size(191, 22);
+      this.mnuNewState.Text = "S&tate";
+      this.mnuNewState.Click += new System.EventHandler(this.mnuNewState_Click);
       // 
       // toolStripSeparator2
       // 
@@ -575,6 +587,15 @@
       this.toolNewComment.Size = new System.Drawing.Size(23, 22);
       this.toolNewComment.Click += new System.EventHandler(this.mnuNewComment_Click);
       // 
+      // toolNewState
+      // 
+      this.toolNewState.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.toolNewState.Image = global::NClass.DiagramEditor.Properties.Resources.State;
+      this.toolNewState.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.toolNewState.Name = "toolNewState";
+      this.toolNewState.Size = new System.Drawing.Size(23, 22);
+      this.toolNewState.Click += new System.EventHandler(this.mnuNewState_Click);
+      // 
       // toolNewAssociation
       // 
       this.toolNewAssociation.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -692,6 +713,7 @@
     private System.Windows.Forms.ToolStripMenuItem mnuNewEnum;
     private System.Windows.Forms.ToolStripMenuItem mnuNewDelegate;
     private System.Windows.Forms.ToolStripMenuItem mnuNewComment;
+    private System.Windows.Forms.ToolStripMenuItem mnuNewState;
     private System.Windows.Forms.ToolStripMenuItem mnuNewAssociation;
     private System.Windows.Forms.ToolStripMenuItem mnuNewComposition;
     private System.Windows.Forms.ToolStripMenuItem mnuNewAggregation;
@@ -731,6 +753,7 @@
     private System.Windows.Forms.ToolStripButton toolNewEnum;
     private System.Windows.Forms.ToolStripButton toolNewDelegate;
     private System.Windows.Forms.ToolStripButton toolNewComment;
+    private System.Windows.Forms.ToolStripButton toolNewState;
     private System.Windows.Forms.ToolStripSeparator toolSepEntities;
     private System.Windows.Forms.ToolStripButton toolNewAssociation;
     private System.Windows.Forms.ToolStripButton toolNewComposition;

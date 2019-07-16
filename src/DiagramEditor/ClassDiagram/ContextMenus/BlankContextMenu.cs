@@ -35,6 +35,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     ToolStripMenuItem mnuNewEnum;
     ToolStripMenuItem mnuNewDelegate;
     ToolStripMenuItem mnuNewComment;
+    ToolStripMenuItem mnuNewState;
     ToolStripMenuItem mnuNewAssociation;
     ToolStripMenuItem mnuNewComposition;
     ToolStripMenuItem mnuNewAggregation;
@@ -92,6 +93,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewEnum = new ToolStripMenuItem(Strings.MenuEnum, Resources.Enum, mnuNewEnum_Click);
       mnuNewDelegate = new ToolStripMenuItem(Strings.MenuDelegate, Resources.Delegate, mnuNewDelegate_Click);
       mnuNewComment = new ToolStripMenuItem(Strings.MenuComment, Resources.Comment, mnuNewComment_Click);
+      mnuNewState = new ToolStripMenuItem(Strings.MenuState, Resources.State, mnuNewState_Click);
       mnuNewAssociation = new ToolStripMenuItem(Strings.MenuAssociation, Resources.Association, mnuNewAssociation_Click);
       mnuNewComposition = new ToolStripMenuItem(Strings.MenuComposition, Resources.Composition, mnuNewComposition_Click);
       mnuNewAggregation = new ToolStripMenuItem(Strings.MenuAggregation, Resources.Aggregation, mnuNewAggregation_Click);
@@ -127,6 +129,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
         mnuNewEnum,
         mnuNewDelegate,
         mnuNewComment,
+        mnuNewState,
         new ToolStripSeparator(),
         mnuNewAssociation,
         mnuNewComposition,
@@ -188,6 +191,11 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     {
       if (Diagram != null)
         Diagram.CreateShape(EntityType.Comment);
+    }
+
+    private void mnuNewState_Click(object sender, EventArgs e)
+    {
+      Diagram?.CreateShape(EntityType.State);
     }
 
     private void mnuNewAssociation_Click(object sender, EventArgs e)

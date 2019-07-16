@@ -205,6 +205,15 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New State.
+        /// </summary>
+        public static string AddNewState {
+            get {
+                return ResourceManager.GetString("AddNewState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Structure.
         /// </summary>
         public static string AddNewStructure {
@@ -2310,6 +2319,15 @@ namespace NClass.Translations {
         public static string MenuSize {
             get {
                 return ResourceManager.GetString("MenuSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;State.
+        /// </summary>
+        public static string MenuState {
+            get {
+                return ResourceManager.GetString("MenuState", resourceCulture);
             }
         }
         

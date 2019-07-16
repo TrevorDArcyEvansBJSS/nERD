@@ -1173,4 +1173,10 @@ Do you still want to continue?</value>
   <data name="State" xml:space="preserve">
     <value>State</value>
   </data>
+  <data name="MenuState" xml:space="preserve">
+    <value>&amp;State</value>
+  </data>
+  <data name="AddNewState" xml:space="preserve">
+    <value>Add New State</value>
+  </data>
 </root>
