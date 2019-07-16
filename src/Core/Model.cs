@@ -137,6 +137,7 @@ namespace NClass.Core
       OnModified(e);
     }
 
+    #region Entity
     private void AddEntity(IEntity entity)
     {
       CheckForDuplicateEntityName(entity);
@@ -162,7 +163,9 @@ namespace NClass.Core
         throw new DuplicateTypeException(entity.Name);
       }
     }
+    #endregion
 
+    #region Class
     public ClassType AddClass()
     {
       ClassType newClass = Language.CreateClass();
@@ -187,10 +190,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
-    /// <exception cref="InvalidOperationException">
-    /// The language does not support structures.
-    /// </exception>
+    #region Structure
     public StructureType AddStructure()
     {
       StructureType structure = Language.CreateStructure();
@@ -216,7 +218,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Interface
     public InterfaceType AddInterface()
     {
       InterfaceType newInterface = Language.CreateInterface();
@@ -242,7 +246,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Enum
     public EnumType AddEnum()
     {
       EnumType newEnum = Language.CreateEnum();
@@ -268,10 +274,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
-    /// <exception cref="InvalidOperationException">
-    /// The language does not support delegates.
-    /// </exception>
+    #region Delegate
     public DelegateType AddDelegate()
     {
       DelegateType newDelegate = Language.CreateDelegate();
@@ -297,7 +302,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Comment
     public Comment AddComment()
     {
       Comment comment = new Comment();
@@ -322,7 +329,36 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region State
+    public State AddState()
+    {
+      var state = new State();
+      AddState(state);
+      return state;
+    }
+
+    protected virtual void AddState(State comment)
+    {
+      AddEntity(comment);
+    }
+
+    public bool InsertState(State state)
+    {
+      if (state != null && !entities.Contains(state))
+      {
+        AddState(state);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    #endregion
+
+    #region Relationship
     private void AddRelationship(Relationship relationship)
     {
       OnBeginUndoableOperation(this, EventArgs.Empty);
@@ -331,7 +367,9 @@ namespace NClass.Core
       relationship.Modified += new EventHandler(ElementChanged);
       OnRelationAdded(new RelationshipEventArgs(relationship));
     }
+    #endregion
 
+    #region Association
     public AssociationRelationship AddAssociation(TypeBase first, TypeBase second)
     {
       AssociationRelationship association = new AssociationRelationship(first, second);
@@ -357,7 +395,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Composition
     public AssociationRelationship AddComposition(TypeBase first, TypeBase second)
     {
       AssociationRelationship composition = new AssociationRelationship(
@@ -366,7 +406,9 @@ namespace NClass.Core
       AddAssociation(composition);
       return composition;
     }
+    #endregion
 
+    #region Aggregation
     public AssociationRelationship AddAggregation(TypeBase first, TypeBase second)
     {
       AssociationRelationship aggregation = new AssociationRelationship(
@@ -375,7 +417,9 @@ namespace NClass.Core
       AddAssociation(aggregation);
       return aggregation;
     }
+    #endregion
 
+    #region Generalization
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
     /// </exception>
@@ -407,7 +451,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Realization
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
     /// </exception>
@@ -438,7 +484,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Dependency
     public DependencyRelationship AddDependency(TypeBase first, TypeBase second)
     {
       DependencyRelationship dependency = new DependencyRelationship(first, second);
@@ -467,7 +515,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region EntityRelationship
     public EntityRelationship AddEntityRelationship(ClassType first, ClassType second)
     {
       var dependency = new EntityRelationship(first, second);
@@ -494,7 +544,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Nesting
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
     /// </exception>
@@ -524,7 +576,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Comment
     public virtual CommentRelationship AddCommentRelationship(Comment comment, IEntity entity)
     {
       CommentRelationship commentRelationship = new CommentRelationship(comment, entity);
@@ -551,7 +605,9 @@ namespace NClass.Core
         return false;
       }
     }
+    #endregion
 
+    #region Remove
     public void RemoveEntity(IEntity entity)
     {
       RemoveRelationships(entity);
@@ -594,7 +650,9 @@ namespace NClass.Core
         OnRelationRemoved(new RelationshipEventArgs(relationship));
       }
     }
+    #endregion
 
+    #region Serialize/Deserialize
     public void Serialize(XmlElement node)
     {
       if (node == null)
@@ -837,45 +895,41 @@ namespace NClass.Core
       }
       root.AppendChild(relationsChild);
     }
+    #endregion
 
+    #region Events
     protected virtual void OnEntityAdded(EntityEventArgs e)
     {
-      if (EntityAdded != null)
-        EntityAdded(this, e);
+      EntityAdded?.Invoke(this, e);
       OnModified(EventArgs.Empty);
     }
 
     protected virtual void OnEntityRemoved(EntityEventArgs e)
     {
-      if (EntityRemoved != null)
-        EntityRemoved(this, e);
+      EntityRemoved?.Invoke(this, e);
       OnModified(EventArgs.Empty);
     }
 
     protected virtual void OnRelationAdded(RelationshipEventArgs e)
     {
-      if (RelationAdded != null)
-        RelationAdded(this, e);
+      RelationAdded?.Invoke(this, e);
       OnModified(EventArgs.Empty);
     }
 
     protected virtual void OnRelationRemoved(RelationshipEventArgs e)
     {
-      if (RelationRemoved != null)
-        RelationRemoved(this, e);
+      RelationRemoved?.Invoke(this, e);
       OnModified(EventArgs.Empty);
     }
 
     protected virtual void OnSerializing(SerializeEventArgs e)
     {
-      if (Serializing != null)
-        Serializing(this, e);
+      Serializing?.Invoke(this, e);
     }
 
     protected virtual void OnDeserializing(SerializeEventArgs e)
     {
-      if (Deserializing != null)
-        Deserializing(this, e);
+      Deserializing?.Invoke(this, e);
       OnModified(EventArgs.Empty);
     }
 
@@ -895,30 +949,25 @@ namespace NClass.Core
 
     protected void OnBeginUndoableOperation(EventArgs e)
     {
-      if (BeginUndoableOperation != null)
-        BeginUndoableOperation(this, e);
+      BeginUndoableOperation?.Invoke(this, e);
     }
 
     protected virtual void OnModified(EventArgs e)
     {
       IsDirty = true;
-      if (Modified != null)
-      {
-        Modified(this, e);
-      }
+      Modified?.Invoke(this, e);
     }
 
     protected virtual void OnRenamed(EventArgs e)
     {
-      if (Renamed != null)
-        Renamed(this, e);
+      Renamed?.Invoke(this, e);
     }
 
     protected virtual void OnClosing(EventArgs e)
     {
-      if (Closing != null)
-        Closing(this, e);
+      Closing?.Invoke(this, e);
     }
+    #endregion
 
     protected virtual void Reset()
     {

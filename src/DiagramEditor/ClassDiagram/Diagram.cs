@@ -1629,6 +1629,9 @@ namespace NClass.DiagramEditor.ClassDiagram
         case EntityType.Comment:
           shapeOutline = CommentShape.GetOutline(Style.CurrentStyle);
           break;
+
+        default:
+          throw new ArgumentOutOfRangeException($"Unknown EntityType: {type}");
       }
       shapeOutline.Location = new Point((int)mouseLocation.X, (int)mouseLocation.Y);
       Redraw();
@@ -1662,8 +1665,12 @@ namespace NClass.DiagramEditor.ClassDiagram
           AddStructure();
           break;
 
+        case EntityType.State:
+          AddState();
+          break;
+
         default:
-          return null;
+          throw new ArgumentOutOfRangeException($"Unknown EntityType: {type}");
       }
 
       RecalculateSize();
