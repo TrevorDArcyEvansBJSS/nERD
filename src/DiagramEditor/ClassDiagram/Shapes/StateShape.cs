@@ -30,8 +30,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     private const int MarginSize = 8;
     private const int HeaderHeight = 45;
 
-    // TODO   StateEditor
-    private static readonly CommentEditor Editor = new CommentEditor();
+    private static readonly StateEditor Editor = new StateEditor();
     private static readonly Pen BorderPen = new Pen(Color.Black);
     private static readonly SolidBrush BackgroundBrush = new SolidBrush(Color.White);
     private static readonly SolidBrush NameBrush = new SolidBrush(Color.Black);
