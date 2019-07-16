@@ -19,14 +19,14 @@ namespace NClass.Core
 {
   public abstract class Element : IModifiable
   {
-    private int dontRaiseRequestCount = 0;
-    private int dontRaisePreRequestCount = 0;
-
     public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
 
     public bool IsDirty { get; private set; } = false;
     public Guid Id { get; } = Guid.NewGuid();
+
+    private int _dontRaiseRequestCount = 0;
+    private int _dontRaisePreRequestCount = 0;
 
     public virtual void Clean()
     {
@@ -40,17 +40,23 @@ namespace NClass.Core
     {
       get
       {
-        return (dontRaisePreRequestCount == 0);
+        return (_dontRaisePreRequestCount == 0);
       }
       set
       {
         if (!value)
-          dontRaisePreRequestCount++;
-        else if (dontRaisePreRequestCount > 0)
-          dontRaisePreRequestCount--;
+        {
+          _dontRaisePreRequestCount++;
+        }
+        else if (_dontRaisePreRequestCount > 0)
+        {
+          _dontRaisePreRequestCount--;
+        }
 
         if (RaisePreChangedEvent)
+        {
           OnBeginUndoableOperation(EventArgs.Empty);
+        }
       }
     }
 
@@ -58,17 +64,23 @@ namespace NClass.Core
     {
       get
       {
-        return (dontRaiseRequestCount == 0);
+        return (_dontRaiseRequestCount == 0);
       }
       set
       {
         if (!value)
-          dontRaiseRequestCount++;
-        else if (dontRaiseRequestCount > 0)
-          dontRaiseRequestCount--;
+        {
+          _dontRaiseRequestCount++;
+        }
+        else if (_dontRaiseRequestCount > 0)
+        {
+          _dontRaiseRequestCount--;
+        }
 
         if (RaiseChangedEvent && IsDirty)
+        {
           OnModified(EventArgs.Empty);
+        }
       }
     }
 
@@ -88,23 +100,25 @@ namespace NClass.Core
       if (!Initializing)
       {
         if (RaiseChangedEvent)
+        {
           OnModified(EventArgs.Empty);
+        }
         else
+        {
           IsDirty = true;
+        }
       }
     }
 
     private void OnBeginUndoableOperation(EventArgs e)
     {
-      if (BeginUndoableOperation != null)
-        BeginUndoableOperation(this, e);
+      BeginUndoableOperation?.Invoke(this, e);
     }
 
     private void OnModified(EventArgs e)
     {
       IsDirty = true;
-      if (Modified != null)
-        Modified(this, e);
+      Modified?.Invoke(this, e);
     }
   }
 }
