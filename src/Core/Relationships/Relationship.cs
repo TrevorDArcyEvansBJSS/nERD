@@ -63,14 +63,18 @@ namespace NClass.Core
     internal void Attach()
     {
       if (!attached)
+      {
         OnAttaching(EventArgs.Empty);
+      }
       attached = true;
     }
 
     internal void Detach()
     {
       if (attached)
+      {
         OnDetaching(EventArgs.Empty);
+      }
       attached = false;
     }
 
@@ -91,9 +95,6 @@ namespace NClass.Core
 
     protected internal virtual void Serialize(XmlElement node)
     {
-      if (node == null)
-        throw new ArgumentNullException("node");
-
       if (SupportsLabel && Label != null)
       {
         XmlElement labelNode = node.OwnerDocument.CreateElement("Label");
@@ -105,40 +106,35 @@ namespace NClass.Core
 
     protected internal virtual void Deserialize(XmlElement node)
     {
-      if (node == null)
-        throw new ArgumentNullException("node");
-
       if (SupportsLabel)
       {
         XmlElement labelNode = node["Label"];
         if (labelNode != null)
+        {
           Label = labelNode.InnerText;
+        }
       }
       OnDeserializing(new SerializeEventArgs(node));
     }
 
     protected virtual void OnAttaching(EventArgs e)
     {
-      if (Attaching != null)
-        Attaching(this, e);
+      Attaching?.Invoke(this, e);
     }
 
     protected virtual void OnDetaching(EventArgs e)
     {
-      if (Detaching != null)
-        Detaching(this, e);
+      Detaching?.Invoke(this, e);
     }
 
     private void OnSerializing(SerializeEventArgs e)
     {
-      if (Serializing != null)
-        Serializing(this, e);
+      Serializing?.Invoke(this, e);
     }
 
     private void OnDeserializing(SerializeEventArgs e)
     {
-      if (Deserializing != null)
-        Deserializing(this, e);
+      Deserializing?.Invoke(this, e);
     }
 
     public abstract override string ToString();
