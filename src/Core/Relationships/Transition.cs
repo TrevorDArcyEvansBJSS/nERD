@@ -1,4 +1,4 @@
-// NClass - Free class diagram editor
+﻿// NClass - Free class diagram editor
 // Copyright (C) 2006-2009 Balazs Tihanyi
 // 
 // This program is free software; you can redistribute it and/or modify it under 
@@ -15,14 +15,27 @@
 
 namespace NClass.Core
 {
-  public enum EntityType
+  public sealed class Transition : Relationship
   {
-    Class,
-    Structure,
-    Interface,
-    Enum,
-    Delegate,
-    Comment,
-    State
+    public override IEntity First { get; protected set; }
+    public override IEntity Second { get; protected set; }
+
+    public override RelationshipType RelationshipType => RelationshipType.Transition;
+
+    public Transition(State first, State second)
+    {
+      First = first;
+      Second = second;
+    }
+
+    public override bool SupportsLabel
+    {
+      get { return true; }
+    }
+
+    public override string ToString()
+    {
+      return $"[{First.Name}]---->[{Second.Name}]";
+    }
   }
 }

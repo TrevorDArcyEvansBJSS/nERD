@@ -1170,4 +1170,7 @@ Do you still want to continue?</value>
   <data name="ErrorDuplicateName" xml:space="preserve">
     <value>Entity with this name already exists</value>
   </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
 </root>

@@ -25,6 +25,7 @@ namespace NClass.Core
     Dependency,
     Nesting,
     Comment,
-    EntityRelationship
+    EntityRelationship,
+    Transition
   }
 }

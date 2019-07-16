@@ -80,6 +80,7 @@
     <Compile Include="IProjectItem.cs" />
     <Compile Include="ISerializableElement.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Relationships\Transition.cs" />
     <Compile Include="SerializeEventArgs.cs" />
     <Compile Include="Entities\CompositeType.cs" />
     <Compile Include="Entities\TypeBase.cs">
@@ -127,6 +128,7 @@
     <Compile Include="Entities\StructureType.cs" />
     <Compile Include="Relationships\Relationship.cs" />
     <Compile Include="LanguageElement.cs" />
+    <Compile Include="Entities\State.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

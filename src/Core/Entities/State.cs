@@ -1,4 +1,4 @@
-// NClass - Free class diagram editor
+﻿// NClass - Free class diagram editor
 // Copyright (C) 2006-2009 Balazs Tihanyi
 // 
 // This program is free software; you can redistribute it and/or modify it under 
@@ -13,16 +13,38 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
+using System.Xml;
+
 namespace NClass.Core
 {
-  public enum EntityType
+  public sealed class State : Element, IEntity
   {
-    Class,
-    Structure,
-    Interface,
-    Enum,
-    Delegate,
-    Comment,
-    State
+    public string Name => Strings.State;
+
+    public EntityType EntityType => EntityType.State;
+
+    public event SerializeEventHandler Serializing;
+    public event SerializeEventHandler Deserializing;
+
+    public void Deserialize(XmlElement node)
+    {
+      OnDeserializing(new SerializeEventArgs(node));
+    }
+
+    public void Serialize(XmlElement node)
+    {
+      OnSerializing(new SerializeEventArgs(node));
+    }
+
+    private void OnSerializing(SerializeEventArgs e)
+    {
+      Serializing?.Invoke(this, e);
+    }
+
+    private void OnDeserializing(SerializeEventArgs e)
+    {
+      Deserializing?.Invoke(this, e);
+    }
   }
 }
