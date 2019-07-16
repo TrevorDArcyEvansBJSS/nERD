@@ -22,10 +22,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
   {
     internal sealed override void Relocate(DiagramElement element)
     {
-      Relocate((TypeShape)element);
+      Relocate((Shape)element);
     }
 
-    internal void Relocate(TypeShape shape)
+    internal void Relocate(Shape shape)
     {
       Diagram diagram = shape.Diagram;
       if (diagram != null)
