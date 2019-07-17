@@ -1583,6 +1583,16 @@ namespace NClass.DiagramEditor.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Transition {
+            get {
+                object obj = ResourceManager.GetObject("Transition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Unidirectional {
             get {
                 object obj = ResourceManager.GetObject("Unidirectional", resourceCulture);
