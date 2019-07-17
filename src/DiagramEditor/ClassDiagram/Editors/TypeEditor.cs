@@ -18,7 +18,7 @@ using System.Drawing;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public abstract class TypeEditor : FloatingEditor
+  public class TypeEditor : FloatingEditor
   {
     internal sealed override void Relocate(DiagramElement element)
     {
