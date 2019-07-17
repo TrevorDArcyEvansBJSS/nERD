@@ -86,6 +86,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       mnuNewEnum.Text = Strings.MenuEnum;
       mnuNewDelegate.Text = Strings.MenuDelegate;
       mnuNewComment.Text = Strings.MenuComment;
+      mnuNewState.Text = Strings.MenuState;
       mnuNewAssociation.Text = Strings.MenuAssociation;
       mnuNewComposition.Text = Strings.MenuComposition;
       mnuNewAggregation.Text = Strings.MenuAggregation;
@@ -128,6 +129,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       toolNewEnum.Text = Strings.AddNewEnum;
       toolNewDelegate.Text = Strings.AddNewDelegate;
       toolNewComment.Text = Strings.AddNewComment;
+      toolNewState.Text = Strings.AddNewState;
       toolNewAssociation.Text = Strings.AddNewAssociation;
       toolNewComposition.Text = Strings.AddNewComposition;
       toolNewAggregation.Text = Strings.AddNewAggregation;
