@@ -13,18 +13,16 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using NClass.Core;
 using NClass.DiagramEditor.Properties;
 using NClass.Translations;
-using NClass.Core;
+using System;
+using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
 {
   public sealed class BlankContextMenu : DiagramContextMenu
   {
-    static BlankContextMenu _default = new BlankContextMenu();
 
     #region MenuItem fields
 
@@ -63,10 +61,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       InitMenuItems();
     }
 
-    public static BlankContextMenu Default
-    {
-      get { return _default; }
-    }
+    public static BlankContextMenu Default { get; } = new BlankContextMenu();
 
     public override void ValidateMenuItems(Diagram diagram)
     {
@@ -76,10 +71,10 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewStructure.Visible = diagram.Language.SupportsStructures;
       mnuNewDelegate.Visible = diagram.Language.SupportsDelegates;
 
-      mnuShowType.Checked = DiagramEditor.Settings.Default.ShowType;
-      mnuShowParameters.Checked = DiagramEditor.Settings.Default.ShowParameters;
-      mnuShowParameterNames.Checked = DiagramEditor.Settings.Default.ShowParameterNames;
-      mnuShowInitialValue.Checked = DiagramEditor.Settings.Default.ShowInitialValue;
+      mnuShowType.Checked = Settings.Default.ShowType;
+      mnuShowParameters.Checked = Settings.Default.ShowParameters;
+      mnuShowParameterNames.Checked = Settings.Default.ShowParameterNames;
+      mnuShowInitialValue.Checked = Settings.Default.ShowInitialValue;
 
       mnuSaveAsImage.Enabled = !diagram.IsEmpty;
     }
@@ -254,28 +249,28 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
 
     private void mnuShowType_CheckedChanged(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowType = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowType = ((ToolStripMenuItem)sender).Checked;
       if (Diagram != null)
         Diagram.Redraw();
     }
 
     private void mnuShowParameters_CheckedChanged(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowParameters = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowParameters = ((ToolStripMenuItem)sender).Checked;
       if (Diagram != null)
         Diagram.Redraw();
     }
 
     private void mnuShowParameterNames_CheckedChanged(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowParameterNames = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowParameterNames = ((ToolStripMenuItem)sender).Checked;
       if (Diagram != null)
         Diagram.Redraw();
     }
 
     private void mnuShowInitialValue_CheckedChanged(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowInitialValue = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowInitialValue = ((ToolStripMenuItem)sender).Checked;
       if (Diagram != null)
         Diagram.Redraw();
     }

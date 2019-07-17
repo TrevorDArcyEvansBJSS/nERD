@@ -23,27 +23,22 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   public sealed partial class DiagramDynamicMenu : DynamicMenu
   {
-    static DiagramDynamicMenu _default = new DiagramDynamicMenu();
-
-    ToolStripMenuItem[] menuItems;
-    Diagram diagram = null;
+    private readonly ToolStripMenuItem[] _menuItems;
+    private Diagram diagram = null;
 
     private DiagramDynamicMenu()
     {
       InitializeComponent();
       UpdateTexts();
 
-      menuItems = new ToolStripMenuItem[2] { mnuDiagram, mnuFormat };
+      _menuItems = new ToolStripMenuItem[2] { mnuDiagram, mnuFormat };
     }
 
-    public static DiagramDynamicMenu Default
-    {
-      get { return _default; }
-    }
+    public static DiagramDynamicMenu Default { get; } = new DiagramDynamicMenu();
 
     public override IEnumerable<ToolStripMenuItem> GetMenuItems()
     {
-      return menuItems;
+      return _menuItems;
     }
 
     public override ToolStrip GetToolStrip()
@@ -241,36 +236,36 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void mnuMembersFormat_DropDownOpening(object sender, EventArgs e)
     {
-      mnuShowType.Checked = DiagramEditor.Settings.Default.ShowType;
-      mnuShowParameters.Checked = DiagramEditor.Settings.Default.ShowParameters;
-      mnuShowParameterNames.Checked = DiagramEditor.Settings.Default.ShowParameterNames;
-      mnuShowInitialValue.Checked = DiagramEditor.Settings.Default.ShowInitialValue;
+      mnuShowType.Checked = Settings.Default.ShowType;
+      mnuShowParameters.Checked = Settings.Default.ShowParameters;
+      mnuShowParameterNames.Checked = Settings.Default.ShowParameterNames;
+      mnuShowInitialValue.Checked = Settings.Default.ShowInitialValue;
     }
 
     private void mnuShowType_Click(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowType = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowType = ((ToolStripMenuItem)sender).Checked;
       if (diagram != null)
         diagram.Redraw();
     }
 
     private void mnuShowParameters_Click(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowParameters = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowParameters = ((ToolStripMenuItem)sender).Checked;
       if (diagram != null)
         diagram.Redraw();
     }
 
     private void mnuShowParameterNames_Click(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowParameterNames = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowParameterNames = ((ToolStripMenuItem)sender).Checked;
       if (diagram != null)
         diagram.Redraw();
     }
 
     private void mnuShowInitialValue_Click(object sender, EventArgs e)
     {
-      DiagramEditor.Settings.Default.ShowInitialValue = ((ToolStripMenuItem)sender).Checked;
+      Settings.Default.ShowInitialValue = ((ToolStripMenuItem)sender).Checked;
       if (diagram != null)
         diagram.Redraw();
     }
