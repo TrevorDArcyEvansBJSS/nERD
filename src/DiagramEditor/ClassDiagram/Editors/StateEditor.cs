@@ -47,7 +47,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
     {
       SuspendLayout();
 
-      int cursorPosition = txtName.SelectionStart;
+      var cursorPosition = txtName.SelectionStart;
       txtName.Text = Shape.Entity.Name;
       txtName.SelectionStart = cursorPosition;
 
