@@ -1433,6 +1433,34 @@ namespace NClass.DiagramEditor
 
     #endregion
 
+    #region Transition
+
+    [DisplayName("Color"), Category("(Transition)")]
+    [Description("The line color for the Transition.")]
+    [DefaultValue(typeof(Color), "Black")]
+    public Color TransitionColor { get; set; }
+
+    private int _transitionWidth = 1;
+    [DisplayName("Width"), Category("(Transition)")]
+    [Description("The width of the Transition line.")]
+    [DefaultValue(1)]
+    public int TransitionWidth
+    {
+      get
+      {
+        return _transitionWidth;
+      }
+      set
+      {
+        if (value < 1)
+          _transitionWidth = 1;
+        else
+          _transitionWidth = value;
+      }
+    }
+
+    #endregion
+
     public Style Clone()
     {
       Style newStyle = (Style)this.MemberwiseClone();

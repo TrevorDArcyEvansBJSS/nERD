@@ -76,6 +76,7 @@
     <Compile Include="ClassDiagram\Connections\CommentConnection.cs" />
     <Compile Include="ClassDiagram\Connections\Generalization.cs" />
     <Compile Include="ClassDiagram\Connections\Realization.cs" />
+    <Compile Include="ClassDiagram\Connections\TransitionConnection.cs" />
     <Compile Include="ClassDiagram\ContextMenus\BlankContextMenu.cs" />
     <Compile Include="ClassDiagram\ContextMenus\DiagramContextMenu.cs" />
     <Compile Include="ClassDiagram\ConnectionCreator.cs" />

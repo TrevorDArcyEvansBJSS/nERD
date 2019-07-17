@@ -544,6 +544,35 @@ namespace NClass.Core
     }
     #endregion
 
+    #region Transition
+    public Transition AddTransitionRelationship(State first, State second)
+    {
+      var trans = new Transition(first, second);
+
+      AddTransitionRelationship(trans);
+      return trans;
+    }
+
+    protected virtual void AddTransitionRelationship(Transition trans)
+    {
+      AddRelationship(trans);
+    }
+
+    public bool InsertTransitionRelationship(Transition trans)
+    {
+      if (trans != null && !relationships.Contains(trans) &&
+        entities.Contains(trans.First) && entities.Contains(trans.Second))
+      {
+        AddTransitionRelationship(trans);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    #endregion
+
     #region Nesting
     /// <exception cref="RelationshipException">
     /// Cannot create relationship between the two types.
@@ -839,9 +868,12 @@ namespace NClass.Core
               relationship = AddEntityRelationship(first as ClassType, second as ClassType);
               break;
 
+            case "Transition":
+              relationship = AddTransitionRelationship(first as State, second as State);
+              break;
+
             default:
-              throw new InvalidDataException(
-                Strings.ErrorCorruptSaveFormat);
+              throw new InvalidDataException(Strings.ErrorCorruptSaveFormat);
           }
           relationship.Deserialize(node);
         }

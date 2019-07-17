@@ -160,6 +160,10 @@ namespace NClass.DiagramEditor.ClassDiagram
           CreateEntityRelationship();
           break;
 
+        case RelationshipType.Transition:
+          CreateTransitionRelationship();
+          break;
+
         default:
           throw new ArgumentOutOfRangeException($"Unknown RelationshipType: {Type}");
       }
@@ -320,6 +324,21 @@ namespace NClass.DiagramEditor.ClassDiagram
       if (shape1 != null && shape2 != null)
       {
         Diagram.AddEntityRelationship(shape1.ClassType, shape2.ClassType);
+      }
+      else
+      {
+        MessageBox.Show(Strings.ErrorCannotCreateRelationship);
+      }
+    }
+
+    private void CreateTransitionRelationship()
+    {
+      var shape1 = First as StateShape;
+      var shape2 = Second as StateShape;
+
+      if (shape1 != null && shape2 != null)
+      {
+        Diagram.AddTransitionRelationship(shape1.State, shape2.State);
       }
       else
       {

@@ -33,6 +33,13 @@ namespace NClass.Core
       get { return true; }
     }
 
+    public Transition Clone(State first, State second)
+    {
+      var trans = new Transition(first, second);
+      trans.CopyFrom(this);
+      return trans;
+    }
+
     public override string ToString()
     {
       return $"[{First.Name}]---->[{Second.Name}]";
