@@ -70,8 +70,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override int GetBorderWidth(Style style)
     {
-      // TODO   State styles
-      return style.CommentBorderWidth;
+      return style.StateBorderWidth;
     }
 
     protected override void OnMove(MoveEventArgs e)
@@ -144,10 +143,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     private void DrawSurface(IGraphics g, bool onScreen, Style style)
     {
       // Update graphical objects
-      // TODO   State styles
-      BackgroundBrush.Color = style.CommentBackColor;
-      BorderPen.Color = style.CommentBorderColor;
-      BorderPen.Width = style.CommentBorderWidth;
+      BackgroundBrush.Color = style.StateBackColor;
+      BorderPen.Color = style.StateBorderColor;
+      BorderPen.Width = style.StateBorderWidth;
 
       DrawRectangleSurface(g, onScreen, style);
     }
