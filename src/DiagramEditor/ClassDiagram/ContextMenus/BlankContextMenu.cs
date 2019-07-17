@@ -43,6 +43,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     ToolStripMenuItem mnuNewNesting;
     ToolStripMenuItem mnuNewCommentRelationship;
     ToolStripMenuItem mnuNewEntityRelationship;
+    ToolStripMenuItem mnuNewTransitionRelationship;
 
     ToolStripMenuItem mnuMembersFormat;
     ToolStripMenuItem mnuShowType;
@@ -98,6 +99,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewNesting = new ToolStripMenuItem(Strings.MenuNesting, Resources.Nesting, mnuNewNesting_Click);
       mnuNewCommentRelationship = new ToolStripMenuItem(Strings.MenuCommentRelationship, Resources.CommentRel, mnuNewCommentRelationship_Click);
       mnuNewEntityRelationship = new ToolStripMenuItem(Strings.MenuEntityRelationship, Resources.EntityRelationship, mnuNewEntityRelationship_Click);
+      mnuNewTransitionRelationship = new ToolStripMenuItem(Strings.MenuTransitionRelationship, Resources.Transition, mnuNewTransitionRelationship_Click);
 
       mnuMembersFormat = new ToolStripMenuItem(Strings.MenuMembersFormat, null);
       mnuShowType = new ToolStripMenuItem(Strings.MenuType, null);
@@ -134,7 +136,8 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
         mnuNewDependency,
         mnuNewNesting,
         mnuNewCommentRelationship,
-        mnuNewEntityRelationship
+        mnuNewEntityRelationship,
+        mnuNewTransitionRelationship
       });
       mnuMembersFormat.DropDownItems.AddRange(new ToolStripItem[] {
         mnuShowType,
@@ -245,6 +248,11 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     {
       if (Diagram != null)
         Diagram.CreateConnection(RelationshipType.EntityRelationship);
+    }
+
+    private void mnuNewTransitionRelationship_Click(object sender, EventArgs e)
+    {
+      Diagram?.CreateConnection(RelationshipType.Transition);
     }
 
     private void mnuShowType_CheckedChanged(object sender, EventArgs e)

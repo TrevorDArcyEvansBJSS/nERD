@@ -45,6 +45,7 @@
       this.mnuNewNesting = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuNewCommentRelationship = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuNewEntityRelationship = new System.Windows.Forms.ToolStripMenuItem();
+      this.mnuNewTransitionRelationship = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuMembersFormat = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuShowType = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuShowParameters = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +78,7 @@
       this.toolNewNesting = new System.Windows.Forms.ToolStripButton();
       this.toolNewCommentRelationship = new System.Windows.Forms.ToolStripButton();
       this.toolNewEntityRelationship = new System.Windows.Forms.ToolStripButton();
+      this.toolNewTransitionRelationship = new System.Windows.Forms.ToolStripButton();
       this.toolDelete = new System.Windows.Forms.ToolStripButton();
       this.mnuAutoSize = new System.Windows.Forms.ToolStripMenuItem();
       this.menuStrip.SuspendLayout();
@@ -225,6 +227,7 @@
             this.toolNewNesting,
             this.toolNewCommentRelationship,
             this.toolNewEntityRelationship,
+            this.toolNewTransitionRelationship,
             this.toolSepRelationships,
             this.toolDelete});
       this.elementsToolStrip.Location = new System.Drawing.Point(0, 0);
@@ -261,7 +264,8 @@
             this.mnuNewDependency,
             this.mnuNewNesting,
             this.mnuNewCommentRelationship,
-            this.mnuNewEntityRelationship});
+            this.mnuNewEntityRelationship,
+            this.mnuNewTransitionRelationship});
       this.mnuAddNewElement.Image = global::NClass.DiagramEditor.Properties.Resources.NewEntity;
       this.mnuAddNewElement.Name = "mnuAddNewElement";
       this.mnuAddNewElement.Size = new System.Drawing.Size(170, 22);
@@ -399,6 +403,14 @@
       this.mnuNewEntityRelationship.Size = new System.Drawing.Size(191, 22);
       this.mnuNewEntityRelationship.Text = "&Entity Relationship";
       this.mnuNewEntityRelationship.Click += new System.EventHandler(this.mnuNewEntityRelationship_Click);
+      // 
+      // mnuNewTransitionRelationship
+      // 
+      this.mnuNewTransitionRelationship.Image = global::NClass.DiagramEditor.Properties.Resources.Transition;
+      this.mnuNewTransitionRelationship.Name = "mnuNewTransitionRelationship";
+      this.mnuNewTransitionRelationship.Size = new System.Drawing.Size(191, 22);
+      this.mnuNewTransitionRelationship.Text = "&Transition Relationship";
+      this.mnuNewTransitionRelationship.Click += new System.EventHandler(this.mnuNewTransitionRelationship_Click);
       // 
       // mnuMembersFormat
       // 
@@ -677,6 +689,15 @@
       this.toolNewEntityRelationship.Size = new System.Drawing.Size(23, 22);
       this.toolNewEntityRelationship.Click += new System.EventHandler(this.mnuNewEntityRelationship_Click);
       // 
+      // toolNewTransitionRelationship
+      // 
+      this.toolNewTransitionRelationship.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.toolNewTransitionRelationship.Image = global::NClass.DiagramEditor.Properties.Resources.Transition;
+      this.toolNewTransitionRelationship.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.toolNewTransitionRelationship.Name = "toolNewTransitionRelationship";
+      this.toolNewTransitionRelationship.Size = new System.Drawing.Size(23, 22);
+      this.toolNewTransitionRelationship.Click += new System.EventHandler(this.mnuNewTransitionRelationship_Click);
+      // 
       // toolDelete
       // 
       this.toolDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -723,6 +744,7 @@
     private System.Windows.Forms.ToolStripMenuItem mnuNewNesting;
     private System.Windows.Forms.ToolStripMenuItem mnuNewCommentRelationship;
     private System.Windows.Forms.ToolStripMenuItem mnuNewEntityRelationship;
+    private System.Windows.Forms.ToolStripMenuItem mnuNewTransitionRelationship;
     private System.Windows.Forms.ToolStripMenuItem mnuMembersFormat;
     private System.Windows.Forms.ToolStripMenuItem mnuShowType;
     private System.Windows.Forms.ToolStripMenuItem mnuShowParameters;
@@ -764,6 +786,7 @@
     private System.Windows.Forms.ToolStripButton toolNewNesting;
     private System.Windows.Forms.ToolStripButton toolNewCommentRelationship;
     private System.Windows.Forms.ToolStripButton toolNewEntityRelationship;
+    private System.Windows.Forms.ToolStripButton toolNewTransitionRelationship;
     private System.Windows.Forms.ToolStripSeparator toolSepRelationships;
     private System.Windows.Forms.ToolStripButton toolDelete;
     private System.Windows.Forms.ToolStripMenuItem mnuGenerateCode;

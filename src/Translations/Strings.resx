@@ -1179,4 +1179,13 @@ Do you still want to continue?</value>
   <data name="AddNewState" xml:space="preserve">
     <value>Add New State</value>
   </data>
+  <data name="AddNewEntityRelationship" xml:space="preserve">
+    <value>Add New Entity Relationship</value>
+  </data>
+  <data name="AddNewTransitionRelationship" xml:space="preserve">
+    <value>Add New Transition</value>
+  </data>
+  <data name="MenuTransitionRelationship" xml:space="preserve">
+    <value>Transition</value>
+  </data>
 </root>

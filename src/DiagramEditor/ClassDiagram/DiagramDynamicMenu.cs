@@ -77,7 +77,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void UpdateTexts()
     {
-      // Diagram menu
+      #region Diagram menu
       mnuDiagram.Text = Strings.MenuDiagram;
       mnuAddNewElement.Text = Strings.MenuNew;
       mnuNewClass.Text = Strings.MenuClass;
@@ -95,6 +95,8 @@ namespace NClass.DiagramEditor.ClassDiagram
       mnuNewDependency.Text = Strings.MenuDependency;
       mnuNewNesting.Text = Strings.MenuNesting;
       mnuNewCommentRelationship.Text = Strings.MenuCommentRelationship;
+      mnuNewEntityRelationship.Text = Strings.MenuEntityRelationship;
+      mnuNewTransitionRelationship.Text = Strings.MenuTransitionRelationship;
       mnuMembersFormat.Text = Strings.MenuMembersFormat;
       mnuShowType.Text = Strings.MenuType;
       mnuShowParameters.Text = Strings.MenuParameters;
@@ -102,8 +104,9 @@ namespace NClass.DiagramEditor.ClassDiagram
       mnuShowInitialValue.Text = Strings.MenuInitialValue;
       mnuGenerateCode.Text = Strings.MenuGenerateCode;
       mnuSaveAsImage.Text = Strings.MenuSaveAsImage;
+      #endregion
 
-      // Format menu
+      #region Format menu
       mnuFormat.Text = Strings.MenuFormat;
       mnuAlign.Text = Strings.MenuAlign;
       mnuAlignTop.Text = Strings.MenuAlignTop;
@@ -121,8 +124,9 @@ namespace NClass.DiagramEditor.ClassDiagram
       mnuAutoHeight.Text = Strings.MenuAutoHeight;
       mnuCollapseAll.Text = Strings.MenuCollapseAll;
       mnuExpandAll.Text = Strings.MenuExpandAll;
+      #endregion
 
-      // Toolbar
+      #region Toolbar
       toolNewClass.Text = Strings.AddNewClass;
       toolNewStructure.Text = Strings.AddNewStructure;
       toolNewInterface.Text = Strings.AddNewInterface;
@@ -138,7 +142,10 @@ namespace NClass.DiagramEditor.ClassDiagram
       toolNewDependency.Text = Strings.AddNewDependency;
       toolNewNesting.Text = Strings.AddNewNesting;
       toolNewCommentRelationship.Text = Strings.AddNewCommentRelationship;
+      toolNewEntityRelationship.Text = Strings.AddNewEntityRelationship;
+      toolNewTransitionRelationship.Text = Strings.AddNewTransitionRelationship;
       toolDelete.Text = Strings.DeleteSelectedItems;
+      #endregion
     }
 
     #region Event handlers
@@ -234,6 +241,11 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void mnuNewEntityRelationship_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.EntityRelationship);
+    }
+
+    private void mnuNewTransitionRelationship_Click(object sender, EventArgs e)
+    {
+      diagram.CreateConnection(RelationshipType.Transition);
     }
 
     private void mnuMembersFormat_DropDownOpening(object sender, EventArgs e)

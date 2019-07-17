@@ -151,6 +151,15 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Entity Relationship.
+        /// </summary>
+        public static string AddNewEntityRelationship {
+            get {
+                return ResourceManager.GetString("AddNewEntityRelationship", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Enum.
         /// </summary>
         public static string AddNewEnum {
@@ -219,6 +228,15 @@ namespace NClass.Translations {
         public static string AddNewStructure {
             get {
                 return ResourceManager.GetString("AddNewStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Transition.
+        /// </summary>
+        public static string AddNewTransitionRelationship {
+            get {
+                return ResourceManager.GetString("AddNewTransitionRelationship", resourceCulture);
             }
         }
         
@@ -2337,6 +2355,15 @@ namespace NClass.Translations {
         public static string MenuStruct {
             get {
                 return ResourceManager.GetString("MenuStruct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transition.
+        /// </summary>
+        public static string MenuTransitionRelationship {
+            get {
+                return ResourceManager.GetString("MenuTransitionRelationship", resourceCulture);
             }
         }
         
