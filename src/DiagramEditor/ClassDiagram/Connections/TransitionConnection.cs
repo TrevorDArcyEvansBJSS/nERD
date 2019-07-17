@@ -14,6 +14,7 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram.Editors;
 using NClass.DiagramEditor.ClassDiagram.Shapes;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -28,6 +29,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       LineJoin = LineJoin.MiterClipped
     };
 
+    private static readonly TransitionEditor Editor = new TransitionEditor();
+
+    private bool _editorShowed = false;
+
     public TransitionConnection(Transition trans, Shape startShape, Shape endShape) :
       base(trans, startShape, endShape)
     {
@@ -37,6 +42,55 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Transition Transition { get; }
 
     public override Relationship Relationship => Transition;
+
+    protected override void OnDoubleClick(AbsoluteMouseEventArgs e)
+    {
+      base.OnDoubleClick(e);
+
+      if (!e.Handled)
+      {
+        ShowEditDialog();
+      }
+    }
+
+    protected internal override void ShowEditor()
+    {
+      ShowEditDialog();
+    }
+
+    public void ShowEditDialog()
+    {
+      const int MarginSize = 20;
+
+      if (!_editorShowed)
+      {
+        var centerF = GetLineCenter(out bool _);
+        var center = new Point((int)centerF.X, (int)centerF.Y);
+        var relative = new Point(
+          (int)(center.X * Diagram.Zoom) - Diagram.Offset.X + MarginSize,
+          (int)(center.Y * Diagram.Zoom) - Diagram.Offset.Y);
+
+        Editor.Location = relative;
+        Editor.Init(this);
+        ShowWindow(Editor);
+        Editor.Focus();
+        _editorShowed = true;
+      }
+    }
+
+    protected internal override void HideEditor()
+    {
+      if (_editorShowed)
+      {
+        HideWindow(Editor);
+        _editorShowed = false;
+      }
+    }
+
+    protected internal override void MoveWindow()
+    {
+      HideEditor();
+    }
 
     protected override Size EndCapSize
     {

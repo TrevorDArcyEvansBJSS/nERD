@@ -478,7 +478,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       }
     }
 
-    private PointF GetLineCenter(out bool horizontal)
+    protected PointF GetLineCenter(out bool horizontal)
     {
       int lineLength = 0;
       for (int i = 0; i < RouteCache.Count - 1; i++)
