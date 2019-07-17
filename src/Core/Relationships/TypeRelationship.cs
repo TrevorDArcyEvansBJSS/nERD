@@ -33,7 +33,6 @@ namespace NClass.Core
       this.second = second;
     }
 
-    //TODO: inkább abstract property-kre hivatkozzon
     public sealed override IEntity First
     {
       get { return first; }

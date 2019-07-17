@@ -13,12 +13,11 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.Translations;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
-using NClass.Translations;
-using NClass.Core;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
@@ -198,55 +197,46 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void mnuNewAssociation_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Association);
-      //TODO: toolNewAssociation.Checked = true;
     }
 
     private void mnuNewComposition_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Composition);
-      //toolNewComposition.Checked = true;
     }
 
     private void mnuNewAggregation_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Aggregation);
-      //toolNewAggregation.Checked = true;
     }
 
     private void mnuNewGeneralization_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Generalization);
-      //toolNewGeneralization.Checked = true;
     }
 
     private void mnuNewRealization_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Realization);
-      //toolNewRealization.Checked = true;
     }
 
     private void mnuNewDependency_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Dependency);
-      //toolNewDependency.Checked = true;
     }
 
     private void mnuNewNesting_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Nesting);
-      //toolNewNesting.Checked = true;
     }
 
     private void mnuNewCommentRelationship_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.Comment);
-      //toolNewCommentRelationship.Checked = true;
     }
 
     private void mnuNewEntityRelationship_Click(object sender, EventArgs e)
     {
       diagram.CreateConnection(RelationshipType.EntityRelationship);
-      //toolNewCommentRelationship.Checked = true;
     }
 
     private void mnuMembersFormat_DropDownOpening(object sender, EventArgs e)

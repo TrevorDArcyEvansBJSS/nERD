@@ -983,7 +983,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
         shape.IsSelected = true;
         shape.IsActive = true;
-        if (shape is TypeShape) //TODO: nem szép
+        if (shape is TypeShape)
           shape.ShowEditor();
       }
       catch (DuplicateTypeException ex)
@@ -1123,7 +1123,6 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       try
       {
-        //TODO: ActiveElement.KeyDown() - de nem minden esetben (pl. törlésnél nem)
         RedrawSuspended = true;
 
         // Delete
@@ -1466,7 +1465,6 @@ namespace NClass.DiagramEditor.ClassDiagram
       RecalculateSize();
     }
 
-    //TODO: legyenek inkább hivatkozások a shape-ekhez
     private Shape GetShape(IEntity entity)
     {
       foreach (Shape shape in ShapeList)

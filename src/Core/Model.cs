@@ -22,7 +22,6 @@ using System.Xml;
 
 namespace NClass.Core
 {
-  //TODO: átdolgozni
   public class Model : IProjectItem
   {
     private string name;
@@ -112,7 +111,6 @@ namespace NClass.Core
     public void Clean()
     {
       IsDirty = false;
-      //TODO: tagokat is tisztítani!
     }
 
     public void Close()

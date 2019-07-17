@@ -27,7 +27,7 @@ namespace NClass.Core
       return GetDeclaration();
     }
 
-    [Obsolete] //TODO: ezt a metódust meg kell szüntetni
+    [Obsolete]
     protected static string GetNameWithoutGeneric(string name)
     {
       int index = name.IndexOf('<');

@@ -81,7 +81,6 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
     }
 
-    //TODO: legyenek inkább hivatkozások a shape-ekhez
     public Shape GetShape(IEntity entity)
     {
       foreach (Shape shape in shapes)

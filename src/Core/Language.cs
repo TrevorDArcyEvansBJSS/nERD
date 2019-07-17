@@ -13,11 +13,11 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using NClass.Translations;
 
 namespace NClass.Core
 {
@@ -120,7 +120,6 @@ namespace NClass.Core
       return Contains(ReservedNames, name);
     }
 
-    //TODO: a languageName ne az assembly neve legyen, hanem a Name property!
     public static Language GetLanguage(string languageName)
     {
       try

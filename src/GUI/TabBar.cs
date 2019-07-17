@@ -13,14 +13,14 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.ComponentModel;
-using System.Windows.Forms;
 using NClass.DiagramEditor;
 using NClass.Translations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace NClass.GUI
 {
@@ -476,7 +476,6 @@ namespace NClass.GUI
       g.DrawLine(borderPen, 0, Height - 1, left, Height - 1);
       foreach (Tab tab in tabs)
       {
-        //TODO: szépíteni
         bool isActiveTab = (tab == activeTab);
         int top = (isActiveTab ? TopMargin : TopMargin + 2);
         Brush tabBrush = (isActiveTab ? activeTabBrush : inactiveTabBrush);

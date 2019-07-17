@@ -31,7 +31,6 @@ namespace NClass.Core
     public virtual void Clean()
     {
       IsDirty = false;
-      //TODO: tagok tisztítása
     }
 
     protected bool Initializing { get; set; } = false;

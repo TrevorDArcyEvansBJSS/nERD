@@ -554,10 +554,10 @@ namespace NClass.DiagramEditor
       UpdateDocumentOffset();
     }
 
-    protected virtual void OnMouseHWheel(EventArgs e) //TODO: MouseEventArgs kellene
+    protected virtual void OnMouseHWheel(EventArgs e)
     {
       UpdateDocumentOffset();
-      Invalidate(); //TODO: SetDisplayRectLocation() kellene
+      Invalidate();
       if (MouseHWheel != null)
         MouseHWheel(this, e);
     }

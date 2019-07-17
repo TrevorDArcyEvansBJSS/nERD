@@ -13,10 +13,10 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
 using System.Text;
 using System.Xml;
-using NClass.Translations;
 
 namespace NClass.Core
 {
@@ -188,7 +188,6 @@ namespace NClass.Core
     {
       OnBeginUndoableOperation();
 
-      //TODO: ne az õsosztályon kereszül érje el, egyszerûbb lenne saját taggal
       IEntity first = First;
       First = Second;
       Second = first;

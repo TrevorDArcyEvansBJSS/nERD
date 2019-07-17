@@ -170,7 +170,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (size != value)
         {
           Size change = new Size(value.Width - Width, value.Height - Height);
-          if (IsResizing) //TODO: ez kell?
+          if (IsResizing)
             mouseDownLocation += change;
           size = value;
           OnResize(new ResizeEventArgs(change));
@@ -193,7 +193,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (size.Width != value)
         {
           Size change = new Size(value - Width, 0);
-          if (IsResizing) //TODO: ez kell?
+          if (IsResizing)
             mouseDownLocation.X += change.Width;
           size.Width = value;
           OnResize(new ResizeEventArgs(change));
@@ -216,7 +216,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (size.Height != value)
         {
           Size change = new Size(0, value - Height);
-          if (IsResizing) //TODO: ez kell?
+          if (IsResizing)
             mouseDownLocation.Y += change.Height;
           size.Height = value;
           OnResize(new ResizeEventArgs(change));

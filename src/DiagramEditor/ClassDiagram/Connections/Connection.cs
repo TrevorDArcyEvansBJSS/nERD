@@ -1520,7 +1520,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     {
       base.OnMouseMove(e);
 
-      //TODO: szebb lenne külön eljárásba tenni
       if (e.Button == MouseButtons.Left && selectedBendPoint != null)
       {
         Point newLocation = Point.Truncate(e.Location);
