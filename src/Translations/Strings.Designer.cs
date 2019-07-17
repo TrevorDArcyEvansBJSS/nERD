@@ -2938,7 +2938,7 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2019-07-15.
+        ///   Looks up a localized string similar to 2019-07-17.
         /// </summary>
         public static string TranslationVersion {
             get {
