@@ -33,15 +33,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     }
 
     public const int SelectionMargin = 12;
-    private static readonly Pen selectionSquarePen = new Pen(Color.Black);
-    protected static readonly float[] borderDashPattern = new float[] { 3, 3 };
-    protected static readonly SolidBrush shadowBrush = new SolidBrush(Color.Gray);
-    protected static readonly Size defaultMinSize = new Size(50, 50);
+    private static readonly Pen SelectionSquarePen = new Pen(Color.Black);
+    protected static readonly float[] BorderDashPattern = new float[] { 3, 3 };
+    protected static readonly SolidBrush ShadowBrush = new SolidBrush(Color.Gray);
+    protected static readonly Size DefaultMinSize = new Size(50, 50);
 
     private Point location;
     private Size size;
     private ResizeMode resizeMode = ResizeMode.None;
-    private Size minimumSize = defaultMinSize;
+    private Size minimumSize = DefaultMinSize;
     private PointF mouseDownLocation = PointF.Empty;
     private bool mouseLeaved = true;
     private Cursor cursor = Cursors.Default;
@@ -423,7 +423,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
             int y = frame.Y + (frame.Height * row / 2) - squareSize / 2;
 
             g.FillRectangle(Brushes.White, x, y, squareSize, squareSize);
-            g.DrawRectangle(selectionSquarePen, x, y, squareSize, squareSize);
+            g.DrawRectangle(SelectionSquarePen, x, y, squareSize, squareSize);
           }
         }
       }

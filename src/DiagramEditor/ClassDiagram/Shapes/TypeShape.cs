@@ -377,9 +377,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       // Draw shadow
       if ((!onScreen || !IsSelected) && !style.ShadowOffset.IsEmpty)
       {
-        shadowBrush.Color = style.ShadowColor;
+        ShadowBrush.Color = style.ShadowColor;
         g.TranslateTransform(style.ShadowOffset.Width, style.ShadowOffset.Height);
-        g.FillRectangle(shadowBrush, BorderRectangle);
+        g.FillRectangle(ShadowBrush, BorderRectangle);
         g.TranslateTransform(-style.ShadowOffset.Width, -style.ShadowOffset.Height);
       }
 
@@ -446,9 +446,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       // Draw shadow
       if ((!onScreen || !IsSelected) && !style.ShadowOffset.IsEmpty)
       {
-        shadowBrush.Color = style.ShadowColor;
+        ShadowBrush.Color = style.ShadowColor;
         g.TranslateTransform(style.ShadowOffset.Width, style.ShadowOffset.Height);
-        g.FillPath(shadowBrush, borderPath);
+        g.FillPath(ShadowBrush, borderPath);
         g.TranslateTransform(-style.ShadowOffset.Width, -style.ShadowOffset.Height);
       }
 
@@ -475,7 +475,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       borderPen.Color = GetBorderColor(style);
       borderPen.Width = GetBorderWidth(style);
       if (IsBorderDashed(style))
-        borderPen.DashPattern = borderDashPattern;
+        borderPen.DashPattern = BorderDashPattern;
       else
         borderPen.DashStyle = DashStyle.Solid;
 

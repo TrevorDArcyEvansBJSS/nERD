@@ -172,7 +172,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       borderPen.Color = style.CommentBorderColor;
       borderPen.Width = style.CommentBorderWidth;
       if (style.IsCommentBorderDashed)
-        borderPen.DashPattern = borderDashPattern;
+        borderPen.DashPattern = BorderDashPattern;
       else
         borderPen.DashStyle = DashStyle.Solid;
 
@@ -186,9 +186,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       // Draw shadow first
       if ((!onScreen || !IsSelected) && !style.ShadowOffset.IsEmpty)
       {
-        shadowBrush.Color = style.ShadowColor;
+        ShadowBrush.Color = style.ShadowColor;
         g.TranslateTransform(style.ShadowOffset.Width, style.ShadowOffset.Height);
-        g.FillPath(shadowBrush, path);
+        g.FillPath(ShadowBrush, path);
         g.TranslateTransform(-style.ShadowOffset.Width, -style.ShadowOffset.Height);
       }
 

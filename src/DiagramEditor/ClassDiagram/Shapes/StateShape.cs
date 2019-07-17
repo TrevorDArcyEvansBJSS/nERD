@@ -14,21 +14,21 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using NClass.Core;
-using NClass.DiagramEditor.ClassDiagram.ContextMenus;
 using NClass.DiagramEditor.ClassDiagram.Editors;
 using NClass.Translations;
-using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   internal sealed class StateShape : Shape
   {
-    private const int DefaultWidth = 160;
+    private const int DefaultWidth = 75;
     private const int DefaultHeight = 75;
     private const int MarginSize = 8;
     private const int HeaderHeight = 45;
+    private const int CornerRadius = 25;
 
     private static readonly StateEditor Editor = new StateEditor();
     private static readonly Pen BorderPen = new Pen(Color.Black);
@@ -141,40 +141,73 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       BackgroundBrush.Color = style.StateBackColor;
       BorderPen.Color = style.StateBorderColor;
       BorderPen.Width = style.StateBorderWidth;
+      ShadowBrush.Color = style.ShadowColor;
+      NameBrush.Color = style.NameColor;
 
       DrawRectangleSurface(g, onScreen, style);
     }
 
     private void DrawRectangleSurface(IGraphics g, bool onScreen, Style style)
     {
-      // Draw shadow
-      if ((!onScreen || !IsSelected) && !style.ShadowOffset.IsEmpty)
+      using (var outline = RoundedRect(BorderRectangle, CornerRadius))
       {
-        shadowBrush.Color = style.ShadowColor;
-        g.TranslateTransform(style.ShadowOffset.Width, style.ShadowOffset.Height);
-        g.FillRectangle(shadowBrush, BorderRectangle);
-        g.TranslateTransform(-style.ShadowOffset.Width, -style.ShadowOffset.Height);
+        // Draw shadow
+        if ((!onScreen || !IsSelected) && !style.ShadowOffset.IsEmpty)
+        {
+          g.TranslateTransform(style.ShadowOffset.Width, style.ShadowOffset.Height);
+          g.FillPath(ShadowBrush, outline);
+          g.TranslateTransform(-style.ShadowOffset.Width, -style.ShadowOffset.Height);
+        }
+
+        // Draw background
+        g.FillPath(BackgroundBrush, outline);
+
+        // Draw border
+        g.DrawPath(BorderPen, outline);
       }
-
-      // Draw background
-      g.FillRectangle(BackgroundBrush, BorderRectangle);
-
-      // Draw header background
-      //DrawHeaderBackground(g, style);
-
-      // Draw border
-      g.DrawRectangle(BorderPen, BorderRectangle);
     }
 
     private void DrawHeaderText(IGraphics g, Style style)
     {
       // Update styles
-      NameBrush.Color = style.NameColor;
       HeaderFormat.Alignment = GetHorizontalAlignment(style.HeaderAlignment);
 
       // Draw name
       HeaderFormat.LineAlignment = GetVerticalAlignment(style.HeaderAlignment);
       g.DrawString(State.Name, GetNameFont(style), NameBrush, CaptionRegion, HeaderFormat);
+    }
+
+    private static GraphicsPath RoundedRect(Rectangle bounds, int radius)
+    {
+      var diameter = radius * 2;
+      var size = new Size(diameter, diameter);
+      var arc = new Rectangle(bounds.Location, size);
+      var path = new GraphicsPath();
+
+      if (radius == 0)
+      {
+        path.AddRectangle(bounds);
+        return path;
+      }
+
+      // top left arc
+      path.AddArc(arc, 180, 90);
+
+      // top right arc
+      arc.X = bounds.Right - diameter;
+      path.AddArc(arc, 270, 90);
+
+      // bottom right arc
+      arc.Y = bounds.Bottom - diameter;
+      path.AddArc(arc, 0, 90);
+
+      // bottom left arc
+      arc.X = bounds.Left;
+      path.AddArc(arc, 90, 90);
+
+      path.CloseFigure();
+
+      return path;
     }
 
     public override void Draw(IGraphics g, bool onScreen, Style style)
