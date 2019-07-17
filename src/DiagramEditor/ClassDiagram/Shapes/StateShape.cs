@@ -135,11 +135,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       HideEditor();
     }
 
-    protected internal override IEnumerable<ToolStripItem> GetContextMenuItems(Diagram diagram)
-    {
-      return CommentShapeContextMenu.Default.GetMenuItems(diagram);
-    }
-
     private void DrawSurface(IGraphics g, bool onScreen, Style style)
     {
       // Update graphical objects
