@@ -37,10 +37,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     public BendPoint(Shape relativeShape, bool relativeToStartShape)
     {
-      if (relativeShape == null)
-        throw new ArgumentNullException("relativeShape");
-
-      _relativeShape = relativeShape;
+      _relativeShape = relativeShape ?? throw new ArgumentNullException("relativeShape");
       RelativeToStartShape = relativeToStartShape;
     }
 
