@@ -20,10 +20,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class CommentConnection : Connection
   {
-    public CommentConnection(CommentRelationship relationship, Shape startShape, Shape endShape)
-      : base(relationship, startShape, endShape)
+    public CommentConnection(CommentRelationship relationship, Shape startShape, Shape endShape) :
+      base(relationship, startShape, endShape)
     {
-      this.CommentRelationship = relationship;
+      CommentRelationship = relationship;
     }
 
     internal CommentRelationship CommentRelationship { get; }
