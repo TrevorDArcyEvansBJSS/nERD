@@ -88,6 +88,7 @@
     <Compile Include="ClassDiagram\Dialogs\EntityRelationshipDialog.Designer.cs">
       <DependentUpon>EntityRelationshipDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClassDiagram\Dialogs\PrintingSettings.cs" />
     <Compile Include="ClassDiagram\Editors\FloatingEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -151,7 +152,9 @@
     <Compile Include="ClassDiagram\Dialogs\OverrideDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ClassDiagram\Dialogs\DiagramPrintDialog.cs" />
+    <Compile Include="ClassDiagram\Dialogs\DiagramPrintDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ClassDiagram\Dialogs\DiagramPrintDialog.Designer.cs">
       <DependentUpon>DiagramPrintDialog.cs</DependentUpon>
     </Compile>
