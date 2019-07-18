@@ -29,23 +29,21 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
   {
     private const int DiamondWidth = 10;
     private const int DiamondHeight = 18;
-    private static readonly Point[] diamondPoints = 
+    private static readonly Point[] DiamondPoints = 
     {
       new Point(0, 0),
       new Point(DiamondWidth / 2, DiamondHeight / 2),
       new Point(0, DiamondHeight),
       new Point(-DiamondWidth / 2, DiamondHeight / 2)
     };
-    private static readonly Pen linePen = new Pen(Color.Black);
-    private static readonly SolidBrush lineBrush = new SolidBrush(Color.Black);
-    private static readonly SolidBrush textBrush = new SolidBrush(Color.Black);
-    private static readonly StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
-
-    static Association()
+    private static readonly Pen LinePen = new Pen(Color.Black)
     {
-      linePen.MiterLimit = 2.0F;
-      linePen.LineJoin = LineJoin.MiterClipped;
-    }
+      MiterLimit = 2.0F,
+      LineJoin = LineJoin.MiterClipped
+    };
+    private static readonly SolidBrush LineBrush = new SolidBrush(Color.Black);
+    private static readonly SolidBrush TextBrush = new SolidBrush(Color.Black);
+    private static readonly StringFormat StringFormat = new StringFormat(StringFormat.GenericTypographic);
 
     public Association(AssociationRelationship association, Shape startShape, Shape endShape)
       : base(association, startShape, endShape)
@@ -182,33 +180,33 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       {
         point.X -= capSize.Width / 2 + TextMargin.Width;
         point.Y += style.ShadowOffset.Height + TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Far;
-        stringFormat.LineAlignment = StringAlignment.Near;
+        StringFormat.Alignment = StringAlignment.Far;
+        StringFormat.LineAlignment = StringAlignment.Near;
       }
       else if (angle == 90) // Left
       {
         point.X -= TextMargin.Width;
         point.Y += capSize.Width / 2 + TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Far;
-        stringFormat.LineAlignment = StringAlignment.Near;
+        StringFormat.Alignment = StringAlignment.Far;
+        StringFormat.LineAlignment = StringAlignment.Near;
       }
       else if (angle == 180) // Up
       {
         point.X -= capSize.Width / 2 + TextMargin.Width;
         point.Y -= TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Far;
-        stringFormat.LineAlignment = StringAlignment.Far;
+        StringFormat.Alignment = StringAlignment.Far;
+        StringFormat.LineAlignment = StringAlignment.Far;
       }
       else // Right
       {
         point.X += style.ShadowOffset.Width + TextMargin.Width;
         point.Y += capSize.Width / 2 + TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Near;
-        stringFormat.LineAlignment = StringAlignment.Near;
+        StringFormat.Alignment = StringAlignment.Near;
+        StringFormat.LineAlignment = StringAlignment.Near;
       }
 
-      textBrush.Color = style.RelationshipTextColor;
-      g.DrawString(text, style.RelationshipTextFont, textBrush, point, stringFormat);
+      TextBrush.Color = style.RelationshipTextColor;
+      g.DrawString(text, style.RelationshipTextFont, TextBrush, point, StringFormat);
     }
 
     private void DrawStartMultiplicity(IGraphics g, Style style)
@@ -239,51 +237,51 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       {
         point.X += capSize.Width / 2 + TextMargin.Width;
         point.Y += style.ShadowOffset.Height + TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Near;
-        stringFormat.LineAlignment = StringAlignment.Near;
+        StringFormat.Alignment = StringAlignment.Near;
+        StringFormat.LineAlignment = StringAlignment.Near;
       }
       else if (angle == 90) // Left
       {
         point.X -= TextMargin.Width;
         point.Y -= capSize.Width / 2 + TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Far;
-        stringFormat.LineAlignment = StringAlignment.Far;
+        StringFormat.Alignment = StringAlignment.Far;
+        StringFormat.LineAlignment = StringAlignment.Far;
       }
       else if (angle == 180) // Up
       {
         point.X += capSize.Width / 2 + TextMargin.Width;
         point.Y -= TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Near;
-        stringFormat.LineAlignment = StringAlignment.Far;
+        StringFormat.Alignment = StringAlignment.Near;
+        StringFormat.LineAlignment = StringAlignment.Far;
       }
       else // Right
       {
         point.X += style.ShadowOffset.Width + TextMargin.Width;
         point.Y -= capSize.Width / 2 + TextMargin.Height;
-        stringFormat.Alignment = StringAlignment.Near;
-        stringFormat.LineAlignment = StringAlignment.Far;
+        StringFormat.Alignment = StringAlignment.Near;
+        StringFormat.LineAlignment = StringAlignment.Far;
       }
 
-      textBrush.Color = style.RelationshipTextColor;
-      g.DrawString(text, style.RelationshipTextFont, textBrush, point, stringFormat);
+      TextBrush.Color = style.RelationshipTextColor;
+      g.DrawString(text, style.RelationshipTextFont, TextBrush, point, StringFormat);
     }
 
     protected override void DrawStartCap(IGraphics g, bool onScreen, Style style)
     {
-      linePen.Color = style.RelationshipColor;
-      linePen.Width = style.RelationshipWidth;
+      LinePen.Color = style.RelationshipColor;
+      LinePen.Width = style.RelationshipWidth;
 
       if (AssociationRelationship.IsAggregation)
       {
-        g.FillPolygon(Brushes.White, diamondPoints);
-        g.DrawPolygon(linePen, diamondPoints);
+        g.FillPolygon(Brushes.White, DiamondPoints);
+        g.DrawPolygon(LinePen, DiamondPoints);
       }
       else if (AssociationRelationship.IsComposition)
       {
-        lineBrush.Color = style.RelationshipColor;
+        LineBrush.Color = style.RelationshipColor;
 
-        g.FillPolygon(lineBrush, diamondPoints);
-        g.DrawPolygon(linePen, diamondPoints);
+        g.FillPolygon(LineBrush, DiamondPoints);
+        g.DrawPolygon(LinePen, DiamondPoints);
       }
     }
 
@@ -291,9 +289,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     {
       if (AssociationRelationship.Direction == Direction.Unidirectional)
       {
-        linePen.Color = style.RelationshipColor;
-        linePen.Width = style.RelationshipWidth;
-        g.DrawLines(linePen, Arrowhead.OpenArrowPoints);
+        LinePen.Color = style.RelationshipColor;
+        LinePen.Width = style.RelationshipWidth;
+        g.DrawLines(LinePen, Arrowhead.OpenArrowPoints);
       }
     }
 
@@ -334,7 +332,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       float angle = GetAngle(firstPoint, secondPoint);
 
       SizeF textSize = Graphics.MeasureString(text, style.RelationshipTextFont,
-        PointF.Empty, stringFormat);
+        PointF.Empty, StringFormat);
       RectangleF area = new RectangleF(firstPoint, textSize);
 
       if (angle == 0) // Down
@@ -379,7 +377,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       float angle = GetAngle(firstPoint, secondPoint);
 
       SizeF textSize = Graphics.MeasureString(text, style.RelationshipTextFont,
-        PointF.Empty, stringFormat);
+        PointF.Empty, StringFormat);
       RectangleF area = new RectangleF(firstPoint, textSize);
 
       if (angle == 0) // Down
