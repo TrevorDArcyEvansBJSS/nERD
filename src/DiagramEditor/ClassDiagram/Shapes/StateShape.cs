@@ -28,7 +28,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     private const int DefaultHeight = 75;
     private const int MarginSize = 8;
     private const int HeaderHeight = 45;
-    private const int CornerRadius = 25;
+    private int CornerRadius => (MinimumSize.Width + MinimumSize.Height) / 4;
 
     private static readonly StateEditor Editor = new StateEditor();
     private static readonly Pen BorderPen = new Pen(Color.Black);
@@ -161,6 +161,21 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
         // Draw background
         g.FillPath(BackgroundBrush, outline);
+
+        if (State.Stage == Stage.Start)
+        {
+          g.FillPath(NameBrush, outline);
+        }
+
+        if (State.Stage == Stage.End)
+        {
+          var innerRect = BorderRectangle;
+          innerRect.Inflate(-CornerRadius / 2, -CornerRadius / 2);
+          using (var innerCircle = RoundedRect(innerRect, CornerRadius / 2))
+          {
+            g.FillPath(NameBrush, innerCircle);
+          }
+        }
 
         // Draw border
         g.DrawPath(BorderPen, outline);

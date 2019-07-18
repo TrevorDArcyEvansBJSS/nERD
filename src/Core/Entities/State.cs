@@ -13,10 +13,18 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using System;
 using System.Xml;
 
 namespace NClass.Core
 {
+    public enum Stage
+    {
+      Start,
+      Intermediate,
+      End
+    }
+
   public sealed class State : Element, IEntity
   {
     public State(string name)
@@ -44,6 +52,24 @@ namespace NClass.Core
       }
     }
 
+    private Stage _stage = Stage.Intermediate;
+    public Stage Stage
+    {
+      get
+      {
+        return _stage;
+      }
+      set
+      {
+        if (_stage != value)
+        {
+          OnBeginUndoableOperation();
+          _stage = value;
+          Changed();
+        }
+      }
+    }
+
     public EntityType EntityType => EntityType.State;
 
     public event SerializeEventHandler Serializing;
@@ -51,17 +77,21 @@ namespace NClass.Core
 
     public void Deserialize(XmlElement node)
     {
-      var nameChild = node["Name"];
-      Name = nameChild?.InnerText;
+      Name = node["Name"]?.InnerText;
+      Stage = (Stage)Enum.Parse(typeof(Stage), node["Stage"]?.InnerText ?? Stage.Intermediate.ToString());
 
       OnDeserializing(new SerializeEventArgs(node));
     }
 
     public void Serialize(XmlElement node)
     {
-      var child = node.OwnerDocument.CreateElement("Name");
-      child.InnerText = Name;
-      node.AppendChild(child);
+      var nameChild = node.OwnerDocument.CreateElement("Name");
+      nameChild.InnerText = Name;
+      node.AppendChild(nameChild);
+
+      var stageChild = node.OwnerDocument.CreateElement("Stage");
+      stageChild.InnerText = Stage.ToString();
+      node.AppendChild(stageChild);
 
       OnSerializing(new SerializeEventArgs(node));
     }
