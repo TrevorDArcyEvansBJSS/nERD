@@ -14,8 +14,10 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using NClass.Core;
+using NClass.DiagramEditor.ClassDiagram.ContextMenus;
 using NClass.DiagramEditor.ClassDiagram.Editors;
 using NClass.Translations;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -133,6 +135,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     protected internal override void MoveWindow()
     {
       HideEditor();
+    }
+
+    protected internal override IEnumerable<ToolStripItem> GetContextMenuItems(Diagram diagram)
+    {
+      return StateShapeContextMenu.Default.GetMenuItems(diagram);
     }
 
     private void DrawSurface(IGraphics g, bool onScreen, Style style)
