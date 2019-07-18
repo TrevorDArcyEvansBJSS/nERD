@@ -24,11 +24,6 @@ namespace NClass.Core
 {
   public class Model : IProjectItem
   {
-    private string name;
-    private readonly List<IEntity> entities = new List<IEntity>();
-    private readonly List<Relationship> relationships = new List<Relationship>();
-    protected Stack<XmlElement> UndoModels = new Stack<XmlElement>();
-
     public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
     public event EventHandler Renamed;
@@ -40,10 +35,15 @@ namespace NClass.Core
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
+    private string _name;
+    private readonly List<IEntity> _entities = new List<IEntity>();
+    private readonly List<Relationship> _relationships = new List<Relationship>();
+    protected Stack<XmlElement> UndoModels = new Stack<XmlElement>();
+
     // required for XML deserialisation
     protected Model()
     {
-      name = Strings.Untitled;
+      _name = Strings.Untitled;
       Language = null;
     }
 
@@ -59,7 +59,7 @@ namespace NClass.Core
       if (name != null && name.Length == 0)
         throw new ArgumentException("Name cannot empty string.");
 
-      this.name = name;
+      this._name = name;
       this.Language = language;
     }
 
@@ -67,17 +67,17 @@ namespace NClass.Core
     {
       get
       {
-        if (name == null)
+        if (_name == null)
           return Strings.Untitled;
         else
-          return name;
+          return _name;
       }
       set
       {
-        if (name != value && value != null)
+        if (_name != value && value != null)
         {
           OnBeginUndoableOperation(this, EventArgs.Empty);
-          name = value;
+          _name = value;
           OnRenamed(EventArgs.Empty);
           OnModified(EventArgs.Empty);
         }
@@ -92,7 +92,7 @@ namespace NClass.Core
     {
       get
       {
-        return (name == null);
+        return (_name == null);
       }
     }
 
@@ -104,7 +104,7 @@ namespace NClass.Core
     {
       get
       {
-        return (entities.Count == 0 && relationships.Count == 0);
+        return (_entities.Count == 0 && _relationships.Count == 0);
       }
     }
 
@@ -120,12 +120,12 @@ namespace NClass.Core
 
     public IEnumerable<IEntity> Entities
     {
-      get { return entities; }
+      get { return _entities; }
     }
 
     public IEnumerable<Relationship> Relationships
     {
-      get { return relationships; }
+      get { return _relationships; }
     }
 
     private void ElementChanged(object sender, EventArgs e)
@@ -141,7 +141,7 @@ namespace NClass.Core
       CheckForDuplicateEntityName(entity);
 
       OnBeginUndoableOperation(this, EventArgs.Empty);
-      entities.Add(entity);
+      _entities.Add(entity);
       entity.BeginUndoableOperation += new EventHandler(OnBeginUndoableOperation);
       entity.Modified += new EventHandler(ElementChanged);
       OnEntityAdded(new EntityEventArgs(entity));
@@ -153,7 +153,7 @@ namespace NClass.Core
 
       if (!Loading &&
         entity is TypeBase &&
-        entities
+        _entities
           .OfType<TypeBase>()
           .Except(new[] { entity })
           .Any(x => x.Name == entity?.Name))
@@ -178,7 +178,7 @@ namespace NClass.Core
 
     public bool InsertClass(ClassType newClass)
     {
-      if (newClass != null && !entities.Contains(newClass) && newClass.Language == Language)
+      if (newClass != null && !_entities.Contains(newClass) && newClass.Language == Language)
       {
         AddClass(newClass);
         return true;
@@ -205,7 +205,7 @@ namespace NClass.Core
 
     public bool InsertStructure(StructureType structure)
     {
-      if (structure != null && !entities.Contains(structure) &&
+      if (structure != null && !_entities.Contains(structure) &&
         structure.Language == Language)
       {
         AddStructure(structure);
@@ -233,7 +233,7 @@ namespace NClass.Core
 
     public bool InsertInterface(InterfaceType newInterface)
     {
-      if (newInterface != null && !entities.Contains(newInterface) &&
+      if (newInterface != null && !_entities.Contains(newInterface) &&
         newInterface.Language == Language)
       {
         AddInterface(newInterface);
@@ -261,7 +261,7 @@ namespace NClass.Core
 
     public bool InsertEnum(EnumType newEnum)
     {
-      if (newEnum != null && !entities.Contains(newEnum) &&
+      if (newEnum != null && !_entities.Contains(newEnum) &&
         newEnum.Language == Language)
       {
         AddEnum(newEnum);
@@ -289,7 +289,7 @@ namespace NClass.Core
 
     public bool InsertDelegate(DelegateType newDelegate)
     {
-      if (newDelegate != null && !entities.Contains(newDelegate) &&
+      if (newDelegate != null && !_entities.Contains(newDelegate) &&
         newDelegate.Language == Language)
       {
         AddDelegate(newDelegate);
@@ -317,7 +317,7 @@ namespace NClass.Core
 
     public bool InsertComment(Comment comment)
     {
-      if (comment != null && !entities.Contains(comment))
+      if (comment != null && !_entities.Contains(comment))
       {
         AddComment(comment);
         return true;
@@ -344,7 +344,7 @@ namespace NClass.Core
 
     public bool InsertState(State state)
     {
-      if (state != null && !entities.Contains(state))
+      if (state != null && !_entities.Contains(state))
       {
         AddState(state);
         return true;
@@ -360,7 +360,7 @@ namespace NClass.Core
     private void AddRelationship(Relationship relationship)
     {
       OnBeginUndoableOperation(this, EventArgs.Empty);
-      relationships.Add(relationship);
+      _relationships.Add(relationship);
       relationship.BeginUndoableOperation += new EventHandler(OnBeginUndoableOperation);
       relationship.Modified += new EventHandler(ElementChanged);
       OnRelationAdded(new RelationshipEventArgs(relationship));
@@ -382,8 +382,8 @@ namespace NClass.Core
 
     public bool InsertAssociation(AssociationRelationship associaton)
     {
-      if (associaton != null && !relationships.Contains(associaton) &&
-        entities.Contains(associaton.First) && entities.Contains(associaton.Second))
+      if (associaton != null && !_relationships.Contains(associaton) &&
+        _entities.Contains(associaton.First) && _entities.Contains(associaton.Second))
       {
         AddAssociation(associaton);
         return true;
@@ -438,8 +438,8 @@ namespace NClass.Core
 
     public bool InsertGeneralization(GeneralizationRelationship generalization)
     {
-      if (generalization != null && !relationships.Contains(generalization) &&
-        entities.Contains(generalization.First) && entities.Contains(generalization.Second))
+      if (generalization != null && !_relationships.Contains(generalization) &&
+        _entities.Contains(generalization.First) && _entities.Contains(generalization.Second))
       {
         AddGeneralization(generalization);
         return true;
@@ -471,8 +471,8 @@ namespace NClass.Core
 
     public bool InsertRealization(RealizationRelationship realization)
     {
-      if (realization != null && !relationships.Contains(realization) &&
-        entities.Contains(realization.First) && entities.Contains(realization.Second))
+      if (realization != null && !_relationships.Contains(realization) &&
+        _entities.Contains(realization.First) && _entities.Contains(realization.Second))
       {
         AddRealization(realization);
         return true;
@@ -501,9 +501,9 @@ namespace NClass.Core
     public bool InsertDependency(DependencyRelationship dependency)
     {
       if (dependency != null &&
-        !relationships.Contains(dependency) &&
-        entities.Contains(dependency.First) &&
-        entities.Contains(dependency.Second))
+        !_relationships.Contains(dependency) &&
+        _entities.Contains(dependency.First) &&
+        _entities.Contains(dependency.Second))
       {
         AddDependency(dependency);
         return true;
@@ -531,8 +531,8 @@ namespace NClass.Core
 
     public bool InsertEntityRelationship(EntityRelationship dependency)
     {
-      if (dependency != null && !relationships.Contains(dependency) &&
-        entities.Contains(dependency.First) && entities.Contains(dependency.Second))
+      if (dependency != null && !_relationships.Contains(dependency) &&
+        _entities.Contains(dependency.First) && _entities.Contains(dependency.Second))
       {
         AddEntityRelationship(dependency);
         return true;
@@ -560,8 +560,8 @@ namespace NClass.Core
 
     public bool InsertTransitionRelationship(Transition trans)
     {
-      if (trans != null && !relationships.Contains(trans) &&
-        entities.Contains(trans.First) && entities.Contains(trans.Second))
+      if (trans != null && !_relationships.Contains(trans) &&
+        _entities.Contains(trans.First) && _entities.Contains(trans.Second))
       {
         AddTransitionRelationship(trans);
         return true;
@@ -592,8 +592,8 @@ namespace NClass.Core
 
     public bool InsertNesting(NestingRelationship nesting)
     {
-      if (nesting != null && !relationships.Contains(nesting) &&
-        entities.Contains(nesting.First) && entities.Contains(nesting.Second))
+      if (nesting != null && !_relationships.Contains(nesting) &&
+        _entities.Contains(nesting.First) && _entities.Contains(nesting.Second))
       {
         AddNesting(nesting);
         return true;
@@ -621,8 +621,8 @@ namespace NClass.Core
 
     public bool InsertCommentRelationship(CommentRelationship commentRelationship)
     {
-      if (commentRelationship != null && !relationships.Contains(commentRelationship) &&
-        entities.Contains(commentRelationship.First) && entities.Contains(commentRelationship.Second))
+      if (commentRelationship != null && !_relationships.Contains(commentRelationship) &&
+        _entities.Contains(commentRelationship.First) && _entities.Contains(commentRelationship.Second))
       {
         AddCommentRelationship(commentRelationship);
         return true;
@@ -640,7 +640,7 @@ namespace NClass.Core
       RemoveRelationships(entity);
 
       OnBeginUndoableOperation(this, EventArgs.Empty);
-      if (entities.Remove(entity))
+      if (_entities.Remove(entity))
       {
         entity.BeginUndoableOperation -= new EventHandler(OnBeginUndoableOperation);
         entity.Modified -= new EventHandler(ElementChanged);
@@ -650,16 +650,16 @@ namespace NClass.Core
 
     private void RemoveRelationships(IEntity entity)
     {
-      for (int i = 0; i < relationships.Count; i++)
+      for (int i = 0; i < _relationships.Count; i++)
       {
-        Relationship relationship = relationships[i];
+        Relationship relationship = _relationships[i];
         if (relationship.First == entity || relationship.Second == entity)
         {
           OnBeginUndoableOperation(this, EventArgs.Empty);
           relationship.Detach();
           relationship.BeginUndoableOperation -= new EventHandler(OnBeginUndoableOperation);
           relationship.Modified -= new EventHandler(ElementChanged);
-          relationships.RemoveAt(i--);
+          _relationships.RemoveAt(i--);
           OnRelationRemoved(new RelationshipEventArgs(relationship));
         }
       }
@@ -667,13 +667,13 @@ namespace NClass.Core
 
     public void RemoveRelationship(Relationship relationship)
     {
-      if (relationships.Contains(relationship))
+      if (_relationships.Contains(relationship))
       {
         OnBeginUndoableOperation(this, EventArgs.Empty);
         relationship.Detach();
         relationship.BeginUndoableOperation -= new EventHandler(OnBeginUndoableOperation);
         relationship.Modified -= new EventHandler(ElementChanged);
-        relationships.Remove(relationship);
+        _relationships.Remove(relationship);
         OnRelationRemoved(new RelationshipEventArgs(relationship));
       }
     }
@@ -710,9 +710,9 @@ namespace NClass.Core
 
       XmlElement nameElement = node["Name"];
       if (nameElement == null || nameElement.InnerText == "")
-        name = null;
+        _name = null;
       else
-        name = nameElement.InnerText;
+        _name = nameElement.InnerText;
 
       XmlElement languageElement = node["Language"];
       try
@@ -821,16 +821,16 @@ namespace NClass.Core
         {
           throw new InvalidDataException(Strings.ErrorCorruptSaveFormat);
         }
-        if (firstIndex < 0 || firstIndex >= entities.Count ||
-          secondIndex < 0 || secondIndex >= entities.Count)
+        if (firstIndex < 0 || firstIndex >= _entities.Count ||
+          secondIndex < 0 || secondIndex >= _entities.Count)
         {
           throw new InvalidDataException(Strings.ErrorCorruptSaveFormat);
         }
 
         try
         {
-          IEntity first = entities[firstIndex];
-          IEntity second = entities[secondIndex];
+          IEntity first = _entities[firstIndex];
+          IEntity second = _entities[secondIndex];
           Relationship relationship;
 
           switch (type)
@@ -895,7 +895,7 @@ namespace NClass.Core
 
       XmlElement entitiesChild = node.OwnerDocument.CreateElement("Entities");
 
-      foreach (IEntity entity in entities)
+      foreach (IEntity entity in _entities)
       {
         XmlElement child = node.OwnerDocument.CreateElement("Entity");
 
@@ -913,12 +913,12 @@ namespace NClass.Core
 
       XmlElement relationsChild = root.OwnerDocument.CreateElement("Relationships");
 
-      foreach (Relationship relationship in relationships)
+      foreach (Relationship relationship in _relationships)
       {
         XmlElement child = root.OwnerDocument.CreateElement("Relationship");
 
-        int firstIndex = entities.IndexOf(relationship.First);
-        int secondIndex = entities.IndexOf(relationship.Second);
+        int firstIndex = _entities.IndexOf(relationship.First);
+        int secondIndex = _entities.IndexOf(relationship.Second);
 
         relationship.Serialize(child);
         child.SetAttribute("type", relationship.RelationshipType.ToString());
@@ -1004,8 +1004,8 @@ namespace NClass.Core
 
     protected virtual void Reset()
     {
-      relationships.Clear();
-      entities.Clear();
+      _relationships.Clear();
+      _entities.Clear();
     }
 
     public override string ToString()
