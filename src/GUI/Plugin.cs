@@ -21,29 +21,21 @@ namespace NClass.GUI
 {
   public abstract class Plugin
   {
-    NClassEnvironment environment;
-
     protected Plugin(NClassEnvironment environment)
     {
-      if (environment == null)
-        throw new ArgumentNullException("environment");
-
-      this.environment = environment;
+      NClassEnvironment = environment ?? throw new ArgumentNullException("environment");
     }
 
-    protected NClassEnvironment NClassEnvironment
-    {
-      get { return environment; }
-    }
+    protected NClassEnvironment NClassEnvironment { get; }
 
     protected Workspace Workspace
     {
-      get { return environment.Workspace; }
+      get { return NClassEnvironment.Workspace; }
     }
 
     protected DocumentManager DocumentManager
     {
-      get { return environment.DocumentManager; }
+      get { return NClassEnvironment.DocumentManager; }
     }
 
     public abstract bool IsAvailable
