@@ -54,13 +54,11 @@ namespace NClass.Core
 
     public Model(string name, Language language)
     {
-      if (language == null)
-        throw new ArgumentNullException("language");
       if (name != null && name.Length == 0)
         throw new ArgumentException("Name cannot empty string.");
 
-      this._name = name;
-      this.Language = language;
+      _name = name;
+      Language = language ?? throw new ArgumentNullException("language");
     }
 
     public string Name
