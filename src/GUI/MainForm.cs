@@ -13,103 +13,100 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using System.Collections.Generic;
-using System.Reflection;
-using System.ComponentModel;
-using System.Windows.Forms;
 using NClass.Core;
 using NClass.CSharp;
-using NClass.Java;
 using NClass.DiagramEditor;
 using NClass.DiagramEditor.ClassDiagram;
 using NClass.GUI.Dialogs;
+using NClass.Java;
 using NClass.Translations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace NClass.GUI
 {
   public sealed partial class MainForm : Form
   {
-    DocumentManager docManager = new DocumentManager();
-    bool showModelExplorer = true;
-    bool showNavigator = true;
-    DynamicMenu dynamicMenu = null;
-    List<Plugin> plugins = new List<Plugin>();
+    private readonly DocumentManager _docManager = new DocumentManager();
+    private DynamicMenu _dynamicMenu = null;
+    private List<Plugin> _plugins = new List<Plugin>();
 
     public MainForm()
     {
       InitializeComponent();
 
       tabbedWindow.Canvas.ZoomChanged += new EventHandler(Canvas_ZoomChanged);
-      tabbedWindow.DocumentManager = docManager;
+      tabbedWindow.DocumentManager = _docManager;
 
       Workspace.Default.ActiveProjectChanged += delegate { UpdateTitleBar(); };
       Workspace.Default.ActiveProjectStateChanged += delegate { UpdateTitleBar(); };
       Workspace.Default.ProjectAdded += delegate { ShowModelExplorer = true; };
-      docManager.ActiveDocumentChanged += DocManager_ActiveDocumentChanged;
+      _docManager.ActiveDocumentChanged += DocManager_ActiveDocumentChanged;
       modelExplorer.Workspace = Workspace.Default;
-      tabbedWindow.DocumentManager = docManager;
+      tabbedWindow.DocumentManager = _docManager;
       diagramNavigator.DocumentVisualizer = tabbedWindow.Canvas;
 
       UpdateTexts();
       UpdateStatusBar();
     }
 
+    private bool _showModelExplorer = true;
     private bool ShowModelExplorer
     {
       get
       {
-        return showModelExplorer;
+        return _showModelExplorer;
       }
       set
       {
-        showModelExplorer = value;
+        _showModelExplorer = value;
 
-        if (!showModelExplorer)
+        if (!_showModelExplorer)
         {
-          if (showNavigator)
+          if (_showNavigator)
             toolsPanel.Panel1Collapsed = true;
           else
             windowClient.Panel2Collapsed = true;
-          showModelExplorer = false;
+          _showModelExplorer = false;
         }
         else
         {
           toolsPanel.Panel1Collapsed = false;
           windowClient.Panel2Collapsed = false;
-          if (!showNavigator)
+          if (!_showNavigator)
             toolsPanel.Panel2Collapsed = true;
         }
       }
     }
 
+    private bool _showNavigator = true;
     private bool ShowNavigator
     {
       get
       {
-        return showNavigator;
+        return _showNavigator;
       }
       set
       {
-        showNavigator = value;
+        _showNavigator = value;
 
-        if (!showNavigator)
+        if (!_showNavigator)
         {
-          if (showModelExplorer)
+          if (_showModelExplorer)
             toolsPanel.Panel2Collapsed = true;
           else
             windowClient.Panel2Collapsed = true;
-          showNavigator = false;
+          _showNavigator = false;
         }
         else
         {
           toolsPanel.Panel2Collapsed = false;
           windowClient.Panel2Collapsed = false;
-          if (!showModelExplorer)
+          if (!_showModelExplorer)
             toolsPanel.Panel1Collapsed = true;
         }
       }
@@ -144,11 +141,11 @@ namespace NClass.GUI
           Strings.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
 
-      if (plugins.Count > 0)
+      if (_plugins.Count > 0)
       {
         mnuPlugins.Visible = true;
 
-        foreach (Plugin plugin in plugins)
+        foreach (Plugin plugin in _plugins)
         {
           mnuPlugins.DropDownItems.Add(plugin.MenuItem);
           plugin.MenuItem.Tag = plugin;
@@ -165,9 +162,9 @@ namespace NClass.GUI
           if (type.IsSubclassOf(typeof(Plugin)))
           {
             NClassEnvironment environment =
-              new NClassEnvironment(Workspace.Default, docManager);
+              new NClassEnvironment(Workspace.Default, _docManager);
             Plugin plugin = (Plugin)Activator.CreateInstance(type, environment);
-            plugins.Add(plugin);
+            _plugins.Add(plugin);
           }
         }
       }
@@ -306,7 +303,7 @@ namespace NClass.GUI
       }
       else
       {
-        this.Text = "nERD";
+        Text = "nERD";
       }
     }
 
@@ -314,21 +311,20 @@ namespace NClass.GUI
     {
       DynamicMenu newMenu = null;
 
-      if (docManager.HasDocument)
-        newMenu = docManager.ActiveDocument.GetDynamicMenu();
+      if (_docManager.HasDocument)
+        newMenu = _docManager.ActiveDocument.GetDynamicMenu();
 
-      if (newMenu != dynamicMenu)
+      if (newMenu != _dynamicMenu)
       {
-        if (dynamicMenu != null)
+        if (_dynamicMenu != null)
         {
-          foreach (ToolStripMenuItem menuItem in dynamicMenu)
+          foreach (ToolStripMenuItem menuItem in _dynamicMenu)
           {
             MainMenuStrip.Items.Remove(menuItem);
           }
-          ToolStrip toolStrip = dynamicMenu.GetToolStrip();
-          if (toolStrip != null)
-            toolStripContainer.TopToolStripPanel.Controls.Remove(toolStrip);
-          dynamicMenu.SetReference(null);
+          ToolStrip toolStrip = _dynamicMenu.GetToolStrip();
+            toolStripContainer?.TopToolStripPanel.Controls.Remove(toolStrip);
+          _dynamicMenu.SetReference(null);
         }
         if (newMenu != null)
         {
@@ -347,7 +343,7 @@ namespace NClass.GUI
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
           }
         }
-        dynamicMenu = newMenu;
+        _dynamicMenu = newMenu;
       }
     }
 
@@ -356,20 +352,20 @@ namespace NClass.GUI
       toolNewCSharpDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolNewJavaDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolSave.Enabled = Workspace.Default.HasActiveProject;
-      toolPrint.Enabled = docManager.HasDocument;
-      toolZoom.Enabled = docManager.HasDocument;
-      toolZoomIn.Enabled = docManager.HasDocument;
-      toolZoomOut.Enabled = docManager.HasDocument;
-      toolZoomValue.Enabled = docManager.HasDocument;
-      toolAutoZoom.Enabled = docManager.HasDocument && !docManager.ActiveDocument.IsEmpty;
-      toolUndo.Enabled = docManager.HasDocument && docManager.ActiveDocument.CanUndo;
+      toolPrint.Enabled = _docManager.HasDocument;
+      toolZoom.Enabled = _docManager.HasDocument;
+      toolZoomIn.Enabled = _docManager.HasDocument;
+      toolZoomOut.Enabled = _docManager.HasDocument;
+      toolZoomValue.Enabled = _docManager.HasDocument;
+      toolAutoZoom.Enabled = _docManager.HasDocument && !_docManager.ActiveDocument.IsEmpty;
+      toolUndo.Enabled = _docManager.HasDocument && _docManager.ActiveDocument.CanUndo;
     }
 
     private void UpdateClipboardToolBar()
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        IDocument document = docManager.ActiveDocument;
+        IDocument document = _docManager.ActiveDocument;
         toolCut.Enabled = document.CanCutToClipboard;
         toolCopy.Enabled = document.CanCopyToClipboard;
         toolPaste.Enabled = document.CanPasteFromClipboard;
@@ -384,10 +380,10 @@ namespace NClass.GUI
 
     private void UpdateStatusBar()
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        lblStatus.Text = docManager.ActiveDocument.GetStatus();
-        lblLanguage.Text = docManager.ActiveDocument.GetShortDescription();
+        lblStatus.Text = _docManager.ActiveDocument.GetStatus();
+        lblLanguage.Text = _docManager.ActiveDocument.GetShortDescription();
       }
       else
       {
@@ -419,13 +415,13 @@ namespace NClass.GUI
     private void MainForm_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.Control && e.KeyCode == Keys.Tab)
-        docManager.SwitchDocument();
+        _docManager.SwitchDocument();
     }
 
     private void MainForm_KeyUp(object sender, KeyEventArgs e)
     {
-      if (docManager.SwitchingTabs && !e.Control)
-        docManager.EndSwitching();
+      if (_docManager.SwitchingTabs && !e.Control)
+        _docManager.EndSwitching();
     }
 
     private void OpenRecentFile_Click(object sender, EventArgs e)
@@ -440,13 +436,13 @@ namespace NClass.GUI
 
     private void DocManager_ActiveDocumentChanged(object sender, DocumentEventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        Workspace.Default.ActiveProject = docManager.ActiveDocument.Project;
-        docManager.ActiveDocument.Modified += ActiveDocument_Modified;
-        docManager.ActiveDocument.StatusChanged += ActiveDocument_StatusChanged;
-        docManager.ActiveDocument.ClipboardAvailabilityChanged += ActiveDocument_ClipboardAvailabilityChanged;
-        docManager.ActiveDocument.BeginUndoableOperation += ActiveDocument_BeginUndoableOperation;
+        Workspace.Default.ActiveProject = _docManager.ActiveDocument.Project;
+        _docManager.ActiveDocument.Modified += ActiveDocument_Modified;
+        _docManager.ActiveDocument.StatusChanged += ActiveDocument_StatusChanged;
+        _docManager.ActiveDocument.ClipboardAvailabilityChanged += ActiveDocument_ClipboardAvailabilityChanged;
+        _docManager.ActiveDocument.BeginUndoableOperation += ActiveDocument_BeginUndoableOperation;
       }
       else
       {
@@ -475,7 +471,7 @@ namespace NClass.GUI
 
     private void ActiveDocument_Modified(object sender, EventArgs e)
     {
-      toolAutoZoom.Enabled = (docManager.HasDocument && !docManager.ActiveDocument.IsEmpty);
+      toolAutoZoom.Enabled = (_docManager.HasDocument && !_docManager.ActiveDocument.IsEmpty);
     }
 
     private void ActiveDocument_StatusChanged(object sender, EventArgs e)
@@ -496,7 +492,7 @@ namespace NClass.GUI
 
     private void ModelExplorer_DocumentOpening(object sender, DocumentEventArgs e)
     {
-      docManager.AddOrActivate(e.Document);
+      _docManager.AddOrActivate(e.Document);
     }
 
     #region File menu event handlers
@@ -534,7 +530,7 @@ namespace NClass.GUI
         mnuCloseAllProjects.Enabled = false;
       }
 
-      mnuPrint.Enabled = docManager.HasDocument;
+      mnuPrint.Enabled = _docManager.HasDocument;
     }
 
     private void mnuNew_DropDownOpening(object sender, EventArgs e)
@@ -616,9 +612,9 @@ namespace NClass.GUI
 
     private void mnuPrint_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        IPrintable document = docManager.ActiveDocument;
+        IPrintable document = _docManager.ActiveDocument;
         document.ShowPrintDialog();
       }
     }
@@ -644,9 +640,9 @@ namespace NClass.GUI
 
     private void mnuEdit_DropDownOpening(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        IDocument document = docManager.ActiveDocument;
+        IDocument document = _docManager.ActiveDocument;
 
         mnuUndo.Enabled = document.CanUndo;
         mnuRedo.Enabled = document.CanRedo;
@@ -681,51 +677,51 @@ namespace NClass.GUI
 
     private void mnuUndo_Click(object sender, EventArgs e)
     {
-      docManager.ActiveDocument.Undo();
+      _docManager.ActiveDocument.Undo();
     }
 
     private void mnuRedo_Click(object sender, EventArgs e)
     {
-      docManager.ActiveDocument.Redo();
+      _docManager.ActiveDocument.Redo();
     }
 
     private void mnuCut_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Cut();
+        _docManager.ActiveDocument.Cut();
       }
     }
 
     private void mnuCopy_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Copy();
+        _docManager.ActiveDocument.Copy();
       }
     }
 
     private void mnuPaste_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Paste();
+        _docManager.ActiveDocument.Paste();
       }
     }
 
     private void mnuDelete_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.DeleteSelectedElements();
+        _docManager.ActiveDocument.DeleteSelectedElements();
       }
     }
 
     private void mnuSelectAll_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.SelectAll();
+        _docManager.ActiveDocument.SelectAll();
       }
     }
 
@@ -735,9 +731,9 @@ namespace NClass.GUI
 
     private void mnuView_DropDownOpening(object sender, EventArgs e)
     {
-      mnuZoom.Enabled = docManager.HasDocument;
-      mnuAutoZoom.Enabled = docManager.HasDocument && !docManager.ActiveDocument.IsEmpty;
-      mnuCloseAllDocuments.Enabled = docManager.HasDocument;
+      mnuZoom.Enabled = _docManager.HasDocument;
+      mnuAutoZoom.Enabled = _docManager.HasDocument && !_docManager.ActiveDocument.IsEmpty;
+      mnuCloseAllDocuments.Enabled = _docManager.HasDocument;
 
       mnuModelExplorer.Checked = ShowModelExplorer;
       mnuDiagramNavigator.Checked = ShowNavigator;
@@ -795,7 +791,7 @@ namespace NClass.GUI
 
     private void mnuCloseAllDocuments_Click(object sender, EventArgs e)
     {
-      docManager.CloseAll();
+      _docManager.CloseAll();
     }
 
     private void mnuOptions_Click(object sender, EventArgs e)
@@ -804,15 +800,15 @@ namespace NClass.GUI
       {
         dialog.StyleModified += new EventHandler(dialog_StyleChanged);
         dialog.ShowDialog();
-        if (docManager.HasDocument)
-          docManager.ActiveDocument.Redraw();
+        if (_docManager.HasDocument)
+          _docManager.ActiveDocument.Redraw();
       }
     }
 
     private void dialog_StyleChanged(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
-        docManager.ActiveDocument.Redraw();
+      if (_docManager.HasDocument)
+        _docManager.ActiveDocument.Redraw();
     }
 
     #endregion
@@ -881,33 +877,33 @@ namespace NClass.GUI
 
     private void toolCut_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Cut();
+        _docManager.ActiveDocument.Cut();
       }
     }
 
     private void toolCopy_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Copy();
+        _docManager.ActiveDocument.Copy();
       }
     }
 
     private void toolPaste_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Paste();
+        _docManager.ActiveDocument.Paste();
       }
     }
 
     private void toolUndo_Click(object sender, EventArgs e)
     {
-      if (docManager.HasDocument)
+      if (_docManager.HasDocument)
       {
-        docManager.ActiveDocument.Undo();
+        _docManager.ActiveDocument.Undo();
       }
     }
 
