@@ -45,7 +45,7 @@ namespace NClass.Core
       if (name.Length == 0)
         throw new ArgumentException("Name cannot empty string.");
 
-      this._name = name;
+      _name = name;
     }
 
     private string _name;
