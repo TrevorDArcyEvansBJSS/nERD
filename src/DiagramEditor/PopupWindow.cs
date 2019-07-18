@@ -20,9 +20,7 @@ namespace NClass.DiagramEditor
 {
   public class PopupWindow : UserControl
   {
-    const int ClientMargin = 20;
-
-    Point parentLocation;
+    private const int ClientMargin = 20;
 
     public new Point Location
     {
@@ -49,17 +47,18 @@ namespace NClass.DiagramEditor
       }
     }
 
+    private Point _parentLocation;
     internal Point ParentLocation
     {
       get
       {
-        return parentLocation;
+        return _parentLocation;
       }
       set
       {
-        Size offset = new Size(value.X - parentLocation.X, value.Y - parentLocation.Y);
-        parentLocation = value;
-        this.Location += offset;
+        Size offset = new Size(value.X - _parentLocation.X, value.Y - _parentLocation.Y);
+        _parentLocation = value;
+        Location += offset;
       }
     }
 
