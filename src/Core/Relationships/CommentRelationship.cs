@@ -22,13 +22,8 @@ namespace NClass.Core
   {
     internal CommentRelationship(Comment comment, IEntity entity)
     {
-      if (comment == null)
-        throw new ArgumentNullException("comment");
-      if (entity == null)
-        throw new ArgumentNullException("entity");
-
-      First = comment;
-      Second = entity;
+      First = comment ?? throw new ArgumentNullException("comment");
+      Second = entity ?? throw new ArgumentNullException("entity");
       RelationshipType = RelationshipType.Comment;
       Attach();
     }
