@@ -25,13 +25,11 @@ namespace NClass.GUI.ModelExplorer
 {
   public sealed class DiagramNode : ProjectItemNode
   {
-    Diagram diagram;
-
-    static ContextMenuStrip contextMenu = new ContextMenuStrip();
+    private static readonly ContextMenuStrip _contextMenu = new ContextMenuStrip();
 
     static DiagramNode()
     {
-      contextMenu.Items.AddRange(new ToolStripItem[] {
+      _contextMenu.Items.AddRange(new ToolStripItem[] {
         new ToolStripMenuItem(Strings.MenuOpen, Resources.Open, open_Click),
         new ToolStripMenuItem(Strings.MenuRename, null, renameItem_Click, Keys.F2),
         new ToolStripSeparator(),
@@ -44,7 +42,7 @@ namespace NClass.GUI.ModelExplorer
       if (diagram == null)
         throw new ArgumentNullException("diagram");
 
-      this.diagram = diagram;
+      this.Diagram = diagram;
       this.Text = diagram.Name;
       this.ImageKey = "diagram";
       this.SelectedImageKey = "diagram";
@@ -52,22 +50,19 @@ namespace NClass.GUI.ModelExplorer
       diagram.Renamed += new EventHandler(diagram_Renamed);
     }
 
-    public Diagram Diagram
-    {
-      get { return diagram; }
-    }
+    public Diagram Diagram { get; }
 
     public override IProjectItem ProjectItem
     {
-      get { return diagram; }
+      get { return Diagram; }
     }
 
     public override ContextMenuStrip ContextMenuStrip
     {
       get
       {
-        contextMenu.Tag = this;
-        return contextMenu;
+        _contextMenu.Tag = this;
+        return _contextMenu;
       }
       set
       {
@@ -77,29 +72,28 @@ namespace NClass.GUI.ModelExplorer
 
     public override void BeforeDelete()
     {
-      diagram.Renamed -= new EventHandler(diagram_Renamed);
+      Diagram.Renamed -= new EventHandler(diagram_Renamed);
       base.BeforeDelete();
     }
 
     public override void LabelModified(NodeLabelEditEventArgs e)
     {
-      diagram.Name = e.Label;
+      Diagram.Name = e.Label;
     }
 
     public override void DoubleClick()
     {
-      this.ModelView.OnDocumentOpening(new DocumentEventArgs(diagram));
+      ModelView.OnDocumentOpening(new DocumentEventArgs(Diagram));
     }
 
     public override void EnterPressed()
     {
-      if (ModelView != null)
-        ModelView.OnDocumentOpening(new DocumentEventArgs(diagram));
+        ModelView?.OnDocumentOpening(new DocumentEventArgs(Diagram));
     }
 
     private void diagram_Renamed(object sender, EventArgs e)
     {
-      Text = diagram.Name;
+      Text = Diagram.Name;
     }
 
     private static void open_Click(object sender, EventArgs e)
