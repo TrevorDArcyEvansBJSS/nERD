@@ -48,19 +48,16 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public static readonly Pen SelectionPen;
 
-    private DiagramElement activeElement = null;
-    private Point offset = Point.Empty;
-    private float zoom = 1.0F;
-    private Size size = MinSize;
-    private Mode state = Mode.Normal;
-    private bool selectioning = false;
-    private RectangleF selectionFrame = RectangleF.Empty;
-    private PointF mouseLocation = PointF.Empty;
-    private bool redrawSuspended = false;
-    private Rectangle shapeOutline = Rectangle.Empty;
-    private EntityType shapeType;
-    private EntityType newShapeType = EntityType.Class;
-    private ConnectionCreator connectionCreator = null;
+    private DiagramElement _activeElement = null;
+    private Mode _state = Mode.Normal;
+    private bool _selectioning = false;
+    private RectangleF _selectionFrame = RectangleF.Empty;
+    private PointF _mouseLocation = PointF.Empty;
+    private bool _redrawSuspended = false;
+    private Rectangle _shapeOutline = Rectangle.Empty;
+    private EntityType _shapeType;
+    private EntityType _newShapeType = EntityType.Class;
+    private ConnectionCreator _connectionCreator = null;
 
     public event EventHandler OffsetChanged;
     public event EventHandler SizeChanged;
@@ -107,58 +104,61 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     internal ElementList<Connection> ConnectionList { get; } = new ElementList<Connection>();
 
+    private Point _offset = Point.Empty;
     public Point Offset
     {
       get
       {
-        return offset;
+        return _offset;
       }
       set
       {
         if (value.X < 0) value.X = 0;
         if (value.Y < 0) value.Y = 0;
 
-        if (offset != value)
+        if (_offset != value)
         {
-          offset = value;
+          _offset = value;
           OnOffsetChanged(EventArgs.Empty);
         }
       }
     }
 
+    private Size _size = MinSize;
     public Size Size
     {
       get
       {
-        return size;
+        return _size;
       }
       set
       {
         if (value.Width < MinSize.Width) value.Width = MinSize.Width;
         if (value.Height < MinSize.Height) value.Height = MinSize.Height;
 
-        if (size != value)
+        if (_size != value)
         {
-          size = value;
+          _size = value;
           OnSizeChanged(EventArgs.Empty);
         }
       }
     }
 
+    private float _zoom = 1.0F;
     public float Zoom
     {
       get
       {
-        return zoom;
+        return _zoom;
       }
       set
       {
         if (value < Canvas.MinZoom) value = Canvas.MinZoom;
         if (value > Canvas.MaxZoom) value = Canvas.MaxZoom;
 
-        if (zoom != value)
+        if (_zoom != value)
         {
-          zoom = value;
+          _zoom = value;
           OnZoomChanged(EventArgs.Empty);
         }
       }
@@ -173,14 +173,14 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       get
       {
-        return redrawSuspended;
+        return _redrawSuspended;
       }
       set
       {
-        if (redrawSuspended != value)
+        if (_redrawSuspended != value)
         {
-          redrawSuspended = value;
-          if (!redrawSuspended)
+          _redrawSuspended = value;
+          if (!_redrawSuspended)
           {
             RecalculateSize();
             RequestRedrawIfNeeded();
@@ -218,15 +218,15 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       get
       {
-        return activeElement;
+        return _activeElement;
       }
       private set
       {
-        if (activeElement != null)
+        if (_activeElement != null)
         {
-          activeElement.IsActive = false;
+          _activeElement.IsActive = false;
         }
-        activeElement = value;
+        _activeElement = value;
       }
     }
 
@@ -384,14 +384,14 @@ namespace NClass.DiagramEditor.ClassDiagram
           element.Draw(graphics, true);
         element.NeedsRedraw = false;
       }
-      if (state == Mode.CreatingShape)
+      if (_state == Mode.CreatingShape)
       {
         g.DrawRectangle(SelectionPen,
-          shapeOutline.X, shapeOutline.Y, shapeOutline.Width, shapeOutline.Height);
+          _shapeOutline.X, _shapeOutline.Y, _shapeOutline.Width, _shapeOutline.Height);
       }
-      else if (state == Mode.CreatingConnection)
+      else if (_state == Mode.CreatingConnection)
       {
-        connectionCreator.Draw(g);
+        _connectionCreator.Draw(g);
       }
 
       // Draw selection lines
@@ -409,13 +409,13 @@ namespace NClass.DiagramEditor.ClassDiagram
           connection.DrawSelectionLines(g, Zoom, Offset);
       }
 
-      if (state == Mode.Multiselecting)
+      if (_state == Mode.Multiselecting)
       {
         RectangleF frame = RectangleF.FromLTRB(
-          Math.Min(selectionFrame.Left, selectionFrame.Right),
-          Math.Min(selectionFrame.Top, selectionFrame.Bottom),
-          Math.Max(selectionFrame.Left, selectionFrame.Right),
-          Math.Max(selectionFrame.Top, selectionFrame.Bottom));
+          Math.Min(_selectionFrame.Left, _selectionFrame.Right),
+          Math.Min(_selectionFrame.Top, _selectionFrame.Bottom),
+          Math.Max(_selectionFrame.Left, _selectionFrame.Right),
+          Math.Max(_selectionFrame.Top, _selectionFrame.Bottom));
         g.DrawRectangle(SelectionPen,
           frame.X * Zoom - Offset.X,
           frame.Y * Zoom - Offset.Y,
@@ -769,7 +769,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     public void SelectAll()
     {
       RedrawSuspended = true;
-      selectioning = true;
+      _selectioning = true;
 
       foreach (Shape shape in ShapeList)
       {
@@ -787,7 +787,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       OnClipboardAvailabilityChanged(EventArgs.Empty);
       OnStatusChanged(EventArgs.Empty);
 
-      selectioning = false;
+      _selectioning = false;
       RedrawSuspended = false;
     }
 
@@ -949,15 +949,15 @@ namespace NClass.DiagramEditor.ClassDiagram
     public void MouseDown(AbsoluteMouseEventArgs e)
     {
       RedrawSuspended = true;
-      if (state == Mode.CreatingShape)
+      if (_state == Mode.CreatingShape)
       {
         AddCreatedShape();
       }
-      else if (state == Mode.CreatingConnection)
+      else if (_state == Mode.CreatingConnection)
       {
-        connectionCreator.MouseDown(e);
-        if (connectionCreator.Created)
-          state = Mode.Normal;
+        _connectionCreator.MouseDown(e);
+        if (_connectionCreator.Created)
+          _state = Mode.Normal;
       }
       else
       {
@@ -977,8 +977,8 @@ namespace NClass.DiagramEditor.ClassDiagram
       try
       {
         DeselectAll();
-        Shape shape = AddShape(shapeType);
-        shape.Location = shapeOutline.Location;
+        Shape shape = AddShape(_shapeType);
+        shape.Location = _shapeOutline.Location;
         RecalculateSize();
 
         shape.IsSelected = true;
@@ -992,7 +992,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       }
       finally
       {
-        state = Mode.Normal;
+        _state = Mode.Normal;
       }
     }
 
@@ -1025,9 +1025,9 @@ namespace NClass.DiagramEditor.ClassDiagram
 
         if (e.Button == MouseButtons.Left)
         {
-          state = Mode.Multiselecting;
-          selectionFrame.Location = e.Location;
-          selectionFrame.Size = Size.Empty;
+          _state = Mode.Multiselecting;
+          _selectionFrame.Location = e.Location;
+          _selectionFrame.Size = Size.Empty;
         }
       }
     }
@@ -1036,21 +1036,21 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       RedrawSuspended = true;
 
-      mouseLocation = e.Location;
-      if (state == Mode.Multiselecting)
+      _mouseLocation = e.Location;
+      if (_state == Mode.Multiselecting)
       {
-        selectionFrame = RectangleF.FromLTRB(
-          selectionFrame.Left, selectionFrame.Top, e.X, e.Y);
+        _selectionFrame = RectangleF.FromLTRB(
+          _selectionFrame.Left, _selectionFrame.Top, e.X, e.Y);
         Redraw();
       }
-      else if (state == Mode.CreatingShape)
+      else if (_state == Mode.CreatingShape)
       {
-        shapeOutline.Location = new Point((int)e.X, (int)e.Y);
+        _shapeOutline.Location = new Point((int)e.X, (int)e.Y);
         Redraw();
       }
-      else if (state == Mode.CreatingConnection)
+      else if (_state == Mode.CreatingConnection)
       {
-        connectionCreator.MouseMove(e);
+        _connectionCreator.MouseMove(e);
       }
       else
       {
@@ -1067,10 +1067,10 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       RedrawSuspended = true;
 
-      if (state == Mode.Multiselecting)
+      if (_state == Mode.Multiselecting)
       {
         TrySelectElements();
-        state = Mode.Normal;
+        _state = Mode.Normal;
       }
       else
       {
@@ -1085,21 +1085,21 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void TrySelectElements()
     {
-      selectionFrame = RectangleF.FromLTRB(
-        Math.Min(selectionFrame.Left, selectionFrame.Right),
-        Math.Min(selectionFrame.Top, selectionFrame.Bottom),
-        Math.Max(selectionFrame.Left, selectionFrame.Right),
-        Math.Max(selectionFrame.Top, selectionFrame.Bottom));
-      selectioning = true;
+      _selectionFrame = RectangleF.FromLTRB(
+        Math.Min(_selectionFrame.Left, _selectionFrame.Right),
+        Math.Min(_selectionFrame.Top, _selectionFrame.Bottom),
+        Math.Max(_selectionFrame.Left, _selectionFrame.Right),
+        Math.Max(_selectionFrame.Top, _selectionFrame.Bottom));
+      _selectioning = true;
 
       foreach (Shape shape in ShapeList)
       {
-        if (shape.TrySelect(selectionFrame))
+        if (shape.TrySelect(_selectionFrame))
           SelectedShapeCount++;
       }
       foreach (Connection connection in ConnectionList)
       {
-        if (connection.TrySelect(selectionFrame))
+        if (connection.TrySelect(_selectionFrame))
           SelectedConnectionCount++;
       }
 
@@ -1108,7 +1108,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       OnStatusChanged(EventArgs.Empty);
       Redraw();
 
-      selectioning = false;
+      _selectioning = false;
     }
 
     public void DoubleClick(AbsoluteMouseEventArgs e)
@@ -1137,7 +1137,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         // Escape
         else if (e.KeyCode == Keys.Escape)
         {
-          state = Mode.Normal;
+          _state = Mode.Normal;
           DeselectAll();
           Redraw();
         }
@@ -1520,7 +1520,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void Shape_SelectionChanged(object sender, EventArgs e)
     {
-      if (!selectioning)
+      if (!_selectioning)
       {
         Shape shape = (Shape)sender;
 
@@ -1542,7 +1542,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void Connection_SelectionChanged(object sender, EventArgs e)
     {
-      if (!selectioning)
+      if (!_selectioning)
       {
         Connection connection = (Connection)sender;
 
@@ -1605,14 +1605,14 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void CreateShape()
     {
-      CreateShape(newShapeType);
+      CreateShape(_newShapeType);
     }
 
     public void CreateShape(EntityType type)
     {
-      state = Mode.CreatingShape;
-      shapeType = type;
-      newShapeType = type;
+      _state = Mode.CreatingShape;
+      _shapeType = type;
+      _newShapeType = type;
 
       switch (type)
       {
@@ -1622,17 +1622,17 @@ namespace NClass.DiagramEditor.ClassDiagram
         case EntityType.Interface:
         case EntityType.Structure:
         case EntityType.State:
-          shapeOutline = TypeShape.GetOutline(Style.CurrentStyle);
+          _shapeOutline = TypeShape.GetOutline(Style.CurrentStyle);
           break;
 
         case EntityType.Comment:
-          shapeOutline = CommentShape.GetOutline(Style.CurrentStyle);
+          _shapeOutline = CommentShape.GetOutline(Style.CurrentStyle);
           break;
 
         default:
           throw new ArgumentOutOfRangeException($"Unknown EntityType: {type}");
       }
-      shapeOutline.Location = new Point((int)mouseLocation.X, (int)mouseLocation.Y);
+      _shapeOutline.Location = new Point((int)_mouseLocation.X, (int)_mouseLocation.Y);
       Redraw();
     }
 
@@ -1720,8 +1720,8 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void CreateConnection(RelationshipType type)
     {
-      connectionCreator = new ConnectionCreator(this, type);
-      state = Mode.CreatingConnection;
+      _connectionCreator = new ConnectionCreator(this, type);
+      _state = Mode.CreatingConnection;
     }
 
     protected override void AddAssociation(AssociationRelationship association)
