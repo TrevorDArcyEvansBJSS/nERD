@@ -25,13 +25,12 @@ namespace NClass.GUI
 {
   public class DiagramNavigator : Control
   {
-    IDocumentVisualizer visualizer = null;
-    Color frameColor = SystemColors.ControlDarkDark;
+    private IDocumentVisualizer visualizer = null;
 
     public DiagramNavigator()
     {
       SetStyle(ControlStyles.UserPaint, true);
-      this.DoubleBuffered = true;
+      DoubleBuffered = true;
     }
 
     [Browsable(false)]
@@ -61,11 +60,7 @@ namespace NClass.GUI
     }
 
     [DefaultValue(typeof(Color), "ControlDarkDark")]
-    public Color FrameColor
-    {
-      get { return frameColor; }
-      set { frameColor = value; }
-    }
+    public Color FrameColor { get; set; } = SystemColors.ControlDarkDark;
 
     private void visualizer_DocumentRedrawed(object sender, EventArgs e)
     {
@@ -122,7 +117,6 @@ namespace NClass.GUI
         g.SmoothingMode = SmoothingMode.AntiAlias;
         g.TextRenderingHint = TextRenderingHint.AntiAlias;
 
-        Rectangle borders = this.ClientRectangle;
         float zoom = GetZoom();
         g.ScaleTransform(zoom, zoom);
 
