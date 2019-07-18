@@ -39,13 +39,10 @@ namespace NClass.GUI.ModelExplorer
 
     public DiagramNode(Diagram diagram)
     {
-      if (diagram == null)
-        throw new ArgumentNullException("diagram");
-
-      this.Diagram = diagram;
-      this.Text = diagram.Name;
-      this.ImageKey = "diagram";
-      this.SelectedImageKey = "diagram";
+      Diagram = diagram ?? throw new ArgumentNullException("diagram");
+      Text = diagram.Name;
+      ImageKey = "diagram";
+      SelectedImageKey = "diagram";
 
       diagram.Renamed += new EventHandler(diagram_Renamed);
     }
