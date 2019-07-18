@@ -24,19 +24,16 @@ namespace NClass.GUI.ModelExplorer
 {
   public sealed class EmptyProjectNode : ModelNode
   {
-    Project project;
+    private readonly Project _project;
 
     public EmptyProjectNode(Project project)
     {
-      if (project == null)
-        throw new ArgumentNullException("project");
-
-      this.project = project;
+      _project = project ?? throw new ArgumentNullException("project");
       project.ItemAdded += new ProjectItemEventHandler(project_ItemAdded);
 
-      this.Text = Strings.DoubleClickToAddDiagram;
-      this.ImageKey = "diagram";
-      this.SelectedImageKey = "diagram";
+      Text = Strings.DoubleClickToAddDiagram;
+      ImageKey = "diagram";
+      SelectedImageKey = "diagram";
     }
 
     protected internal override void AfterInitialized()
@@ -47,7 +44,7 @@ namespace NClass.GUI.ModelExplorer
 
     private void project_ItemAdded(object sender, ProjectItemEventArgs e)
     {
-      this.Delete();
+      Delete();
     }
 
     public override void LabelModified(NodeLabelEditEventArgs e)
@@ -59,9 +56,9 @@ namespace NClass.GUI.ModelExplorer
     {
       TreeNode parent = Parent;
 
-      this.Delete();
+      Delete();
       Diagram diagram = new Diagram(Settings.Default.GetDefaultLanguage());
-      project.Add(diagram);
+      _project.Add(diagram);
     }
 
     public override void DoubleClick()
@@ -76,7 +73,7 @@ namespace NClass.GUI.ModelExplorer
 
     public override void BeforeDelete()
     {
-      project.ItemAdded -= new ProjectItemEventHandler(project_ItemAdded);
+      _project.ItemAdded -= new ProjectItemEventHandler(project_ItemAdded);
       NodeFont.Dispose();
       base.BeforeDelete();
     }
