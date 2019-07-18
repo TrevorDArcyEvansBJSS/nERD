@@ -23,28 +23,24 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   internal sealed class EnumShape : TypeShape
   {
-    static EnumEditor typeEditor = new EnumEditor();
-    static EnumValueEditor valueEditor = new EnumValueEditor();
-    static EnumDialog enumDialog = new EnumDialog();
-    static SolidBrush itemBrush = new SolidBrush(Color.Black);
+    private static readonly EnumEditor TypeEditor = new EnumEditor();
+    private static readonly EnumValueEditor ValueEditor = new EnumValueEditor();
+    private static readonly EnumDialog EnumDialog = new EnumDialog();
+    private static readonly SolidBrush ItemBrush = new SolidBrush(Color.Black);
 
-    EnumType _enum;
-
-    internal EnumShape(EnumType _enum) : base(_enum)
+    internal EnumShape(EnumType _enum) : 
+      base(_enum)
     {
-      this._enum = _enum;
+      EnumType = _enum;
       UpdateMinSize();
     }
 
     public override TypeBase TypeBase
     {
-      get { return _enum; }
+      get { return EnumType; }
     }
 
-    public EnumType EnumType
-    {
-      get { return _enum; }
-    }
+    public EnumType EnumType { get; }
 
     internal EnumValue ActiveValue
     {
@@ -79,20 +75,20 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override TypeEditor HeaderEditor
     {
-      get { return typeEditor; }
+      get { return TypeEditor; }
     }
 
     protected override EditorWindow ContentEditor
     {
-      get { return valueEditor; }
+      get { return ValueEditor; }
     }
 
     protected override EditorWindow GetEditorWindow()
     {
       if (ActiveValue == null)
-        return typeEditor;
+        return TypeEditor;
       else
-        return valueEditor;
+        return ValueEditor;
     }
 
     protected internal override bool DeleteSelectedMember(bool showConfirmation)
@@ -167,7 +163,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected internal override void EditMembers()
     {
-      enumDialog.ShowDialog(EnumType);
+      EnumDialog.ShowDialog(EnumType);
     }
 
     protected override void OnMouseDown(AbsoluteMouseEventArgs e)
@@ -230,7 +226,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       Font font = GetFont(style);
       string memberString = value.ToString();
-      itemBrush.Color = style.EnumItemColor;
+      ItemBrush.Color = style.EnumItemColor;
 
       if (style.UseIcons)
       {
@@ -241,11 +237,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
           record.X + IconSpacing, record.Y,
           record.Width - IconSpacing, record.Height);
 
-        g.DrawString(memberString, font, itemBrush, textBounds, memberFormat);
+        g.DrawString(memberString, font, ItemBrush, textBounds, MemberFormat);
       }
       else
       {
-        g.DrawString(memberString, font, itemBrush, record, memberFormat);
+        g.DrawString(memberString, font, ItemBrush, record, MemberFormat);
       }
     }
 
@@ -284,7 +280,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       foreach (EnumValue value in EnumType.Values)
       {
         float itemWidth = g.MeasureString(value.ToString(),
-          font, PointF.Empty, memberFormat).Width;
+          font, PointF.Empty, MemberFormat).Width;
         requiredWidth = Math.Max(requiredWidth, itemWidth);
       }
 
