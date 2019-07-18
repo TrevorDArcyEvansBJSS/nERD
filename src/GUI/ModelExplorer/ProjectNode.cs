@@ -27,12 +27,11 @@ namespace NClass.GUI.ModelExplorer
 {
   public sealed class ProjectNode : ModelNode
   {
-    Project project;
-    static ContextMenuStrip contextMenu = new ContextMenuStrip();
+    private static readonly ContextMenuStrip _contextMenu = new ContextMenuStrip();
 
     static ProjectNode()
     {
-      contextMenu.Items.AddRange(new ToolStripItem[] {
+      _contextMenu.Items.AddRange(new ToolStripItem[] {
         new ToolStripMenuItem(Strings.MenuAddNew, Resources.NewDocument,
           new ToolStripMenuItem(Strings.MenuCSharpDiagram, null, newCSharpDiagram_Click),
           new ToolStripMenuItem(Strings.MenuJavaDiagram, null, newJavaDiagram_Click)
@@ -48,13 +47,10 @@ namespace NClass.GUI.ModelExplorer
 
     public ProjectNode(Project project)
     {
-      if (project == null)
-        throw new ArgumentNullException("project");
-
-      this.project = project;
-      this.Text = project.Name;
-      this.ImageKey = "project";
-      this.SelectedImageKey = "project";
+      Project = project ?? throw new ArgumentNullException("project");
+      Text = project.Name;
+      ImageKey = "project";
+      SelectedImageKey = "project";
 
       AddProjectItemNodes(project);
       project.Renamed += new EventHandler(project_Renamed);
@@ -62,17 +58,14 @@ namespace NClass.GUI.ModelExplorer
       project.ItemRemoved += new ProjectItemEventHandler(project_ItemRemoved);
     }
 
-    public Project Project
-    {
-      get { return project; }
-    }
+    public Project Project { get; }
 
     public override ContextMenuStrip ContextMenuStrip
     {
       get
       {
-        contextMenu.Tag = this;
-        return contextMenu;
+        _contextMenu.Tag = this;
+        return _contextMenu;
       }
       set
       {
@@ -102,9 +95,8 @@ namespace NClass.GUI.ModelExplorer
     {
       ModelNode node = null;
 
-      if (projectItem is Diagram)
+      if (projectItem is Diagram diagram)
       {
-        Diagram diagram = (Diagram)projectItem;
         node = new DiagramNode(diagram);
         if (TreeView != null)
           ModelView.OnDocumentOpening(new DocumentEventArgs(diagram));
@@ -140,15 +132,15 @@ namespace NClass.GUI.ModelExplorer
 
     public override void LabelModified(NodeLabelEditEventArgs e)
     {
-      project.Name = e.Label;
+      Project.Name = e.Label;
 
-      if (project.Name != e.Label)
+      if (Project.Name != e.Label)
         e.CancelEdit = true;
     }
 
     private void project_Renamed(object sender, EventArgs e)
     {
-      Text = project.Name;
+      Text = Project.Name;
     }
 
     private void project_ItemAdded(object sender, ProjectItemEventArgs e)
@@ -159,9 +151,9 @@ namespace NClass.GUI.ModelExplorer
     private void project_ItemRemoved(object sender, ProjectItemEventArgs e)
     {
       RemoveProjectItemNode(e.ProjectItem);
-      if (project.IsEmpty)
+      if (Project.IsEmpty)
       {
-        ModelNode node = new EmptyProjectNode(project);
+        ModelNode node = new EmptyProjectNode(Project);
         Nodes.Add(node);
         if (TreeView != null)
           node.AfterInitialized();
@@ -170,9 +162,9 @@ namespace NClass.GUI.ModelExplorer
 
     public override void BeforeDelete()
     {
-      project.Renamed -= new EventHandler(project_Renamed);
-      project.ItemAdded -= new ProjectItemEventHandler(project_ItemAdded);
-      project.ItemRemoved -= new ProjectItemEventHandler(project_ItemRemoved);
+      Project.Renamed -= new EventHandler(project_Renamed);
+      Project.ItemAdded -= new ProjectItemEventHandler(project_ItemAdded);
+      Project.ItemRemoved -= new ProjectItemEventHandler(project_ItemRemoved);
       base.BeforeDelete();
     }
 
