@@ -13,103 +13,82 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using NClass.DiagramEditor.Properties;
 using NClass.Translations;
+using System;
+using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
 {
-	public sealed class GeneralContextMenu : DiagramContextMenu
-	{
-		static GeneralContextMenu _default = new GeneralContextMenu();
+  public sealed class GeneralContextMenu : DiagramContextMenu
+  {
+    private readonly ToolStripMenuItem mnuCut;
+    private readonly ToolStripMenuItem mnuCopy;
+    private readonly ToolStripMenuItem mnuDelete;
+    private readonly ToolStripMenuItem mnuCopyAsImage;
+    private readonly ToolStripMenuItem mnuSaveAsImage;
 
-		ToolStripMenuItem mnuCut;
-		ToolStripMenuItem mnuCopy;
-		ToolStripMenuItem mnuDelete;
-		ToolStripMenuItem mnuCopyAsImage;
-		ToolStripMenuItem mnuSaveAsImage;
+    private GeneralContextMenu()
+    {
+      mnuCut = new ToolStripMenuItem(Strings.MenuCut, Resources.Cut, mnuCut_Click);
+      mnuCopy = new ToolStripMenuItem(Strings.MenuCopy, Resources.Copy, mnuCopy_Click);
+      mnuDelete = new ToolStripMenuItem(Strings.MenuDelete, Resources.Delete, mnuDelete_Click);
+      mnuCopyAsImage = new ToolStripMenuItem(Strings.MenuCopyImageToClipboard, Resources.CopyAsImage, mnuCopyAsImage_Click);
+      mnuSaveAsImage = new ToolStripMenuItem(Strings.MenuSaveSelectionAsImage, Resources.Image, mnuSaveAsImage_Click);
 
-		private GeneralContextMenu()
-		{
-			InitMenuItems();
-		}
+      MenuList.AddRange(new ToolStripItem[] {
+        mnuCut,
+        mnuCopy,
+        mnuDelete,
+        new ToolStripSeparator(),
+        mnuCopyAsImage,
+        mnuSaveAsImage,
+      });
 
-		public static GeneralContextMenu Default
-		{
-			get { return _default; }
-		}
+      UpdateTexts();
+    }
 
-		private void UpdateTexts()
-		{
-			mnuCut.Text = Strings.MenuCut;
-			mnuCopy.Text = Strings.MenuCopy;
-			mnuDelete.Text = Strings.MenuDelete;
-			mnuCopyAsImage.Text = Strings.MenuCopyImageToClipboard;
-			mnuSaveAsImage.Text = Strings.MenuSaveSelectionAsImage;
-		}
+    public static GeneralContextMenu Default { get; } = new GeneralContextMenu();
 
-		public override void ValidateMenuItems(Diagram diagram)
-		{
-			base.ValidateMenuItems(diagram);
-			mnuCut.Enabled = diagram.CanCutToClipboard;
-			mnuCopy.Enabled = diagram.CanCopyToClipboard;
-		}
+    private void UpdateTexts()
+    {
+      mnuCut.Text = Strings.MenuCut;
+      mnuCopy.Text = Strings.MenuCopy;
+      mnuDelete.Text = Strings.MenuDelete;
+      mnuCopyAsImage.Text = Strings.MenuCopyImageToClipboard;
+      mnuSaveAsImage.Text = Strings.MenuSaveSelectionAsImage;
+    }
 
-		private void InitMenuItems()
-		{
-			mnuCut = new ToolStripMenuItem(Strings.MenuCut,
-				Resources.Cut, mnuCut_Click);
-			mnuCopy = new ToolStripMenuItem(Strings.MenuCopy,
-				Resources.Copy, mnuCopy_Click);
-			mnuDelete = new ToolStripMenuItem(Strings.MenuDelete,
-				Resources.Delete, mnuDelete_Click);
-			mnuCopyAsImage = new ToolStripMenuItem(
-				Strings.MenuCopyImageToClipboard,
-				Resources.CopyAsImage, mnuCopyAsImage_Click);
-			mnuSaveAsImage = new ToolStripMenuItem(
-				Strings.MenuSaveSelectionAsImage,
-				Resources.Image, mnuSaveAsImage_Click);
+    public override void ValidateMenuItems(Diagram diagram)
+    {
+      base.ValidateMenuItems(diagram);
+      mnuCut.Enabled = diagram.CanCutToClipboard;
+      mnuCopy.Enabled = diagram.CanCopyToClipboard;
+    }
 
-			MenuList.AddRange(new ToolStripItem[] {
-				mnuCut,
-				mnuCopy,
-				mnuDelete,
-				new ToolStripSeparator(),
-				mnuCopyAsImage,
-				mnuSaveAsImage,
-			});
-		}
+    private void mnuCut_Click(object sender, EventArgs e)
+    {
+      Diagram?.Cut();
+    }
 
-		private void mnuCut_Click(object sender, EventArgs e)
-		{
-			if (Diagram != null)
-				Diagram.Cut();
-		}
+    private void mnuCopy_Click(object sender, EventArgs e)
+    {
+      Diagram?.Copy();
+    }
 
-		private void mnuCopy_Click(object sender, EventArgs e)
-		{
-			if (Diagram != null)
-				Diagram.Copy();
-		}
+    private void mnuDelete_Click(object sender, EventArgs e)
+    {
+      Diagram?.DeleteSelectedElements();
+    }
 
-		private void mnuDelete_Click(object sender, EventArgs e)
-		{
-			if (Diagram != null)
-				Diagram.DeleteSelectedElements();
-		}
+    private void mnuCopyAsImage_Click(object sender, EventArgs e)
+    {
+      Diagram?.CopyAsImage();
+    }
 
-		private void mnuCopyAsImage_Click(object sender, EventArgs e)
-		{
-			if (Diagram != null)
-				Diagram.CopyAsImage();
-		}
-
-		private void mnuSaveAsImage_Click(object sender, EventArgs e)
-		{
-			if (Diagram != null)
-				Diagram.SaveAsImage(true);
-		}
-	}
+    private void mnuSaveAsImage_Click(object sender, EventArgs e)
+    {
+      Diagram?.SaveAsImage(true);
+    }
+  }
 }
