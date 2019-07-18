@@ -24,12 +24,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     private const int Radius = 9;
     private const int Diameter = Radius * 2;
     private const int CrossSize = 8;
-    private static Pen linePen = new Pen(Color.Black);
+    private static readonly Pen LinePen = new Pen(Color.Black);
 
-    public Nesting(NestingRelationship nesting, Shape startShape, Shape endShape)
-      : base(nesting, startShape, endShape)
+    public Nesting(NestingRelationship nesting, Shape startShape, Shape endShape): 
+      base(nesting, startShape, endShape)
     {
-      this.NestingRelationship = nesting;
+      NestingRelationship = nesting;
     }
 
     internal NestingRelationship NestingRelationship { get; }
@@ -51,21 +51,18 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override void DrawStartCap(IGraphics g, bool onScreen, Style style)
     {
-      linePen.Color = style.RelationshipColor;
-      linePen.Width = style.RelationshipWidth;
+      LinePen.Color = style.RelationshipColor;
+      LinePen.Width = style.RelationshipWidth;
 
       g.FillEllipse(Brushes.White, -Radius, 0, Diameter, Diameter);
-      g.DrawEllipse(linePen, -Radius, 0, Diameter, Diameter);
-      g.DrawLine(linePen, 0, Radius - CrossSize / 2, 0, Radius + CrossSize / 2);
-      g.DrawLine(linePen, -CrossSize / 2, Radius, CrossSize / 2, Radius);
+      g.DrawEllipse(LinePen, -Radius, 0, Diameter, Diameter);
+      g.DrawLine(LinePen, 0, Radius - CrossSize / 2, 0, Radius + CrossSize / 2);
+      g.DrawLine(LinePen, -CrossSize / 2, Radius, CrossSize / 2, Radius);
     }
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
     {
-      CompositeType firstType = first.Entity as CompositeType;
-      TypeBase secondType = second.Entity as TypeBase;
-
-      if (firstType != null && secondType != null)
+      if (first.Entity is CompositeType firstType && second.Entity is TypeBase secondType)
       {
         NestingRelationship clone = NestingRelationship.Clone(firstType, secondType);
         return diagram.InsertNesting(clone);
