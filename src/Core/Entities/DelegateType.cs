@@ -21,16 +21,16 @@ namespace NClass.Core
 {
   public abstract class DelegateType : TypeBase
   {
-    string returnType;
-    ArgumentList argumentList;
+    private string _returnType;
+    private ArgumentList _argumentList;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
     protected DelegateType(string name) : base(name)
     {
-      argumentList = Language.CreateParameterCollection();
-      returnType = DefaultReturnType;
+      _argumentList = Language.CreateParameterCollection();
+      _returnType = DefaultReturnType;
     }
 
     public sealed override EntityType EntityType
@@ -45,16 +45,16 @@ namespace NClass.Core
     {
       get
       {
-        return returnType;
+        return _returnType;
       }
       set
       {
         string newReturnType = Language.GetValidTypeName(value);
 
-        if (newReturnType != returnType)
+        if (newReturnType != _returnType)
         {
           OnBeginUndoableOperation();
-          returnType = newReturnType;
+          _returnType = newReturnType;
           Changed();
         }
       }
@@ -62,12 +62,12 @@ namespace NClass.Core
 
     public IEnumerable<Parameter> Arguments
     {
-      get { return argumentList; }
+      get { return _argumentList; }
     }
 
     public int ArgumentCount
     {
-      get { return argumentList.Count; }
+      get { return _argumentList.Count; }
     }
 
     public sealed override string Signature
@@ -90,8 +90,8 @@ namespace NClass.Core
 
     public Parameter GetArgument(int index)
     {
-      if (index >= 0 && index < argumentList.Count)
-        return argumentList[index];
+      if (index >= 0 && index < _argumentList.Count)
+        return _argumentList[index];
       else
         return null;
     }
@@ -104,7 +104,7 @@ namespace NClass.Core
     /// </exception>
     public Parameter AddParameter(string declaration)
     {
-      Parameter parameter = argumentList.Add(declaration);
+      Parameter parameter = _argumentList.Add(declaration);
 
       OnBeginUndoableOperation();
       parameter.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
@@ -122,7 +122,7 @@ namespace NClass.Core
     public Parameter ModifyParameter(Parameter parameter, string declaration)
     {
       OnBeginUndoableOperation();
-      Parameter modified = argumentList.ModifyParameter(parameter, declaration);
+      Parameter modified = _argumentList.ModifyParameter(parameter, declaration);
       Changed();
 
       return modified;
@@ -131,13 +131,13 @@ namespace NClass.Core
     public void RemoveParameter(Parameter parameter)
     {
       OnBeginUndoableOperation();
-      argumentList.Remove(parameter);
+      _argumentList.Remove(parameter);
       Changed();
     }
 
     public override bool MoveUpItem(object item)
     {
-      if (item is Parameter && MoveUp(argumentList, item))
+      if (item is Parameter && MoveUp(_argumentList, item))
       {
         OnBeginUndoableOperation();
         Changed();
@@ -156,7 +156,7 @@ namespace NClass.Core
         OnBeginUndoableOperation();
       }
 
-      if (item is Parameter && MoveDown(argumentList, item))
+      if (item is Parameter && MoveDown(_argumentList, item))
       {
         Changed();
         return true;
@@ -172,8 +172,8 @@ namespace NClass.Core
       base.CopyFrom(type);
 
       DelegateType delegateType = (DelegateType)type;
-      returnType = delegateType.returnType;
-      argumentList = delegateType.argumentList.Clone();
+      _returnType = delegateType._returnType;
+      _argumentList = delegateType._argumentList.Clone();
     }
 
     public abstract DelegateType Clone();
@@ -186,7 +186,7 @@ namespace NClass.Core
       returnTypeNode.InnerText = ReturnType.ToString();
       node.AppendChild(returnTypeNode);
 
-      foreach (Parameter parameter in argumentList)
+      foreach (Parameter parameter in _argumentList)
       {
         XmlElement paramNode = node.OwnerDocument.CreateElement("Param");
         paramNode.InnerText = parameter.ToString();
@@ -210,7 +210,7 @@ namespace NClass.Core
 
       XmlNodeList nodeList = node.SelectNodes("Param");
       foreach (XmlNode parameterNode in nodeList)
-        argumentList.Add(parameterNode.InnerText);
+        _argumentList.Add(parameterNode.InnerText);
 
       base.Deserialize(node);
       RaisePreChangedEvent = RaiseChangedEvent = true;
