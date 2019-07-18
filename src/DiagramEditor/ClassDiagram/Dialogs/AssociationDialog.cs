@@ -13,26 +13,24 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.Translations;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.ComponentModel;
 using System.Windows.Forms;
-using NClass.Core;
-using NClass.Translations;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
   public partial class AssociationDialog : Form
   {
-    const int ArrowWidth = 18;
-    const int ArrowHeight = 10;
-    const int DiamondWidth = 20;
-    const int DiamondHeight = 10;
+    private const int ArrowWidth = 18;
+    private const int ArrowHeight = 10;
+    private const int DiamondWidth = 20;
+    private const int DiamondHeight = 10;
 
-    AssociationRelationship association = null;
-    Direction modifiedDirection;
-    AssociationType modifiedType;
+    private Direction _modifiedDirection;
+    private AssociationType _modifiedType;
 
     public AssociationDialog()
     {
@@ -40,17 +38,18 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       UpdateTexts();
     }
 
+    private AssociationRelationship _association = null;
     public AssociationRelationship Association
     {
       get
       {
-        return association;
+        return _association;
       }
       set
       {
         if (value != null)
         {
-          association = value;
+          _association = value;
           UpdateFields();
         }
       }
@@ -65,25 +64,25 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void UpdateFields()
     {
-      modifiedDirection = association.Direction;
-      modifiedType = association.AssociationType;
+      _modifiedDirection = _association.Direction;
+      _modifiedType = _association.AssociationType;
 
-      txtName.Text = association.Label;
-      txtStartRole.Text = association.StartRole;
-      txtEndRole.Text = association.EndRole;
-      cboStartMultiplicity.Text = association.StartMultiplicity;
-      cboEndMultiplicity.Text = association.EndMultiplicity;
+      txtName.Text = _association.Label;
+      txtStartRole.Text = _association.StartRole;
+      txtEndRole.Text = _association.EndRole;
+      cboStartMultiplicity.Text = _association.StartMultiplicity;
+      cboEndMultiplicity.Text = _association.EndMultiplicity;
     }
 
     private void ModifyRelationship()
     {
-      association.AssociationType = modifiedType;
-      association.Direction = modifiedDirection;
-      association.Label = txtName.Text;
-      association.StartRole = txtStartRole.Text;
-      association.EndRole = txtEndRole.Text;
-      association.StartMultiplicity = cboStartMultiplicity.Text;
-      association.EndMultiplicity = cboEndMultiplicity.Text;
+      _association.AssociationType = _modifiedType;
+      _association.Direction = _modifiedDirection;
+      _association.Label = txtName.Text;
+      _association.StartRole = txtStartRole.Text;
+      _association.EndRole = txtEndRole.Text;
+      _association.StartMultiplicity = cboStartMultiplicity.Text;
+      _association.EndMultiplicity = cboEndMultiplicity.Text;
     }
 
     private void PicArrow_MouseDown(object sender, MouseEventArgs e)
@@ -102,29 +101,29 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void ChangeType()
     {
-      if (modifiedType == AssociationType.Association)
+      if (_modifiedType == AssociationType.Association)
       {
-        modifiedType = AssociationType.Aggregation;
+        _modifiedType = AssociationType.Aggregation;
       }
-      else if (modifiedType == AssociationType.Aggregation)
+      else if (_modifiedType == AssociationType.Aggregation)
       {
-        modifiedType = AssociationType.Composition;
+        _modifiedType = AssociationType.Composition;
       }
       else
       {
-        modifiedType = AssociationType.Association;
+        _modifiedType = AssociationType.Association;
       }
     }
 
     private void ChangeHead()
     {
-      if (modifiedDirection == Direction.Bidirectional)
+      if (_modifiedDirection == Direction.Bidirectional)
       {
-        modifiedDirection = Direction.Unidirectional;
+        _modifiedDirection = Direction.Unidirectional;
       }
       else
       {
-        modifiedDirection = Direction.Bidirectional;
+        _modifiedDirection = Direction.Bidirectional;
       }
     }
 
@@ -139,14 +138,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       g.DrawLine(Pens.Black, 0, center, width, center);
 
       // Draw arrow head
-      if (modifiedDirection == Direction.Unidirectional)
+      if (_modifiedDirection == Direction.Unidirectional)
       {
         g.DrawLine(Pens.Black, width - ArrowWidth, center - ArrowHeight / 2, width, center);
         g.DrawLine(Pens.Black, width - ArrowWidth, center + ArrowHeight / 2, width, center);
       }
 
       // Draw start symbol
-      if (modifiedType != AssociationType.Association)
+      if (_modifiedType != AssociationType.Association)
       {
         Point[] diamondPoints =
         {
@@ -156,12 +155,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
           new Point(DiamondWidth / 2, center + DiamondHeight / 2)
         };
 
-        if (modifiedType == AssociationType.Aggregation)
+        if (_modifiedType == AssociationType.Aggregation)
         {
           g.FillPolygon(Brushes.White, diamondPoints);
           g.DrawPolygon(Pens.Black, diamondPoints);
         }
-        else if (modifiedType == AssociationType.Composition)
+        else if (_modifiedType == AssociationType.Composition)
         {
           g.FillPolygon(Brushes.Black, diamondPoints);
         }
@@ -170,7 +169,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void BtnOK_Click(object sender, EventArgs e)
     {
-      if (association != null)
+      if (_association != null)
       {
         ModifyRelationship();
       }
