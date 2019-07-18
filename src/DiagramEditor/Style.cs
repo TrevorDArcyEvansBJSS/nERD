@@ -13,18 +13,14 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Threading;
-using System.Globalization;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using NClass.Translations;
-using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NClass.DiagramEditor
 {
@@ -40,115 +36,12 @@ namespace NClass.DiagramEditor
   [DefaultProperty("AttributeColor")]
   public sealed class Style : IDisposable
   {
-    static Style currentStyle;
-    static SortedList<string, Style> styles = new SortedList<string, Style>();
-
-    static string settingsDir = Path.Combine(
-      Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NClass");
-    static string stylesDir = Path.Combine(settingsDir, "UserStyles");
-    static string userStylePath = Path.Combine(settingsDir, "style.dst");
-
     public static event EventHandler CurrentStyleChanged;
 
-    #region Fields
-
-    // General fields
-    string name = null;
-    string author = null;
-    Color backgroundColor = Color.White;
-    Size shadowOffset = new Size(4, 4);
-    Color shadowColor = Color.FromArgb(70, Color.Black);
-
-    // Type fields
-    bool showSignature = false;
-    bool showStereotypes = true;
-    bool useIcons = false;
-    Color identifierColor = Color.Black;
-    Color nameColor = Color.Black;
-    Color attributeColor = Color.Black;
-    Color operationColor = Color.Black;
-    ContentAlignment headerAlignment = ContentAlignment.MiddleCenter;
-    Font nameFont = new Font("Arial", 9.75F, FontStyle.Bold);
-    Font identifierFont = new Font("Tahoma", 6.75F);
-    Font memberFont = new Font("Tahoma", 8.25F);
-    [NonSerialized]
-    Font abstractNameFont;
-    [NonSerialized]
-    Font staticMemberFont;
-    [NonSerialized]
-    Font abstractMemberFont;
-
-    // Class fields
-    int classBorderWidth = 1;
-    int classRoundingSize = 0;
-    bool isClassBorderDashed = false;
-    Color classBackgroundColor = Color.White;
-    Color classBorderColor = Color.Black;
-    Color classHeaderColor = Color.White;
-    GradientStyle classGradientHeaderStyle = GradientStyle.None;
-
-    // Modified class fields
-    int abstractClassBorderWidth = 1;
-    int sealedClassBorderWidth = 1;
-    int staticClassBorderWidth = 1;
-    bool isAbstractClassBorderDashed = false;
-    bool isSealedClassBorderDashed = false;
-    bool isStaticClassBorderDashed = false;
-
-    // Structure fields
-    int structureBorderWidth = 1;
-    int structureRoundingSize = 0;
-    bool isStructureBorderDashed = false;
-    Color structureBackgroundColor = Color.White;
-    Color structureBorderColor = Color.Black;
-    Color structureHeaderColor = Color.White;
-    GradientStyle structureGradientHeaderStyle = GradientStyle.None;
-
-    // Interface fields
-    int interfaceBorderWidth = 1;
-    int interfaceRoundingSize = 0;
-    bool isInterfaceBorderDashed = false;
-    Color interfaceBackgroundColor = Color.White;
-    Color interfaceBorderColor = Color.Black;
-    Color interfaceHeaderColor = Color.White;
-    GradientStyle interfaceGradientHeaderStyle = GradientStyle.None;
-
-    // Enum fields
-    int enumBorderWidth = 1;
-    int enumRoundingSize = 0;
-    bool isEnumBorderDashed = false;
-    Color enumBackgroundColor = Color.White;
-    Color enumBorderColor = Color.Black;
-    Color enumHeaderColor = Color.White;
-    Color enumItemColor = Color.Black;
-    GradientStyle enumGradientHeaderStyle = GradientStyle.None;
-
-    // Delegate fields
-    int delegateBorderWidth = 1;
-    int delegateRoundingSize = 0;
-    bool isDelegateBorderDashed = false;
-    Color delegateBackgroundColor = Color.White;
-    Color delegateBorderColor = Color.Black;
-    Color delegateHeaderColor = Color.White;
-    Color delegateParameterColor = Color.Black;
-    GradientStyle delegateGradientHeaderStyle = GradientStyle.None;
-
-    // Comment fields
-    int commentBorderWidth = 1;
-    bool isCommentBorderDashed = false;
-    Color commentBackColor = Color.White;
-    Color commentBorderColor = Color.Black;
-    Color textColor = Color.Black;
-    Font commentFont = new Font("Tahoma", 8.25F);
-
-    // Relationship fields
-    int relationshipDashSize = 5;
-    int relationshipWidth = 1;
-    Color relationshipColor = Color.Black;
-    Color relationshipTextColor = Color.Black;
-    Font relationshipTextFont = new Font("Tahoma", 8.25F);
-
-    #endregion
+    private static readonly SortedList<string, Style> Styles = new SortedList<string, Style>();
+    private static readonly string SettingsDir = Path.Combine(
+      Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NClass");
+    private static readonly string UserStylePath = Path.Combine(SettingsDir, "style.dst");
 
     static Style()
     {
@@ -163,29 +56,30 @@ namespace NClass.DiagramEditor
 
     public Style()
     {
-      abstractNameFont = new Font(nameFont, nameFont.Style | FontStyle.Italic);
-      staticMemberFont = new Font(memberFont, memberFont.Style | FontStyle.Underline);
-      abstractMemberFont = new Font(memberFont, memberFont.Style | FontStyle.Italic);
+      _abstractNameFont = new Font(_nameFont, _nameFont.Style | FontStyle.Italic);
+      _staticMemberFont = new Font(_memberFont, _memberFont.Style | FontStyle.Underline);
+      _abstractMemberFont = new Font(_memberFont, _memberFont.Style | FontStyle.Italic);
     }
 
-    public static IEnumerable<Style> AvaiableStyles
+    public static IEnumerable<Style> AvailableStyles
     {
-      get { return styles.Values; }
+      get { return Styles.Values; }
     }
 
+    private static Style _currentStyle;
     public static Style CurrentStyle
     {
       get
       {
-        return currentStyle;
+        return _currentStyle;
       }
       set
       {
-        if (value != null && currentStyle != value)
+        if (value != null && _currentStyle != value)
         {
-          if (currentStyle != null)
-            currentStyle.Dispose();
-          currentStyle = (Style)value.Clone();
+          if (_currentStyle != null)
+            _currentStyle.Dispose();
+          _currentStyle = (Style)value.Clone();
           SaveCurrentStyle();
           if (CurrentStyleChanged != null)
             CurrentStyleChanged(null, EventArgs.Empty);
@@ -193,10 +87,7 @@ namespace NClass.DiagramEditor
       }
     }
 
-    public static string StylesDirectory
-    {
-      get { return stylesDir; }
-    }
+    public static string StylesDirectory { get; } = Path.Combine(SettingsDir, "UserStyles");
 
     #region Style Information
 
@@ -205,47 +96,49 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return string.IsNullOrEmpty(name);
+        return string.IsNullOrEmpty(_name);
       }
     }
 
+    private string _name = null;
     [DisplayName("Style Name"), Category("(Style Information)")]
     [Description("The name of the current style.")]
     public string Name
     {
       get
       {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(_name))
           return Strings.Untitled;
         else
-          return name;
+          return _name;
       }
       set
       {
         if (value == Strings.Untitled)
-          name = null;
+          _name = null;
         else
-          name = value;
+          _name = value;
       }
     }
 
+    private string _author = null;
     [DisplayName("Author"), Category("(Style Information)")]
     [Description("The author of the current style.")]
     public string Author
     {
       get
       {
-        if (string.IsNullOrEmpty(author))
+        if (string.IsNullOrEmpty(_author))
           return Strings.Unknown;
         else
-          return author;
+          return _author;
       }
       set
       {
         if (value == Strings.Unknown)
-          author = null;
+          _author = null;
         else
-          author = value;
+          _author = value;
       }
     }
 
@@ -256,11 +149,7 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("(Background)")]
     [Description("The background color for the diagram.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color BackgroundColor
-    {
-      get { return backgroundColor; }
-      set { backgroundColor = value; }
-    }
+    public Color BackgroundColor { get; set; } = Color.White;
 
     #endregion
 
@@ -269,11 +158,7 @@ namespace NClass.DiagramEditor
     [DisplayName("Attribute Color"), Category("(All Types)")]
     [Description("The text color of a type's attributes.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color AttributeColor
-    {
-      get { return attributeColor; }
-      set { attributeColor = value; }
-    }
+    public Color AttributeColor { get; set; } = Color.Black;
 
     [DisplayName("Background Color"), Category("(All Types)")]
     [Description("The background color for all types.")]
@@ -282,12 +167,12 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        Color color = classBackgroundColor;
+        Color color = ClassBackgroundColor;
 
-        if (structureBackgroundColor == color &&
-          interfaceBackgroundColor == color &&
-          enumBackgroundColor == color &&
-          delegateBackgroundColor == color)
+        if (StructureBackgroundColor == color &&
+          InterfaceBackgroundColor == color &&
+          EnumBackgroundColor == color &&
+          DelegateBackgroundColor == color)
         {
           return color;
         }
@@ -300,11 +185,11 @@ namespace NClass.DiagramEditor
       {
         if (value != Color.Empty)
         {
-          classBackgroundColor = value;
-          structureBackgroundColor = value;
-          interfaceBackgroundColor = value;
-          enumBackgroundColor = value;
-          delegateBackgroundColor = value;
+          ClassBackgroundColor = value;
+          StructureBackgroundColor = value;
+          InterfaceBackgroundColor = value;
+          EnumBackgroundColor = value;
+          DelegateBackgroundColor = value;
         }
       }
     }
@@ -316,12 +201,12 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        Color color = classBorderColor;
+        Color color = ClassBorderColor;
 
-        if (structureBorderColor == color &&
-          interfaceBorderColor == color &&
-          enumBorderColor == color &&
-          delegateBorderColor == color)
+        if (StructureBorderColor == color &&
+          InterfaceBorderColor == color &&
+          EnumBorderColor == color &&
+          DelegateBorderColor == color)
         {
           return color;
         }
@@ -334,15 +219,16 @@ namespace NClass.DiagramEditor
       {
         if (value != Color.Empty)
         {
-          classBorderColor = value;
-          structureBorderColor = value;
-          interfaceBorderColor = value;
-          enumBorderColor = value;
-          delegateBorderColor = value;
+          ClassBorderColor = value;
+          StructureBorderColor = value;
+          InterfaceBorderColor = value;
+          EnumBorderColor = value;
+          DelegateBorderColor = value;
         }
       }
     }
 
+    private int _classBorderWidth = 1;
     [DisplayName("Border Width"), Category("(All Types)")]
     [Description("The border width for all types.")]
     [DefaultValue(1)]
@@ -350,15 +236,15 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        int width = classBorderWidth;
+        int width = _classBorderWidth;
 
-        if (structureBorderWidth == width &&
-          interfaceBorderWidth == width &&
-          enumBorderWidth == width &&
-          delegateBorderWidth == width &&
-          abstractClassBorderWidth == width &&
-          sealedClassBorderWidth == width &&
-          staticClassBorderWidth == width)
+        if (_structureBorderWidth == width &&
+          _interfaceBorderWidth == width &&
+          _enumBorderWidth == width &&
+          _delegateBorderWidth == width &&
+          _abstractClassBorderWidth == width &&
+          _sealedClassBorderWidth == width &&
+          _staticClassBorderWidth == width)
         {
           return width;
         }
@@ -373,14 +259,14 @@ namespace NClass.DiagramEditor
         {
           int width = (value.Value < 1) ? 1 : value.Value;
 
-          classBorderWidth = width;
-          structureBorderWidth = width;
-          interfaceBorderWidth = width;
-          enumBorderWidth = width;
-          delegateBorderWidth = width;
-          abstractClassBorderWidth = width;
-          sealedClassBorderWidth = width;
-          staticClassBorderWidth = width;
+          _classBorderWidth = width;
+          _structureBorderWidth = width;
+          _interfaceBorderWidth = width;
+          _enumBorderWidth = width;
+          _delegateBorderWidth = width;
+          _abstractClassBorderWidth = width;
+          _sealedClassBorderWidth = width;
+          _staticClassBorderWidth = width;
         }
       }
     }
@@ -392,15 +278,15 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        bool dashed = isClassBorderDashed;
+        bool dashed = IsClassBorderDashed;
 
-        if (isStructureBorderDashed == dashed &&
-          isInterfaceBorderDashed == dashed &&
-          isEnumBorderDashed == dashed &&
-          isDelegateBorderDashed == dashed &&
-          isAbstractClassBorderDashed == dashed &&
-          isSealedClassBorderDashed == dashed &&
-          isStaticClassBorderDashed == dashed)
+        if (IsStructureBorderDashed == dashed &&
+          IsInterfaceBorderDashed == dashed &&
+          IsEnumBorderDashed == dashed &&
+          IsDelegateBorderDashed == dashed &&
+          IsAbstractClassBorderDashed == dashed &&
+          IsSealedClassBorderDashed == dashed &&
+          IsStaticClassBorderDashed == dashed)
         {
           return dashed;
         }
@@ -413,14 +299,14 @@ namespace NClass.DiagramEditor
       {
         if (value.HasValue)
         {
-          isClassBorderDashed = value.Value;
-          isStructureBorderDashed = value.Value;
-          isInterfaceBorderDashed = value.Value;
-          isEnumBorderDashed = value.Value;
-          isDelegateBorderDashed = value.Value;
-          isAbstractClassBorderDashed = value.Value;
-          isSealedClassBorderDashed = value.Value;
-          isStaticClassBorderDashed = value.Value;
+          IsClassBorderDashed = value.Value;
+          IsStructureBorderDashed = value.Value;
+          IsInterfaceBorderDashed = value.Value;
+          IsEnumBorderDashed = value.Value;
+          IsDelegateBorderDashed = value.Value;
+          IsAbstractClassBorderDashed = value.Value;
+          IsSealedClassBorderDashed = value.Value;
+          IsStaticClassBorderDashed = value.Value;
         }
       }
     }
@@ -428,11 +314,7 @@ namespace NClass.DiagramEditor
     [DisplayName("Header Alignment"), Category("(All Types)")]
     [Description("Specifies text alignment within the header compartment.")]
     [DefaultValue(ContentAlignment.MiddleCenter)]
-    public ContentAlignment HeaderAlignment
-    {
-      get { return headerAlignment; }
-      set { headerAlignment = value; }
-    }
+    public ContentAlignment HeaderAlignment { get; set; } = ContentAlignment.MiddleCenter;
 
     [DisplayName("Header Color"), Category("(All Types)")]
     [Description("The background color of the header compartment for all types.")]
@@ -441,12 +323,12 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        Color color = classHeaderColor;
+        Color color = ClassHeaderColor;
 
-        if (structureHeaderColor == color &&
-          interfaceHeaderColor == color &&
-          enumHeaderColor == color &&
-          delegateHeaderColor == color)
+        if (StructureHeaderColor == color &&
+          InterfaceHeaderColor == color &&
+          EnumHeaderColor == color &&
+          DelegateHeaderColor == color)
         {
           return color;
         }
@@ -459,11 +341,11 @@ namespace NClass.DiagramEditor
       {
         if (value != Color.Empty)
         {
-          classHeaderColor = value;
-          structureHeaderColor = value;
-          interfaceHeaderColor = value;
-          enumHeaderColor = value;
-          delegateHeaderColor = value;
+          ClassHeaderColor = value;
+          StructureHeaderColor = value;
+          InterfaceHeaderColor = value;
+          EnumHeaderColor = value;
+          DelegateHeaderColor = value;
         }
       }
     }
@@ -471,110 +353,108 @@ namespace NClass.DiagramEditor
     [DisplayName("Identifier Color"), Category("(All Types)")]
     [Description("The text color of the secondary text beside the type's name.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color IdentifierColor
-    {
-      get { return identifierColor; }
-      set { identifierColor = value; }
-    }
+    public Color IdentifierColor { get; set; } = Color.Black;
 
+    private Font _identifierFont = new Font("Tahoma", 6.75F);
     [DisplayName("Identifier Font"), Category("(All Types)")]
     [Description("The font of the secondary text beside the type's name.")]
     public Font IdentifierFont
     {
       get
       {
-        return identifierFont;
+        return _identifierFont;
       }
       set
       {
-        if (value != null && identifierFont != value)
+        if (value != null && _identifierFont != value)
         {
-          identifierFont.Dispose();
-          identifierFont = value;
+          _identifierFont.Dispose();
+          _identifierFont = value;
         }
       }
     }
 
+    private Font _memberFont = new Font("Tahoma", 8.25F);
     [DisplayName("Member Font"), Category("(All Types)")]
     [Description("The font of the type's members.")]
     public Font MemberFont
     {
       get
       {
-        return memberFont;
+        return _memberFont;
       }
       set
       {
-        if (value != null && memberFont != value)
+        if (value != null && _memberFont != value)
         {
-          memberFont.Dispose();
-          staticMemberFont.Dispose();
-          abstractMemberFont.Dispose();
+          _memberFont.Dispose();
+          _staticMemberFont.Dispose();
+          _abstractMemberFont.Dispose();
 
-          memberFont = value;
-          staticMemberFont = new Font(memberFont, memberFont.Style | FontStyle.Underline);
-          abstractMemberFont = new Font(memberFont, memberFont.Style | FontStyle.Italic);
+          _memberFont = value;
+          _staticMemberFont = new Font(_memberFont, _memberFont.Style | FontStyle.Underline);
+          _abstractMemberFont = new Font(_memberFont, _memberFont.Style | FontStyle.Italic);
         }
       }
     }
 
+    [NonSerialized]
+    private Font _staticMemberFont;
     [Browsable(false)]
     public Font StaticMemberFont
     {
-      get { return staticMemberFont; }
+      get { return _staticMemberFont; }
     }
 
+    [NonSerialized]
+    private Font _abstractMemberFont;
     [Browsable(false)]
     public Font AbstractMemberFont
     {
-      get { return abstractMemberFont; }
+      get { return _abstractMemberFont; }
     }
 
     [DisplayName("Name Color"), Category("(All Types)")]
     [Description("The text color of the type's name.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color NameColor
-    {
-      get { return nameColor; }
-      set { nameColor = value; }
-    }
+    public Color NameColor { get; set; } = Color.Black;
 
+    private Font _nameFont = new Font("Arial", 9.75F, FontStyle.Bold);
     [DisplayName("Name Font"), Category("(All Types)")]
     [Description("The font of the type's name.")]
     public Font NameFont
     {
       get
       {
-        return nameFont;
+        return _nameFont;
       }
       set
       {
-        if (value != null && nameFont != value)
+        if (value != null && _nameFont != value)
         {
-          nameFont.Dispose();
-          abstractNameFont.Dispose();
+          _nameFont.Dispose();
+          _abstractNameFont.Dispose();
 
-          nameFont = value;
-          abstractNameFont = new Font(nameFont, nameFont.Style | FontStyle.Italic);
+          _nameFont = value;
+          _abstractNameFont = new Font(_nameFont, _nameFont.Style | FontStyle.Italic);
         }
       }
     }
 
+    [NonSerialized]
+    private Font _abstractNameFont;
     [Browsable(false)]
     public Font AbstractNameFont
     {
-      get { return abstractNameFont; }
+      get { return _abstractNameFont; }
     }
 
     [DisplayName("Operation Color"), Category("(All Types)")]
     [Description("The text color of a type's operations.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color OperationColor
-    {
-      get { return operationColor; }
-      set { operationColor = value; }
-    }
+    public Color OperationColor { get; set; } = Color.Black;
 
+    private int _classRoundingSize = 0;
     [DisplayName("Rounding Size"), Category("(All Types)")]
     [Description("The rounding size of the corners for all types.")]
     [DefaultValue(0)]
@@ -582,12 +462,12 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        int size = classRoundingSize;
+        int size = _classRoundingSize;
 
-        if (structureRoundingSize == size &&
-          interfaceRoundingSize == size &&
-          enumRoundingSize == size &&
-          delegateRoundingSize == size)
+        if (_structureRoundingSize == size &&
+          _interfaceRoundingSize == size &&
+          _enumRoundingSize == size &&
+          _delegateRoundingSize == size)
         {
           return size;
         }
@@ -602,15 +482,16 @@ namespace NClass.DiagramEditor
         {
           int size = (value.Value < 0) ? 0 : value.Value;
 
-          classRoundingSize = size;
-          structureRoundingSize = size;
-          interfaceRoundingSize = size;
-          enumRoundingSize = size;
-          delegateRoundingSize = size;
+          _classRoundingSize = size;
+          _structureRoundingSize = size;
+          _interfaceRoundingSize = size;
+          _enumRoundingSize = size;
+          _delegateRoundingSize = size;
         }
       }
     }
 
+    private Size _shadowOffset = new Size(4, 4);
     [DisplayName("Shadow"), Category("(All Types)")]
     [Description("The offset of the shadow for all entities.")]
     [DefaultValue(typeof(Size), "4, 4")]
@@ -618,7 +499,7 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return shadowOffset;
+        return _shadowOffset;
       }
       set
       {
@@ -627,19 +508,16 @@ namespace NClass.DiagramEditor
         if (value.Height < 0)
           value.Height = 0;
 
-        shadowOffset = value;
+        _shadowOffset = value;
       }
     }
 
     [DisplayName("Shadow Color"), Category("(All Types)")]
     [Description("The color of the shadow.")]
     [DefaultValue(typeof(Color), "70,0,0,0")]
-    public Color ShadowColor
-    {
-      get { return shadowColor; }
-      set { shadowColor = value; }
-    }
+    public Color ShadowColor { get; set; } = Color.FromArgb(70, Color.Black);
 
+    private bool _showSignature = false;
     [DisplayName("Show Signature"), Category("(All Types)")]
     [Description("Whether to show detailed type description within the header compartment.")]
     [DefaultValue(false)]
@@ -647,16 +525,17 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return showSignature;
+        return _showSignature;
       }
       set
       {
         if (value && ShowStereotype)
           ShowStereotype = false;
-        showSignature = value;
+        _showSignature = value;
       }
     }
 
+    private bool _showStereotypes = true;
     [DisplayName("Show Stereotype"), Category("(All Types)")]
     [Description("Whether to show stereotype within the header compartment.")]
     [DefaultValue(true)]
@@ -664,13 +543,13 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return showStereotypes;
+        return _showStereotypes;
       }
       set
       {
         if (value && ShowSignature)
           ShowSignature = false;
-        showStereotypes = value;
+        _showStereotypes = value;
       }
     }
 
@@ -681,12 +560,12 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        GradientStyle value = classGradientHeaderStyle;
+        GradientStyle value = ClassGradientHeaderStyle;
 
-        if (structureGradientHeaderStyle == value &&
-          interfaceGradientHeaderStyle == value &&
-          enumGradientHeaderStyle == value &&
-          delegateGradientHeaderStyle == value)
+        if (StructureGradientHeaderStyle == value &&
+          InterfaceGradientHeaderStyle == value &&
+          EnumGradientHeaderStyle == value &&
+          DelegateGradientHeaderStyle == value)
         {
           return value;
         }
@@ -699,11 +578,11 @@ namespace NClass.DiagramEditor
       {
         if (value.HasValue)
         {
-          classGradientHeaderStyle = value.Value;
-          structureGradientHeaderStyle = value.Value;
-          interfaceGradientHeaderStyle = value.Value;
-          enumGradientHeaderStyle = value.Value;
-          delegateGradientHeaderStyle = value.Value;
+          ClassGradientHeaderStyle = value.Value;
+          StructureGradientHeaderStyle = value.Value;
+          InterfaceGradientHeaderStyle = value.Value;
+          EnumGradientHeaderStyle = value.Value;
+          DelegateGradientHeaderStyle = value.Value;
         }
       }
     }
@@ -712,11 +591,7 @@ namespace NClass.DiagramEditor
     [Description("Whether to use member type icons in the " +
       "attributes and operations compartments.")]
     [DefaultValue(false)]
-    public bool UseIcons
-    {
-      get { return useIcons; }
-      set { useIcons = value; }
-    }
+    public bool UseIcons { get; set; } = false;
 
     #endregion
 
@@ -725,20 +600,12 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("Class")]
     [Description("The background color for the class type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color ClassBackgroundColor
-    {
-      get { return classBackgroundColor; }
-      set { classBackgroundColor = value; }
-    }
+    public Color ClassBackgroundColor { get; set; } = Color.White;
 
     [DisplayName("Border Color"), Category("Class")]
     [Description("The border color for the class type.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color ClassBorderColor
-    {
-      get { return classBorderColor; }
-      set { classBorderColor = value; }
-    }
+    public Color ClassBorderColor { get; set; } = Color.Black;
 
     [DisplayName("Border Width"), Category("Class")]
     [Description("The border width for the class type.")]
@@ -747,34 +614,26 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return classBorderWidth;
+        return _classBorderWidth;
       }
       set
       {
         if (value < 1)
-          classBorderWidth = 1;
+          _classBorderWidth = 1;
         else
-          classBorderWidth = value;
+          _classBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Class")]
     [Description("Whether the border for the class type will be dashed.")]
     [DefaultValue(false)]
-    public bool IsClassBorderDashed
-    {
-      get { return isClassBorderDashed; }
-      set { isClassBorderDashed = value; }
-    }
+    public bool IsClassBorderDashed { get; set; } = false;
 
     [DisplayName("Header Color"), Category("Class")]
     [Description("The background color of the header compartment for the class type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color ClassHeaderColor
-    {
-      get { return classHeaderColor; }
-      set { classHeaderColor = value; }
-    }
+    public Color ClassHeaderColor { get; set; } = Color.White;
 
     [DisplayName("Rounding Size"), Category("Class")]
     [Description("The rounding size of the corners for the class type.")]
@@ -783,30 +642,27 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return classRoundingSize;
+        return _classRoundingSize;
       }
       set
       {
         if (value < 0)
-          classRoundingSize = 0;
+          _classRoundingSize = 0;
         else
-          classRoundingSize = value;
+          _classRoundingSize = value;
       }
     }
 
     [DisplayName("Header Gradient Style"), Category("Class")]
     [Description("The direction of the gradient header color in class types.")]
     [DefaultValue(GradientStyle.None)]
-    public GradientStyle ClassGradientHeaderStyle
-    {
-      get { return classGradientHeaderStyle; }
-      set { classGradientHeaderStyle = value; }
-    }
+    public GradientStyle ClassGradientHeaderStyle { get; set; } = GradientStyle.None;
 
     #endregion
 
     #region Modified class properties
 
+    private int _abstractClassBorderWidth = 1;
     [DisplayName("Border Width"), Category("Abstract Class")]
     [Description("The border width for abstract classes.")]
     [DefaultValue(1)]
@@ -814,26 +670,23 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return abstractClassBorderWidth;
+        return _abstractClassBorderWidth;
       }
       set
       {
         if (value < 1)
-          abstractClassBorderWidth = 1;
+          _abstractClassBorderWidth = 1;
         else
-          abstractClassBorderWidth = value;
+          _abstractClassBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Abstract Class")]
     [Description("Whether the border for abstract classes will be dashed.")]
     [DefaultValue(false)]
-    public bool IsAbstractClassBorderDashed
-    {
-      get { return isAbstractClassBorderDashed; }
-      set { isAbstractClassBorderDashed = value; }
-    }
+    public bool IsAbstractClassBorderDashed { get; set; } = false;
 
+    private int _sealedClassBorderWidth = 1;
     [DisplayName("Border Width"), Category("Sealed Class")]
     [Description("The border width for sealed classes.")]
     [DefaultValue(1)]
@@ -841,26 +694,23 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return sealedClassBorderWidth;
+        return _sealedClassBorderWidth;
       }
       set
       {
         if (value < 1)
-          sealedClassBorderWidth = 1;
+          _sealedClassBorderWidth = 1;
         else
-          sealedClassBorderWidth = value;
+          _sealedClassBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Sealed Class")]
     [Description("Whether the border for sealed classes will be dashed.")]
     [DefaultValue(false)]
-    public bool IsSealedClassBorderDashed
-    {
-      get { return isSealedClassBorderDashed; }
-      set { isSealedClassBorderDashed = value; }
-    }
+    public bool IsSealedClassBorderDashed { get; set; } = false;
 
+    private int _staticClassBorderWidth = 1;
     [DisplayName("Border Width"), Category("Static Class")]
     [Description("The border width for static classes.")]
     [DefaultValue(1)]
@@ -868,25 +718,21 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return staticClassBorderWidth;
+        return _staticClassBorderWidth;
       }
       set
       {
         if (value < 1)
-          staticClassBorderWidth = 1;
+          _staticClassBorderWidth = 1;
         else
-          staticClassBorderWidth = value;
+          _staticClassBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Static Class")]
     [Description("Whether the border for static classes will be dashed.")]
     [DefaultValue(false)]
-    public bool IsStaticClassBorderDashed
-    {
-      get { return isStaticClassBorderDashed; }
-      set { isStaticClassBorderDashed = value; }
-    }
+    public bool IsStaticClassBorderDashed { get; set; } = false;
 
     #endregion
 
@@ -895,21 +741,14 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("Structure")]
     [Description("The background color for the structure type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color StructureBackgroundColor
-    {
-      get { return structureBackgroundColor; }
-      set { structureBackgroundColor = value; }
-    }
+    public Color StructureBackgroundColor { get; set; } = Color.White;
 
     [DisplayName("Border Color"), Category("Structure")]
     [Description("The border color for the structure type.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color StructureBorderColor
-    {
-      get { return structureBorderColor; }
-      set { structureBorderColor = value; }
-    }
+    public Color StructureBorderColor { get; set; } = Color.Black;
 
+    private int _structureBorderWidth = 1;
     [DisplayName("Border Width"), Category("Structure")]
     [Description("The border width for the structure type.")]
     [DefaultValue(1)]
@@ -917,35 +756,28 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return structureBorderWidth;
+        return _structureBorderWidth;
       }
       set
       {
         if (value < 1)
-          structureBorderWidth = 1;
+          _structureBorderWidth = 1;
         else
-          structureBorderWidth = value;
+          _structureBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Structure")]
     [Description("Whether the border for the structure type will be dashed.")]
     [DefaultValue(false)]
-    public bool IsStructureBorderDashed
-    {
-      get { return isStructureBorderDashed; }
-      set { isStructureBorderDashed = value; }
-    }
+    public bool IsStructureBorderDashed { get; set; } = false;
 
     [DisplayName("Header Color"), Category("Structure")]
     [Description("The background color of the header compartment for the structure type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color StructureHeaderColor
-    {
-      get { return structureHeaderColor; }
-      set { structureHeaderColor = value; }
-    }
+    public Color StructureHeaderColor { get; set; } = Color.White;
 
+    private int _structureRoundingSize = 0;
     [DisplayName("Rounding Size"), Category("Structure")]
     [Description("The rounding size of the corners for the structure type.")]
     [DefaultValue(0)]
@@ -953,25 +785,21 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return structureRoundingSize;
+        return _structureRoundingSize;
       }
       set
       {
         if (value < 0)
-          structureRoundingSize = 0;
+          _structureRoundingSize = 0;
         else
-          structureRoundingSize = value;
+          _structureRoundingSize = value;
       }
     }
 
     [DisplayName("Header Gradient Style"), Category("Structure")]
     [Description("The direction of the gradient header color in structure types.")]
     [DefaultValue(GradientStyle.None)]
-    public GradientStyle StructureGradientHeaderStyle
-    {
-      get { return structureGradientHeaderStyle; }
-      set { structureGradientHeaderStyle = value; }
-    }
+    public GradientStyle StructureGradientHeaderStyle { get; set; } = GradientStyle.None;
 
     #endregion
 
@@ -980,21 +808,14 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("Interface")]
     [Description("The background color for the interface type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color InterfaceBackgroundColor
-    {
-      get { return interfaceBackgroundColor; }
-      set { interfaceBackgroundColor = value; }
-    }
+    public Color InterfaceBackgroundColor { get; set; } = Color.White;
 
     [DisplayName("Border Color"), Category("Interface")]
     [Description("The border color for the interface type.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color InterfaceBorderColor
-    {
-      get { return interfaceBorderColor; }
-      set { interfaceBorderColor = value; }
-    }
+    public Color InterfaceBorderColor { get; set; } = Color.Black;
 
+    private int _interfaceBorderWidth = 1;
     [DisplayName("Border Width"), Category("Interface")]
     [Description("The border width for the interface type.")]
     [DefaultValue(1)]
@@ -1002,35 +823,28 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return interfaceBorderWidth;
+        return _interfaceBorderWidth;
       }
       set
       {
         if (value < 1)
-          interfaceBorderWidth = 1;
+          _interfaceBorderWidth = 1;
         else
-          interfaceBorderWidth = value;
+          _interfaceBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Interface")]
     [Description("Whether the border for the interface type will be dashed.")]
     [DefaultValue(false)]
-    public bool IsInterfaceBorderDashed
-    {
-      get { return isInterfaceBorderDashed; }
-      set { isInterfaceBorderDashed = value; }
-    }
+    public bool IsInterfaceBorderDashed { get; set; } = false;
 
     [DisplayName("Header Color"), Category("Interface")]
     [Description("The background color of the header compartment for the interface type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color InterfaceHeaderColor
-    {
-      get { return interfaceHeaderColor; }
-      set { interfaceHeaderColor = value; }
-    }
+    public Color InterfaceHeaderColor { get; set; } = Color.White;
 
+    private int _interfaceRoundingSize = 0;
     [DisplayName("Rounding Size"), Category("Interface")]
     [Description("The rounding size of the corners for the interface type.")]
     [DefaultValue(0)]
@@ -1038,25 +852,21 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return interfaceRoundingSize;
+        return _interfaceRoundingSize;
       }
       set
       {
         if (value < 0)
-          interfaceRoundingSize = 0;
+          _interfaceRoundingSize = 0;
         else
-          interfaceRoundingSize = value;
+          _interfaceRoundingSize = value;
       }
     }
 
     [DisplayName("Header Gradient Style"), Category("Interface")]
     [Description("The direction of the gradient header color in interface types.")]
     [DefaultValue(GradientStyle.None)]
-    public GradientStyle InterfaceGradientHeaderStyle
-    {
-      get { return interfaceGradientHeaderStyle; }
-      set { interfaceGradientHeaderStyle = value; }
-    }
+    public GradientStyle InterfaceGradientHeaderStyle { get; set; } = GradientStyle.None;
 
     #endregion
 
@@ -1065,21 +875,14 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("Enum")]
     [Description("The background color for the enum type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color EnumBackgroundColor
-    {
-      get { return enumBackgroundColor; }
-      set { enumBackgroundColor = value; }
-    }
+    public Color EnumBackgroundColor { get; set; } = Color.White;
 
     [DisplayName("Border Color"), Category("Enum")]
     [Description("The border color for the enum type.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color EnumBorderColor
-    {
-      get { return enumBorderColor; }
-      set { enumBorderColor = value; }
-    }
+    public Color EnumBorderColor { get; set; } = Color.Black;
 
+    private int _enumBorderWidth = 1;
     [DisplayName("Border Width"), Category("Enum")]
     [Description("The border width for the enum type")]
     [DefaultValue(1)]
@@ -1087,44 +890,33 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return enumBorderWidth;
+        return _enumBorderWidth;
       }
       set
       {
         if (value < 1)
-          enumBorderWidth = 1;
+          _enumBorderWidth = 1;
         else
-          enumBorderWidth = value;
+          _enumBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Enum")]
     [Description("Whether the border for the enum type will be dashed.")]
     [DefaultValue(false)]
-    public bool IsEnumBorderDashed
-    {
-      get { return isEnumBorderDashed; }
-      set { isEnumBorderDashed = value; }
-    }
+    public bool IsEnumBorderDashed { get; set; } = false;
 
     [DisplayName("Header Color"), Category("Enum")]
     [Description("The background color of the header compartment for the enum type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color EnumHeaderColor
-    {
-      get { return enumHeaderColor; }
-      set { enumHeaderColor = value; }
-    }
+    public Color EnumHeaderColor { get; set; } = Color.White;
 
     [DisplayName("Item Color"), Category("Enum")]
     [Description("The text color of an enumerator item.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color EnumItemColor
-    {
-      get { return enumItemColor; }
-      set { enumItemColor = value; }
-    }
+    public Color EnumItemColor { get; set; } = Color.Black;
 
+    private int _enumRoundingSize = 0;
     [DisplayName("Rounding Size"), Category("Enum")]
     [Description("The rounding size of the corners for the enum type.")]
     [DefaultValue(0)]
@@ -1132,25 +924,21 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return enumRoundingSize;
+        return _enumRoundingSize;
       }
       set
       {
         if (value < 0)
-          enumRoundingSize = 0;
+          _enumRoundingSize = 0;
         else
-          enumRoundingSize = value;
+          _enumRoundingSize = value;
       }
     }
 
     [DisplayName("Header Gradient Style"), Category("Enum")]
     [Description("The direction of the gradient header color in enum types.")]
     [DefaultValue(GradientStyle.None)]
-    public GradientStyle EnumGradientHeaderStyle
-    {
-      get { return enumGradientHeaderStyle; }
-      set { enumGradientHeaderStyle = value; }
-    }
+    public GradientStyle EnumGradientHeaderStyle { get; set; } = GradientStyle.None;
 
     #endregion
 
@@ -1159,21 +947,14 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("Delegate")]
     [Description("The background color for the delegate type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color DelegateBackgroundColor
-    {
-      get { return delegateBackgroundColor; }
-      set { delegateBackgroundColor = value; }
-    }
+    public Color DelegateBackgroundColor { get; set; } = Color.White;
 
     [DisplayName("Border Color"), Category("Delegate")]
     [Description("The border color for the delegate type.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color DelegateBorderColor
-    {
-      get { return delegateBorderColor; }
-      set { delegateBorderColor = value; }
-    }
+    public Color DelegateBorderColor { get; set; } = Color.Black;
 
+    private int _delegateBorderWidth = 1;
     [DisplayName("Border Width"), Category("Delegate")]
     [Description("The border width for the delegate type.")]
     [DefaultValue(1)]
@@ -1181,44 +962,33 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return delegateBorderWidth;
+        return _delegateBorderWidth;
       }
       set
       {
         if (value < 1)
-          delegateBorderWidth = 1;
+          _delegateBorderWidth = 1;
         else
-          delegateBorderWidth = value;
+          _delegateBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Delegate")]
     [Description("Whether the border for the delegate type will be dashed.")]
     [DefaultValue(false)]
-    public bool IsDelegateBorderDashed
-    {
-      get { return isDelegateBorderDashed; }
-      set { isDelegateBorderDashed = value; }
-    }
+    public bool IsDelegateBorderDashed { get; set; } = false;
 
     [DisplayName("Header Color"), Category("Delegate")]
     [Description("The background color of the header compartment for the delegate type.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color DelegateHeaderColor
-    {
-      get { return delegateHeaderColor; }
-      set { delegateHeaderColor = value; }
-    }
+    public Color DelegateHeaderColor { get; set; } = Color.White;
 
     [DisplayName("Parameter Color"), Category("Delegate")]
     [Description("The text color of a delegate's parameters.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color DelegateParameterColor
-    {
-      get { return delegateParameterColor; }
-      set { delegateParameterColor = value; }
-    }
+    public Color DelegateParameterColor { get; set; } = Color.Black;
 
+    private int _delegateRoundingSize = 0;
     [DisplayName("Rounding Size"), Category("Delegate")]
     [Description("The rounding size of the corners for the delegate type.")]
     [DefaultValue(0)]
@@ -1226,25 +996,21 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return delegateRoundingSize;
+        return _delegateRoundingSize;
       }
       set
       {
         if (value < 0)
-          delegateRoundingSize = 0;
+          _delegateRoundingSize = 0;
         else
-          delegateRoundingSize = value;
+          _delegateRoundingSize = value;
       }
     }
 
     [DisplayName("Header Gradient Style"), Category("Delegate")]
     [Description("The direction of the gradient header color in delegate types.")]
     [DefaultValue(GradientStyle.None)]
-    public GradientStyle DelegateGradientHeaderStyle
-    {
-      get { return delegateGradientHeaderStyle; }
-      set { delegateGradientHeaderStyle = value; }
-    }
+    public GradientStyle DelegateGradientHeaderStyle { get; set; } = GradientStyle.None;
 
     #endregion
 
@@ -1253,21 +1019,14 @@ namespace NClass.DiagramEditor
     [DisplayName("Background Color"), Category("Comment")]
     [Description("The background color for the comment.")]
     [DefaultValue(typeof(Color), "White")]
-    public Color CommentBackColor
-    {
-      get { return commentBackColor; }
-      set { commentBackColor = value; }
-    }
+    public Color CommentBackColor { get; set; } = Color.White;
 
     [DisplayName("Border Color"), Category("Comment")]
     [Description("The border color for the comment.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color CommentBorderColor
-    {
-      get { return commentBorderColor; }
-      set { commentBorderColor = value; }
-    }
+    public Color CommentBorderColor { get; set; } = Color.Black;
 
+    private int _commentBorderWidth = 1;
     [DisplayName("Border Width"), Category("Comment")]
     [Description("The border width for the comment.")]
     [DefaultValue(1)]
@@ -1275,40 +1034,37 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return commentBorderWidth;
+        return _commentBorderWidth;
       }
       set
       {
         if (value < 1)
-          commentBorderWidth = 1;
+          _commentBorderWidth = 1;
         else
-          commentBorderWidth = value;
+          _commentBorderWidth = value;
       }
     }
 
     [DisplayName("Dashed Border"), Category("Comment")]
     [Description("Whether the border for the comment will be dashed.")]
     [DefaultValue(false)]
-    public bool IsCommentBorderDashed
-    {
-      get { return isCommentBorderDashed; }
-      set { isCommentBorderDashed = value; }
-    }
+    public bool IsCommentBorderDashed { get; set; } = false;
 
+    private Font _commentFont = new Font("Tahoma", 8.25F);
     [DisplayName("Font"), Category("Comment")]
     [Description("The font of the displayed text for the comment.")]
     public Font CommentFont
     {
       get
       {
-        return commentFont;
+        return _commentFont;
       }
       set
       {
-        if (value != null && commentFont != value)
+        if (value != null && _commentFont != value)
         {
-          commentFont.Dispose();
-          commentFont = value;
+          _commentFont.Dispose();
+          _commentFont = value;
         }
       }
     }
@@ -1316,11 +1072,7 @@ namespace NClass.DiagramEditor
     [DisplayName("Text Color"), Category("Comment")]
     [Description("The text color for the comment.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color CommentTextColor
-    {
-      get { return textColor; }
-      set { textColor = value; }
-    }
+    public Color CommentTextColor { get; set; } = Color.Black;
 
     #endregion
 
@@ -1359,6 +1111,7 @@ namespace NClass.DiagramEditor
 
     #region Relationship properties
 
+    private int _relationshipDashSize = 5;
     [DisplayName("Dash Size"), Category("(Relationship)")]
     [Description("The lengths of alternating dashes and spaces in dashed lines.")]
     [DefaultValue(5)]
@@ -1366,53 +1119,47 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return relationshipDashSize;
+        return _relationshipDashSize;
       }
       set
       {
         if (value < 1)
-          relationshipDashSize = 1;
+          _relationshipDashSize = 1;
         else
-          relationshipDashSize = value;
+          _relationshipDashSize = value;
       }
     }
 
     [DisplayName("Color"), Category("(Relationship)")]
     [Description("The line color for the relationship.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color RelationshipColor
-    {
-      get { return relationshipColor; }
-      set { relationshipColor = value; }
-    }
+    public Color RelationshipColor { get; set; } = Color.Black;
 
     [DisplayName("Font Color"), Category("(Relationship)")]
     [Description("The color of relationship texts.")]
     [DefaultValue(typeof(Color), "Black")]
-    public Color RelationshipTextColor
-    {
-      get { return relationshipTextColor; }
-      set { relationshipTextColor = value; }
-    }
+    public Color RelationshipTextColor { get; set; } = Color.Black;
 
+    private Font _relationshipTextFont = new Font("Tahoma", 8.25F);
     [DisplayName("Font"), Category("(Relationship)")]
     [Description("The font of the type's name.")]
     public Font RelationshipTextFont
     {
       get
       {
-        return relationshipTextFont;
+        return _relationshipTextFont;
       }
       set
       {
-        if (value != null && relationshipTextFont != value)
+        if (value != null && _relationshipTextFont != value)
         {
-          relationshipTextFont.Dispose();
-          relationshipTextFont = value;
+          _relationshipTextFont.Dispose();
+          _relationshipTextFont = value;
         }
       }
     }
 
+    private int _relationshipWidth = 1;
     [DisplayName("Width"), Category("(Relationship)")]
     [Description("The width of the relationship line.")]
     [DefaultValue(1)]
@@ -1420,14 +1167,14 @@ namespace NClass.DiagramEditor
     {
       get
       {
-        return relationshipWidth;
+        return _relationshipWidth;
       }
       set
       {
         if (value < 1)
-          relationshipWidth = 1;
+          _relationshipWidth = 1;
         else
-          relationshipWidth = value;
+          _relationshipWidth = value;
       }
     }
 
@@ -1465,28 +1212,28 @@ namespace NClass.DiagramEditor
     {
       Style newStyle = (Style)this.MemberwiseClone();
 
-      newStyle.nameFont = (Font)NameFont.Clone();
-      newStyle.abstractNameFont = (Font)AbstractNameFont.Clone();
-      newStyle.identifierFont = (Font)IdentifierFont.Clone();
-      newStyle.memberFont = (Font)MemberFont.Clone();
-      newStyle.staticMemberFont = (Font)StaticMemberFont.Clone();
-      newStyle.abstractMemberFont = (Font)AbstractMemberFont.Clone();
-      newStyle.commentFont = (Font)CommentFont.Clone();
-      newStyle.relationshipTextFont = (Font)RelationshipTextFont.Clone();
+      newStyle._nameFont = (Font)NameFont.Clone();
+      newStyle._abstractNameFont = (Font)AbstractNameFont.Clone();
+      newStyle._identifierFont = (Font)IdentifierFont.Clone();
+      newStyle._memberFont = (Font)MemberFont.Clone();
+      newStyle._staticMemberFont = (Font)StaticMemberFont.Clone();
+      newStyle._abstractMemberFont = (Font)AbstractMemberFont.Clone();
+      newStyle._commentFont = (Font)CommentFont.Clone();
+      newStyle._relationshipTextFont = (Font)RelationshipTextFont.Clone();
 
       return newStyle;
     }
 
     public void Dispose()
     {
-      nameFont.Dispose();
-      abstractNameFont.Dispose();
-      identifierFont.Dispose();
-      memberFont.Dispose();
-      staticMemberFont.Dispose();
-      abstractMemberFont.Dispose();
-      commentFont.Dispose();
-      relationshipTextFont.Dispose();
+      _nameFont.Dispose();
+      _abstractNameFont.Dispose();
+      _identifierFont.Dispose();
+      _memberFont.Dispose();
+      _staticMemberFont.Dispose();
+      _abstractMemberFont.Dispose();
+      _commentFont.Dispose();
+      _relationshipTextFont.Dispose();
     }
 
     private static bool LoadStyles()
@@ -1514,12 +1261,12 @@ namespace NClass.DiagramEditor
 
     private static bool LoadCurrentStyle()
     {
-      return ((currentStyle = Load(userStylePath, false)) != null);
+      return ((_currentStyle = Load(UserStylePath, false)) != null);
     }
 
     public static bool SaveCurrentStyle()
     {
-      return CurrentStyle.Save(userStylePath, false);
+      return CurrentStyle.Save(UserStylePath, false);
     }
 
     public static Style Load(string path)
@@ -1551,9 +1298,9 @@ namespace NClass.DiagramEditor
     [OnDeserialized]
     private void SetFonts(StreamingContext context)
     {
-      abstractNameFont = new Font(nameFont, nameFont.Style | FontStyle.Italic);
-      staticMemberFont = new Font(memberFont, memberFont.Style | FontStyle.Underline);
-      abstractMemberFont = new Font(memberFont, memberFont.Style | FontStyle.Italic);
+      _abstractNameFont = new Font(_nameFont, _nameFont.Style | FontStyle.Italic);
+      _staticMemberFont = new Font(_memberFont, _memberFont.Style | FontStyle.Underline);
+      _abstractMemberFont = new Font(_memberFont, _memberFont.Style | FontStyle.Italic);
     }
 
     public bool Save(string filePath)
@@ -1584,14 +1331,14 @@ namespace NClass.DiagramEditor
 
     private static void AddToList(Style style, string stylePath)
     {
-      if (!styles.ContainsKey(stylePath))
+      if (!Styles.ContainsKey(stylePath))
       {
-        styles.Add(stylePath, style);
+        Styles.Add(stylePath, style);
       }
       else // Replace the old style
       {
-        styles.Remove(stylePath);
-        styles.Add(stylePath, style);
+        Styles.Remove(stylePath);
+        Styles.Add(stylePath, style);
       }
     }
 
