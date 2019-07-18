@@ -187,8 +187,7 @@ namespace NClass.DiagramEditor
         {
           metaG.ReleaseHdc();
           metaG.Dispose();
-          if (g != null)
-            g.Dispose();
+          g?.Dispose();
         }
       }
       else // Save to rastered image
