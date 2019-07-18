@@ -22,16 +22,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Dependency : Connection
   {
-    private static readonly Pen linePen = new Pen(Color.Black);
-
-    static Dependency()
+    private static readonly Pen LinePen = new Pen(Color.Black)
     {
-      linePen.MiterLimit = 2.0F;
-      linePen.LineJoin = LineJoin.MiterClipped;
-    }
+      MiterLimit = 2.0F,
+      LineJoin = LineJoin.MiterClipped
+    };
 
-    public Dependency(DependencyRelationship dependency, Shape startShape, Shape endShape)
-      : base(dependency, startShape, endShape)
+    public Dependency(DependencyRelationship dependency, Shape startShape, Shape endShape) :
+      base(dependency, startShape, endShape)
     {
       this.DependencyRelationship = dependency;
     }
@@ -55,17 +53,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override void DrawEndCap(IGraphics g, bool onScreen, Style style)
     {
-      linePen.Color = style.RelationshipColor;
-      linePen.Width = style.RelationshipWidth;
-      g.DrawLines(linePen, Arrowhead.OpenArrowPoints);
+      LinePen.Color = style.RelationshipColor;
+      LinePen.Width = style.RelationshipWidth;
+      g.DrawLines(LinePen, Arrowhead.OpenArrowPoints);
     }
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
     {
-      TypeBase firstType = first.Entity as TypeBase;
-      TypeBase secondType = second.Entity as TypeBase;
-
-      if (firstType != null && secondType != null)
+      if (first.Entity is TypeBase firstType && second.Entity is TypeBase secondType)
       {
         DependencyRelationship clone = DependencyRelationship.Clone(firstType, secondType);
         return diagram.InsertDependency(clone);
