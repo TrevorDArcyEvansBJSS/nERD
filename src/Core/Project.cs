@@ -24,11 +24,6 @@ namespace NClass.Core
 {
   public sealed class Project : IModifiable
   {
-    private string name;
-    private FileInfo projectFile = null;
-    private readonly List<IProjectItem> items = new List<IProjectItem>();
-    private bool loading = false;
-
     public event EventHandler BeginUndoableOperation;
     public event EventHandler Modified;
     public event EventHandler Renamed;
@@ -36,9 +31,11 @@ namespace NClass.Core
     public event ProjectItemEventHandler ItemAdded;
     public event ProjectItemEventHandler ItemRemoved;
 
+    private bool _loading = false;
+
     public Project()
     {
-      name = Strings.Untitled;
+      _name = Strings.Untitled;
     }
 
     public Project(string name)
@@ -48,21 +45,22 @@ namespace NClass.Core
       if (name.Length == 0)
         throw new ArgumentException("Name cannot empty string.");
 
-      this.name = name;
+      this._name = name;
     }
 
+    private string _name;
     public string Name
     {
       get
       {
-        return name;
+        return _name;
       }
       set
       {
-        if (name != value && value != null && value.Length > 0)
+        if (_name != value && value != null && value.Length > 0)
         {
           OnBeginUndoableOperation(EventArgs.Empty);
-          name = value;
+          _name = value;
           IsUntitled = false;
           OnRenamed(EventArgs.Empty);
           OnModified(EventArgs.Empty);
@@ -74,14 +72,12 @@ namespace NClass.Core
 
     public bool IsReadOnly { get; private set; } = false;
 
+    private FileInfo _projectFile = null;
     public string FilePath
     {
       get
       {
-        if (projectFile != null)
-          return projectFile.FullName;
-        else
-          return null;
+        return _projectFile?.FullName;
       }
       private set
       {
@@ -91,24 +87,24 @@ namespace NClass.Core
           {
             FileInfo file = new FileInfo(value);
 
-            if (projectFile == null || projectFile.FullName != file.FullName)
+            if (_projectFile == null || _projectFile.FullName != file.FullName)
             {
-              projectFile = file;
+              _projectFile = file;
               OnFileStateChanged(EventArgs.Empty);
             }
           }
           catch
           {
-            if (projectFile != null)
+            if (_projectFile != null)
             {
-              projectFile = null;
+              _projectFile = null;
               OnFileStateChanged(EventArgs.Empty);
             }
           }
         }
-        else if (projectFile != null) // value == null
+        else if (_projectFile != null) // value == null
         {
-          projectFile = null;
+          _projectFile = null;
           OnFileStateChanged(EventArgs.Empty);
         }
       }
@@ -118,8 +114,8 @@ namespace NClass.Core
     {
       get
       {
-        if (projectFile != null)
-          return projectFile.Name;
+        if (_projectFile != null)
+          return _projectFile.Name;
         else
           return Name + ".ncp";
       }
@@ -127,14 +123,15 @@ namespace NClass.Core
 
     public bool IsDirty { get; private set; } = false;
 
+    private readonly List<IProjectItem> _items = new List<IProjectItem>();
     public IEnumerable<IProjectItem> Items
     {
-      get { return items; }
+      get { return _items; }
     }
 
     public int ItemCount
     {
-      get { return items.Count; }
+      get { return _items.Count; }
     }
 
     public bool IsEmpty
@@ -167,14 +164,14 @@ namespace NClass.Core
     {
       if (item == null)
         throw new ArgumentNullException("item");
-      if (items.Contains(item))
+      if (_items.Contains(item))
         throw new ArgumentException("The project already contains this item.");
 
       OnBeginUndoableOperation(EventArgs.Empty);
       item.Project = this;
       item.BeginUndoableOperation += delegate { OnBeginUndoableOperation(EventArgs.Empty); };
       item.Modified += new EventHandler(Item_Modified);
-      items.Add(item);
+      _items.Add(item);
 
       OnItemAdded(new ProjectItemEventArgs(item));
       OnModified(EventArgs.Empty);
@@ -182,7 +179,7 @@ namespace NClass.Core
 
     public void Remove(IProjectItem item)
     {
-      if (items.Remove(item))
+      if (_items.Remove(item))
       {
         OnBeginUndoableOperation(EventArgs.Empty);
         item.Close();
@@ -201,8 +198,8 @@ namespace NClass.Core
 
     public string GetProjectDirectory()
     {
-      if (projectFile != null)
-        return projectFile.DirectoryName;
+      if (_projectFile != null)
+        return _projectFile.DirectoryName;
       else
         return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     }
@@ -246,14 +243,14 @@ namespace NClass.Core
         {
           Project oldProject = LoadWithPreviousFormat(root);
           oldProject.FilePath = fileName;
-          oldProject.name = Path.GetFileNameWithoutExtension(fileName);
+          oldProject._name = Path.GetFileNameWithoutExtension(fileName);
           oldProject.IsUntitled = false;
           return oldProject;
         }
       }
 
       Project project = new Project();
-      project.loading = true;
+      project._loading = true;
       try
       {
         project.Deserialize(root);
@@ -262,9 +259,9 @@ namespace NClass.Core
       {
         throw new InvalidDataException(Strings.ErrorCorruptSaveFile, ex);
       }
-      project.loading = false;
+      project._loading = false;
       project.FilePath = fileName;
-      project.IsReadOnly = project.projectFile.IsReadOnly;
+      project.IsReadOnly = project._projectFile.IsReadOnly;
 
       return project;
     }
@@ -272,7 +269,7 @@ namespace NClass.Core
     private static Project LoadWithPreviousFormat(XmlElement root)
     {
       Project project = new Project();
-      project.loading = true;
+      project._loading = true;
 
       Assembly assembly = Assembly.Load("NClass.DiagramEditor");
       IProjectItem projectItem = (IProjectItem)assembly.CreateInstance(
@@ -289,7 +286,7 @@ namespace NClass.Core
         throw new InvalidDataException(Strings.ErrorCorruptSaveFile, ex);
       }
       project.Add(projectItem);
-      project.loading = false;
+      project._loading = false;
       project.IsReadOnly = true;
       return project;
     }
@@ -302,7 +299,7 @@ namespace NClass.Core
     /// </exception>
     public void Save()
     {
-      if (projectFile == null)
+      if (_projectFile == null)
         throw new InvalidOperationException(Strings.ErrorCannotSaveFile);
 
       Save(FilePath);
@@ -372,7 +369,7 @@ namespace NClass.Core
       XmlElement nameElement = node["Name"];
       if (nameElement == null || nameElement.InnerText == "")
         throw new InvalidDataException("Project's name cannot be empty.");
-      name = nameElement.InnerText;
+      _name = nameElement.InnerText;
 
       foreach (XmlElement itemElement in node.GetElementsByTagName("ProjectItem"))
       {
@@ -410,45 +407,39 @@ namespace NClass.Core
 
     private void OnBeginUndoableOperation(EventArgs e)
     {
-      if (!loading)
+      if (!_loading)
       {
-        if (BeginUndoableOperation != null)
-          BeginUndoableOperation(this, e);
+        BeginUndoableOperation?.Invoke(this, e);
       }
     }
 
     private void OnModified(EventArgs e)
     {
-      if (!loading)
+      if (!_loading)
       {
         IsDirty = true;
-        if (Modified != null)
-          Modified(this, e);
+        Modified?.Invoke(this, e);
       }
     }
 
     private void OnRenamed(EventArgs e)
     {
-      if (Renamed != null)
-        Renamed(this, e);
+      Renamed?.Invoke(this, e);
     }
 
     private void OnItemAdded(ProjectItemEventArgs e)
     {
-      if (ItemAdded != null)
-        ItemAdded(this, e);
+      ItemAdded?.Invoke(this, e);
     }
 
     private void OnItemRemoved(ProjectItemEventArgs e)
     {
-      if (ItemRemoved != null)
-        ItemRemoved(this, e);
+      ItemRemoved?.Invoke(this, e);
     }
 
     private void OnFileStateChanged(EventArgs e)
     {
-      if (FileStateChanged != null)
-        FileStateChanged(this, e);
+      FileStateChanged?.Invoke(this, e);
     }
 
     public override bool Equals(object obj)
@@ -461,19 +452,19 @@ namespace NClass.Core
 
       Project project = (Project)obj;
 
-      if (this.projectFile == null && project.projectFile == null)
+      if (this._projectFile == null && project._projectFile == null)
         return object.ReferenceEquals(this, obj);
 
       return (
-        this.projectFile != null && project.projectFile != null &&
-        this.projectFile.FullName == project.projectFile.FullName
+        this._projectFile != null && project._projectFile != null &&
+        this._projectFile.FullName == project._projectFile.FullName
       );
     }
 
     public override int GetHashCode()
     {
-      if (projectFile != null)
-        return projectFile.GetHashCode();
+      if (_projectFile != null)
+        return _projectFile.GetHashCode();
       else
         return Name.GetHashCode();
     }
