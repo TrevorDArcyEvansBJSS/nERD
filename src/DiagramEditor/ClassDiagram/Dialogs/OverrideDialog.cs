@@ -13,75 +13,76 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using NClass.Core;
 using NClass.Translations;
+using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-	public partial class OverrideDialog : TreeDialog
-	{
-		protected override void UpdateTexts()
-		{
-			this.Text = Strings.OverrideMembers;
-			base.UpdateTexts();
-		}
+  public partial class OverrideDialog : TreeDialog
+  {
+    protected override void UpdateTexts()
+    {
+      Text = Strings.OverrideMembers;
+      base.UpdateTexts();
+    }
 
-		private TreeNode CreateClassNode(string className)
-		{
-			TreeNode node = OperationTree.Nodes.Add(className);
-			node.SelectedImageIndex = Icons.ClassImageIndex;
-			node.ImageIndex = Icons.ClassImageIndex;
+    private TreeNode CreateClassNode(string className)
+    {
+      TreeNode node = OperationTree.Nodes.Add(className);
+      node.SelectedImageIndex = Icons.ClassImageIndex;
+      node.ImageIndex = Icons.ClassImageIndex;
 
-			return node;
-		}
+      return node;
+    }
 
-		private void RemoveSimilarNode(Operation operation)
-		{
-			if (operation == null)
-				return;
+    private void RemoveSimilarNode(Operation operation)
+    {
+      if (operation == null)
+        return;
 
-			for (int i = 0; i < OperationTree.Nodes.Count; i++) {
-				for (int j = 0; j < OperationTree.Nodes[i].Nodes.Count; j++) {
-					if (operation.HasSameSignatureAs(
-						OperationTree.Nodes[i].Nodes[j].Tag as Operation))
-					{
-						OperationTree.Nodes[i].Nodes.RemoveAt(j);
-						break;
-					}
-				}
-			}
-		}
+      for (int i = 0; i < OperationTree.Nodes.Count; i++)
+      {
+        for (int j = 0; j < OperationTree.Nodes[i].Nodes.Count; j++)
+        {
+          if (operation.HasSameSignatureAs(
+            OperationTree.Nodes[i].Nodes[j].Tag as Operation))
+          {
+            OperationTree.Nodes[i].Nodes.RemoveAt(j);
+            break;
+          }
+        }
+      }
+    }
 
-		private void AddOperations(SingleInheritanceType derivedClass,
-			SingleInheritanceType baseClass)
-		{
-			if (derivedClass == null || baseClass == null)
-				return;
+    private void AddOperations(SingleInheritanceType derivedClass,
+      SingleInheritanceType baseClass)
+    {
+      if (derivedClass == null || baseClass == null)
+        return;
 
-			AddOperations(derivedClass, baseClass.Base);
+      AddOperations(derivedClass, baseClass.Base);
 
-			TreeNode node = CreateClassNode(baseClass.Name);
-			foreach (Operation operation in baseClass.OverridableOperations) {
-				if (derivedClass.GetDefinedOperation(operation) != null)
-					continue;
-				RemoveSimilarNode(operation);
-				CreateOperationNode(node, operation);
-			}
-		}
+      TreeNode node = CreateClassNode(baseClass.Name);
+      foreach (Operation operation in baseClass.OverridableOperations)
+      {
+        if (derivedClass.GetDefinedOperation(operation) != null)
+          continue;
+        RemoveSimilarNode(operation);
+        CreateOperationNode(node, operation);
+      }
+    }
 
-		public DialogResult ShowDialog(SingleInheritanceType inheritedClass)
-		{
-			if (inheritedClass == null)
-				return DialogResult.None;
+    public DialogResult ShowDialog(SingleInheritanceType inheritedClass)
+    {
+      if (inheritedClass == null)
+        return DialogResult.None;
 
-			OperationTree.Nodes.Clear();
-			AddOperations(inheritedClass, inheritedClass.Base);
-			RemoveEmptyNodes();
+      OperationTree.Nodes.Clear();
+      AddOperations(inheritedClass, inheritedClass.Base);
+      RemoveEmptyNodes();
 
-			return ShowDialog();
-		}
-	}
+      return ShowDialog();
+    }
+  }
 }
