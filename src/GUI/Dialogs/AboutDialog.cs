@@ -51,9 +51,7 @@ namespace NClass.GUI.Dialogs
 
     private void lnkEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      string target = e.Link.LinkData as string;
-
-      if (target != null)
+      if (e.Link.LinkData is string target)
       {
         try
         {
@@ -71,9 +69,7 @@ namespace NClass.GUI.Dialogs
 
     private void lnkHomepage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-      string target = e.Link.LinkData as string;
-
-      if (target != null)
+      if (e.Link.LinkData is string target)
       {
         try
         {
