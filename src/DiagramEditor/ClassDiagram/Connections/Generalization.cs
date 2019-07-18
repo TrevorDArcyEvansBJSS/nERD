@@ -22,16 +22,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   internal sealed class Generalization : Connection
   {
-    private static readonly Pen linePen = new Pen(Color.Black);
-
-    static Generalization()
+    private static readonly Pen LinePen = new Pen(Color.Black)
     {
-      linePen.MiterLimit = 2.0F;
-      linePen.LineJoin = LineJoin.MiterClipped;
-    }
+      MiterLimit = 2.0F,
+      LineJoin = LineJoin.MiterClipped
+    };
 
-    public Generalization(GeneralizationRelationship generalization, Shape startShape, Shape endShape)
-      : base(generalization, startShape, endShape)
+    public Generalization(GeneralizationRelationship generalization, Shape startShape, Shape endShape) :
+        base(generalization, startShape, endShape)
     {
       this.GeneralizationRelationship = generalization;
     }
@@ -55,19 +53,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override void DrawEndCap(IGraphics g, bool onScreen, Style style)
     {
-      linePen.Color = style.RelationshipColor;
-      linePen.Width = style.RelationshipWidth;
+      LinePen.Color = style.RelationshipColor;
+      LinePen.Width = style.RelationshipWidth;
 
       g.FillPath(Brushes.White, Arrowhead.ClosedArrowPath);
-      g.DrawPath(linePen, Arrowhead.ClosedArrowPath);
+      g.DrawPath(LinePen, Arrowhead.ClosedArrowPath);
     }
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
     {
-      CompositeType firstType = first.Entity as CompositeType;
-      CompositeType secondType = second.Entity as CompositeType;
-
-      if (firstType != null && secondType != null)
+      if (first.Entity is CompositeType firstType && second.Entity is CompositeType secondType)
       {
         GeneralizationRelationship clone = GeneralizationRelationship.Clone(firstType, secondType);
         return diagram.InsertGeneralization(clone);
