@@ -46,7 +46,10 @@ namespace NClass.DiagramEditor.ClassDiagram
     private const float DashSize = 3;
     private static readonly Size MinSize = new Size(3000, 2000);
 
-    public static readonly Pen SelectionPen;
+    public static readonly Pen SelectionPen = new Pen(Color.Black)
+    {
+      DashPattern = new float[] { DashSize, DashSize }
+    };
 
     private DiagramElement _activeElement = null;
     private Mode _state = Mode.Normal;
@@ -68,12 +71,6 @@ namespace NClass.DiagramEditor.ClassDiagram
     public event EventHandler ClipboardAvailabilityChanged;
     public event PopupWindowEventHandler ShowingWindow;
     public event PopupWindowEventHandler HidingWindow;
-
-    static Diagram()
-    {
-      SelectionPen = new Pen(Color.Black);
-      SelectionPen.DashPattern = new float[] { DashSize, DashSize };
-    }
 
     // required for XML deserialisation
     private Diagram()
@@ -464,8 +461,10 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public void ShowPrintDialog()
     {
-      DiagramPrintDialog dialog = new DiagramPrintDialog();
-      dialog.Document = this;
+      var dialog = new DiagramPrintDialog
+      {
+        Document = this
+      };
       dialog.ShowDialog();
     }
 
@@ -1844,58 +1843,49 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void OnOffsetChanged(EventArgs e)
     {
-      if (OffsetChanged != null)
-        OffsetChanged(this, e);
+      OffsetChanged?.Invoke(this, e);
       UpdateWindowPosition();
     }
 
     private void OnSizeChanged(EventArgs e)
     {
-      if (SizeChanged != null)
-        SizeChanged(this, e);
+      SizeChanged?.Invoke(this, e);
     }
 
     private void OnZoomChanged(EventArgs e)
     {
-      if (ZoomChanged != null)
-        ZoomChanged(this, e);
+      ZoomChanged?.Invoke(this, e);
       CloseWindows();
     }
 
     private void OnStatusChanged(EventArgs e)
     {
-      if (StatusChanged != null)
-        StatusChanged(this, e);
+      StatusChanged?.Invoke(this, e);
     }
 
     private void OnSelectionChanged(EventArgs e)
     {
-      if (SelectionChanged != null)
-        SelectionChanged(this, e);
+      SelectionChanged?.Invoke(this, e);
     }
 
     private void OnNeedsRedraw(EventArgs e)
     {
-      if (NeedsRedraw != null)
-        NeedsRedraw(this, e);
+      NeedsRedraw?.Invoke(this, e);
     }
 
     private void OnClipboardAvailabilityChanged(EventArgs e)
     {
-      if (ClipboardAvailabilityChanged != null)
-        ClipboardAvailabilityChanged(this, e);
+      ClipboardAvailabilityChanged?.Invoke(this, e);
     }
 
     private void OnShowingWindow(PopupWindowEventArgs e)
     {
-      if (ShowingWindow != null)
-        ShowingWindow(this, e);
+      ShowingWindow?.Invoke(this, e);
     }
 
     private void OnHidingWindow(PopupWindowEventArgs e)
     {
-      if (HidingWindow != null)
-        HidingWindow(this, e);
+      HidingWindow?.Invoke(this, e);
     }
 
     public bool CanUndo
