@@ -23,15 +23,11 @@ namespace NClass.Core
     /// <exception cref="RelationshipException">
     /// Cannot create generalization.
     /// </exception>
-    internal GeneralizationRelationship(CompositeType derivedType, CompositeType baseType)
-      : base(derivedType, baseType)
+    internal GeneralizationRelationship(CompositeType derivedType, CompositeType baseType) :
+      base(derivedType, baseType)
     {
+      RelationshipType = RelationshipType.Generalization;
       Attach();
-    }
-
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.Generalization; }
     }
 
     private CompositeType DerivedType
@@ -46,8 +42,7 @@ namespace NClass.Core
 
     public GeneralizationRelationship Clone(CompositeType derivedType, CompositeType baseType)
     {
-      GeneralizationRelationship generalization =
-        new GeneralizationRelationship(derivedType, baseType);
+      GeneralizationRelationship generalization = new GeneralizationRelationship(derivedType, baseType);
       generalization.CopyFrom(this);
       return generalization;
     }

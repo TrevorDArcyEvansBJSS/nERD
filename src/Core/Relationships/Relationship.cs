@@ -20,80 +20,66 @@ namespace NClass.Core
 {
   public abstract class Relationship : Element, ISerializableElement
   {
-    private string label = string.Empty;
-    private bool attached = false;
-
     public event EventHandler Attaching;
     public event EventHandler Detaching;
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
-    public abstract IEntity First { get; protected set; }
-    public abstract IEntity Second { get; protected set; }
-    public abstract RelationshipType RelationshipType { get; }
+    public IEntity First { get; protected set; }
+    public IEntity Second { get; protected set; }
+    public RelationshipType RelationshipType { get; protected set; }
 
+    private string _label = string.Empty;
     public virtual string Label
     {
       get
       {
-        return label;
+        return _label;
       }
       set
       {
         if (value == "")
           value = null;
 
-        if (label != value && SupportsLabel)
+        if (_label != value && SupportsLabel)
         {
           OnBeginUndoableOperation();
-          label = value;
+          _label = value;
           Changed();
         }
       }
     }
 
-    public virtual bool SupportsLabel
-    {
-      get { return false; }
-    }
+    public bool SupportsLabel { get; protected set; } = false;
 
+    private bool _attached = false;
     /// <exception cref="RelationshipException">
     /// Cannot finalize relationship.
     /// </exception>
     internal void Attach()
     {
-      if (!attached)
+      if (!_attached)
       {
         OnAttaching(EventArgs.Empty);
       }
-      attached = true;
+      _attached = true;
     }
 
     internal void Detach()
     {
-      if (attached)
+      if (_attached)
       {
         OnDetaching(EventArgs.Empty);
       }
-      attached = false;
+      _attached = false;
     }
 
     protected virtual void CopyFrom(Relationship relationship)
     {
-      label = relationship.label;
+      _label = relationship._label;
     }
 
-    void ISerializableElement.Serialize(XmlElement node)
-    {
-      Serialize(node);
-    }
-
-    void ISerializableElement.Deserialize(XmlElement node)
-    {
-      Deserialize(node);
-    }
-
-    protected internal virtual void Serialize(XmlElement node)
+    public virtual void Serialize(XmlElement node)
     {
       if (SupportsLabel && Label != null)
       {
@@ -104,7 +90,7 @@ namespace NClass.Core
       OnSerializing(new SerializeEventArgs(node));
     }
 
-    protected internal virtual void Deserialize(XmlElement node)
+    public virtual void Deserialize(XmlElement node)
     {
       if (SupportsLabel)
       {

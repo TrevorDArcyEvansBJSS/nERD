@@ -22,13 +22,6 @@ namespace NClass.Core
 {
   public sealed class AssociationRelationship : TypeRelationship
   {
-    private AssociationType associationType = AssociationType.Association;
-    private Direction direction = Direction.Unidirectional;
-    private string startRole;
-    private string endRole;
-    private string startMultiplicity;
-    private string endMultiplicity;
-
     public event EventHandler Reversed;
 
     internal AssociationRelationship(TypeBase first, TypeBase second)
@@ -40,49 +33,43 @@ namespace NClass.Core
     internal AssociationRelationship(TypeBase first, TypeBase second, AssociationType type)
       : base(first, second)
     {
-      this.associationType = type;
+      _associationType = type;
+      RelationshipType = RelationshipType.Association;
+      SupportsLabel = true;
       Attach();
     }
 
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.Association; }
-    }
-
-    public override bool SupportsLabel
-    {
-      get { return true; }
-    }
-
+    private Direction _direction = Direction.Unidirectional;
     public Direction Direction
     {
       get
       {
-        return direction;
+        return _direction;
       }
       set
       {
-        if (direction != value)
+        if (_direction != value)
         {
           OnBeginUndoableOperation();
-          direction = value;
+          _direction = value;
           Changed();
         }
       }
     }
 
+    private AssociationType _associationType = AssociationType.Association;
     public AssociationType AssociationType
     {
       get
       {
-        return associationType;
+        return _associationType;
       }
       set
       {
-        if (associationType != value)
+        if (_associationType != value)
         {
           OnBeginUndoableOperation();
-          associationType = value;
+          _associationType = value;
           Changed();
         }
       }
@@ -92,7 +79,7 @@ namespace NClass.Core
     {
       get
       {
-        return (associationType == AssociationType.Aggregation);
+        return (_associationType == AssociationType.Aggregation);
       }
     }
 
@@ -100,85 +87,89 @@ namespace NClass.Core
     {
       get
       {
-        return (associationType == AssociationType.Composition);
+        return (_associationType == AssociationType.Composition);
       }
     }
 
+    private string _startRole;
     public string StartRole
     {
       get
       {
-        return startRole;
+        return _startRole;
       }
       set
       {
         if (value == "")
           value = null;
 
-        if (startRole != value)
+        if (_startRole != value)
         {
           OnBeginUndoableOperation();
-          startRole = value;
+          _startRole = value;
           Changed();
         }
       }
     }
 
+    private string _endRole;
     public string EndRole
     {
       get
       {
-        return endRole;
+        return _endRole;
       }
       set
       {
         if (value == "")
           value = null;
 
-        if (endRole != value)
+        if (_endRole != value)
         {
           OnBeginUndoableOperation();
-          endRole = value;
+          _endRole = value;
           Changed();
         }
       }
     }
 
+    private string _startMultiplicity;
     public string StartMultiplicity
     {
       get
       {
-        return startMultiplicity;
+        return _startMultiplicity;
       }
       set
       {
         if (value == "")
           value = null;
 
-        if (startMultiplicity != value)
+        if (_startMultiplicity != value)
         {
           OnBeginUndoableOperation();
-          startMultiplicity = value;
+          _startMultiplicity = value;
           Changed();
         }
       }
     }
 
+    private string _endMultiplicity;
     public string EndMultiplicity
     {
       get
       {
-        return endMultiplicity;
+        return _endMultiplicity;
       }
       set
       {
         if (value == "")
           value = null;
 
-        if (endMultiplicity != value)
+        if (_endMultiplicity != value)
         {
           OnBeginUndoableOperation();
-          endMultiplicity = value;
+          _endMultiplicity = value;
           Changed();
         }
       }
@@ -201,12 +192,12 @@ namespace NClass.Core
       base.CopyFrom(relationship);
 
       AssociationRelationship association = (AssociationRelationship)relationship;
-      associationType = association.associationType;
-      direction = association.direction;
-      startRole = association.startRole;
-      endRole = association.endRole;
-      startMultiplicity = association.startMultiplicity;
-      endMultiplicity = association.endMultiplicity;
+      _associationType = association._associationType;
+      _direction = association._direction;
+      _startRole = association._startRole;
+      _endRole = association._endRole;
+      _startMultiplicity = association._startMultiplicity;
+      _endMultiplicity = association._endMultiplicity;
     }
 
     public AssociationRelationship Clone(TypeBase first, TypeBase second)
@@ -216,7 +207,7 @@ namespace NClass.Core
       return association;
     }
 
-    protected internal override void Serialize(XmlElement node)
+    public override void Serialize(XmlElement node)
     {
       base.Serialize(node);
 
@@ -254,7 +245,7 @@ namespace NClass.Core
       }
     }
 
-    protected internal override void Deserialize(XmlElement node)
+    public override void Deserialize(XmlElement node)
     {
       base.Deserialize(node);
 
@@ -276,39 +267,39 @@ namespace NClass.Core
         {
           child = node["IsAggregation"];
           if (child != null && bool.Parse(child.InnerText))
-            associationType = AssociationType.Aggregation;
+            _associationType = AssociationType.Aggregation;
 
           child = node["IsComposition"];
           if (child != null && bool.Parse(child.InnerText))
-            associationType = AssociationType.Composition;
+            _associationType = AssociationType.Composition;
         }
 
         child = node["AssociationType"];
         if (child != null)
         {
           if (child.InnerText == "Aggregation")
-            associationType = AssociationType.Aggregation;
+            _associationType = AssociationType.Aggregation;
           else if (child.InnerText == "Composition")
-            associationType = AssociationType.Composition;
+            _associationType = AssociationType.Composition;
           else
-            associationType = AssociationType.Association;
+            _associationType = AssociationType.Association;
         }
 
         child = node["StartRole"];
         if (child != null)
-          startRole = child.InnerText;
+          _startRole = child.InnerText;
 
         child = node["EndRole"];
         if (child != null)
-          endRole = child.InnerText;
+          _endRole = child.InnerText;
 
         child = node["StartMultiplicity"];
         if (child != null)
-          startMultiplicity = child.InnerText;
+          _startMultiplicity = child.InnerText;
 
         child = node["EndMultiplicity"];
         if (child != null)
-          endMultiplicity = child.InnerText;
+          _endMultiplicity = child.InnerText;
       }
       catch (ArgumentException)
       {
@@ -319,8 +310,7 @@ namespace NClass.Core
 
     private void OnReversed(EventArgs e)
     {
-      if (Reversed != null)
-        Reversed(this, e);
+      Reversed?.Invoke(this, e);
     }
 
     public override string ToString()

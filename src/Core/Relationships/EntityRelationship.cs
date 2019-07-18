@@ -21,37 +21,37 @@ namespace NClass.Core
 {
   public sealed class EntityRelationship : TypeRelationship
   {
-    private MultiplicityType startMultiplicity;
-    private MultiplicityType endMultiplicity;
-
+    private MultiplicityType _startMultiplicity;
     public MultiplicityType StartMultiplicity
     {
       get
       {
-        return startMultiplicity;
+        return _startMultiplicity;
       }
       set
       {
-        if (startMultiplicity != value)
+        if (_startMultiplicity != value)
         {
           OnBeginUndoableOperation();
-          startMultiplicity = value;
+          _startMultiplicity = value;
           Changed();
         }
       }
     }
+
+    private MultiplicityType _endMultiplicity;
     public MultiplicityType EndMultiplicity
     {
       get
       {
-        return endMultiplicity;
+        return _endMultiplicity;
       }
       set
       {
-        if (endMultiplicity != value)
+        if (_endMultiplicity != value)
         {
           OnBeginUndoableOperation();
-          endMultiplicity = value;
+          _endMultiplicity = value;
           Changed();
         }
       }
@@ -60,20 +60,12 @@ namespace NClass.Core
     internal EntityRelationship(ClassType first, ClassType second) :
       base(first, second)
     {
+      RelationshipType = RelationshipType.EntityRelationship;
+      SupportsLabel = true;
       Attach();
     }
 
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.EntityRelationship; }
-    }
-
-    public override bool SupportsLabel
-    {
-      get { return true; }
-    }
-
-    protected internal override void Serialize(XmlElement node)
+    public override void Serialize(XmlElement node)
     {
       base.Serialize(node);
 
@@ -86,7 +78,7 @@ namespace NClass.Core
       node.AppendChild(endMultNode);
     }
 
-    protected internal override void Deserialize(XmlElement node)
+    public override void Deserialize(XmlElement node)
     {
       base.Deserialize(node);
 

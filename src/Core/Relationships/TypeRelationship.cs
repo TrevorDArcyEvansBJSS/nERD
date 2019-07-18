@@ -19,9 +19,6 @@ namespace NClass.Core
 {
   public abstract class TypeRelationship : Relationship
   {
-    private TypeBase first;
-    private TypeBase second;
-
     protected TypeRelationship(TypeBase first, TypeBase second)
     {
       if (first == null)
@@ -29,20 +26,8 @@ namespace NClass.Core
       if (second == null)
         throw new ArgumentNullException("second");
 
-      this.first = first;
-      this.second = second;
-    }
-
-    public sealed override IEntity First
-    {
-      get { return first; }
-      protected set { first = (TypeBase)value; }
-    }
-
-    public sealed override IEntity Second
-    {
-      get { return second; }
-      protected set { second = (TypeBase)value; }
+      First = first;
+      Second = second;
     }
   }
 }

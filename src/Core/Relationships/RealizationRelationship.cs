@@ -23,17 +23,13 @@ namespace NClass.Core
     /// <exception cref="RelationshipException">
     /// Cannot create realization.
     /// </exception>
-    internal RealizationRelationship(TypeBase implementer, InterfaceType baseType)
-      : base(implementer, baseType)
+    internal RealizationRelationship(TypeBase implementer, InterfaceType baseType) :
+      base(implementer, baseType)
     {
       if (!(implementer is IInterfaceImplementer))
         throw new RelationshipException(Strings.ErrorNotInterfaceImplementer);
+      RelationshipType = RelationshipType.Realization;
       Attach();
-    }
-
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.Realization; }
     }
 
     private IInterfaceImplementer Implementer

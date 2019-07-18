@@ -20,9 +20,6 @@ namespace NClass.Core
 {
   public sealed class CommentRelationship : Relationship
   {
-    private Comment comment;
-    private IEntity entity;
-
     internal CommentRelationship(Comment comment, IEntity entity)
     {
       if (comment == null)
@@ -30,27 +27,12 @@ namespace NClass.Core
       if (entity == null)
         throw new ArgumentNullException("entity");
 
-      this.comment = comment;
-      this.entity = entity;
+      First = comment;
+      Second = entity;
+      RelationshipType = RelationshipType.Comment;
       Attach();
     }
 
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.Comment; }
-    }
-
-    public override IEntity First
-    {
-      get { return comment; }
-      protected set { comment = (Comment)value; }
-    }
-
-    public override IEntity Second
-    {
-      get { return entity; }
-      protected set { entity = value; }
-    }
 
     public CommentRelationship Clone(Comment comment, IEntity entity)
     {
@@ -62,7 +44,7 @@ namespace NClass.Core
     public override string ToString()
     {
       return string.Format("{0}: {1} --- {2}",
-        Strings.Comment, comment.ToString(), entity.Name);
+        Strings.Comment, First.ToString(), Second.Name);
     }
   }
 }

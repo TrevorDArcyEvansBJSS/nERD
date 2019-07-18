@@ -22,17 +22,9 @@ namespace NClass.Core
     internal DependencyRelationship(TypeBase first, TypeBase second) :
       base(first, second)
     {
+      RelationshipType = RelationshipType.Dependency;
+      SupportsLabel = true;
       Attach();
-    }
-
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.Dependency; }
-    }
-
-    public override bool SupportsLabel
-    {
-      get { return true; }
     }
 
     public DependencyRelationship Clone(TypeBase first, TypeBase second)

@@ -23,15 +23,11 @@ namespace NClass.Core
     /// <exception cref="RelationshipException">
     /// Cannot create nesting relationship.
     /// </exception>
-    internal NestingRelationship(CompositeType parentType, TypeBase innerType)
-      : base(parentType, innerType)
+    internal NestingRelationship(CompositeType parentType, TypeBase innerType) :
+      base(parentType, innerType)
     {
+      RelationshipType = RelationshipType.Nesting;
       Attach();
-    }
-
-    public override RelationshipType RelationshipType
-    {
-      get { return RelationshipType.Nesting; }
     }
 
     private CompositeType ParentType
