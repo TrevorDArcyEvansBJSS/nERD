@@ -21,13 +21,8 @@ namespace NClass.Core
   {
     protected TypeRelationship(TypeBase first, TypeBase second)
     {
-      if (first == null)
-        throw new ArgumentNullException("first");
-      if (second == null)
-        throw new ArgumentNullException("second");
-
-      First = first;
-      Second = second;
+      First = first ?? throw new ArgumentNullException("first");
+      Second = second ?? throw new ArgumentNullException("second");
     }
   }
 }
