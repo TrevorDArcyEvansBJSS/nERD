@@ -23,22 +23,22 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   internal class ElementContainer : IClipboardItem
   {
-    const int BaseOffset = 20;
+    private const int BaseOffset = 20;
 
-    List<Shape> shapes = new List<Shape>();
-    List<Connection> connections = new List<Connection>();
-    Dictionary<Shape, Shape> pastedShapes = new Dictionary<Shape, Shape>();
-    int currentOffset = 0;
+    private readonly List<Shape> _shapes = new List<Shape>();
+    private readonly List<Connection> _connections = new List<Connection>();
+    private readonly Dictionary<Shape, Shape> _pastedShapes = new Dictionary<Shape, Shape>();
+    private int _currentOffset = 0;
 
     public void AddShape(Shape shape)
     {
-      shapes.Add(shape);
-      pastedShapes.Add(shape, null);
+      _shapes.Add(shape);
+      _pastedShapes.Add(shape, null);
     }
 
     public void AddConnection(Connection connection)
     {
-      connections.Add(connection);
+      _connections.Add(connection);
     }
 
     public void Paste(IDocument document)
@@ -48,28 +48,28 @@ namespace NClass.DiagramEditor.ClassDiagram
       {
         bool success = false;
 
-        currentOffset += BaseOffset;
+        _currentOffset += BaseOffset;
         Size offset = new Size(
-          (int)((diagram.Offset.X + currentOffset) / diagram.Zoom),
-          (int)((diagram.Offset.Y + currentOffset) / diagram.Zoom));
+          (int)((diagram.Offset.X + _currentOffset) / diagram.Zoom),
+          (int)((diagram.Offset.Y + _currentOffset) / diagram.Zoom));
 
-        foreach (Shape shape in shapes)
+        foreach (Shape shape in _shapes)
         {
           Shape pasted = shape.Paste(diagram, offset);
-          pastedShapes[shape] = pasted;
+          _pastedShapes[shape] = pasted;
           success |= (pasted != null);
           offset += new Size(BaseOffset, BaseOffset);
         }
-        foreach (Connection connection in connections)
+        foreach (Connection connection in _connections)
         {
           Shape first = GetShape(connection.Relationship.First);
           Shape second = GetShape(connection.Relationship.Second);
 
-          if (first != null && pastedShapes[first] != null &&
-            second != null && pastedShapes[second] != null)
+          if (first != null && _pastedShapes[first] != null &&
+            second != null && _pastedShapes[second] != null)
           {
             Connection pasted = connection.Paste(
-              diagram, offset, pastedShapes[first], pastedShapes[second]);
+              diagram, offset, _pastedShapes[first], _pastedShapes[second]);
             success |= (pasted != null);
           }
         }
@@ -83,7 +83,7 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public Shape GetShape(IEntity entity)
     {
-      foreach (Shape shape in shapes)
+      foreach (Shape shape in _shapes)
       {
         if (shape.Entity == entity)
           return shape;
