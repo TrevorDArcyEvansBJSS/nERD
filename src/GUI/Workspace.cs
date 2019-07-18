@@ -13,22 +13,16 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using NClass.Core;
 using NClass.Translations;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace NClass.GUI
 {
   public class Workspace
   {
-    static Workspace _default = new Workspace();
-
-    List<Project> projects = new List<Project>();
-    Project activeProject = null;
-
     public event EventHandler ActiveProjectChanged;
     public event EventHandler ActiveProjectStateChanged;
     public event ProjectEventHandler ProjectAdded;
@@ -38,19 +32,17 @@ namespace NClass.GUI
     {
     }
 
-    public static Workspace Default
-    {
-      get { return _default; }
-    }
+    public static Workspace Default { get; } = new Workspace();
 
+    private readonly List<Project> _projects = new List<Project>();
     public IEnumerable<Project> Projects
     {
-      get { return projects; }
+      get { return _projects; }
     }
 
     public int ProjectCount
     {
-      get { return projects.Count; }
+      get { return _projects.Count; }
     }
 
     public bool HasProject
@@ -58,25 +50,26 @@ namespace NClass.GUI
       get { return (ProjectCount > 0); }
     }
 
+    private Project _activeProject = null;
     public Project ActiveProject
     {
       get
       {
-        return activeProject;
+        return _activeProject;
       }
       set
       {
         if (value == null)
         {
-          if (activeProject != null)
+          if (_activeProject != null)
           {
-            activeProject = null;
+            _activeProject = null;
             OnActiveProjectChanged(EventArgs.Empty);
           }
         }
-        else if (activeProject != value && projects.Contains(value))
+        else if (_activeProject != value && _projects.Contains(value))
         {
-          activeProject = value;
+          _activeProject = value;
           OnActiveProjectChanged(EventArgs.Empty);
         }
       }
@@ -84,13 +77,13 @@ namespace NClass.GUI
 
     public bool HasActiveProject
     {
-      get { return (activeProject != null); }
+      get { return (_activeProject != null); }
     }
 
     public Project AddEmptyProject()
     {
       Project project = new Project();
-      projects.Add(project);
+      _projects.Add(project);
       project.Modified += new EventHandler(project_StateChanged);
       project.FileStateChanged += new EventHandler(project_StateChanged);
       OnProjectAdded(new ProjectEventArgs(project));
@@ -102,9 +95,9 @@ namespace NClass.GUI
       if (project == null)
         throw new ArgumentNullException("project");
 
-      if (!projects.Contains(project))
+      if (!_projects.Contains(project))
       {
-        projects.Add(project);
+        _projects.Add(project);
         project.Modified += new EventHandler(project_StateChanged);
         project.FileStateChanged += new EventHandler(project_StateChanged);
         if (project.FilePath != null)
@@ -137,7 +130,7 @@ namespace NClass.GUI
         }
       }
 
-      if (projects.Remove(project))
+      if (_projects.Remove(project))
       {
         project.CloseItems();
         project.Modified -= new EventHandler(project_StateChanged);
@@ -170,7 +163,7 @@ namespace NClass.GUI
     {
       if (saveConfirmation)
       {
-        ICollection<Project> unsavedProjects = projects.FindAll(
+        ICollection<Project> unsavedProjects = _projects.FindAll(
           delegate (Project project) { return project.IsDirty; });
 
         if (unsavedProjects.Count > 0)
@@ -196,10 +189,10 @@ namespace NClass.GUI
 
       while (HasProject)
       {
-        int lastIndex = projects.Count - 1;
-        Project project = projects[lastIndex];
+        int lastIndex = _projects.Count - 1;
+        Project project = _projects[lastIndex];
         project.CloseItems();
-        projects.RemoveAt(lastIndex);
+        _projects.RemoveAt(lastIndex);
         OnProjectRemoved(new ProjectEventArgs(project));
       }
       ActiveProject = null;
@@ -313,7 +306,7 @@ namespace NClass.GUI
     {
       bool allSaved = true;
 
-      foreach (Project project in projects)
+      foreach (Project project in _projects)
       {
         allSaved &= SaveProject(project);
       }
@@ -324,7 +317,7 @@ namespace NClass.GUI
     {
       bool allSaved = true;
 
-      foreach (Project project in projects)
+      foreach (Project project in _projects)
       {
         if (project.IsDirty)
           allSaved &= SaveProject(project);
@@ -350,7 +343,7 @@ namespace NClass.GUI
     {
       Settings.Default.OpenedProjects.Clear();
 
-      foreach (Project project in projects)
+      foreach (Project project in _projects)
       {
         if (project.FilePath != null)
           Settings.Default.OpenedProjects.Add(project.FilePath);
@@ -372,26 +365,22 @@ namespace NClass.GUI
 
     protected virtual void OnActiveProjectChanged(EventArgs e)
     {
-      if (ActiveProjectChanged != null)
-        ActiveProjectChanged(this, EventArgs.Empty);
+      ActiveProjectChanged?.Invoke(this, EventArgs.Empty);
     }
 
     protected virtual void OnActiveProjectStateChanged(EventArgs e)
     {
-      if (ActiveProjectStateChanged != null)
-        ActiveProjectStateChanged(this, EventArgs.Empty);
+      ActiveProjectStateChanged?.Invoke(this, EventArgs.Empty);
     }
 
     protected virtual void OnProjectAdded(ProjectEventArgs e)
     {
-      if (ProjectAdded != null)
-        ProjectAdded(this, e);
+      ProjectAdded?.Invoke(this, e);
     }
 
     protected virtual void OnProjectRemoved(ProjectEventArgs e)
     {
-      if (ProjectRemoved != null)
-        ProjectRemoved(this, e);
+      ProjectRemoved?.Invoke(this, e);
     }
   }
 }
