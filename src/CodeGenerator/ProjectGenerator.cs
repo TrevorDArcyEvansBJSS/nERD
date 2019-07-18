@@ -22,20 +22,14 @@ namespace NClass.CodeGenerator
 {
   public abstract class ProjectGenerator
   {
-    Model model;
-    List<string> fileNames = new List<string>();
-
     protected ProjectGenerator(Model model)
     {
-      if (model == null)
-        throw new ArgumentNullException("model");
-
-      this.model = model;
+      Model = model ?? throw new ArgumentNullException("model");
     }
 
     public string ProjectName
     {
-      get { return model.Name; }
+      get { return Model.Name; }
     }
 
     public abstract string RelativeProjectFileName
@@ -45,13 +39,10 @@ namespace NClass.CodeGenerator
 
     public Language ProjectLanguage
     {
-      get { return model.Language; }
+      get { return Model.Language; }
     }
 
-    protected Model Model
-    {
-      get { return model; }
-    }
+    protected Model Model { get; }
 
     protected string RootNamespace
     {
@@ -67,10 +58,7 @@ namespace NClass.CodeGenerator
       }
     }
 
-    protected List<string> FileNames
-    {
-      get { return fileNames; }
-    }
+    protected List<string> FileNames { get; } = new List<string>();
 
     /// <exception cref="ArgumentException">
     /// <paramref name="location"/> contains invalid path characters.
@@ -90,8 +78,8 @@ namespace NClass.CodeGenerator
       bool success = true;
       location = Path.Combine(location, ProjectName);
 
-      fileNames.Clear();
-      foreach (IEntity entity in model.Entities)
+      FileNames.Clear();
+      foreach (IEntity entity in Model.Entities)
       {
         TypeBase type = entity as TypeBase;
 
@@ -102,7 +90,7 @@ namespace NClass.CodeGenerator
           try
           {
             string fileName = sourceFile.Generate(location);
-            fileNames.Add(fileName);
+            FileNames.Add(fileName);
           }
           catch (FileGenerationException)
           {
