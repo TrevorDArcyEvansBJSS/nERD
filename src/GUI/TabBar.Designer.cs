@@ -15,7 +15,7 @@
 		{
 			if (disposing)
 			{
-				stringFormat.Dispose();
+				StringFormat.Dispose();
 				activeTabFont.Dispose();
 			}			
 			if (disposing && (components != null))
