@@ -24,7 +24,7 @@ namespace NClass.DiagramEditor.ClassDiagram
   public sealed partial class DiagramDynamicMenu : DynamicMenu
   {
     private readonly ToolStripMenuItem[] _menuItems;
-    private Diagram diagram = null;
+    private Diagram _diagram = null;
 
     private DiagramDynamicMenu()
     {
@@ -48,31 +48,31 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public override void SetReference(IDocument document)
     {
-      if (diagram != null)
+      if (_diagram != null)
       {
-        diagram.SelectionChanged -= new EventHandler(Diagram_SelectionChanged);
+        _diagram.SelectionChanged -= new EventHandler(Diagram_SelectionChanged);
       }
 
       if (document == null)
       {
-        diagram = null;
+        _diagram = null;
       }
       else
       {
-        diagram = document as Diagram;
-        diagram.SelectionChanged += new EventHandler(Diagram_SelectionChanged);
+        _diagram = document as Diagram;
+        _diagram.SelectionChanged += new EventHandler(Diagram_SelectionChanged);
 
-        mnuNewStructure.Visible = diagram.Language.SupportsStructures;
-        mnuNewDelegate.Visible = diagram.Language.SupportsDelegates;
-        toolNewStructure.Visible = diagram.Language.SupportsStructures;
-        toolNewDelegate.Visible = diagram.Language.SupportsDelegates;
-        toolDelete.Enabled = diagram.HasSelectedElement;
+        mnuNewStructure.Visible = _diagram.Language.SupportsStructures;
+        mnuNewDelegate.Visible = _diagram.Language.SupportsDelegates;
+        toolNewStructure.Visible = _diagram.Language.SupportsStructures;
+        toolNewDelegate.Visible = _diagram.Language.SupportsDelegates;
+        toolDelete.Enabled = _diagram.HasSelectedElement;
       }
     }
 
     private void Diagram_SelectionChanged(object sender, EventArgs e)
     {
-      toolDelete.Enabled = (diagram != null && diagram.HasSelectedElement);
+      toolDelete.Enabled = (_diagram != null && _diagram.HasSelectedElement);
     }
 
     private void UpdateTexts()
@@ -152,100 +152,94 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void mnuDiagram_DropDownOpening(object sender, EventArgs e)
     {
-      bool hasContent = (diagram != null && !diagram.IsEmpty);
+      bool hasContent = (_diagram != null && !_diagram.IsEmpty);
       mnuGenerateCode.Enabled = hasContent;
       mnuSaveAsImage.Enabled = hasContent;
     }
 
     private void mnuNewClass_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CreateShape(EntityType.Class);
+      _diagram?.CreateShape(EntityType.Class);
     }
 
     private void mnuNewStructure_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CreateShape(EntityType.Structure);
+      _diagram?.CreateShape(EntityType.Structure);
     }
 
     private void mnuNewInterface_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CreateShape(EntityType.Interface);
+      _diagram?.CreateShape(EntityType.Interface);
     }
 
     private void mnuNewEnum_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CreateShape(EntityType.Enum);
+      _diagram?.CreateShape(EntityType.Enum);
     }
 
     private void mnuNewDelegate_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CreateShape(EntityType.Delegate);
+      _diagram?.CreateShape(EntityType.Delegate);
     }
 
     private void mnuNewComment_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CreateShape(EntityType.Comment);
+      _diagram?.CreateShape(EntityType.Comment);
     }
 
     private void mnuNewState_Click(object sender, EventArgs e)
     {
-      diagram?.CreateShape(EntityType.State);
+      _diagram?.CreateShape(EntityType.State);
     }
 
     private void mnuNewAssociation_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Association);
+      _diagram.CreateConnection(RelationshipType.Association);
     }
 
     private void mnuNewComposition_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Composition);
+      _diagram.CreateConnection(RelationshipType.Composition);
     }
 
     private void mnuNewAggregation_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Aggregation);
+      _diagram.CreateConnection(RelationshipType.Aggregation);
     }
 
     private void mnuNewGeneralization_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Generalization);
+      _diagram.CreateConnection(RelationshipType.Generalization);
     }
 
     private void mnuNewRealization_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Realization);
+      _diagram.CreateConnection(RelationshipType.Realization);
     }
 
     private void mnuNewDependency_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Dependency);
+      _diagram.CreateConnection(RelationshipType.Dependency);
     }
 
     private void mnuNewNesting_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Nesting);
+      _diagram.CreateConnection(RelationshipType.Nesting);
     }
 
     private void mnuNewCommentRelationship_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Comment);
+      _diagram.CreateConnection(RelationshipType.Comment);
     }
 
     private void mnuNewEntityRelationship_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.EntityRelationship);
+      _diagram.CreateConnection(RelationshipType.EntityRelationship);
     }
 
     private void mnuNewTransitionRelationship_Click(object sender, EventArgs e)
     {
-      diagram.CreateConnection(RelationshipType.Transition);
+      _diagram.CreateConnection(RelationshipType.Transition);
     }
 
     private void mnuMembersFormat_DropDownOpening(object sender, EventArgs e)
@@ -259,40 +253,36 @@ namespace NClass.DiagramEditor.ClassDiagram
     private void mnuShowType_Click(object sender, EventArgs e)
     {
       Settings.Default.ShowType = ((ToolStripMenuItem)sender).Checked;
-      if (diagram != null)
-        diagram.Redraw();
+      _diagram?.Redraw();
     }
 
     private void mnuShowParameters_Click(object sender, EventArgs e)
     {
       Settings.Default.ShowParameters = ((ToolStripMenuItem)sender).Checked;
-      if (diagram != null)
-        diagram.Redraw();
+      _diagram?.Redraw();
     }
 
     private void mnuShowParameterNames_Click(object sender, EventArgs e)
     {
       Settings.Default.ShowParameterNames = ((ToolStripMenuItem)sender).Checked;
-      if (diagram != null)
-        diagram.Redraw();
+      _diagram?.Redraw();
     }
 
     private void mnuShowInitialValue_Click(object sender, EventArgs e)
     {
       Settings.Default.ShowInitialValue = ((ToolStripMenuItem)sender).Checked;
-      if (diagram != null)
-        diagram.Redraw();
+      _diagram?.Redraw();
     }
 
     private void mnuGenerateCode_Click(object sender, EventArgs e)
     {
-      if (diagram != null && diagram.Project != null)
+      if (_diagram?.Project != null)
       {
         using (CodeGenerator.Dialog dialog = new CodeGenerator.Dialog())
         {
           try
           {
-            dialog.ShowDialog(diagram.Project);
+            dialog.ShowDialog(_diagram.Project);
           }
           catch (Exception ex)
           {
@@ -305,14 +295,14 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void mnuSaveAsImage_Click(object sender, EventArgs e)
     {
-      if (diagram != null && !diagram.IsEmpty)
-        diagram.SaveAsImage();
+      if (!_diagram?.IsEmpty ?? false)
+        _diagram.SaveAsImage();
     }
 
     private void mnuFormat_DropDownOpening(object sender, EventArgs e)
     {
-      bool shapeSelected = (diagram != null && diagram.SelectedShapeCount >= 1);
-      bool multiselection = (diagram != null && diagram.SelectedShapeCount >= 2);
+      bool shapeSelected = (_diagram != null && _diagram.SelectedShapeCount >= 1);
+      bool multiselection = (_diagram != null && _diagram.SelectedShapeCount >= 2);
 
       mnuAutoWidth.Enabled = shapeSelected;
       mnuAutoHeight.Enabled = shapeSelected;
@@ -322,92 +312,77 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     private void mnuAlignTop_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AlignTop();
+      _diagram?.AlignTop();
     }
 
     private void mnuAlignLeft_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AlignLeft();
+      _diagram?.AlignLeft();
     }
 
     private void mnuAlignBottom_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AlignBottom();
+      _diagram?.AlignBottom();
     }
 
     private void mnuAlignRight_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AlignRight();
+      _diagram?.AlignRight();
     }
 
     private void mnuAlignHorizontal_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AlignHorizontal();
+      _diagram?.AlignHorizontal();
     }
 
     private void mnuAlignVertical_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AlignVertical();
+      _diagram?.AlignVertical();
     }
 
     private void mnuSameWidth_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AdjustToSameWidth();
+      _diagram?.AdjustToSameWidth();
     }
 
     private void mnuSameHeight_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AdjustToSameHeight();
+      _diagram?.AdjustToSameHeight();
     }
 
     private void mnuSameSize_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AdjustToSameSize();
+      _diagram?.AdjustToSameSize();
     }
 
     private void mnuAutoSize_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AutoSizeOfSelectedShapes();
+      _diagram?.AutoSizeOfSelectedShapes();
     }
 
     private void mnuAutoWidth_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AutoWidthOfSelectedShapes();
+      _diagram?.AutoWidthOfSelectedShapes();
     }
 
     private void mnuAutoHeight_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.AutoHeightOfSelectedShapes();
+      _diagram?.AutoHeightOfSelectedShapes();
     }
 
     private void mnuCollapseAll_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.CollapseAll();
+      _diagram?.CollapseAll();
     }
 
     private void mnuExpandAll_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.ExpandAll();
+      _diagram?.ExpandAll();
     }
 
     private void toolDelete_Click(object sender, EventArgs e)
     {
-      if (diagram != null)
-        diagram.DeleteSelectedElements();
+      _diagram?.DeleteSelectedElements();
     }
 
     #endregion
