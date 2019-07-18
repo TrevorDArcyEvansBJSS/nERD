@@ -68,7 +68,7 @@ namespace NClass.GUI.Dialogs
     private void LoadStyles()
     {
       cboStyles.Items.Clear();
-      foreach (Style style in Style.AvaiableStyles)
+      foreach (Style style in Style.AvailableStyles)
       {
         cboStyles.Items.Add(style);
         if (style.Equals(Style.CurrentStyle))
