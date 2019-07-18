@@ -22,57 +22,47 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 {
   public sealed class BendPoint
   {
-    const int Spacing = Connection.Spacing;
+    private const int Spacing = Connection.Spacing;
     internal const int SquareSize = 8;
 
-    static Color darkStartColor = Color.Blue;
-    static Color darkEndColor = Color.Red;
-    static Color lightStartColor = Color.FromArgb(178, 178, 255);
-    static Color lightEndColor = Color.FromArgb(255, 178, 178);
-    static Pen squarePen = new Pen(Color.Black);
-    static SolidBrush squareBrush = new SolidBrush(Color.Black);
+    private static readonly Color DarkStartColor = Color.Blue;
+    private static readonly Color DarkEndColor = Color.Red;
+    private static readonly Color LightStartColor = Color.FromArgb(178, 178, 255);
+    private static readonly Color LightEndColor = Color.FromArgb(255, 178, 178);
+    private static readonly Pen SquarePen = new Pen(Color.Black);
+    private static readonly SolidBrush SquareBrush = new SolidBrush(Color.Black);
 
-    Shape relativeShape;
-    bool relativeToStartShape;
-    bool autoPosition = true;
-    Size relativePosition = Size.Empty;
+    private readonly Shape _relativeShape;
+    private Size _relativePosition = Size.Empty;
 
     public BendPoint(Shape relativeShape, bool relativeToStartShape)
     {
       if (relativeShape == null)
         throw new ArgumentNullException("relativeShape");
 
-      this.relativeShape = relativeShape;
-      this.relativeToStartShape = relativeToStartShape;
+      _relativeShape = relativeShape;
+      RelativeToStartShape = relativeToStartShape;
     }
 
-    public BendPoint(Shape relativeShape, bool relativeToStartShape, bool autoPosition)
-      : this(relativeShape, relativeToStartShape)
+    public BendPoint(Shape relativeShape, bool relativeToStartShape, bool autoPosition) :
+      this(relativeShape, relativeToStartShape)
     {
-      this.autoPosition = autoPosition;
+      AutoPosition = autoPosition;
     }
 
-    public bool RelativeToStartShape
-    {
-      get { return relativeToStartShape; }
-      set { relativeToStartShape = value; }
-    }
+    public bool RelativeToStartShape { get; set; }
 
-    internal bool AutoPosition
-    {
-      get { return autoPosition; }
-      set { autoPosition = value; }
-    }
+    internal bool AutoPosition { get; set; } = true;
 
     public int X
     {
       get
       {
-        return (relativeShape.X + relativePosition.Width);
+        return (_relativeShape.X + _relativePosition.Width);
       }
       internal set
       {
-        relativePosition.Width = value - relativeShape.X;
+        _relativePosition.Width = value - _relativeShape.X;
       }
     }
 
@@ -80,11 +70,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     {
       get
       {
-        return (relativeShape.Y + relativePosition.Height);
+        return (_relativeShape.Y + _relativePosition.Height);
       }
       internal set
       {
-        relativePosition.Height = value - relativeShape.Y;
+        _relativePosition.Height = value - _relativeShape.Y;
       }
     }
 
@@ -92,34 +82,34 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     {
       get
       {
-        return (relativeShape.Location + relativePosition);
+        return (_relativeShape.Location + _relativePosition);
       }
       set
       {
-        if (value.X > relativeShape.Left - Spacing &&
-          value.X < relativeShape.Right + Spacing &&
-          value.Y > relativeShape.Top - Spacing &&
-          value.Y < relativeShape.Bottom + Spacing)
+        if (value.X > _relativeShape.Left - Spacing &&
+          value.X < _relativeShape.Right + Spacing &&
+          value.Y > _relativeShape.Top - Spacing &&
+          value.Y < _relativeShape.Bottom + Spacing)
         {
-          if (X <= relativeShape.Left - Spacing)
+          if (X <= _relativeShape.Left - Spacing)
           {
-            X = relativeShape.Left - Spacing;
+            X = _relativeShape.Left - Spacing;
             Y = value.Y;
           }
-          else if (X >= relativeShape.Right + Spacing)
+          else if (X >= _relativeShape.Right + Spacing)
           {
-            X = relativeShape.Right + Spacing;
+            X = _relativeShape.Right + Spacing;
             Y = value.Y;
           }
-          else if (Y <= relativeShape.Top - Spacing)
+          else if (Y <= _relativeShape.Top - Spacing)
           {
             X = value.X;
-            Y = relativeShape.Top - Spacing;
+            Y = _relativeShape.Top - Spacing;
           }
           else
           {
             X = value.X;
-            Y = relativeShape.Bottom + Spacing;
+            Y = _relativeShape.Bottom + Spacing;
           }
         }
         else
@@ -143,16 +133,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
       if (AutoPosition)
       {
-        squarePen.Color = RelativeToStartShape ? lightStartColor : lightEndColor;
-        g.DrawRectangle(squarePen, square.X, square.Y, square.Width, square.Height);
+        SquarePen.Color = RelativeToStartShape ? LightStartColor : LightEndColor;
+        g.DrawRectangle(SquarePen, square.X, square.Y, square.Width, square.Height);
       }
       else
       {
-        squarePen.Color = RelativeToStartShape ? darkStartColor : darkEndColor;
-        squareBrush.Color = RelativeToStartShape ? lightStartColor : lightEndColor;
+        SquarePen.Color = RelativeToStartShape ? DarkStartColor : DarkEndColor;
+        SquareBrush.Color = RelativeToStartShape ? LightStartColor : LightEndColor;
 
-        g.FillRectangle(squareBrush, square);
-        g.DrawRectangle(squarePen, square);
+        g.FillRectangle(SquareBrush, square);
+        g.DrawRectangle(SquarePen, square);
       }
     }
 
@@ -168,10 +158,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     internal void ShapeResized(Size size)
     {
-      if (X >= relativeShape.Left && X <= relativeShape.Right && Y > relativeShape.Top)
+      if (X >= _relativeShape.Left && X <= _relativeShape.Right && Y > _relativeShape.Top)
         Y += size.Height;
 
-      if (Y >= relativeShape.Top && Y <= relativeShape.Bottom && X > relativeShape.Left)
+      if (Y >= _relativeShape.Top && Y <= _relativeShape.Bottom && X > _relativeShape.Left)
         X += size.Width;
     }
 
