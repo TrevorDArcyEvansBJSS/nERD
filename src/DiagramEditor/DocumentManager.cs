@@ -18,52 +18,52 @@ using System.Collections.Generic;
 
 namespace NClass.DiagramEditor
 {
-  public class DocumentManager
+  public sealed class DocumentManager
   {
-    List<IDocument> documents = new List<IDocument>();
-    IDocument activeDocument = null;
-    OrderedList<IDocument> documentHistory = new OrderedList<IDocument>();
-    LinkedListNode<IDocument> switchingNode = null;
-
     public event DocumentEventHandler ActiveDocumentChanged;
     public event DocumentEventHandler DocumentAdded;
     public event DocumentEventHandler DocumentRemoved;
     public event DocumentMovedEventHandler DocumentMoved;
 
+    private LinkedListNode<IDocument> _switchingNode = null;
+
+    private readonly List<IDocument> _documents = new List<IDocument>();
     public IEnumerable<IDocument> Documents
     {
-      get { return documents; }
+      get { return _documents; }
     }
 
+    private readonly OrderedList<IDocument> _documentHistory = new OrderedList<IDocument>();
     public IEnumerable<IDocument> DocumentHistory
     {
-      get { return documentHistory; }
+      get { return _documentHistory; }
     }
 
     public int DocumentCount
     {
-      get { return documents.Count; }
+      get { return _documents.Count; }
     }
 
     public bool HasDocument
     {
-      get { return (documents.Count > 0); }
+      get { return (_documents.Count > 0); }
     }
 
+    private IDocument _activeDocument = null;
     public IDocument ActiveDocument
     {
       get
       {
-        return activeDocument;
+        return _activeDocument;
       }
       set
       {
-        if (activeDocument != value && documents.Contains(value))
+        if (_activeDocument != value && _documents.Contains(value))
         {
-          IDocument oldDocument = activeDocument;
+          IDocument oldDocument = _activeDocument;
           if (!SwitchingTabs)
-            documentHistory.ShiftToFirstPlace(value);
-          activeDocument = value;
+            _documentHistory.ShiftToFirstPlace(value);
+          _activeDocument = value;
           OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
         }
       }
@@ -71,7 +71,7 @@ namespace NClass.DiagramEditor
 
     public bool SwitchingTabs
     {
-      get { return (switchingNode != null); }
+      get { return (_switchingNode != null); }
     }
 
     private void Document_Closing(object sender, EventArgs e)
@@ -87,21 +87,21 @@ namespace NClass.DiagramEditor
 
       EndSwitching();
 
-      IDocument oldDocument = activeDocument;
-      if (documents.Contains(document))
+      IDocument oldDocument = _activeDocument;
+      if (_documents.Contains(document))
       {
-        if (activeDocument != document)
+        if (_activeDocument != document)
         {
-          activeDocument = document;
-          documentHistory.ShiftToFirstPlace(document);
+          _activeDocument = document;
+          _documentHistory.ShiftToFirstPlace(document);
           OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
         }
       }
       else
       {
-        documents.Add(document);
-        activeDocument = document;
-        documentHistory.AddFirst(document);
+        _documents.Add(document);
+        _activeDocument = document;
+        _documentHistory.AddFirst(document);
         document.Closing += new EventHandler(Document_Closing);
         OnDocumentAdded(new DocumentEventArgs(document));
         OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
@@ -110,7 +110,7 @@ namespace NClass.DiagramEditor
 
     public void MoveDocument(IDocument document, int places)
     {
-      int index = documents.IndexOf(document);
+      int index = _documents.IndexOf(document);
 
       if (index >= 0 && places != 0)
       {
@@ -119,7 +119,7 @@ namespace NClass.DiagramEditor
         {
           while (position < index + places && position < DocumentCount - 1)
           {
-            documents[position] = documents[position + 1];
+            _documents[position] = _documents[position + 1];
             position++;
           }
         }
@@ -127,12 +127,12 @@ namespace NClass.DiagramEditor
         {
           while (position > index + places && position > 0)
           {
-            documents[position] = documents[position - 1];
+            _documents[position] = _documents[position - 1];
             position--;
           }
         }
 
-        documents[position] = document;
+        _documents[position] = document;
         OnDocumentMoved(new DocumentMovedEventArgs(document, index, position));
       }
     }
@@ -141,18 +141,18 @@ namespace NClass.DiagramEditor
     {
       EndSwitching();
 
-      if (documents.Remove(document))
+      if (_documents.Remove(document))
       {
-        documentHistory.Remove(document);
+        _documentHistory.Remove(document);
         document.Closing -= new EventHandler(Document_Closing);
         OnDocumentRemoved(new DocumentEventArgs(document));
-        if (activeDocument == document)
+        if (_activeDocument == document)
         {
-          IDocument oldDocument = activeDocument;
+          IDocument oldDocument = _activeDocument;
           if (HasDocument)
-            activeDocument = documentHistory.FirstValue;
+            _activeDocument = _documentHistory.FirstValue;
           else
-            activeDocument = null;
+            _activeDocument = null;
           OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
         }
         return true;
@@ -169,20 +169,20 @@ namespace NClass.DiagramEditor
 
       if (HasDocument)
       {
-        while (documents.Count > 0)
+        while (_documents.Count > 0)
         {
-          IDocument document = documents[documents.Count - 1];
-          documents.RemoveAt(documents.Count - 1);
+          IDocument document = _documents[_documents.Count - 1];
+          _documents.RemoveAt(_documents.Count - 1);
           document.Closing -= new EventHandler(Document_Closing);
           OnDocumentRemoved(new DocumentEventArgs(document));
         }
 
-        documentHistory.Clear();
+        _documentHistory.Clear();
 
-        if (activeDocument != null)
+        if (_activeDocument != null)
         {
-          IDocument oldDocument = activeDocument;
-          activeDocument = null;
+          IDocument oldDocument = _activeDocument;
+          _activeDocument = null;
           OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
         }
       }
@@ -192,31 +192,31 @@ namespace NClass.DiagramEditor
     {
       EndSwitching();
 
-      if (HasDocument && documents.Count >= 2)
+      if (HasDocument && _documents.Count >= 2)
       {
-        while (documents.Count >= 2)
+        while (_documents.Count >= 2)
         {
-          IDocument document = documents[documents.Count - 1];
+          IDocument document = _documents[_documents.Count - 1];
           if (document != exception)
           {
-            documents.RemoveAt(documents.Count - 1);
+            _documents.RemoveAt(_documents.Count - 1);
           }
           else
           {
-            document = documents[documents.Count - 2];
-            documents.RemoveAt(documents.Count - 2);
+            document = _documents[_documents.Count - 2];
+            _documents.RemoveAt(_documents.Count - 2);
           }
           document.Closing -= new EventHandler(Document_Closing);
           OnDocumentRemoved(new DocumentEventArgs(document));
         }
 
-        documentHistory.Clear();
-        documentHistory.Add(exception);
+        _documentHistory.Clear();
+        _documentHistory.Add(exception);
 
-        if (activeDocument != exception)
+        if (_activeDocument != exception)
         {
-          IDocument oldDocument = activeDocument;
-          activeDocument = exception;
+          IDocument oldDocument = _activeDocument;
+          _activeDocument = exception;
           OnActiveDocumentChanged(new DocumentEventArgs(oldDocument));
         }
       }
@@ -226,14 +226,14 @@ namespace NClass.DiagramEditor
     {
       if (DocumentCount >= 2)
       {
-        if (switchingNode == null)
-          switchingNode = documentHistory.First;
+        if (_switchingNode == null)
+          _switchingNode = _documentHistory.First;
 
-        switchingNode = switchingNode.Next;
-        if (switchingNode == null)
-          switchingNode = documentHistory.First;
+        _switchingNode = _switchingNode.Next;
+        if (_switchingNode == null)
+          _switchingNode = _documentHistory.First;
 
-        ActiveDocument = switchingNode.Value;
+        ActiveDocument = _switchingNode.Value;
       }
     }
 
@@ -241,34 +241,30 @@ namespace NClass.DiagramEditor
     {
       if (SwitchingTabs)
       {
-        switchingNode = null;
+        _switchingNode = null;
         if (HasDocument)
-          documentHistory.ShiftToFirstPlace(ActiveDocument);
+          _documentHistory.ShiftToFirstPlace(ActiveDocument);
       }
     }
 
-    protected virtual void OnActiveDocumentChanged(DocumentEventArgs e)
+    private void OnActiveDocumentChanged(DocumentEventArgs e)
     {
-      if (ActiveDocumentChanged != null)
-        ActiveDocumentChanged(this, e);
+      ActiveDocumentChanged?.Invoke(this, e);
     }
 
-    protected virtual void OnDocumentAdded(DocumentEventArgs e)
+    private void OnDocumentAdded(DocumentEventArgs e)
     {
-      if (DocumentAdded != null)
-        DocumentAdded(this, e);
+      DocumentAdded?.Invoke(this, e);
     }
 
-    protected virtual void OnDocumentRemoved(DocumentEventArgs e)
+    private void OnDocumentRemoved(DocumentEventArgs e)
     {
-      if (DocumentRemoved != null)
-        DocumentRemoved(this, e);
+      DocumentRemoved?.Invoke(this, e);
     }
 
-    protected virtual void OnDocumentMoved(DocumentMovedEventArgs e)
+    private void OnDocumentMoved(DocumentMovedEventArgs e)
     {
-      if (DocumentMoved != null)
-        DocumentMoved(this, e);
+      DocumentMoved?.Invoke(this, e);
     }
   }
 }
