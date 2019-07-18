@@ -33,7 +33,6 @@ namespace NClass.Core
       Attach();
     }
 
-
     public CommentRelationship Clone(Comment comment, IEntity entity)
     {
       CommentRelationship relationship = new CommentRelationship(comment, entity);
@@ -43,8 +42,7 @@ namespace NClass.Core
 
     public override string ToString()
     {
-      return string.Format("{0}: {1} --- {2}",
-        Strings.Comment, First.ToString(), Second.Name);
+      return string.Format($"{Strings.Comment}: {First.ToString()} --- {Second.Name}");
     }
   }
 }
