@@ -23,7 +23,7 @@ namespace NClass.Core
 {
   public abstract class CompositeType : TypeBase
   {
-    private readonly List<TypeBase> nestedChilds = new List<TypeBase>();
+    private readonly List<TypeBase> _nestedChilds = new List<TypeBase>();
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -101,7 +101,7 @@ namespace NClass.Core
 
     public IEnumerable<TypeBase> NestedChilds
     {
-      get { return nestedChilds; }
+      get { return _nestedChilds; }
     }
 
     /// <exception cref="InvalidOperationException">
@@ -252,10 +252,10 @@ namespace NClass.Core
 
     internal void AddNestedChild(TypeBase type)
     {
-      if (type != null && !nestedChilds.Contains(type))
+      if (type != null && !_nestedChilds.Contains(type))
       {
         OnBeginUndoableOperation();
-        nestedChilds.Add(type);
+        _nestedChilds.Add(type);
         Changed();
       }
     }
@@ -267,7 +267,7 @@ namespace NClass.Core
         OnBeginUndoableOperation();
       }
 
-      if (type != null && nestedChilds.Remove(type))
+      if (type != null && _nestedChilds.Remove(type))
         Changed();
     }
 
