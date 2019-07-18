@@ -19,22 +19,22 @@ namespace NClass.DiagramEditor
 {
   public static class Clipboard
   {
-    static IClipboardItem item = null;
+    private static IClipboardItem _item = null;
 
     public static IClipboardItem Item
     {
-      get { return Clipboard.item; }
-      set { Clipboard.item = value; }
+      get { return Clipboard._item; }
+      set { Clipboard._item = value; }
     }
 
     public static bool IsEmpty
     {
-      get { return (item == null); }
+      get { return (_item == null); }
     }
 
     public static void Clear()
     {
-      item = null;
+      _item = null;
     }
 
     public static void Paste(IDocument document)
@@ -42,7 +42,7 @@ namespace NClass.DiagramEditor
       if (document == null)
         throw new ArgumentNullException("document");
 
-      item.Paste(document);
+      _item.Paste(document);
     }
   }
 }
