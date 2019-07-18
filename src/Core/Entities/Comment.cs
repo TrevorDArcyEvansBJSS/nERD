@@ -21,10 +21,10 @@ namespace NClass.Core
 {
   public sealed class Comment : Element, IEntity
   {
-    string text = string.Empty;
-
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
+
+    private string _text = string.Empty;
 
     internal Comment()
     {
@@ -32,7 +32,7 @@ namespace NClass.Core
 
     internal Comment(string text)
     {
-      this.text = text;
+      _text = text;
     }
 
     public EntityType EntityType
@@ -49,17 +49,17 @@ namespace NClass.Core
     {
       get
       {
-        return text;
+        return _text;
       }
       set
       {
         if (value == null)
           value = string.Empty;
 
-        if (text != value)
+        if (_text != value)
         {
           OnBeginUndoableOperation();
-          text = value;
+          _text = value;
           Changed();
         }
       }
@@ -67,20 +67,10 @@ namespace NClass.Core
 
     public Comment Clone()
     {
-      return new Comment(this.text);
+      return new Comment(this._text);
     }
 
-    void ISerializableElement.Serialize(XmlElement node)
-    {
-      Serialize(node);
-    }
-
-    void ISerializableElement.Deserialize(XmlElement node)
-    {
-      Deserialize(node);
-    }
-
-    internal void Serialize(XmlElement node)
+    public void Serialize(XmlElement node)
     {
       if (node == null)
         throw new ArgumentNullException("node");
@@ -98,31 +88,26 @@ namespace NClass.Core
     /// <exception cref="InvalidOperationException">
     /// The XML document is corrupt.
     /// </exception>
-    internal void Deserialize(XmlElement node)
+    public void Deserialize(XmlElement node)
     {
       if (node == null)
         throw new ArgumentNullException("node");
 
       XmlElement textNode = node["Text"];
 
-      if (textNode != null)
-        Text = textNode.InnerText;
-      else
-        Text = null;
+        Text = textNode?.InnerText;
 
       OnDeserializing(new SerializeEventArgs(node));
     }
 
     private void OnSerializing(SerializeEventArgs e)
     {
-      if (Serializing != null)
-        Serializing(this, e);
+      Serializing?.Invoke(this, e);
     }
 
     private void OnDeserializing(SerializeEventArgs e)
     {
-      if (Deserializing != null)
-        Deserializing(this, e);
+      Deserializing?.Invoke(this, e);
     }
 
     public override string ToString()
