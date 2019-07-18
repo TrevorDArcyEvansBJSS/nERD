@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace NClass.DiagramEditor.ClassDiagram
 {
-  public class ElementList<T> : OrderedList<T> where T : DiagramElement
+  public sealed class ElementList<T> : OrderedList<T> where T : DiagramElement
   {
     public IEnumerable<T> GetSelectedElements()
     {
