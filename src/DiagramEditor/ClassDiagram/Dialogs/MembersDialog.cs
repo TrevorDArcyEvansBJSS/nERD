@@ -40,8 +40,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void OnContentsChanged(EventArgs e)
     {
-      if (ContentsChanged != null)
-        ContentsChanged(this, e);
+      ContentsChanged?.Invoke(this, e);
     }
 
     private void UpdateTexts()
@@ -593,8 +592,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void cboAccess_SelectedIndexChanged(object sender, EventArgs e)
     {
-      int index = cboAccess.SelectedIndex;
-
       if (!Locked && Member != null)
       {
         try
