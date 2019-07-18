@@ -27,7 +27,6 @@ namespace NClass.DiagramEditor.ClassDiagram
   {
     private const int BorderOffset = 8;
     private const int BorderOffset2 = 12;
-    private const int Radius = 5;
 
     private static readonly float[] DashPattern = new float[] { 3, 3 };
     private static readonly Pen FirstPen = new Pen(Color.Blue)
