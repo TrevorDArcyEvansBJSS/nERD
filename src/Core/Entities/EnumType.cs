@@ -15,14 +15,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 
 namespace NClass.Core
 {
   public abstract class EnumType : TypeBase
   {
-    List<EnumValue> values = new List<EnumValue>();
+    private readonly List<EnumValue> _values = new List<EnumValue>();
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -38,12 +37,12 @@ namespace NClass.Core
 
     public IEnumerable<EnumValue> Values
     {
-      get { return values; }
+      get { return _values; }
     }
 
     public int ValueCount
     {
-      get { return values.Count; }
+      get { return _values.Count; }
     }
 
     public sealed override string Signature
@@ -81,7 +80,7 @@ namespace NClass.Core
         }
 
         OnBeginUndoableOperation();
-        values.Add(newValue);
+        _values.Add(newValue);
         newValue.BeginUndoableOperation += delegate { OnBeginUndoableOperation(); };
         newValue.Modified += delegate { Changed(); };
         Changed();
@@ -90,8 +89,8 @@ namespace NClass.Core
 
     public EnumValue GetValue(int index)
     {
-      if (index >= 0 && index < values.Count)
-        return values[index];
+      if (index >= 0 && index < _values.Count)
+        return _values[index];
       else
         return null;
     }
@@ -113,11 +112,11 @@ namespace NClass.Core
         return false;
 
       int index = -1;
-      for (int i = 0; i < values.Count; i++)
+      for (int i = 0; i < _values.Count; i++)
       {
-        if (values[i] == oldValue)
+        if (_values[i] == oldValue)
           index = i;
-        else if (values[i].Name == newValue.Name)
+        else if (_values[i].Name == newValue.Name)
           throw new ReservedNameException(newValue.Name);
       }
 
@@ -128,7 +127,7 @@ namespace NClass.Core
       else
       {
         OnBeginUndoableOperation();
-        values[index] = newValue;
+        _values[index] = newValue;
         Changed();
         return true;
       }
@@ -137,7 +136,7 @@ namespace NClass.Core
     public void RemoveValue(EnumValue value)
     {
       OnBeginUndoableOperation();
-      if (values.Remove(value))
+      if (_values.Remove(value))
         Changed();
     }
 
@@ -148,7 +147,7 @@ namespace NClass.Core
         OnBeginUndoableOperation();
       }
 
-      if (item is EnumValue && MoveUp(values, item))
+      if (item is EnumValue && MoveUp(_values, item))
       {
         Changed();
         return true;
@@ -166,7 +165,7 @@ namespace NClass.Core
         OnBeginUndoableOperation();
       }
 
-      if (item is EnumValue && MoveDown(values, item))
+      if (item is EnumValue && MoveDown(_values, item))
       {
         Changed();
         return true;
@@ -182,11 +181,11 @@ namespace NClass.Core
       base.CopyFrom(type);
 
       EnumType enumType = (EnumType)type;
-      values.Clear();
-      values.Capacity = enumType.values.Capacity;
-      foreach (EnumValue value in enumType.values)
+      _values.Clear();
+      _values.Capacity = enumType._values.Capacity;
+      foreach (EnumValue value in enumType._values)
       {
-        values.Add(value.Clone());
+        _values.Add(value.Clone());
       }
     }
 
@@ -196,7 +195,7 @@ namespace NClass.Core
     {
       base.Serialize(node);
 
-      foreach (EnumValue value in values)
+      foreach (EnumValue value in _values)
       {
         XmlElement child = node.OwnerDocument.CreateElement("Value");
         child.InnerText = value.ToString();
