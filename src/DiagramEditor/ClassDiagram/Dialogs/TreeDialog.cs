@@ -23,7 +23,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
   public abstract partial class TreeDialog : Form
   {
-    bool checkingLocked = false;
+    private bool _checkingLocked = false;
 
     public TreeDialog()
     {
@@ -94,9 +94,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void treMembers_AfterCheck(object sender, TreeViewEventArgs e)
     {
-      if (!checkingLocked)
+      if (!_checkingLocked)
       {
-        checkingLocked = true;
+        _checkingLocked = true;
 
         TreeNode node = e.Node;
         TreeNode parentNode = e.Node.Parent;
@@ -126,7 +126,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         foreach (TreeNode child in node.Nodes)
           child.Checked = node.Checked;
 
-        checkingLocked = false;
+        _checkingLocked = false;
       }
     }
   }
