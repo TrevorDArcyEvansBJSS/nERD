@@ -27,8 +27,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     private readonly EntityRelationship _relationship;
 
-    public EntityRelationshipConnection(EntityRelationship relationship, Shape startShape, Shape endShape)
-      : base(relationship, startShape, endShape)
+    public EntityRelationshipConnection(EntityRelationship relationship, Shape startShape, Shape endShape) :
+      base(relationship, startShape, endShape)
     {
       _relationship = relationship;
     }
@@ -68,10 +68,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
     {
-      var firstType = first.Entity as ClassType;
-      var secondType = second.Entity as ClassType;
-
-      if (firstType != null && secondType != null)
+      if (first.Entity is ClassType firstType && second.Entity is ClassType secondType)
       {
         var clone = _relationship.Clone(firstType, secondType);
         return diagram.InsertEntityRelationship(clone);
@@ -202,7 +199,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
           {
             case MultiplicityType.ZeroOrOne:
               {
-                g.DrawLine(pen, -OptionalCircleDiameter / 2, 2* OptionalCircleDiameter, OptionalCircleDiameter / 2, 2* OptionalCircleDiameter);
+                g.DrawLine(pen, -OptionalCircleDiameter / 2, 2 * OptionalCircleDiameter, OptionalCircleDiameter / 2, 2 * OptionalCircleDiameter);
                 g.FillEllipse(brush, -OptionalCircleDiameter / 2, OptionalCircleDiameter / 2, OptionalCircleDiameter, OptionalCircleDiameter);
                 g.DrawEllipse(pen, -OptionalCircleDiameter / 2, OptionalCircleDiameter / 2, OptionalCircleDiameter, OptionalCircleDiameter);
               }
