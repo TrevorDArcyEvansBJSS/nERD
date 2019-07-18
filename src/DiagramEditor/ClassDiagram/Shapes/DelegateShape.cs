@@ -23,28 +23,23 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public sealed class DelegateShape : TypeShape
   {
-    static DelegateEditor typeEditor = new DelegateEditor();
-    static ParameterEditor parameterEditor = new ParameterEditor();
-    static DelegateDialog delegateDialog = new DelegateDialog();
-    static SolidBrush parameterBrush = new SolidBrush(Color.Black);
-
-    DelegateType _delegate;
+    private static readonly DelegateEditor TypeEditor = new DelegateEditor();
+    private static readonly ParameterEditor ParameterEditor = new ParameterEditor();
+    private static readonly DelegateDialog DelegateDialog = new DelegateDialog();
+    private static readonly SolidBrush ParameterBrush = new SolidBrush(Color.Black);
 
     internal DelegateShape(DelegateType _delegate) : base(_delegate)
     {
-      this._delegate = _delegate;
+      DelegateType = _delegate;
       UpdateMinSize();
     }
 
     public override TypeBase TypeBase
     {
-      get { return _delegate; }
+      get { return DelegateType; }
     }
 
-    public DelegateType DelegateType
-    {
-      get { return _delegate; }
-    }
+    public DelegateType DelegateType { get; }
 
     internal Parameter ActiveParameter
     {
@@ -79,20 +74,20 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override TypeEditor HeaderEditor
     {
-      get { return typeEditor; }
+      get { return TypeEditor; }
     }
 
     protected override EditorWindow ContentEditor
     {
-      get { return parameterEditor; }
+      get { return ParameterEditor; }
     }
 
     protected override EditorWindow GetEditorWindow()
     {
       if (ActiveParameter == null)
-        return typeEditor;
+        return TypeEditor;
       else
-        return parameterEditor;
+        return ParameterEditor;
     }
 
     protected internal override bool DeleteSelectedMember(bool showConfirmation)
@@ -167,7 +162,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected internal override void EditMembers()
     {
-      delegateDialog.ShowDialog(DelegateType);
+      DelegateDialog.ShowDialog(DelegateType);
     }
 
     protected override void OnMouseDown(AbsoluteMouseEventArgs e)
@@ -230,7 +225,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       Font font = GetFont(style);
       string memberString = parameter.ToString();
-      parameterBrush.Color = style.EnumItemColor;
+      ParameterBrush.Color = style.EnumItemColor;
 
       if (style.UseIcons)
       {
@@ -241,11 +236,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
           record.X + IconSpacing, record.Y,
           record.Width - IconSpacing, record.Height);
 
-        g.DrawString(memberString, font, parameterBrush, textBounds, memberFormat);
+        g.DrawString(memberString, font, ParameterBrush, textBounds, MemberFormat);
       }
       else
       {
-        g.DrawString(memberString, font, parameterBrush, record, memberFormat);
+        g.DrawString(memberString, font, ParameterBrush, record, MemberFormat);
       }
     }
 
@@ -284,7 +279,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       foreach (Parameter parameter in DelegateType.Arguments)
       {
         float itemWidth = g.MeasureString(parameter.ToString(),
-          font, PointF.Empty, memberFormat).Width;
+          font, PointF.Empty, MemberFormat).Width;
         requiredWidth = Math.Max(requiredWidth, itemWidth);
       }
 
