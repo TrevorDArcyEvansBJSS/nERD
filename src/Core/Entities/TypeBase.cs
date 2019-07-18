@@ -22,10 +22,6 @@ namespace NClass.Core
 {
   public abstract class TypeBase : LanguageElement, IEntity
   {
-    private string name;
-    private AccessModifier access = AccessModifier.Public;
-    private CompositeType nestingParent = null;
-
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
@@ -39,6 +35,7 @@ namespace NClass.Core
       Initializing = false;
     }
 
+    private string _name;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -46,16 +43,16 @@ namespace NClass.Core
     {
       get
       {
-        return name;
+        return _name;
       }
       set
       {
         string newName = Language.GetValidName(value, true);
 
-        if (newName != name)
+        if (newName != _name)
         {
           OnBeginUndoableOperation();
-          name = newName;
+          _name = newName;
           Changed();
         }
       }
@@ -66,6 +63,7 @@ namespace NClass.Core
       get;
     }
 
+    private AccessModifier _access = AccessModifier.Public;
     /// <exception cref="BadSyntaxException">
     /// The type visibility is not valid in the current context.
     /// </exception>
@@ -73,17 +71,17 @@ namespace NClass.Core
     {
       get
       {
-        return access;
+        return _access;
       }
       set
       {
         if (!Language.IsValidModifier(value))
           throw new BadSyntaxException(Strings.ErrorInvalidModifier);
 
-        if (access != value)
+        if (_access != value)
         {
           OnBeginUndoableOperation();
-          access = value;
+          _access = value;
           Changed();
         }
       }
@@ -105,6 +103,7 @@ namespace NClass.Core
       }
     }
 
+    private CompositeType _nestingParent = null;
     /// <exception cref="RelationshipException">
     /// Parent type does not support nesting.-or-
     /// The inner type is already nested.-or-
@@ -114,11 +113,11 @@ namespace NClass.Core
     {
       get
       {
-        return nestingParent;
+        return _nestingParent;
       }
       protected internal set
       {
-        if (nestingParent != value)
+        if (_nestingParent != value)
         {
           if (value == this)
           {
@@ -134,11 +133,9 @@ namespace NClass.Core
           }
 
           OnBeginUndoableOperation();
-          if (nestingParent != null)
-            nestingParent.RemoveNestedChild(this);
-          nestingParent = value;
-          if (nestingParent != null)
-            nestingParent.AddNestedChild(this);
+          _nestingParent?.RemoveNestedChild(this);
+          _nestingParent = value;
+          _nestingParent?.AddNestedChild(this);
           Changed();
         }
       }
@@ -216,8 +213,8 @@ namespace NClass.Core
 
     protected virtual void CopyFrom(TypeBase type)
     {
-      name = type.name;
-      access = type.access;
+      _name = type._name;
+      _access = type._access;
     }
 
     void ISerializableElement.Serialize(XmlElement node)
@@ -261,8 +258,7 @@ namespace NClass.Core
 
       RaisePreChangedEvent = RaiseChangedEvent = false;
       XmlElement nameChild = node["Name"];
-      if (nameChild != null)
-        Name = nameChild.InnerText;
+      Name = nameChild?.InnerText;
 
       XmlElement accessChild = node["Access"];
       if (accessChild != null)
@@ -274,14 +270,12 @@ namespace NClass.Core
 
     private void OnSerializing(SerializeEventArgs e)
     {
-      if (Serializing != null)
-        Serializing(this, e);
+      Serializing?.Invoke(this, e);
     }
 
     private void OnDeserializing(SerializeEventArgs e)
     {
-      if (Deserializing != null)
-        Deserializing(this, e);
+      Deserializing?.Invoke(this, e);
     }
 
     public override string ToString()
