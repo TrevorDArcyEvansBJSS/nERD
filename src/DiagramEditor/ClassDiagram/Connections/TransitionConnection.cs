@@ -110,10 +110,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected override bool CloneRelationship(Diagram diagram, Shape first, Shape second)
     {
-      var firstType = first.Entity as State;
-      var secondType = second.Entity as State;
-
-      if (firstType != null && secondType != null)
+      if (first.Entity is State firstType && second.Entity is State secondType)
       {
         var clone = Transition.Clone(firstType, secondType);
         return diagram.InsertTransitionRelationship(clone);
