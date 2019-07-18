@@ -29,10 +29,6 @@ namespace NClass.DiagramEditor
   {
     public const float MinZoom = 0.1F;
     public const float MaxZoom = 4.0F;
-    private static readonly Pen BorderPen = new Pen(Color.FromArgb(128, Color.Black))
-    {
-      DashPattern = new float[] { 5, 5 }
-    };
 
     public event EventHandler ZoomChanged;
     public event EventHandler DocumentRedrawed;
@@ -231,7 +227,7 @@ namespace NClass.DiagramEditor
         if (ParentForm != null)
         {
           ParentForm.Controls.Add(window);
-          Point point = this.PointToScreen(Point.Empty);
+          Point point = PointToScreen(Point.Empty);
           Point absPos = ParentForm.PointToClient(point);
           window.ParentLocation = absPos;
           window.BringToFront();
@@ -245,10 +241,7 @@ namespace NClass.DiagramEditor
       if (_windows.Contains(window))
       {
         _windows.Remove(window);
-        if (ParentForm != null)
-        {
-          ParentForm.Controls.Remove(window);
-        }
+          ParentForm?.Controls.Remove(window);
       }
     }
 
@@ -397,16 +390,16 @@ namespace NClass.DiagramEditor
     {
       if (HasDocument)
       {
-        this.AutoScrollMinSize = new Size(
+        AutoScrollMinSize = new Size(
           (int)Math.Ceiling(Document.Size.Width * Document.Zoom),
           (int)Math.Ceiling(Document.Size.Height * Document.Zoom)
         );
-        this.AutoScrollPosition = Document.Offset;
+        AutoScrollPosition = Document.Offset;
       }
       else
       {
-        this.AutoScrollMinSize = Size.Empty;
-        this.AutoScrollPosition = Point.Empty;
+        AutoScrollMinSize = Size.Empty;
+        AutoScrollPosition = Point.Empty;
       }
     }
 
@@ -500,7 +493,7 @@ namespace NClass.DiagramEditor
     {
       if (ParentForm != null)
       {
-        Point point = this.PointToScreen(Point.Empty);
+        Point point = PointToScreen(Point.Empty);
         Point absPos = ParentForm.PointToClient(point);
 
         foreach (PopupWindow window in _windows)
@@ -558,8 +551,7 @@ namespace NClass.DiagramEditor
     {
       UpdateDocumentOffset();
       Invalidate();
-      if (MouseHWheel != null)
-        MouseHWheel(this, e);
+      MouseHWheel?.Invoke(this, e);
     }
 
     protected override void OnMouseDown(MouseEventArgs e)
@@ -571,7 +563,7 @@ namespace NClass.DiagramEditor
         AbsoluteMouseEventArgs abs_e = new AbsoluteMouseEventArgs(e, Document);
         Document.MouseDown(abs_e);
         if (e.Button == MouseButtons.Right)
-          this.ContextMenuStrip = Document.GetContextMenu(abs_e);
+          ContextMenuStrip = Document.GetContextMenu(abs_e);
       }
     }
 
@@ -666,20 +658,17 @@ namespace NClass.DiagramEditor
 
     private void OnZoomChanged(EventArgs e)
     {
-      if (ZoomChanged != null)
-        ZoomChanged(this, e);
+      ZoomChanged?.Invoke(this, e);
     }
 
     private void OnDocumentRedrawed(EventArgs e)
     {
-      if (DocumentRedrawed != null)
-        DocumentRedrawed(this, e);
+      DocumentRedrawed?.Invoke(this, e);
     }
 
     private void OnVisibleAreaChanged(EventArgs e)
     {
-      if (VisibleAreaChanged != null)
-        VisibleAreaChanged(this, e);
+      VisibleAreaChanged?.Invoke(this, e);
     }
   }
 }
