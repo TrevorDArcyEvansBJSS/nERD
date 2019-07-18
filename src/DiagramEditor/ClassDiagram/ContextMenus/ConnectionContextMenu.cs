@@ -22,19 +22,23 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
 {
   internal sealed class ConnectionContextMenu : DiagramContextMenu
   {
-    static ConnectionContextMenu _default = new ConnectionContextMenu();
-
-    ToolStripMenuItem mnuAutoRouting;
+    private readonly ToolStripMenuItem mnuAutoRouting;
 
     private ConnectionContextMenu()
     {
-      InitMenuItems();
+      mnuAutoRouting = new ToolStripMenuItem(Strings.MenuAutoRouting, null, mnuAutoRouting_Click);
+
+      MenuList.AddRange(GeneralContextMenu.Default.MenuItems);
+      MenuList.AddRange(new ToolStripItem[]
+      {
+        new ToolStripSeparator(),
+        mnuAutoRouting,
+      });
+
+      UpdateTexts();
     }
 
-    public static ConnectionContextMenu Default
-    {
-      get { return _default; }
-    }
+    public static ConnectionContextMenu Default { get; } = new ConnectionContextMenu();
 
     private void UpdateTexts()
     {
@@ -45,18 +49,6 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     {
       base.ValidateMenuItems(diagram);
       GeneralContextMenu.Default.ValidateMenuItems(diagram);
-    }
-
-    private void InitMenuItems()
-    {
-      mnuAutoRouting = new ToolStripMenuItem(Strings.MenuAutoRouting, null, mnuAutoRouting_Click);
-
-      MenuList.AddRange(GeneralContextMenu.Default.MenuItems);
-      MenuList.AddRange(new ToolStripItem[]
-      {
-        new ToolStripSeparator(),
-        mnuAutoRouting,
-      });
     }
 
     private void mnuAutoRouting_Click(object sender, EventArgs e)
