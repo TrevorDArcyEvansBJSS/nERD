@@ -25,6 +25,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public abstract class Shape : DiagramElement
   {
+    public event MoveEventHandler Move;
+    public event MoveEventHandler Dragging;
+    public event ResizeEventHandler Resizing;
+    public event ResizeEventHandler Resize;
+
     protected enum ResizeMode
     {
       None = 0,
@@ -33,31 +38,24 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     }
 
     public const int SelectionMargin = 12;
+
     private static readonly Pen SelectionSquarePen = new Pen(Color.Black);
     protected static readonly float[] BorderDashPattern = new float[] { 3, 3 };
     protected static readonly SolidBrush ShadowBrush = new SolidBrush(Color.Gray);
     protected static readonly Size DefaultMinSize = new Size(50, 50);
 
-    private Point location;
-    private Size size;
-    private ResizeMode resizeMode = ResizeMode.None;
-    private Size minimumSize = DefaultMinSize;
-    private PointF mouseDownLocation = PointF.Empty;
-    private bool mouseLeaved = true;
-    private Cursor cursor = Cursors.Default;
-
-    public event MoveEventHandler Move;
-    public event MoveEventHandler Dragging;
-    public event ResizeEventHandler Resizing;
-    public event ResizeEventHandler Resize;
+    private ResizeMode _resizeMode = ResizeMode.None;
+    private PointF _mouseDownLocation = PointF.Empty;
+    private bool _mouseLeaved = true;
+    private Cursor _cursor = Cursors.Default;
 
     protected Shape(IEntity entity)
     {
       if (entity == null)
         throw new ArgumentNullException("entity");
 
-      location = Point.Empty;
-      size = DefaultSize;
+      _location = Point.Empty;
+      _size = DefaultSize;
 
       entity.Modified += delegate { OnModified(EventArgs.Empty); };
 
@@ -76,18 +74,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       get;
     }
 
+    private Size _minimumSize = DefaultMinSize;
     protected Size MinimumSize
     {
       get
       {
-        return minimumSize;
+        return _minimumSize;
       }
       set
       {
-        minimumSize = value;
-        if (minimumSize.Width > size.Width)
+        _minimumSize = value;
+        if (_minimumSize.Width > _size.Width)
           Width = value.Width;
-        if (minimumSize.Height > size.Height)
+        if (_minimumSize.Height > _size.Height)
           Height = value.Height;
       }
     }
@@ -97,19 +96,20 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       get;
     }
 
+    private Point _location;
     public Point Location
     {
       get
       {
-        return location;
+        return _location;
       }
       set
       {
-        if (location != value)
+        if (_location != value)
         {
           Size offset = new Size(value.X - X, value.Y - Y);
-          mouseDownLocation += offset;
-          location = value;
+          _mouseDownLocation += offset;
+          _location = value;
           OnMove(new MoveEventArgs(offset));
           OnModified(EventArgs.Empty);
         }
@@ -120,15 +120,15 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       get
       {
-        return location.X;
+        return _location.X;
       }
       set
       {
-        if (location.X != value)
+        if (_location.X != value)
         {
           Size offset = new Size(value - X, 0);
-          mouseDownLocation.X += offset.Width;
-          location.X = value;
+          _mouseDownLocation.X += offset.Width;
+          _location.X = value;
           OnMove(new MoveEventArgs(offset));
           OnModified(EventArgs.Empty);
         }
@@ -139,26 +139,27 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       get
       {
-        return location.Y;
+        return _location.Y;
       }
       set
       {
-        if (location.Y != value)
+        if (_location.Y != value)
         {
           Size offset = new Size(0, value - Y);
-          mouseDownLocation.Y += offset.Height;
-          location.Y = value;
+          _mouseDownLocation.Y += offset.Height;
+          _location.Y = value;
           OnMove(new MoveEventArgs(offset));
           OnModified(EventArgs.Empty);
         }
       }
     }
 
+    private Size _size;
     public virtual Size Size
     {
       get
       {
-        return size;
+        return _size;
       }
       set
       {
@@ -167,12 +168,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (value.Height < MinimumSize.Height)
           value.Height = MinimumSize.Height;
 
-        if (size != value)
+        if (_size != value)
         {
           Size change = new Size(value.Width - Width, value.Height - Height);
           if (IsResizing)
-            mouseDownLocation += change;
-          size = value;
+            _mouseDownLocation += change;
+          _size = value;
           OnResize(new ResizeEventArgs(change));
           OnModified(EventArgs.Empty);
         }
@@ -183,19 +184,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       get
       {
-        return size.Width;
+        return _size.Width;
       }
       set
       {
         if (value < MinimumSize.Width)
           value = MinimumSize.Width;
 
-        if (size.Width != value)
+        if (_size.Width != value)
         {
           Size change = new Size(value - Width, 0);
           if (IsResizing)
-            mouseDownLocation.X += change.Width;
-          size.Width = value;
+            _mouseDownLocation.X += change.Width;
+          _size.Width = value;
           OnResize(new ResizeEventArgs(change));
           OnModified(EventArgs.Empty);
         }
@@ -206,19 +207,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       get
       {
-        return size.Height;
+        return _size.Height;
       }
       set
       {
         if (value < MinimumSize.Height)
           value = MinimumSize.Height;
 
-        if (size.Height != value)
+        if (_size.Height != value)
         {
           Size change = new Size(0, value - Height);
           if (IsResizing)
-            mouseDownLocation.Y += change.Height;
-          size.Height = value;
+            _mouseDownLocation.Y += change.Height;
+          _size.Height = value;
           OnResize(new ResizeEventArgs(change));
           OnModified(EventArgs.Empty);
         }
@@ -263,7 +264,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       get
       {
-        return ((Left + Right) / 2);
+        return (Left + Right) / 2;
       }
     }
 
@@ -271,7 +272,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       get
       {
-        return ((Top + Bottom) / 2);
+        return (Top + Bottom) / 2;
       }
     }
 
@@ -306,7 +307,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     internal bool IsResizing
     {
-      get { return (resizeMode != ResizeMode.None); }
+      get { return (_resizeMode != ResizeMode.None); }
     }
 
     public virtual void Collapse()
@@ -575,13 +576,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         {
           e.Handled = true;
           var oldResizing = IsResizing;
-          resizeMode = GetResizeMode(e);
+          _resizeMode = GetResizeMode(e);
           if (oldResizing != IsResizing)
           {
             _currentOperation = DiagramElementOperation.Resizing;
             OnBeginUndoableOperation(EventArgs.Empty);
           }
-          Cursor.Current = cursor;
+          Cursor.Current = _cursor;
           OnMouseDown(e);
         }
       }
@@ -597,9 +598,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         {
           contains = Contains(e.Location);
 
-          if (Contains(e.Location) && mouseLeaved)
+          if (Contains(e.Location) && _mouseLeaved)
             OnMouseEnter(EventArgs.Empty);
-          else if (!Contains(e.Location) && !mouseLeaved)
+          else if (!Contains(e.Location) && !_mouseLeaved)
             OnMouseLeave(EventArgs.Empty);
 
           contains |= (IsSelected && GetResizeMode(e) != ResizeMode.None);
@@ -610,19 +611,19 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
           e.Handled = true;
           if (IsMousePressed)
           {
-            Cursor.Current = cursor;
+            Cursor.Current = _cursor;
           }
           else
           {
-            cursor = GetCursor(e);
-            Cursor.Current = cursor;
+            _cursor = GetCursor(e);
+            Cursor.Current = _cursor;
           }
           OnMouseMove(e);
         }
       }
       else // Already handled
       {
-        if (!mouseLeaved)
+        if (!_mouseLeaved)
           OnMouseLeave(EventArgs.Empty);
       }
     }
@@ -662,14 +663,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     {
       Size change = Size.Empty;
 
-      if ((resizeMode & ResizeMode.Right) != 0)
+      if ((_resizeMode & ResizeMode.Right) != 0)
       {
-        int offset = (int)(mouseLocation.X - mouseDownLocation.X);
+        int offset = (int)(mouseLocation.X - _mouseDownLocation.X);
         change.Width += offset;
       }
-      if ((resizeMode & ResizeMode.Bottom) != 0)
+      if ((_resizeMode & ResizeMode.Bottom) != 0)
       {
-        int offset = (int)(mouseLocation.Y - mouseDownLocation.Y);
+        int offset = (int)(mouseLocation.Y - _mouseDownLocation.Y);
         change.Height += offset;
       }
 
@@ -680,8 +681,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected virtual void CopyFrom(Shape shape)
     {
-      location = shape.location;
-      size = shape.size;
+      _location = shape._location;
+      _size = shape._size;
     }
 
     protected override void OnDeactivating(EventArgs e)
@@ -692,7 +693,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override void OnMouseDown(AbsoluteMouseEventArgs e)
     {
-      mouseDownLocation = e.Location;
+      _mouseDownLocation = e.Location;
       base.OnMouseDown(e);
     }
 
@@ -707,8 +708,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       else if (IsMousePressed && e.Button == MouseButtons.Left)
       {
         Size offset = new Size(
-          (int)(e.X - mouseDownLocation.X),
-          (int)(e.Y - mouseDownLocation.Y));
+          (int)(e.X - _mouseDownLocation.X),
+          (int)(e.Y - _mouseDownLocation.Y));
 
         if (_currentOperation == DiagramElementOperation.None)
         {
@@ -723,7 +724,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     protected override void OnMouseUp(AbsoluteMouseEventArgs e)
     {
       base.OnMouseUp(e);
-      resizeMode = ResizeMode.None;
+      _resizeMode = ResizeMode.None;
       _currentOperation = DiagramElementOperation.None;
     }
 
@@ -764,12 +765,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected virtual void OnMouseEnter(EventArgs e)
     {
-      mouseLeaved = false;
+      _mouseLeaved = false;
     }
 
     protected virtual void OnMouseLeave(EventArgs e)
     {
-      mouseLeaved = true;
+      _mouseLeaved = true;
     }
 
     public override string ToString()

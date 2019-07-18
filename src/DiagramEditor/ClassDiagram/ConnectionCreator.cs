@@ -45,16 +45,15 @@ namespace NClass.DiagramEditor.ClassDiagram
       CustomEndCap = new AdjustableArrowCap(6, 7, true)
     };
 
+    public bool Created { get; private set; } = false;
+
     public ConnectionCreator(Diagram diagram, RelationshipType type)
     {
       Diagram = diagram;
       Type = type;
     }
 
-    public bool Created { get; private set; } = false;
-
     private Diagram Diagram { get; }
-
     private RelationshipType Type { get; }
     private bool FirstSelected { get; set; } = false;
     private Shape First { get; set; } = null;

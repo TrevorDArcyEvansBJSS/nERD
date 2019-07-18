@@ -26,9 +26,8 @@ namespace NClass.DiagramEditor.ClassDiagram
   public abstract class DiagramElement : IModifiable
   {
     protected const float UndreadableZoom = 0.25F;
+
     internal static Graphics Graphics = null; // Graphics object for text measuring
-    private bool isSelected = false;
-    private bool isActive = false;
     protected DiagramElementOperation _currentOperation = DiagramElementOperation.None;
 
     public event EventHandler BeginUndoableOperation;
@@ -45,42 +44,44 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     public Diagram Diagram { get; set; }
 
+    private bool _isSelected = false;
     public bool IsSelected
     {
       get
       {
-        return isSelected;
+        return _isSelected;
       }
       set
       {
-        if (isSelected != value)
+        if (_isSelected != value)
         {
-          isSelected = value;
+          _isSelected = value;
           NeedsRedraw = true;
           OnSelectionChanged(EventArgs.Empty);
         }
       }
     }
 
+    private bool _isActive = false;
     public bool IsActive
     {
       get
       {
-        return isActive;
+        return _isActive;
       }
       set
       {
-        if (isActive != value)
+        if (_isActive != value)
         {
           if (value)
             OnActivating(EventArgs.Empty);
           else
             OnDeactivating(EventArgs.Empty);
 
-          isActive = value;
+          _isActive = value;
           NeedsRedraw = true;
 
-          if (isActive)
+          if (_isActive)
             OnActivated(EventArgs.Empty);
           else
             OnDeactivated(EventArgs.Empty);
@@ -117,14 +118,12 @@ namespace NClass.DiagramEditor.ClassDiagram
 
     protected void ShowWindow(PopupWindow window)
     {
-      if (Diagram != null)
-        Diagram.ShowWindow(window);
+      Diagram?.ShowWindow(window);
     }
 
     protected void HideWindow(PopupWindow window)
     {
-      if (Diagram != null)
-        Diagram.HideWindow(window);
+      Diagram?.HideWindow(window);
     }
 
     protected internal virtual void ShowEditor()
@@ -222,38 +221,32 @@ namespace NClass.DiagramEditor.ClassDiagram
     {
       IsDirty = true;
       NeedsRedraw = true;
-      if (Modified != null)
-        Modified(this, e);
+      Modified?.Invoke(this, e);
     }
 
     protected virtual void OnSelectionChanged(EventArgs e)
     {
-      if (SelectionChanged != null)
-        SelectionChanged(this, e);
+      SelectionChanged?.Invoke(this, e);
     }
 
     protected virtual void OnActivating(EventArgs e)
     {
-      if (Activating != null)
-        Activating(this, e);
+      Activating?.Invoke(this, e);
     }
 
     protected virtual void OnActivated(EventArgs e)
     {
-      if (Activated != null)
-        Activated(this, e);
+      Activated?.Invoke(this, e);
     }
 
     protected virtual void OnDeactivating(EventArgs e)
     {
-      if (Deactivating != null)
-        Deactivating(this, e);
+      Deactivating?.Invoke(this, e);
     }
 
     protected virtual void OnDeactivated(EventArgs e)
     {
-      if (Deactivated != null)
-        Deactivated(this, e);
+      Deactivated?.Invoke(this, e);
     }
 
     protected virtual void OnMouseDown(AbsoluteMouseEventArgs e)
@@ -261,33 +254,28 @@ namespace NClass.DiagramEditor.ClassDiagram
       IsMousePressed = true;
       IsSelected = true;
 
-      if (MouseDown != null)
-        MouseDown(this, e);
+      MouseDown?.Invoke(this, e);
     }
 
     protected virtual void OnMouseMove(AbsoluteMouseEventArgs e)
     {
-      if (MouseMove != null)
-        MouseMove(this, e);
+      MouseMove?.Invoke(this, e);
     }
 
     protected virtual void OnMouseUp(AbsoluteMouseEventArgs e)
     {
       IsMousePressed = false;
-      if (MouseUp != null)
-        MouseUp(this, e);
+      MouseUp?.Invoke(this, e);
     }
 
     protected virtual void OnDoubleClick(AbsoluteMouseEventArgs e)
     {
-      if (DoubleClick != null)
-        DoubleClick(this, e);
+      DoubleClick?.Invoke(this, e);
     }
 
     protected virtual void OnBeginUndoableOperation(EventArgs e)
     {
-      if (BeginUndoableOperation != null)
-        BeginUndoableOperation(this, e);
+      BeginUndoableOperation?.Invoke(this, e);
     }
 
     internal abstract void MousePressed(AbsoluteMouseEventArgs e);
