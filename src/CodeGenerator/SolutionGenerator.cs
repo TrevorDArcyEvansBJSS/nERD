@@ -24,31 +24,19 @@ namespace NClass.CodeGenerator
 {
   public abstract class SolutionGenerator
   {
-    Project project;
-    List<ProjectGenerator> projectGenerators = new List<ProjectGenerator>();
-
     protected SolutionGenerator(Project project)
     {
-      if (project == null)
-        throw new ArgumentNullException("project");
-
-      this.project = project;
+      Project = project ?? throw new ArgumentNullException("project");
     }
 
     public string SolutionName
     {
-      get { return project.Name; }
+      get { return Project.Name; }
     }
 
-    protected Project Project
-    {
-      get { return project; }
-    }
+    protected Project Project { get; }
 
-    protected List<ProjectGenerator> ProjectGenerators
-    {
-      get { return projectGenerators; }
-    }
+    protected List<ProjectGenerator> ProjectGenerators { get; } = new List<ProjectGenerator>();
 
     /// <exception cref="ArgumentException">
     /// <paramref name="location"/> contains invalid path characters.
@@ -98,17 +86,17 @@ namespace NClass.CodeGenerator
     private bool GenerateProjectFiles(string location)
     {
       bool success = true;
-      location = Path.Combine(location, project.Name);
+      location = Path.Combine(location, Project.Name);
 
-      projectGenerators.Clear();
-      foreach (IProjectItem projectItem in project.Items)
+      ProjectGenerators.Clear();
+      foreach (IProjectItem projectItem in Project.Items)
       {
         Model model = projectItem as Model;
 
         if (model != null)
         {
           ProjectGenerator projectGenerator = CreateProjectGenerator(model);
-          projectGenerators.Add(projectGenerator);
+          ProjectGenerators.Add(projectGenerator);
 
           try
           {
