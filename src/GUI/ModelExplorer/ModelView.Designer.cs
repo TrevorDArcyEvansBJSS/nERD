@@ -35,8 +35,8 @@ namespace NClass.GUI.ModelExplorer
 			}
 			if (disposing)
 			{
-				normalFont.Dispose();
-				boldFont.Dispose();
+				_normalFont.Dispose();
+				_boldFont.Dispose();
 			}
 			base.Dispose(disposing);
 		}
