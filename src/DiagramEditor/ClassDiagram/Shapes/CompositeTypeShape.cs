@@ -24,22 +24,23 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
   public abstract class CompositeTypeShape : TypeShape
   {
     private const int AccessSpacing = 12;
-    private static readonly CompositeTypeEditor typeEditor = new CompositeTypeEditor();
-    private static readonly MemberEditor memberEditor = new MemberEditor();
-    private static readonly MembersDialog membersDialog = new MembersDialog();
-    private static readonly SolidBrush memberBrush = new SolidBrush(Color.Black);
-    private static readonly StringFormat accessFormat = new StringFormat(StringFormat.GenericTypographic);
-    private static readonly Pen selectionPen = new Pen(Color.Black);
 
-    static CompositeTypeShape()
+    private static readonly CompositeTypeEditor TypeEditor = new CompositeTypeEditor();
+    private static readonly MemberEditor MemberEditor = new MemberEditor();
+    private static readonly MembersDialog MembersDialog = new MembersDialog();
+    private static readonly SolidBrush MemberBrush = new SolidBrush(Color.Black);
+    private static readonly StringFormat AccessFormat = new StringFormat(StringFormat.GenericTypographic)
     {
-      accessFormat.Alignment = StringAlignment.Center;
-      accessFormat.LineAlignment = StringAlignment.Center;
-      selectionPen.DashPattern = new float[] { 2, 4 };
-    }
+      Alignment = StringAlignment.Center,
+      LineAlignment = StringAlignment.Center
+    };
+    private static readonly Pen SelectionPen = new Pen(Color.Black)
+    {
+      DashPattern = new float[] { 2, 4 }
+    };
 
-    protected CompositeTypeShape(CompositeType compositeType)
-      : base(compositeType)
+    protected CompositeTypeShape(CompositeType compositeType) :
+      base(compositeType)
     {
     }
 
@@ -52,12 +53,12 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected override TypeEditor HeaderEditor
     {
-      get { return typeEditor; }
+      get { return TypeEditor; }
     }
 
     protected override EditorWindow ContentEditor
     {
-      get { return memberEditor; }
+      get { return MemberEditor; }
     }
 
     protected internal Member ActiveMember
@@ -117,7 +118,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected internal override void EditMembers()
     {
-      membersDialog.ShowDialog(CompositeType);
+      MembersDialog.ShowDialog(CompositeType);
     }
 
     protected override EditorWindow GetEditorWindow()
@@ -127,7 +128,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
         if (ActiveMember == null)
           return HeaderEditor;
         else
-          return memberEditor;
+          return MemberEditor;
       }
       else
       {
@@ -350,9 +351,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       Font memberFont = GetMemberFont(member, style);
 
       if (member is Field)
-        memberBrush.Color = style.AttributeColor;
+        MemberBrush.Color = style.AttributeColor;
       else
-        memberBrush.Color = style.OperationColor;
+        MemberBrush.Color = style.OperationColor;
 
       if (style.UseIcons)
       {
@@ -364,7 +365,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
           record.Width - IconSpacing, record.Height);
 
         string memberString = GetMemberString(member);
-        g.DrawString(memberString, memberFont, memberBrush, textBounds, memberFormat);
+        g.DrawString(memberString, memberFont, MemberBrush, textBounds, MemberFormat);
       }
       else
       {
@@ -375,9 +376,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
           record.Width - AccessSpacing, record.Height);
 
         g.DrawString(GetAccessString(member), GetFont(style),
-          memberBrush, accessBounds, accessFormat);
+          MemberBrush, accessBounds, AccessFormat);
         g.DrawString(GetMemberString(member), memberFont,
-          memberBrush, textBounds, memberFormat);
+          MemberBrush, textBounds, MemberFormat);
       }
     }
 
@@ -430,13 +431,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       foreach (Field field in CompositeType.Fields)
       {
         float fieldWidth = g.MeasureString(GetMemberString(field),
-          GetMemberFont(field, style), PointF.Empty, memberFormat).Width;
+          GetMemberFont(field, style), PointF.Empty, MemberFormat).Width;
         requiredWidth = Math.Max(requiredWidth, fieldWidth);
       }
       foreach (Operation operation in CompositeType.Operations)
       {
         float operationWidth = g.MeasureString(GetMemberString(operation),
-          GetMemberFont(operation, style), PointF.Empty, memberFormat).Width;
+          GetMemberFont(operation, style), PointF.Empty, MemberFormat).Width;
         requiredWidth = Math.Max(requiredWidth, operationWidth);
       }
       requiredWidth += (style.UseIcons) ? IconSpacing : AccessSpacing;
