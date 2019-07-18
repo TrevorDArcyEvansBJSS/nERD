@@ -25,19 +25,19 @@ namespace NClass.GUI.ModelExplorer
 {
   public partial class ModelView : TreeView
   {
-    Workspace workspace = null;
-    Font boldFont, normalFont;
-
     public event DocumentEventHandler DocumentOpening;
+
+    private Font _normalFont;
+    private Font _boldFont;
 
     public ModelView()
     {
       InitializeComponent();
-      this.Controls.Add(lblAddProject);
+      Controls.Add(lblAddProject);
       UpdateTexts();
 
-      normalFont = new Font(this.Font, FontStyle.Regular);
-      boldFont = new Font(this.Font, FontStyle.Bold);
+      _normalFont = new Font(Font, FontStyle.Regular);
+      _boldFont = new Font(Font, FontStyle.Bold);
     }
 
     private void UpdateTexts()
@@ -51,33 +51,34 @@ namespace NClass.GUI.ModelExplorer
       lblAddProject.Text = Strings.DoubleClickToAddProject;
     }
 
+    private Workspace _workspace = null;
     [Browsable(false)]
     public Workspace Workspace
     {
       get
       {
-        return workspace;
+        return _workspace;
       }
       set
       {
-        if (workspace != value)
+        if (_workspace != value)
         {
-          if (workspace != null)
+          if (_workspace != null)
           {
-            workspace.ActiveProjectChanged -= workspace_ActiveProjectChanged;
-            workspace.ProjectAdded -= workspace_ProjectAdded;
-            workspace.ProjectRemoved -= workspace_ProjectRemoved;
+            _workspace.ActiveProjectChanged -= workspace_ActiveProjectChanged;
+            _workspace.ProjectAdded -= workspace_ProjectAdded;
+            _workspace.ProjectRemoved -= workspace_ProjectRemoved;
             RemoveProjects();
           }
-          workspace = value;
-          if (workspace != null)
+          _workspace = value;
+          if (_workspace != null)
           {
-            workspace.ActiveProjectChanged += workspace_ActiveProjectChanged;
-            workspace.ProjectAdded += workspace_ProjectAdded;
-            workspace.ProjectRemoved += workspace_ProjectRemoved;
+            _workspace.ActiveProjectChanged += workspace_ActiveProjectChanged;
+            _workspace.ProjectAdded += workspace_ProjectAdded;
+            _workspace.ProjectRemoved += workspace_ProjectRemoved;
             LoadProjects();
           }
-          lblAddProject.Visible = (workspace != null && !workspace.HasProject);
+          lblAddProject.Visible = (_workspace != null && !_workspace.HasProject);
         }
       }
     }
@@ -117,7 +118,7 @@ namespace NClass.GUI.ModelExplorer
           break;
         }
       }
-      if (!workspace.HasProject)
+      if (!_workspace.HasProject)
         lblAddProject.Visible = true;
     }
 
@@ -133,7 +134,7 @@ namespace NClass.GUI.ModelExplorer
 
     private void LoadProjects()
     {
-      foreach (Project project in workspace.Projects)
+      foreach (Project project in _workspace.Projects)
       {
         AddProject(project);
       }
@@ -144,9 +145,9 @@ namespace NClass.GUI.ModelExplorer
       foreach (ProjectNode node in Nodes)
       {
         if (node.Project == Workspace.ActiveProject)
-          node.NodeFont = boldFont;
+          node.NodeFont = _boldFont;
         else
-          node.NodeFont = normalFont;
+          node.NodeFont = _normalFont;
         node.Text = node.Text; // Little hack to update the text's clipping size
       }
 
@@ -166,9 +167,9 @@ namespace NClass.GUI.ModelExplorer
 
     private void lblAddProject_DoubleClick(object sender, EventArgs e)
     {
-      if (workspace != null && !workspace.HasProject)
+      if (_workspace != null && !_workspace.HasProject)
       {
-        workspace.AddEmptyProject();
+        _workspace.AddEmptyProject();
       }
     }
 
@@ -186,14 +187,12 @@ namespace NClass.GUI.ModelExplorer
       if (e.KeyCode == Keys.Enter)
       {
         ModelNode selectedNode = SelectedNode as ModelNode;
-        if (selectedNode != null)
-          selectedNode.EnterPressed();
+          selectedNode?.EnterPressed();
       }
       else if (e.KeyCode == Keys.F2)
       {
         ModelNode selectedNode = SelectedNode as ModelNode;
-        if (selectedNode != null)
-          selectedNode.EditLabel();
+          selectedNode?.EditLabel();
       }
     }
 
@@ -229,18 +228,17 @@ namespace NClass.GUI.ModelExplorer
 
     protected internal virtual void OnDocumentOpening(DocumentEventArgs e)
     {
-      if (DocumentOpening != null)
-        DocumentOpening(this, e);
+      DocumentOpening?.Invoke(this, e);
     }
 
     protected override void OnFontChanged(EventArgs e)
     {
       base.OnFontChanged(e);
 
-      normalFont.Dispose();
-      boldFont.Dispose();
-      normalFont = new Font(this.Font, FontStyle.Regular);
-      boldFont = new Font(this.Font, FontStyle.Bold);
+      _normalFont.Dispose();
+      _boldFont.Dispose();
+      _normalFont = new Font(this.Font, FontStyle.Regular);
+      _boldFont = new Font(this.Font, FontStyle.Bold);
     }
 
     #region Context menu event handlers
