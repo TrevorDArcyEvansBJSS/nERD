@@ -1811,36 +1811,6 @@ namespace NClass.DiagramEditor.ClassDiagram
       base.OnRelationRemoved(e);
     }
 
-    protected override void OnDeserializing(SerializeEventArgs e)
-    {
-      base.OnDeserializing(e);
-
-      // Old file format
-      {
-        XmlElement positionsNode = e.Node["Positions"];
-        if (positionsNode != null)
-        {
-          LinkedListNode<Shape> currentShapeNode = ShapeList.Last;
-          foreach (XmlElement shapeNode in positionsNode.SelectNodes("Shape"))
-          {
-            if (currentShapeNode == null)
-              break;
-            currentShapeNode.Value.Deserialize(shapeNode);
-            currentShapeNode = currentShapeNode.Previous;
-          }
-
-          LinkedListNode<Connection> currentConnecitonNode = ConnectionList.Last;
-          foreach (XmlElement connectionNode in positionsNode.SelectNodes("Connection"))
-          {
-            if (currentConnecitonNode == null)
-              break;
-            currentConnecitonNode.Value.Deserialize(connectionNode);
-            currentConnecitonNode = currentConnecitonNode.Previous;
-          }
-        }
-      }
-    }
-
     private void OnOffsetChanged(EventArgs e)
     {
       OffsetChanged?.Invoke(this, e);

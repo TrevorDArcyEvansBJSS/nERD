@@ -764,26 +764,18 @@ namespace NClass.Core
       switch (type)
       {
         case "Class":
-        case "CSharpClass":     // Old file format
-        case "JavaClass":       // Old file format
           return AddClass();
 
         case "Structure":
-        case "StructType":      // Old file format
           return AddStructure();
 
         case "Interface":
-        case "CSharpInterface": // Old file format
-        case "JavaInterface":   // Old file format
           return AddInterface();
 
         case "Enum":
-        case "CSharpEnum":      // Old file format
-        case "JavaEnum":        // Old file format
           return AddEnum();
 
         case "Delegate":
-        case "DelegateType":    // Old file format
           return AddDelegate();
 
         case "Comment":
@@ -805,7 +797,7 @@ namespace NClass.Core
       if (root == null)
         throw new ArgumentNullException("root");
 
-      XmlNodeList nodeList = root.SelectNodes("Relationships/Relationship|Relations/Relation"); // old file format
+      XmlNodeList nodeList = root.SelectNodes("Relationships/Relationship");
 
       foreach (XmlElement node in nodeList)
       {
@@ -855,7 +847,6 @@ namespace NClass.Core
               break;
 
             case "Comment":
-            case "CommentRelationship": // Old file format
               if (first is Comment)
                 relationship = AddCommentRelationship(first as Comment, second);
               else

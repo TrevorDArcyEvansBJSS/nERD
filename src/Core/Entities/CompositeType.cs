@@ -469,7 +469,7 @@ namespace NClass.Core
     {
       RaisePreChangedEvent = RaiseChangedEvent = false;
 
-      foreach (XmlElement childNode in node.SelectNodes("Member|Field|Operation")) // old file format
+      foreach (XmlElement childNode in node.SelectNodes("Member|Field|Operation"))
       {
         string type = childNode.GetAttribute("type");
 
@@ -500,16 +500,12 @@ namespace NClass.Core
       switch (type)
       {
         case "Constructor":
-        case "CSharpConstructor":  // Old file format
-        case "JavaConstructor":    // Old file format
           return AddConstructor();
 
         case "Destructor":
           return AddDestructor();
 
         case "Method":
-        case "CSharpMethod":       // Old file format
-        case "JavaMethod":         // Old file format
           return AddMethod();
 
         case "Property":

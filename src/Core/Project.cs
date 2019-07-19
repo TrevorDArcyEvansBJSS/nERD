@@ -232,23 +232,6 @@ namespace NClass.Core
       }
 
       XmlElement root = document["Project"];
-      if (root == null)
-      {
-        root = document["ClassProject"]; // Old file format
-        if (root == null)
-        {
-          throw new InvalidDataException(Strings.ErrorCorruptSaveFile);
-        }
-        else
-        {
-          Project oldProject = LoadWithPreviousFormat(root);
-          oldProject.FilePath = fileName;
-          oldProject._name = Path.GetFileNameWithoutExtension(fileName);
-          oldProject.IsUntitled = false;
-          return oldProject;
-        }
-      }
-
       Project project = new Project();
       project._loading = true;
       try
@@ -263,31 +246,6 @@ namespace NClass.Core
       project.FilePath = fileName;
       project.IsReadOnly = project._projectFile.IsReadOnly;
 
-      return project;
-    }
-
-    private static Project LoadWithPreviousFormat(XmlElement root)
-    {
-      Project project = new Project();
-      project._loading = true;
-
-      Assembly assembly = Assembly.Load("NClass.DiagramEditor");
-      IProjectItem projectItem = (IProjectItem)assembly.CreateInstance(
-        "NClass.DiagramEditor.ClassDiagram.Diagram", false,
-        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-        null, null, null, null);
-
-      try
-      {
-        projectItem.Deserialize(root);
-      }
-      catch (Exception ex)
-      {
-        throw new InvalidDataException(Strings.ErrorCorruptSaveFile, ex);
-      }
-      project.Add(projectItem);
-      project._loading = false;
-      project.IsReadOnly = true;
       return project;
     }
 
