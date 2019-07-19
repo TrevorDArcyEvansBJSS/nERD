@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor
 {
-  public partial class Canvas : UserControl, IDocumentVisualizer
+  public sealed partial class Canvas : UserControl, IDocumentVisualizer
   {
     public const float MinZoom = 0.1F;
     public const float MaxZoom = 4.0F;
@@ -132,7 +132,7 @@ namespace NClass.DiagramEditor
       }
     }
 
-    Size IDocumentVisualizer.DocumentSize
+    public Size DocumentSize
     {
       get
       {
@@ -241,7 +241,7 @@ namespace NClass.DiagramEditor
       if (_windows.Contains(window))
       {
         _windows.Remove(window);
-          ParentForm?.Controls.Remove(window);
+        ParentForm?.Controls.Remove(window);
       }
     }
 
@@ -418,7 +418,7 @@ namespace NClass.DiagramEditor
       }
     }
 
-    void IDocumentVisualizer.DrawDocument(Graphics g)
+    public void DrawDocument(Graphics g)
     {
       if (HasDocument)
       {
@@ -483,7 +483,7 @@ namespace NClass.DiagramEditor
     {
       if (HasDocument)
       {
-        Document.Offset = this.Offset;
+        Document.Offset = Offset;
         if (MonoHelper.IsRunningOnMono)
           Invalidate();
       }
@@ -527,7 +527,7 @@ namespace NClass.DiagramEditor
 
     protected override void OnMouseWheel(MouseEventArgs e)
     {
-      if (Control.ModifierKeys == Keys.Control)
+      if (ModifierKeys == Keys.Control)
       {
         bool enlarge = (e.Delta > 0);
 
@@ -536,7 +536,7 @@ namespace NClass.DiagramEditor
         else
           ChangeZoom(enlarge);
       }
-      else if (Control.ModifierKeys == Keys.Shift)
+      else if (ModifierKeys == Keys.Shift)
       {
         ScrollHorizontally(-e.Delta);
       }
@@ -547,12 +547,14 @@ namespace NClass.DiagramEditor
       UpdateDocumentOffset();
     }
 
-    protected virtual void OnMouseHWheel(EventArgs e)
+    private void OnMouseHWheel(EventArgs e)
     {
       UpdateDocumentOffset();
       Invalidate();
       MouseHWheel?.Invoke(this, e);
     }
+
+    private PointF _initialScrollPosAbs = PointF.Empty;
 
     protected override void OnMouseDown(MouseEventArgs e)
     {
@@ -560,10 +562,16 @@ namespace NClass.DiagramEditor
 
       if (HasDocument)
       {
-        AbsoluteMouseEventArgs abs_e = new AbsoluteMouseEventArgs(e, Document);
+        var abs_e = new AbsoluteMouseEventArgs(e, Document);
         Document.MouseDown(abs_e);
         if (e.Button == MouseButtons.Right)
+        {
           ContextMenuStrip = Document.GetContextMenu(abs_e);
+        }
+        if (e.Button == MouseButtons.Middle)
+        {
+          _initialScrollPosAbs = abs_e.Location;
+        }
       }
     }
 
@@ -573,7 +581,17 @@ namespace NClass.DiagramEditor
 
       if (HasDocument)
       {
-        Document.MouseMove(new AbsoluteMouseEventArgs(e, Document));
+        var abs_e = new AbsoluteMouseEventArgs(e, Document);
+        Document.MouseMove(abs_e);
+
+        if (e.Button == MouseButtons.Middle)
+        {
+          var horizDiff = abs_e.X - _initialScrollPosAbs.X > 0 ? -1 : 1;
+          var vertDiff = abs_e.Y - _initialScrollPosAbs.Y > 0 ? -1 : 1;
+          var currOffset = Offset;
+          currOffset.Offset(3 * horizDiff, 3 * vertDiff);
+          Offset = currOffset;
+        }
       }
     }
 
@@ -584,6 +602,7 @@ namespace NClass.DiagramEditor
       if (HasDocument)
       {
         Document.MouseUp(new AbsoluteMouseEventArgs(e, Document));
+        _initialScrollPosAbs = PointF.Empty;
       }
     }
 
