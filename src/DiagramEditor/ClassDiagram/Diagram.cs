@@ -51,7 +51,6 @@ namespace NClass.DiagramEditor.ClassDiagram
       DashPattern = new float[] { DashSize, DashSize }
     };
 
-    private DiagramElement _activeElement = null;
     private Mode _state = Mode.Normal;
     private bool _selectioning = false;
     private RectangleF _selectionFrame = RectangleF.Empty;
@@ -211,6 +210,7 @@ namespace NClass.DiagramEditor.ClassDiagram
       get { return ConnectionList.Count; }
     }
 
+    private DiagramElement _activeElement = null;
     public DiagramElement ActiveElement
     {
       get
