@@ -586,10 +586,13 @@ namespace NClass.DiagramEditor
 
         if (e.Button == MouseButtons.Middle)
         {
-          var horizDiff = abs_e.X - _initialScrollPosAbs.X > 0 ? -1 : 1;
-          var vertDiff = abs_e.Y - _initialScrollPosAbs.Y > 0 ? -1 : 1;
+          // seems to work well, at least on my system...
+          const int DiffMagnifier = 3;
+
+          var horDiff = Math.Sign(_initialScrollPosAbs.X - abs_e.X); ;
+          var verDiff = Math.Sign(_initialScrollPosAbs.Y - abs_e.Y);
           var currOffset = Offset;
-          currOffset.Offset(3 * horizDiff, 3 * vertDiff);
+          currOffset.Offset(DiffMagnifier * horDiff, DiffMagnifier * verDiff);
           Offset = currOffset;
         }
       }
