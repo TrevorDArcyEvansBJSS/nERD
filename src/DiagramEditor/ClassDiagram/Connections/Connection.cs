@@ -1668,78 +1668,46 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     protected virtual void OnDeserializing(SerializeEventArgs e)
     {
-      // Old file format
-      XmlElement oldStartNode = e.Node["StartNode"];
-      XmlElement oldEndNode = e.Node["EndNode"];
-      if (oldStartNode != null && oldEndNode != null)
+      XmlElement startNode = e.Node["StartOrientation"];
+      if (startNode != null)
       {
-        bool isHorizontal;
-        bool.TryParse(oldStartNode.GetAttribute("isHorizontal"), out isHorizontal);
-        _startOrientation = (isHorizontal) ? LineOrientation.Horizontal : LineOrientation.Vertical;
-        bool.TryParse(oldEndNode.GetAttribute("isHorizontal"), out isHorizontal);
-        _endOrientation = (isHorizontal) ? LineOrientation.Horizontal : LineOrientation.Vertical;
-
-        int startLocation, endLocation;
-        int.TryParse(oldStartNode.GetAttribute("location"), out startLocation);
-        int.TryParse(oldEndNode.GetAttribute("location"), out endLocation);
-
-        Reroute();
-        if (_startOrientation == LineOrientation.Vertical)
-          FirstBendPoint.X = StartShape.Left + startLocation;
+        if (startNode.InnerText == "Horizontal")
+          _startOrientation = LineOrientation.Horizontal;
         else
-          FirstBendPoint.Y = StartShape.Top + startLocation;
-
-        if (_endOrientation == LineOrientation.Vertical)
-          LastBendPoint.X = EndShape.Left + endLocation;
-        else
-          LastBendPoint.Y = EndShape.Top + endLocation;
-
-        FirstBendPoint.AutoPosition = false;
-        LastBendPoint.AutoPosition = false;
-        Reroute();
+          _startOrientation = LineOrientation.Vertical;
       }
-      else
+
+      XmlElement endNode = e.Node["EndOrientation"];
+      if (endNode != null)
       {
-        // New file format
-        XmlElement startNode = e.Node["StartOrientation"];
-        if (startNode != null)
-        {
-          if (startNode.InnerText == "Horizontal")
-            _startOrientation = LineOrientation.Horizontal;
-          else
-            _startOrientation = LineOrientation.Vertical;
-        }
-        XmlElement endNode = e.Node["EndOrientation"];
-        if (endNode != null)
-        {
-          if (endNode.InnerText == "Horizontal")
-            _endOrientation = LineOrientation.Horizontal;
-          else
-            _endOrientation = LineOrientation.Vertical;
-        }
-
-        if (startNode != null && endNode != null) // To be sure it's the new file format
-        {
-          _bendPoints.Clear();
-
-          XmlNodeList nodes = e.Node.SelectNodes("child::BendPoint");
-          foreach (XmlElement node in nodes)
-          {
-            bool relativeToStartShape;
-            bool.TryParse(node.GetAttribute("relativeToStartShape"), out relativeToStartShape);
-            Shape relativeShape = relativeToStartShape ? StartShape : EndShape;
-
-            BendPoint point = new BendPoint(relativeShape, relativeToStartShape, false);
-            point.Deserialize(node);
-            _bendPoints.Add(point);
-          }
-          if (_bendPoints.Count == 0 || !FirstBendPoint.RelativeToStartShape)
-            _bendPoints.AddFirst(new BendPoint(StartShape, true));
-          if (LastBendPoint.RelativeToStartShape)
-            _bendPoints.Add(new BendPoint(EndShape, false));
-        }
-        Reroute();
+        if (endNode.InnerText == "Horizontal")
+          _endOrientation = LineOrientation.Horizontal;
+        else
+          _endOrientation = LineOrientation.Vertical;
       }
+
+      if (startNode != null && endNode != null) // To be sure it's the new file format
+      {
+        _bendPoints.Clear();
+
+        XmlNodeList nodes = e.Node.SelectNodes("child::BendPoint");
+        foreach (XmlElement node in nodes)
+        {
+          bool relativeToStartShape;
+          bool.TryParse(node.GetAttribute("relativeToStartShape"), out relativeToStartShape);
+          Shape relativeShape = relativeToStartShape ? StartShape : EndShape;
+
+          BendPoint point = new BendPoint(relativeShape, relativeToStartShape, false);
+          point.Deserialize(node);
+          _bendPoints.Add(point);
+        }
+        if (_bendPoints.Count == 0 || !FirstBendPoint.RelativeToStartShape)
+          _bendPoints.AddFirst(new BendPoint(StartShape, true));
+        if (LastBendPoint.RelativeToStartShape)
+          _bendPoints.Add(new BendPoint(EndShape, false));
+      }
+
+      Reroute();
     }
 
     public override string ToString()

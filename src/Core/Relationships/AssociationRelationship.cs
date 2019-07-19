@@ -254,8 +254,7 @@ namespace NClass.Core
       RaisePreChangedEvent = RaiseChangedEvent = false;
       if (child != null)
       {
-        // Old file format
-        if (child.InnerText == "Unidirectional" || child.InnerText == "SourceDestination")
+        if (child.InnerText == "Unidirectional")
           Direction = Direction.Unidirectional;
         else
           Direction = Direction.Bidirectional;
@@ -263,17 +262,6 @@ namespace NClass.Core
 
       try
       {
-        // Old file format
-        {
-          child = node["IsAggregation"];
-          if (child != null && bool.Parse(child.InnerText))
-            _associationType = AssociationType.Aggregation;
-
-          child = node["IsComposition"];
-          if (child != null && bool.Parse(child.InnerText))
-            _associationType = AssociationType.Composition;
-        }
-
         child = node["AssociationType"];
         if (child != null)
         {
