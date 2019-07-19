@@ -36,8 +36,8 @@ namespace NClass.Core
     {
     }
 
-    protected RelationshipException(SerializationInfo info, StreamingContext context)
-      : base(info, context)
+    public RelationshipException(SerializationInfo info, StreamingContext context) :
+      base(info, context)
     {
     }
   }
