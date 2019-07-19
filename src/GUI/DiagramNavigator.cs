@@ -23,37 +23,36 @@ using System.Windows.Forms;
 
 namespace NClass.GUI
 {
-  public class DiagramNavigator : Control
+  public sealed class DiagramNavigator : Control
   {
-    private IDocumentVisualizer visualizer = null;
-
     public DiagramNavigator()
     {
       SetStyle(ControlStyles.UserPaint, true);
       DoubleBuffered = true;
     }
 
+    private IDocumentVisualizer _visualizer = null;
     [Browsable(false)]
     public IDocumentVisualizer DocumentVisualizer
     {
       get
       {
-        return visualizer;
+        return _visualizer;
       }
       set
       {
-        if (visualizer != value)
+        if (_visualizer != value)
         {
-          if (visualizer != null)
+          if (_visualizer != null)
           {
-            visualizer.DocumentRedrawed -= visualizer_DocumentRedrawed;
-            visualizer.VisibleAreaChanged -= visualizer_VisibleAreaChanged;
+            _visualizer.DocumentRedrawed -= visualizer_DocumentRedrawed;
+            _visualizer.VisibleAreaChanged -= visualizer_VisibleAreaChanged;
           }
-          visualizer = value;
-          if (visualizer != null)
+          _visualizer = value;
+          if (_visualizer != null)
           {
-            visualizer.DocumentRedrawed += visualizer_DocumentRedrawed;
-            visualizer.VisibleAreaChanged += visualizer_VisibleAreaChanged;
+            _visualizer.DocumentRedrawed += visualizer_DocumentRedrawed;
+            _visualizer.VisibleAreaChanged += visualizer_VisibleAreaChanged;
           }
         }
       }
@@ -64,12 +63,12 @@ namespace NClass.GUI
 
     private void visualizer_DocumentRedrawed(object sender, EventArgs e)
     {
-      this.Invalidate();
+      Invalidate();
     }
 
     private void visualizer_VisibleAreaChanged(object sender, EventArgs e)
     {
-      this.Invalidate();
+      Invalidate();
     }
 
     protected override void OnMouseDown(MouseEventArgs e)
@@ -90,7 +89,7 @@ namespace NClass.GUI
     {
       if (DocumentVisualizer != null && DocumentVisualizer.HasDocument)
       {
-        float zoom = this.GetZoom() / DocumentVisualizer.Zoom;
+        float zoom = GetZoom() / DocumentVisualizer.Zoom;
         float frameWidth = DocumentVisualizer.VisibleArea.Width * DocumentVisualizer.Zoom;
         float frameHeight = DocumentVisualizer.VisibleArea.Height * DocumentVisualizer.Zoom;
 
@@ -103,7 +102,7 @@ namespace NClass.GUI
 
     private float GetZoom()
     {
-      Rectangle borders = this.ClientRectangle;
+      Rectangle borders = ClientRectangle;
       float zoom1 = (float)borders.Width / DocumentVisualizer.DocumentSize.Width;
       float zoom2 = (float)borders.Height / DocumentVisualizer.DocumentSize.Height;
 
