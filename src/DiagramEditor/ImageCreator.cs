@@ -26,15 +26,15 @@ namespace NClass.DiagramEditor
 {
   public static class ImageCreator
   {
-    const string DialogFilter = "BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|" +
+    private const string DialogFilter = "BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|" +
       "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png|" +
       "Transparent PNG (*.png)|*.png|Enhanced Metafile (*.emf)|*.emf";
-    const string DialogFilterWithoutTransparentPNG =
+    private const string DialogFilterWithoutTransparentPNG =
       "BMP (*.bmp)|*.bmp|GIF (*.gif)|*.gif|JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
       "PNG (*.png)|*.png|Enhanced Metafile (*.emf)|*.emf";
 
-    static Control control = new Control();
-    static string initDir = null;
+    private static readonly Control _control = new Control();
+    private static string _initDir = null;
 
     public static void CopyAsImage(IPrintable document)
     {
@@ -56,7 +56,7 @@ namespace NClass.DiagramEditor
       {
         // Set drawing parameters
         g.SmoothingMode = SmoothingMode.HighQuality;
-        if (DiagramEditor.Settings.Default.UseClearTypeForImages)
+        if (Settings.Default.UseClearTypeForImages)
           g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
         else
           g.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit;
@@ -97,16 +97,16 @@ namespace NClass.DiagramEditor
           saveAsImageDialog.Filter = DialogFilter;
         saveAsImageDialog.FilterIndex = 4;
         saveAsImageDialog.FileName = document.GetSelectedElementName() ?? document.Name;
-        if (initDir == null && document.Project != null)
+        if (_initDir == null && document.Project != null)
           saveAsImageDialog.InitialDirectory = document.Project.GetProjectDirectory();
         else
-          saveAsImageDialog.InitialDirectory = initDir;
+          saveAsImageDialog.InitialDirectory = _initDir;
 
         if (saveAsImageDialog.ShowDialog() == DialogResult.OK)
         {
-          initDir = Path.GetDirectoryName(saveAsImageDialog.FileName);
+          _initDir = Path.GetDirectoryName(saveAsImageDialog.FileName);
 
-          string extension = System.IO.Path.GetExtension(saveAsImageDialog.FileName);
+          string extension = Path.GetExtension(saveAsImageDialog.FileName);
           ImageFormat format;
 
           switch (extension.ToLower())
@@ -154,7 +154,7 @@ namespace NClass.DiagramEditor
 
       if (format == ImageFormat.Emf) // Save to metafile
       {
-        Graphics metaG = control.CreateGraphics();
+        Graphics metaG = _control.CreateGraphics();
         IntPtr hc = metaG.GetHdc();
         Graphics g = null;
 
