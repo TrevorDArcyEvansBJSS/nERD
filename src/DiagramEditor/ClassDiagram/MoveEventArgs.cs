@@ -20,18 +20,13 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   public delegate void MoveEventHandler(object sender, MoveEventArgs e);
 
-  public class MoveEventArgs : EventArgs
+  public sealed class MoveEventArgs : EventArgs
   {
-    Size offset;
-
     public MoveEventArgs(Size offset)
     {
-      this.offset = offset;
+      Offset = offset;
     }
 
-    public Size Offset
-    {
-      get { return offset; }
-    }
+    public Size Offset { get; }
   }
 }
