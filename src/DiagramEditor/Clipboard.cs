@@ -23,8 +23,8 @@ namespace NClass.DiagramEditor
 
     public static IClipboardItem Item
     {
-      get { return Clipboard._item; }
-      set { Clipboard._item = value; }
+      get { return _item; }
+      set { _item = value; }
     }
 
     public static bool IsEmpty
