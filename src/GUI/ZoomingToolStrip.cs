@@ -28,7 +28,7 @@ namespace NClass.GUI
     ToolStripItemDesignerAvailability.StatusStrip)]
   [DefaultEvent("ZoomValueChanged")]
   [DefaultProperty("ZoomValue")]
-  public class ZoomingToolStrip : ToolStripItem
+  public sealed class ZoomingToolStrip : ToolStripItem
   {
     private const float MaxValue = Canvas.MaxZoom;
     private const float MinValue = Canvas.MinZoom;
@@ -104,7 +104,7 @@ namespace NClass.GUI
       }
     }
 
-    protected virtual void OnZoomValueChanged(EventArgs e)
+    private void OnZoomValueChanged(EventArgs e)
     {
       ZoomValueChanged?.Invoke(this, e);
     }
