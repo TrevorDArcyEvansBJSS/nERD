@@ -22,32 +22,19 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   public static class Icons
   {
-    const int DefaultDestructorIndex = 84;
-    const int PrivateDestructorIndex = 85;
     public const int InterfaceImageIndex = 86;
     public const int EnumItemImageIndex = 87;
     public const int ParameterImageIndex = 88;
     public const int ClassImageIndex = 89;
 
-    static Bitmap[] images;
-    static ImageList imageList;
+    private const int DefaultDestructorIndex = 84;
+    private const int PrivateDestructorIndex = 85;
+
+    private static readonly Bitmap[] _images;
 
     static Icons()
     {
-      LoadImages();
-    }
-
-    public static ImageList IconList
-    {
-      get
-      {
-        return imageList;
-      }
-    }
-
-    private static void LoadImages()
-    {
-      images = new Bitmap[]
+      _images = new Bitmap[]
       {
         Properties.Resources.DefaultConst,
         Properties.Resources.PublicConst,
@@ -155,10 +142,13 @@ namespace NClass.DiagramEditor.ClassDiagram
         Properties.Resources.Class              // 89.
       };
 
-      imageList = new ImageList();
-      imageList.ColorDepth = ColorDepth.Depth32Bit;
-      imageList.Images.AddRange(images);
+      IconList.Images.AddRange(_images);
     }
+
+    public static ImageList IconList { get; } = new ImageList
+    {
+      ColorDepth = ColorDepth.Depth32Bit
+    };
 
     public static int GetImageIndex(Member member)
     {
@@ -225,7 +215,7 @@ namespace NClass.DiagramEditor.ClassDiagram
     public static Image GetImage(Member member)
     {
       int imageIndex = GetImageIndex(member);
-      return images[imageIndex];
+      return _images[imageIndex];
     }
 
     public static Image GetImage(MemberType type, AccessModifier access)
@@ -262,7 +252,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           break;
       }
 
-      return images[group * 6 + (int)access];
+      return _images[group * 6 + (int)access];
     }
 
     public static Image GetImage(TypeBase type)
@@ -299,7 +289,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           break;
       }
 
-      return images[group * 6 + (int)access];
+      return _images[group * 6 + (int)access];
     }
   }
 }
