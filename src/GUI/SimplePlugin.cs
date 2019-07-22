@@ -21,19 +21,22 @@ namespace NClass.GUI
 {
   public abstract class SimplePlugin : Plugin
   {
-    ToolStripMenuItem menuItem;
+    private readonly ToolStripMenuItem _menuItem;
 
-    protected SimplePlugin(NClassEnvironment environment) : base(environment)
+    protected SimplePlugin(NClassEnvironment environment) : 
+      base(environment)
     {
-      menuItem = new ToolStripMenuItem();
-      menuItem.Text = MenuText;
-      menuItem.ToolTipText = string.Format(Strings.PluginTooltip, Name, Author);
-      menuItem.Click += new EventHandler(menuItem_Click);
+      _menuItem = new ToolStripMenuItem
+      {
+        Text = MenuText,
+        ToolTipText = string.Format(Strings.PluginTooltip, Name, Author)
+      };
+      _menuItem.Click += new EventHandler(menuItem_Click);
     }
 
     public override ToolStripItem MenuItem
     {
-      get { return menuItem; }
+      get { return _menuItem; }
     }
 
     private void menuItem_Click(object sender, EventArgs e)
