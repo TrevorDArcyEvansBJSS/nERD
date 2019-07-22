@@ -13,50 +13,46 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-using System.IO;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Configuration;
 using NClass.Core;
 using NClass.CSharp;
-using NClass.Translations;
+using System.IO;
 
 namespace NClass.GUI
 {
-	public sealed partial class Settings
-	{
-		const int MaxRecentFileCount = 5;
+  public sealed partial class Settings
+  {
+    const int MaxRecentFileCount = 5;
 
-		public Language GetDefaultLanguage()
-		{
-			Language defaultLanguage = Language.GetLanguage(DefaultLanguageName);
+    public Language GetDefaultLanguage()
+    {
+      Language defaultLanguage = Language.GetLanguage(DefaultLanguageName);
 
-			return defaultLanguage ?? CSharpLanguage.Instance;
-		}
+      return defaultLanguage ?? CSharpLanguage.Instance;
+    }
 
-		public void AddRecentFile(string recentFile)
-		{
-			if (!File.Exists(recentFile))
-				return;
+    public void AddRecentFile(string recentFile)
+    {
+      if (!File.Exists(recentFile))
+        return;
 
-			int index = RecentFiles.IndexOf(recentFile);
+      int index = RecentFiles.IndexOf(recentFile);
 
-			if (index < 0)
-			{
-				if (RecentFiles.Count < MaxRecentFileCount)
-					RecentFiles.Add(string.Empty);
+      if (index < 0)
+      {
+        if (RecentFiles.Count < MaxRecentFileCount)
+          RecentFiles.Add(string.Empty);
 
-				for (int i = RecentFiles.Count - 2; i >= 0; i--)
-					RecentFiles[i + 1] = RecentFiles[i];
-				RecentFiles[0] = recentFile;
-			}
-			else if (index > 0)
-			{
-				string temp = RecentFiles[index];
-				for (int i = index; i > 0; i--)
-					RecentFiles[i] = RecentFiles[i - 1];
-				RecentFiles[0] = temp;
-			}
-		}
-	}
+        for (int i = RecentFiles.Count - 2; i >= 0; i--)
+          RecentFiles[i + 1] = RecentFiles[i];
+        RecentFiles[0] = recentFile;
+      }
+      else if (index > 0)
+      {
+        string temp = RecentFiles[index];
+        for (int i = index; i > 0; i--)
+          RecentFiles[i] = RecentFiles[i - 1];
+        RecentFiles[0] = temp;
+      }
+    }
+  }
 }
