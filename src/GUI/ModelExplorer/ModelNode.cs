@@ -27,7 +27,7 @@ namespace NClass.GUI.ModelExplorer
 
     public ModelView ModelView
     {
-      get { return this.TreeView as ModelView; }
+      get { return TreeView as ModelView; }
     }
 
     public bool EditingLabel { get; private set; } = false;
