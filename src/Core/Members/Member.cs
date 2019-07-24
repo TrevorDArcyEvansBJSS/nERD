@@ -30,7 +30,7 @@ namespace NClass.Core
     {
       if (parent == null)
         throw new ArgumentNullException("parent");
-      if (parent.Language != this.Language)
+      if (parent.Language != Language)
         throw new ArgumentException(Strings.ErrorLanguagesDoNotEqual);
 
       Initializing = true;
