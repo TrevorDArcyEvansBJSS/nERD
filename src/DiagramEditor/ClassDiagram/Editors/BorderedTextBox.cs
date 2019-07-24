@@ -59,9 +59,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
       TextBox.GotFocus += new EventHandler(textBox_GotFocus);
       TextBox.LostFocus += new EventHandler(textBox_LostFocus);
 
-      this.Padding = new Padding(1);
-      this.BorderColor = SystemColors.ControlDark;
-      this.Controls.Add(Panel);
+      Padding = new Padding(1);
+      BorderColor = SystemColors.ControlDark;
+      Controls.Add(Panel);
     }
 
     [DefaultValue(typeof(Color), "ControlDark")]
