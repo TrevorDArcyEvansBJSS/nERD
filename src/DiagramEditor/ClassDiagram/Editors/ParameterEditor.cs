@@ -19,7 +19,7 @@ using System.Drawing;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public partial class ParameterEditor : ItemEditor
+  public sealed partial class ParameterEditor : ItemEditor
   {
     public DelegateShape Shape { get; set; } = null;
 
