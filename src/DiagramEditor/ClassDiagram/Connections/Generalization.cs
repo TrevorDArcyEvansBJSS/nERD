@@ -31,7 +31,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Generalization(GeneralizationRelationship generalization, Shape startShape, Shape endShape) :
         base(generalization, startShape, endShape)
     {
-      this.GeneralizationRelationship = generalization;
+      GeneralizationRelationship = generalization;
     }
 
     internal GeneralizationRelationship GeneralizationRelationship { get; }
