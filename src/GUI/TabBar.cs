@@ -257,7 +257,7 @@ namespace NClass.GUI
           break;
         }
       }
-      this.Invalidate();
+      Invalidate();
     }
 
     private void docManager_DocumentAdded(object sender, DocumentEventArgs e)
@@ -273,7 +273,7 @@ namespace NClass.GUI
         if (_tabs[index].Document == e.Document)
         {
           _tabs.RemoveAt(index);
-          this.Invalidate();
+          Invalidate();
           return;
         }
       }
