@@ -22,22 +22,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
   public class FloatingEditor : EditorWindow
   {
     protected const int MarginSize = 20;
-    static readonly Color beginColor = SystemColors.ControlLight;
-    static readonly Color endColor = SystemColors.Control;
-
-    static MemberType newMemberType = MemberType.Method;
 
     protected FloatingEditor()
     {
-      this.BackColor = System.Drawing.SystemColors.Control;
-      this.Padding = new Padding(1);
+      BackColor = SystemColors.Control;
+      Padding = new Padding(1);
     }
 
-    protected static MemberType NewMemberType
-    {
-      get { return newMemberType; }
-      set { newMemberType = value; }
-    }
+    protected static MemberType NewMemberType { get; set; } = MemberType.Method;
 
     protected override void OnPaintBackground(PaintEventArgs e)
     {
