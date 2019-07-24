@@ -20,10 +20,6 @@ namespace NClass.Core
 {
   public abstract class Member : LanguageElement
   {
-    private string name;
-    private string type;
-    private AccessModifier access = AccessModifier.Default;
-    private CompositeType parent;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -50,26 +46,28 @@ namespace NClass.Core
       get;
     }
 
+    private CompositeType _parent;
     public CompositeType Parent
     {
       get
       {
-        return parent;
+        return _parent;
       }
       set
       {
         if (value == null)
           throw new ArgumentNullException("value");
 
-        if (parent != value)
+        if (_parent != value)
         {
           OnBeginUndoableOperation();
-          parent = value;
+          _parent = value;
           Changed();
         }
       }
     }
 
+    private string _name;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -77,17 +75,17 @@ namespace NClass.Core
     {
       get
       {
-        return name;
+        return _name;
       }
       set
       {
 
         string newName = Language.GetValidName(value, true);
 
-        if (newName != name)
+        if (newName != _name)
         {
           OnBeginUndoableOperation();
-          name = newName;
+          _name = newName;
           Changed();
         }
       }
@@ -97,10 +95,10 @@ namespace NClass.Core
     {
       set
       {
-        if (name != value)
+        if (_name != value)
         {
           OnBeginUndoableOperation();
-          name = value;
+          _name = value;
           Changed();
         }
       }
@@ -111,6 +109,7 @@ namespace NClass.Core
       get { return false; }
     }
 
+    private string _type;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -118,16 +117,16 @@ namespace NClass.Core
     {
       get
       {
-        return type;
+        return _type;
       }
       set
       {
         string newType = Language.GetValidTypeName(value);
 
-        if (newType != type)
+        if (newType != _type)
         {
           OnBeginUndoableOperation();
-          type = newType;
+          _type = newType;
           Changed();
         }
       }
@@ -137,10 +136,10 @@ namespace NClass.Core
     {
       set
       {
-        if (type != value)
+        if (_type != value)
         {
           OnBeginUndoableOperation();
-          type = value;
+          _type = value;
           Changed();
         }
       }
@@ -156,6 +155,7 @@ namespace NClass.Core
       get;
     }
 
+    private AccessModifier _accessModifier = AccessModifier.Default;
     /// <exception cref="BadSyntaxException">
     /// Cannot set access visibility.
     /// </exception>
@@ -163,17 +163,17 @@ namespace NClass.Core
     {
       get
       {
-        return access;
+        return _accessModifier;
       }
       set
       {
         if (!Language.IsValidModifier(value))
           throw new BadSyntaxException(Strings.ErrorInvalidModifier);
 
-        if (access != value)
+        if (_accessModifier != value)
         {
           OnBeginUndoableOperation();
-          access = value;
+          _accessModifier = value;
           Changed();
         }
       }
@@ -238,8 +238,7 @@ namespace NClass.Core
       return GetUmlDescription(getType, getParameters, getParameterNames, getType);
     }
 
-    public abstract string GetUmlDescription(bool getType, bool getParameters,
-      bool getParameterNames, bool getInitValue);
+    public abstract string GetUmlDescription(bool getType, bool getParameters, bool getParameterNames, bool getInitValue);
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="declaration"/> does not fit to the syntax.
@@ -248,9 +247,9 @@ namespace NClass.Core
 
     protected virtual void CopyFrom(Member member)
     {
-      name = member.name;
-      type = member.type;
-      access = member.access;
+      _name = member._name;
+      _type = member._type;
+      _accessModifier = member._accessModifier;
     }
   }
 }
