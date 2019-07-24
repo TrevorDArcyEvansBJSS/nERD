@@ -78,8 +78,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       if (typeParent == null)
         return;
 
-      this.TypeParent = typeParent;
-      this.Text = string.Format(Strings.MembersOfType, typeParent.Name);
+      TypeParent = typeParent;
+      Text = string.Format(Strings.MembersOfType, typeParent.Name);
 
       LanguageSpecificInitialization(typeParent.Language);
       FillMembersList();
@@ -504,7 +504,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
         if (Error)
           RefreshValues();
         else
-          this.Close();
+          Close();
       }
       else if (e.KeyCode == Keys.Enter)
       {
@@ -1154,7 +1154,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void btnClose_Click(object sender, EventArgs e)
     {
-      this.Close();
+      Close();
     }
 
     private void txtSyntax_KeyDown(object sender, KeyEventArgs e)
