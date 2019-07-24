@@ -66,7 +66,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           absolute.Width += 3;
         }
 
-        this.SetBounds(
+        SetBounds(
           (int)(absolute.X * diagram.Zoom) - diagram.Offset.X + ParentLocation.X,
           (int)(absolute.Y * diagram.Zoom) - diagram.Offset.Y + ParentLocation.Y,
           (int)(absolute.Width * diagram.Zoom),
