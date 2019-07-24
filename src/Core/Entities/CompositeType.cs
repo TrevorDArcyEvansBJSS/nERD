@@ -23,13 +23,11 @@ namespace NClass.Core
 {
   public abstract class CompositeType : TypeBase
   {
-    private readonly List<TypeBase> _nestedChilds = new List<TypeBase>();
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
-    protected CompositeType(string name)
-      : base(name)
+    protected CompositeType(string name) :
+      base(name)
     {
     }
 
@@ -99,6 +97,7 @@ namespace NClass.Core
       }
     }
 
+    private readonly List<TypeBase> _nestedChilds = new List<TypeBase>();
     public IEnumerable<TypeBase> NestedChilds
     {
       get { return _nestedChilds; }
