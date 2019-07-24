@@ -24,7 +24,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
   public partial class DelegateEditor : TypeEditor
   {
-    static readonly string newValueText = "« " + Strings.NewParameter + " »";
+    private static readonly string newValueText = "« " + Strings.NewParameter + " »";
 
     public DelegateShape Shape { get; set; } = null;
     public bool NeedValidation { get; set; } = false;
