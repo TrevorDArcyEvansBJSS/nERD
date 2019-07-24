@@ -23,7 +23,6 @@ namespace NClass.DiagramEditor
     event EventHandler DocumentRedrawed;
     event EventHandler VisibleAreaChanged;
 
-
     bool HasDocument { get; }
 
     IDocument Document { get; }
