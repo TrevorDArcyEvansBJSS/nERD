@@ -23,7 +23,7 @@ namespace NClass.AssemblyImport
     /// <summary>
     /// The filter to delegate filter calls to.
     /// </summary>
-    private readonly IFilter filter;
+    private readonly IFilter _filter;
 
     #endregion
 
@@ -38,7 +38,7 @@ namespace NClass.AssemblyImport
     /// <param name="filter">The filter to delegate filter calls to.</param>
     public NClassImportFilter(IFilter filter)
     {
-      this.filter = filter;
+      _filter = filter;
       UnsafeTypesPresent = false;
     }
 
@@ -84,7 +84,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRClass nrClass)
     {
-      return filter.Reflect(nrClass);
+      return _filter.Reflect(nrClass);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRInterface nrInterface)
     {
-      return filter.Reflect(nrInterface);
+      return _filter.Reflect(nrInterface);
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRStruct nrStruct)
     {
-      return filter.Reflect(nrStruct);
+      return _filter.Reflect(nrStruct);
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRDelegate nrDelegate)
     {
-      return IsUnsafePointer(nrDelegate.ReturnType) || HasUnsafeParameters(nrDelegate.Parameters) ? false : filter.Reflect(nrDelegate);
+      return IsUnsafePointer(nrDelegate.ReturnType) || HasUnsafeParameters(nrDelegate.Parameters) ? false : _filter.Reflect(nrDelegate);
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NREnum nrEnum)
     {
-      return filter.Reflect(nrEnum);
+      return _filter.Reflect(nrEnum);
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NREnumValue nrEnumValue)
     {
-      return filter.Reflect(nrEnumValue);
+      return _filter.Reflect(nrEnumValue);
     }
 
     /// <summary>
@@ -156,7 +156,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRConstructor nrConstructor)
     {
-      return HasUnsafeParameters(nrConstructor.Parameters) ? false : filter.Reflect(nrConstructor);
+      return HasUnsafeParameters(nrConstructor.Parameters) ? false : _filter.Reflect(nrConstructor);
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRMethod nrMethod)
     {
-      return IsUnsafePointer(nrMethod.Type) || HasUnsafeParameters(nrMethod.Parameters) ? false : filter.Reflect(nrMethod);
+      return IsUnsafePointer(nrMethod.Type) || HasUnsafeParameters(nrMethod.Parameters) ? false : _filter.Reflect(nrMethod);
     }
 
     /// <summary>
@@ -180,7 +180,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NROperator nrOperator)
     {
-      return IsUnsafePointer(nrOperator.Type) || HasUnsafeParameters(nrOperator.Parameters) ? false : filter.Reflect(nrOperator);
+      return IsUnsafePointer(nrOperator.Type) || HasUnsafeParameters(nrOperator.Parameters) ? false : _filter.Reflect(nrOperator);
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NREvent nrEvent)
     {
-      return filter.Reflect(nrEvent);
+      return _filter.Reflect(nrEvent);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRField nrField)
     {
-      return IsUnsafePointer(nrField.Type) ? false : filter.Reflect(nrField);
+      return IsUnsafePointer(nrField.Type) ? false : _filter.Reflect(nrField);
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ namespace NClass.AssemblyImport
     /// </returns>
     public bool Reflect(NRProperty nrProperty)
     {
-      return IsUnsafePointer(nrProperty.Type) ? false : filter.Reflect(nrProperty);
+      return IsUnsafePointer(nrProperty.Type) ? false : _filter.Reflect(nrProperty);
     }
 
     /// <summary>
