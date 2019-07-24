@@ -94,8 +94,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
     {
       if (parent != null)
       {
-        this._parent = parent;
-        this.Text = string.Format(Strings.ItemsOfType, parent.Name);
+        _parent = parent;
+        Text = string.Format(Strings.ItemsOfType, parent.Name);
         FillList();
 
         base.ShowDialog();
