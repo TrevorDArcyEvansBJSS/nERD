@@ -20,7 +20,7 @@ namespace NClass.Core
 {
   public delegate void SerializeEventHandler(object sender, SerializeEventArgs e);
 
-  public class SerializeEventArgs : EventArgs
+  public sealed class SerializeEventArgs : EventArgs
   {
     public SerializeEventArgs(XmlElement node)
     {
