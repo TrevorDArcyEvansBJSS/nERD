@@ -1210,7 +1210,7 @@ namespace NClass.DiagramEditor
 
     public Style Clone()
     {
-      Style newStyle = (Style)this.MemberwiseClone();
+      Style newStyle = (Style)MemberwiseClone();
 
       newStyle._nameFont = (Font)NameFont.Clone();
       newStyle._abstractNameFont = (Font)AbstractNameFont.Clone();
@@ -1319,7 +1319,7 @@ namespace NClass.DiagramEditor
         }
 
         if (addToList)
-          AddToList((Style)this.Clone(), path);
+          AddToList(Clone(), path);
 
         return true;
       }
