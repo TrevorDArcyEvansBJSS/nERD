@@ -30,8 +30,8 @@ namespace NClass.Core
       Attach();
     }
 
-    internal AssociationRelationship(TypeBase first, TypeBase second, AssociationType type)
-      : base(first, second)
+    internal AssociationRelationship(TypeBase first, TypeBase second, AssociationType type) :
+      base(first, second)
     {
       _associationType = type;
       RelationshipType = RelationshipType.Association;
