@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public partial class DelegateEditor : TypeEditor
+  public sealed partial class DelegateEditor : TypeEditor
   {
     private static readonly string newValueText = "« " + Strings.NewParameter + " »";
 
