@@ -45,7 +45,7 @@ namespace NClass.DiagramEditor
 
       if (DiagramElement.Graphics == null)
       {
-        DiagramElement.Graphics = this.CreateGraphics();
+        DiagramElement.Graphics = CreateGraphics();
       }
     }
 
@@ -153,8 +153,8 @@ namespace NClass.DiagramEditor
           return new Rectangle(
             (int)(Document.Offset.X / Document.Zoom),
             (int)(Document.Offset.Y / Document.Zoom),
-            (int)(this.ClientSize.Width / Document.Zoom),
-            (int)(this.ClientSize.Height / Document.Zoom)
+            (int)(ClientSize.Width / Document.Zoom),
+            (int)(ClientSize.Height / Document.Zoom)
           );
         }
         else
@@ -332,7 +332,7 @@ namespace NClass.DiagramEditor
         Document.Zoom = zoomValue;
         Point newLocation = ConvertAbsoluteToRelative(zoomingCenter);
 
-        this.Offset += new Size(
+        Offset += new Size(
           newLocation.X - oldLocation.X,
           newLocation.Y - oldLocation.Y
         );
@@ -349,7 +349,7 @@ namespace NClass.DiagramEditor
       Point newLocation = ConvertAbsoluteToRelative(centerPoint);
       Point desiredLocation = new Point(Width / 2, Height / 2);
 
-      this.Offset += new Size(
+      Offset += new Size(
         newLocation.X - desiredLocation.X,
         newLocation.Y - desiredLocation.Y
       );
@@ -367,7 +367,7 @@ namespace NClass.DiagramEditor
         const int Margin = Shape.SelectionMargin;
         selectedOnly &= Document.HasSelectedElement;
 
-        Rectangle visibleRectangle = this.ClientRectangle;
+        Rectangle visibleRectangle = ClientRectangle;
         RectangleF diagramRectangle = _document.GetPrintingArea(selectedOnly);
         visibleRectangle.Inflate(-Margin, -Margin);
 
