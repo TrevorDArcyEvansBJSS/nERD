@@ -19,18 +19,13 @@ namespace NClass.Core
 {
   public delegate void EntityEventHandler(object sender, EntityEventArgs e);
 
-  public class EntityEventArgs : EventArgs
+  public sealed class EntityEventArgs : EventArgs
   {
-    IEntity entity;
-
     public EntityEventArgs(IEntity entity)
     {
-      this.entity = entity;
+      Entity = entity;
     }
 
-    public IEntity Entity
-    {
-      get { return entity; }
-    }
+    public IEntity Entity { get; }
   }
 }
