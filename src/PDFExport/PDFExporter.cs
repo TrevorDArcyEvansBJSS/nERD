@@ -19,22 +19,22 @@ namespace PDFExport
     /// <summary>
     /// The location where to save the created PDF.
     /// </summary>
-    private readonly string fileName;
+    private readonly string _fileName;
 
     /// <summary>
     /// The diagram to export to the PDF.
     /// </summary>
-    private readonly IDocument nclassDocument;
+    private readonly IDocument _nclassDocument;
 
     /// <summary>
     /// True if only the selected elements should be exported.
     /// </summary>
-    private readonly bool selectedOnly;
+    private readonly bool _selectedOnly;
 
     /// <summary>
     /// The size of the border arround the diagram.
     /// </summary>
-    private readonly Padding padding;
+    private readonly Padding _padding;
 
     #endregion
 
@@ -52,10 +52,10 @@ namespace PDFExport
     /// <param name="padding">The size of the border arround the diagram.</param>
     public PDFExporter(string fileName, IDocument nclassDocument, bool selectedOnly, Padding padding)
     {
-      this.fileName = fileName;
-      this.nclassDocument = nclassDocument;
-      this.selectedOnly = selectedOnly;
-      this.padding = padding;
+      _fileName = fileName;
+      _nclassDocument = nclassDocument;
+      _selectedOnly = selectedOnly;
+      _padding = padding;
       Successful = false;
     }
 
@@ -80,22 +80,22 @@ namespace PDFExport
 
     /// <summary>
     /// Exports the given diagram into a PDF. The PDF is saved at the location
-    /// given in <see cref="fileName"/>. If selectedOnly is true, only the selected
+    /// given in <see cref="_fileName"/>. If selectedOnly is true, only the selected
     /// elements of the diagram get exported.
     /// </summary>
     public void Export()
     {
       PdfDocument document = new PdfDocument();
       PdfPage page = document.AddPage();
-      RectangleF diagramSize = nclassDocument.GetPrintingArea(selectedOnly);
-      page.Width = new XUnit(diagramSize.Width, XGraphicsUnit.Presentation) + new XUnit(padding.Right*2);
-      page.Height = new XUnit(diagramSize.Height, XGraphicsUnit.Presentation) + new XUnit(padding.Bottom*2);
+      RectangleF diagramSize = _nclassDocument.GetPrintingArea(_selectedOnly);
+      page.Width = new XUnit(diagramSize.Width, XGraphicsUnit.Presentation) + new XUnit(_padding.Right*2);
+      page.Height = new XUnit(diagramSize.Height, XGraphicsUnit.Presentation) + new XUnit(_padding.Bottom*2);
 
       XGraphics gfx = XGraphics.FromPdfPage(page);
       PDFGraphics graphics = new PDFGraphics(gfx);
 
       //Translate because of the padding.
-      graphics.TranslateTransform(padding.Left, padding.Top);
+      graphics.TranslateTransform(_padding.Left, _padding.Top);
 
       //Do some scaling to get from pixels to dots...
       Graphics gdiGraphics = (new Control()).CreateGraphics();
@@ -112,7 +112,7 @@ namespace PDFExport
 
       graphics.TakeInitialTransform();
 
-      nclassDocument.Print(graphics, selectedOnly, Style.CurrentStyle);
+      _nclassDocument.Print(graphics, _selectedOnly, Style.CurrentStyle);
 
       //Clean up...
       while(gfx.GraphicsStateLevel > 0)
@@ -123,7 +123,7 @@ namespace PDFExport
       document.Options.CompressContentStreams = true;
       try
       {
-        document.Save(fileName);
+        document.Save(_fileName);
         Successful = true;
       }
       catch(IOException e)
