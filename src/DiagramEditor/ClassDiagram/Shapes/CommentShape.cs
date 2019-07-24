@@ -30,23 +30,22 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     private const int PaddingSize = 10;
     private const int DefaultWidth = 160;
     private const int DefaultHeight = 75;
-    private static readonly CommentEditor editor = new CommentEditor();
-    private static readonly Pen borderPen = new Pen(Color.Black);
-    private static readonly SolidBrush backgroundBrush = new SolidBrush(Color.White);
-    private static readonly SolidBrush textBrush = new SolidBrush(Color.Black);
-    private static StringFormat format = new StringFormat(StringFormat.GenericTypographic);
-    private bool editorShowed = false;
-
-    static CommentShape()
+    private static readonly Pen BorderPen = new Pen(Color.Black);
+    private static readonly SolidBrush BackgroundBrush = new SolidBrush(Color.White);
+    private static readonly SolidBrush TextBrush = new SolidBrush(Color.Black);
+    private static readonly StringFormat Format = new StringFormat(StringFormat.GenericTypographic)
     {
-      format.Trimming = StringTrimming.EllipsisWord;
-      format.FormatFlags = StringFormatFlags.LineLimit;
-    }
+      Trimming = StringTrimming.EllipsisWord,
+      FormatFlags = StringFormatFlags.LineLimit
+    };
+    private static readonly CommentEditor _editor = new CommentEditor();
+
+    private bool _editorShowed = false;
 
     internal CommentShape(Comment comment) :
       base(comment)
     {
-      this.Comment = comment;
+      Comment = comment;
     }
 
     public override IEntity Entity
@@ -102,11 +101,11 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     protected override void OnResize(ResizeEventArgs e)
     {
       base.OnResize(e);
-      if (editorShowed)
+      if (_editorShowed)
       {
-        editor.Relocate(this);
-        if (!editor.Focused)
-          editor.Focus();
+        _editor.Relocate(this);
+        if (!_editor.Focused)
+          _editor.Focus();
       }
     }
 
@@ -127,22 +126,22 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected internal override void ShowEditor()
     {
-      if (!editorShowed)
+      if (!_editorShowed)
       {
-        editor.Relocate(this);
-        editor.Init(this);
-        ShowWindow(editor);
-        editor.Focus();
-        editorShowed = true;
+        _editor.Relocate(this);
+        _editor.Init(this);
+        ShowWindow(_editor);
+        _editor.Focus();
+        _editorShowed = true;
       }
     }
 
     protected internal override void HideEditor()
     {
-      if (editorShowed)
+      if (_editorShowed)
       {
-        HideWindow(editor);
-        editorShowed = false;
+        HideWindow(_editor);
+        _editorShowed = false;
       }
     }
 
@@ -168,13 +167,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     private void DrawSurface(IGraphics g, bool onScreen, Style style)
     {
       // Update graphical objects
-      backgroundBrush.Color = style.CommentBackColor;
-      borderPen.Color = style.CommentBorderColor;
-      borderPen.Width = style.CommentBorderWidth;
+      BackgroundBrush.Color = style.CommentBackColor;
+      BorderPen.Color = style.CommentBorderColor;
+      BorderPen.Width = style.CommentBorderWidth;
       if (style.IsCommentBorderDashed)
-        borderPen.DashPattern = BorderDashPattern;
+        BorderPen.DashPattern = BorderDashPattern;
       else
-        borderPen.DashStyle = DashStyle.Solid;
+        BorderPen.DashStyle = DashStyle.Solid;
 
       // Create shape pattern
       GraphicsPath path = new GraphicsPath();
@@ -193,14 +192,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       }
 
       // Draw borders & background
-      g.FillPath(backgroundBrush, path);
-      g.DrawPath(borderPen, path);
+      g.FillPath(BackgroundBrush, path);
+      g.DrawPath(BorderPen, path);
 
       // Draw earmark
       path.Reset();
       path.AddLine(Right - PaddingSize, Top, Right - PaddingSize, Top + PaddingSize);
       path.AddLine(Right - PaddingSize, Top + PaddingSize, Right, Top + PaddingSize);
-      g.DrawPath(borderPen, path);
+      g.DrawPath(BorderPen, path);
 
       path.Dispose();
     }
@@ -211,14 +210,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
       if (string.IsNullOrEmpty(Text) && onScreen)
       {
-        textBrush.Color = Color.FromArgb(128, style.CommentTextColor);
+        TextBrush.Color = Color.FromArgb(128, style.CommentTextColor);
         g.DrawString(Strings.DoubleClickToEdit,
-          style.CommentFont, textBrush, textBounds, format);
+          style.CommentFont, TextBrush, textBounds, Format);
       }
       else
       {
-        textBrush.Color = style.CommentTextColor;
-        g.DrawString(Text, style.CommentFont, textBrush, textBounds, format);
+        TextBrush.Color = style.CommentTextColor;
+        g.DrawString(Text, style.CommentFont, TextBrush, textBounds, Format);
       }
     }
 
