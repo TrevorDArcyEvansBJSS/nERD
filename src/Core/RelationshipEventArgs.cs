@@ -19,18 +19,13 @@ namespace NClass.Core
 {
   public delegate void RelationshipEventHandler(object sender, RelationshipEventArgs e);
 
-  public class RelationshipEventArgs : EventArgs
+  public sealed class RelationshipEventArgs : EventArgs
   {
-    Relationship relationship;
-
     public RelationshipEventArgs(Relationship relationship)
     {
-      this.relationship = relationship;
+      Relationship = relationship;
     }
 
-    public Relationship Relationship
-    {
-      get { return relationship; }
-    }
+    public Relationship Relationship { get; }
   }
 }
