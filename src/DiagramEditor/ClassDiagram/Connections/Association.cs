@@ -48,7 +48,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Association(AssociationRelationship association, Shape startShape, Shape endShape)
       : base(association, startShape, endShape)
     {
-      this.AssociationRelationship = association;
+      AssociationRelationship = association;
       association.Reversed += new EventHandler(Association_Reversed);
     }
 
