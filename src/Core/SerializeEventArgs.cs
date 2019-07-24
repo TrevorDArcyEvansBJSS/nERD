@@ -22,16 +22,11 @@ namespace NClass.Core
 
   public class SerializeEventArgs : EventArgs
   {
-    XmlElement node;
-
     public SerializeEventArgs(XmlElement node)
     {
-      this.node = node;
+      Node = node;
     }
 
-    public XmlElement Node
-    {
-      get { return node; }
-    }
+    public XmlElement Node { get; }
   }
 }
