@@ -39,7 +39,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void UpdateTexts()
     {
-      this.Text = Strings.EditComment;
+      Text = Strings.EditComment;
       lblEdit.Text = Strings.EditText;
       btnOK.Text = Strings.ButtonOK;
       btnCancel.Text = Strings.ButtonCancel;
