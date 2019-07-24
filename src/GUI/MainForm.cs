@@ -297,9 +297,9 @@ namespace NClass.GUI
         string projectName = Workspace.Default.ActiveProject.Name;
 
         if (Workspace.Default.ActiveProject.IsDirty)
-          this.Text = projectName + "* - nERD";
+          Text = projectName + "* - nERD";
         else
-          this.Text = projectName + " - nERD";
+          Text = projectName + " - nERD";
       }
       else
       {
@@ -631,7 +631,7 @@ namespace NClass.GUI
 
     private void mnuExit_Click(object sender, EventArgs e)
     {
-      this.Close();
+      Close();
     }
 
     #endregion
