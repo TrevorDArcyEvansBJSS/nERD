@@ -54,7 +54,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void UpdateTexts()
     {
-      this.Text = Strings.EditAssociation;
+      Text = Strings.EditAssociation;
       btnOK.Text = Strings.ButtonOK;
       btnCancel.Text = Strings.ButtonCancel;
     }
