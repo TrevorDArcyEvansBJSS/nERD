@@ -30,7 +30,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     private readonly ToolStripMenuItem mnuType;
     private readonly ToolStripMenuItem mnuAssociation;
     private readonly ToolStripMenuItem mnuComposition;
-    private ToolStripMenuItem mnuAggregation;
+    private readonly ToolStripMenuItem mnuAggregation;
     private readonly ToolStripMenuItem mnuReverse;
     private readonly ToolStripMenuItem mnuEdit;
 
