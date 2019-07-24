@@ -20,8 +20,6 @@ namespace NClass.Core
 {
   public abstract class Field : Member
   {
-    private string initialValue = null;
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
@@ -91,7 +89,7 @@ namespace NClass.Core
     {
       get
       {
-        return (Modifier == FieldModifier.None);
+        return Modifier == FieldModifier.None;
       }
     }
 
@@ -102,7 +100,7 @@ namespace NClass.Core
     {
       get
       {
-        return ((Modifier & FieldModifier.Static) != 0);
+        return (Modifier & FieldModifier.Static) != 0;
       }
       set
       {
@@ -136,7 +134,7 @@ namespace NClass.Core
     {
       get
       {
-        return ((Modifier & FieldModifier.Hider) != 0);
+        return (Modifier & FieldModifier.Hider) != 0;
       }
       set
       {
@@ -204,7 +202,7 @@ namespace NClass.Core
     {
       get
       {
-        return ((Modifier & FieldModifier.Constant) != 0);
+        return (Modifier & FieldModifier.Constant) != 0;
       }
       set
       {
@@ -238,7 +236,7 @@ namespace NClass.Core
     {
       get
       {
-        return ((Modifier & FieldModifier.Volatile) != 0);
+        return (Modifier & FieldModifier.Volatile) != 0;
       }
       set
       {
@@ -265,19 +263,20 @@ namespace NClass.Core
       }
     }
 
+    private string _initialValue = null;
     public virtual string InitialValue
     {
       get
       {
-        return initialValue;
+        return _initialValue;
       }
       set
       {
-        if (initialValue != value &&
-          (!string.IsNullOrEmpty(value) || !string.IsNullOrEmpty(initialValue)))
+        if (_initialValue != value &&
+          (!string.IsNullOrEmpty(value) || !string.IsNullOrEmpty(_initialValue)))
         {
           OnBeginUndoableOperation();
-          initialValue = value;
+          _initialValue = value;
           Changed();
         }
       }
@@ -301,8 +300,7 @@ namespace NClass.Core
       }
     }
 
-    public sealed override string GetUmlDescription(bool getType, bool getParameters,
-      bool getParameterNames, bool getInitValue)
+    public sealed override string GetUmlDescription(bool getType, bool getParameters, bool getParameterNames, bool getInitValue)
     {
       StringBuilder builder = new StringBuilder(50);
 
@@ -321,7 +319,7 @@ namespace NClass.Core
 
       Field field = (Field)member;
       Modifier = field.Modifier;
-      initialValue = field.initialValue;
+      _initialValue = field._initialValue;
     }
 
     protected internal abstract Field Clone(CompositeType newParent);
