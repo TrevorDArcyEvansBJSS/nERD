@@ -445,14 +445,14 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     protected internal sealed override void Offset(Size offset)
     {
-      this.Location += offset;
+      Location += offset;
     }
 
     protected internal override Size GetMaximalOffset(Size offset, int padding)
     {
       if (IsSelected)
       {
-        Rectangle newPosition = this.BorderRectangle;
+        Rectangle newPosition = BorderRectangle;
         newPosition.Offset(offset.Width, offset.Height);
 
         if (newPosition.Left < padding)
@@ -484,7 +484,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 
     internal void AutoHeight()
     {
-      this.Height = GetRequiredHeight();
+      Height = GetRequiredHeight();
     }
 
     protected virtual int GetRequiredHeight()
@@ -503,7 +503,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
       {
         Shape shape = diagram.ShapeList.FirstValue;
         shape.Location = new Point(offset);
-        shape.Size = this.Size;
+        shape.Size = Size;
         shape.IsSelected = true;
         return shape;
       }
