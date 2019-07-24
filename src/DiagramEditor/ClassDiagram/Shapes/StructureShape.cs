@@ -23,7 +23,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     internal StructureShape(StructureType structure) :
       base(structure)
     {
-      this.StructureType = structure;
+      StructureType = structure;
       UpdateMinSize();
     }
 
