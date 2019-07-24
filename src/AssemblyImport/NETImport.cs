@@ -36,18 +36,18 @@ namespace NClass.AssemblyImport
     /// <summary>
     /// The diagram to add the new entities to.
     /// </summary>
-    private readonly Diagram diagram;
+    private readonly Diagram _diagram;
 
     /// <summary>
     /// An <see cref="ImportSettings"/> instance which describes which entities and members to reflect.
     /// </summary>
-    private readonly ImportSettings settings;
+    private readonly ImportSettings _settings;
 
     /// <summary>
     /// A mapping from NReflects <see cref="NRTypeBase"/> objects to the
     /// corresponding NClass <see cref="TypeBase"/> objects.
     /// </summary>
-    private readonly Dictionary<NRTypeBase, TypeBase> types;
+    private readonly Dictionary<NRTypeBase, TypeBase> _types;
 
     #endregion
 
@@ -61,10 +61,10 @@ namespace NClass.AssemblyImport
     /// </summary>
     public NETImport(Diagram diagram, ImportSettings settings)
     {
-      this.diagram = diagram;
-      this.settings = settings;
+      _diagram = diagram;
+      _settings = settings;
 
-      types = new Dictionary<NRTypeBase, TypeBase>();
+      _types = new Dictionary<NRTypeBase, TypeBase>();
     }
 
     #endregion
@@ -97,13 +97,13 @@ namespace NClass.AssemblyImport
       }
       try
       {
-        diagram.Name = Path.GetFileName(fileName);
-        diagram.RedrawSuspended = true;
+        _diagram.Name = Path.GetFileName(fileName);
+        _diagram.RedrawSuspended = true;
 
         IncludeFilter includeFilter = new IncludeFilter();
-        includeFilter.Rules.AddRange(settings.FilterRules);
+        includeFilter.Rules.AddRange(_settings.FilterRules);
         IFilter filter = includeFilter;
-        if(!settings.UseAsWhiteList)
+        if(!_settings.UseAsWhiteList)
         {
           filter = new InvertFilter(includeFilter);
         }
@@ -123,10 +123,10 @@ namespace NClass.AssemblyImport
         ArrangeTypes();
 
         RelationshipCreator relationshipCreator = new RelationshipCreator();
-        NRRelationships nrRelationships = relationshipCreator.CreateRelationships(nrAssembly, settings.CreateNestings,
-                                                                                  settings.CreateGeneralizations,
-                                                                                  settings.CreateRealizations,
-                                                                                  settings.CreateAssociations);
+        NRRelationships nrRelationships = relationshipCreator.CreateRelationships(nrAssembly, _settings.CreateNestings,
+                                                                                  _settings.CreateGeneralizations,
+                                                                                  _settings.CreateRealizations,
+                                                                                  _settings.CreateAssociations);
         AddRelationships(nrRelationships);
 
         if(nClassImportFilter.UnsafeTypesPresent)
@@ -156,7 +156,7 @@ namespace NClass.AssemblyImport
       }
       finally
       {
-        diagram.RedrawSuspended = false;
+        _diagram.RedrawSuspended = false;
       }
 
       return true;
@@ -171,41 +171,41 @@ namespace NClass.AssemblyImport
     {
       foreach(NRNesting nrNesting in nrRelationships.Nestings)
       {
-        CompositeType parentType = types[nrNesting.ParentType] as CompositeType;
-        TypeBase innerType = types[nrNesting.InnerType];
+        CompositeType parentType = _types[nrNesting.ParentType] as CompositeType;
+        TypeBase innerType = _types[nrNesting.InnerType];
         if(parentType != null && innerType != null)
         {
-          diagram.AddNesting(parentType, innerType);
+          _diagram.AddNesting(parentType, innerType);
         }
       }
 
       foreach(NRGeneralization nrGeneralization in nrRelationships.Generalizations)
       {
-        CompositeType derivedType = types[nrGeneralization.DerivedType] as CompositeType;
-        CompositeType baseType = types[nrGeneralization.BaseType] as CompositeType;
+        CompositeType derivedType = _types[nrGeneralization.DerivedType] as CompositeType;
+        CompositeType baseType = _types[nrGeneralization.BaseType] as CompositeType;
         if(derivedType != null && baseType != null)
         {
-          diagram.AddGeneralization(derivedType, baseType);
+          _diagram.AddGeneralization(derivedType, baseType);
         }
       }
 
       foreach (NRRealization nrRealization in nrRelationships.Realizations)
       {
-        CompositeType implementingType = types[nrRealization.ImplementingType] as CompositeType;
-        InterfaceType interfaceType = types[nrRealization.BaseType] as InterfaceType;
+        CompositeType implementingType = _types[nrRealization.ImplementingType] as CompositeType;
+        InterfaceType interfaceType = _types[nrRealization.BaseType] as InterfaceType;
         if (implementingType != null && interfaceType != null)
         {
-          diagram.AddRealization(implementingType, interfaceType);
+          _diagram.AddRealization(implementingType, interfaceType);
         }
       }
 
       foreach (NRAssociation nrAssociation in nrRelationships.Associations)
       {
-        TypeBase first = types[nrAssociation.StartType];
-        TypeBase second = types[nrAssociation.EndType];
+        TypeBase first = _types[nrAssociation.StartType];
+        TypeBase second = _types[nrAssociation.EndType];
         if (first != null && second != null)
         {
-          AssociationRelationship associationRelationship = diagram.AddAssociation(first, second);
+          AssociationRelationship associationRelationship = _diagram.AddAssociation(first, second);
           associationRelationship.EndMultiplicity = nrAssociation.EndMultiplicity;
           associationRelationship.StartMultiplicity = nrAssociation.StartMultiplicity;
           associationRelationship.EndRole = nrAssociation.EndRole;
@@ -222,13 +222,13 @@ namespace NClass.AssemblyImport
       const int Margin = Connection.Spacing * 2;
       const int DiagramPadding = Shape.SelectionMargin;
 
-      int shapeCount = diagram.ShapeCount;
+      int shapeCount = _diagram.ShapeCount;
       int columns = (int)Math.Ceiling(Math.Sqrt(shapeCount * 2));
       int shapeIndex = 0;
       int top = Shape.SelectionMargin;
       int maxHeight = 0;
 
-      foreach (Shape shape in diagram.Shapes)
+      foreach (Shape shape in _diagram.Shapes)
       {
         int column = shapeIndex % columns;
 
@@ -255,7 +255,7 @@ namespace NClass.AssemblyImport
     {
       foreach (NRClass nrClass in classes)
       {
-        ClassType classType = diagram.AddClass();
+        ClassType classType = _diagram.AddClass();
         classType.Name = nrClass.Name;
         classType.AccessModifier = nrClass.AccessModifier.ToNClass();
         classType.Modifier = nrClass.ClassModifier.ToNClass();
@@ -267,7 +267,7 @@ namespace NClass.AssemblyImport
         AddMethods(classType, nrClass.Methods);
         AddOperators(classType, nrClass.Operators);
 
-        types.Add(nrClass, classType);
+        _types.Add(nrClass, classType);
       }
     }
 
@@ -279,7 +279,7 @@ namespace NClass.AssemblyImport
     {
       foreach (NRStruct nrStruct in structs)
       {
-        StructureType structureType = diagram.AddStructure();
+        StructureType structureType = _diagram.AddStructure();
         structureType.Name = nrStruct.Name;
         structureType.AccessModifier = nrStruct.AccessModifier.ToNClass();
 
@@ -290,7 +290,7 @@ namespace NClass.AssemblyImport
         AddMethods(structureType, nrStruct.Methods);
         AddOperators(structureType, nrStruct.Operators);
 
-        types.Add(nrStruct, structureType);
+        _types.Add(nrStruct, structureType);
       }
     }
 
@@ -302,7 +302,7 @@ namespace NClass.AssemblyImport
     {
       foreach (NRInterface nrInterface in interfaces)
       {
-        InterfaceType interfaceType = diagram.AddInterface();
+        InterfaceType interfaceType = _diagram.AddInterface();
         interfaceType.Name = nrInterface.Name;
         interfaceType.AccessModifier = nrInterface.AccessModifier.ToNClass();
 
@@ -310,7 +310,7 @@ namespace NClass.AssemblyImport
         AddEvents(interfaceType, nrInterface.Events);
         AddMethods(interfaceType, nrInterface.Methods);
 
-        types.Add(nrInterface, interfaceType);
+        _types.Add(nrInterface, interfaceType);
       }
     }
 
@@ -322,7 +322,7 @@ namespace NClass.AssemblyImport
     {
       foreach (NRDelegate nrDelegate in delegates)
       {
-        DelegateType delegateType = diagram.AddDelegate();
+        DelegateType delegateType = _diagram.AddDelegate();
         delegateType.Name = nrDelegate.Name;
         delegateType.AccessModifier = nrDelegate.AccessModifier.ToNClass();
         delegateType.ReturnType = nrDelegate.ReturnType;
@@ -331,7 +331,7 @@ namespace NClass.AssemblyImport
           delegateType.AddParameter(nrParameter.Declaration());
         }
 
-        types.Add(nrDelegate, delegateType);
+        _types.Add(nrDelegate, delegateType);
       }
     }
 
@@ -343,13 +343,13 @@ namespace NClass.AssemblyImport
     {
       foreach (NREnum nrEnum in enums)
       {
-        EnumType enumType = diagram.AddEnum();
+        EnumType enumType = _diagram.AddEnum();
         enumType.Name = nrEnum.Name;
         enumType.AccessModifier = nrEnum.AccessModifier.ToNClass();
 
         AddEnumValues(enumType, nrEnum.Values);
 
-        types.Add(nrEnum, enumType);
+        _types.Add(nrEnum, enumType);
       }
     }
 
