@@ -35,7 +35,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           (int)(absolute.X * diagram.Zoom) - diagram.Offset.X + MarginSize,
           (int)(absolute.Y * diagram.Zoom) - diagram.Offset.Y);
 
-        this.Location = ParentLocation + relative;
+        Location = ParentLocation + relative;
       }
     }
   }
