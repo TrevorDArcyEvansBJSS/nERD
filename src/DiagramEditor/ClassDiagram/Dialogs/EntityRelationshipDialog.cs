@@ -41,7 +41,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void UpdateTexts()
     {
-      this.Text = Strings.EditEntityRelationship;
+      Text = Strings.EditEntityRelationship;
       btnOK.Text = Strings.ButtonOK;
       btnCancel.Text = Strings.ButtonCancel;
     }
