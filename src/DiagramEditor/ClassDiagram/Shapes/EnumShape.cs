@@ -28,10 +28,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
     private static readonly EnumDialog EnumDialog = new EnumDialog();
     private static readonly SolidBrush ItemBrush = new SolidBrush(Color.Black);
 
-    internal EnumShape(EnumType _enum) : 
-      base(_enum)
+    internal EnumShape(EnumType enumType) : 
+      base(enumType)
     {
-      EnumType = _enum;
+      EnumType = enumType;
       UpdateMinSize();
     }
 
