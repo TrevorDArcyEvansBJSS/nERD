@@ -55,7 +55,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void UpdateTexts()
     {
-      this.Text = Strings.Print;
+      Text = Strings.Print;
       btnPrinter.Text = Strings.ButtonSelectPrinter;
       btnPageSetup.Text = Strings.ButtonPageSetup;
       lblStyle.Text = Strings.Style;
@@ -277,7 +277,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       if (selectPrinterDialog.ShowDialog() == DialogResult.OK)
       {
         Print();
-        this.Close();
+        Close();
       }
     }
 
