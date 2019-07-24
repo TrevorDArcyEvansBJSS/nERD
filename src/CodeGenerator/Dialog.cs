@@ -25,7 +25,7 @@ namespace NClass.CodeGenerator
 {
   public partial class Dialog : Form
   {
-    Project project = null;
+    private Project _project = null;
 
     public Dialog()
     {
@@ -35,7 +35,7 @@ namespace NClass.CodeGenerator
 
     private void UpdateTexts()
     {
-      this.Text = Strings.CodeGeneration;
+      Text = Strings.CodeGeneration;
       lblDestination.Text = Strings.Destination;
       btnAddItem.Text = Strings.ButtonAddItem;
       btnBrowse.Text = Strings.ButtonBrowse;
@@ -97,7 +97,7 @@ namespace NClass.CodeGenerator
 
     public void ShowDialog(Project project)
     {
-      this.project = project;
+      _project = project;
 
       UpdateTexts();
       UpdateValues();
@@ -213,14 +213,14 @@ namespace NClass.CodeGenerator
 
     private void btnGenerate_Click(object sender, EventArgs e)
     {
-      if (project != null)
+      if (_project != null)
       {
         ValidateSettings();
 
         try
         {
           SolutionType solutionType = (SolutionType)cboSolutionType.SelectedIndex;
-          Generator generator = new Generator(project, solutionType);
+          Generator generator = new Generator(_project, solutionType);
           string destination = txtDestination.Text;
 
           GenerationResult result = generator.Generate(destination);
@@ -238,7 +238,7 @@ namespace NClass.CodeGenerator
           }
           else // Cancelled
           {
-            this.DialogResult = DialogResult.None;
+            DialogResult = DialogResult.None;
           }
         }
         catch (Exception ex)
