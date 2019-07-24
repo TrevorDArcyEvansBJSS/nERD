@@ -65,8 +65,7 @@ namespace NClass.Core
 
     public override string ToString()
     {
-      return string.Format("{0}: {1} (+)--> {2}",
-        Strings.Nesting, First.Name, Second.Name);
+      return string.Format("{0}: {1} (+)--> {2}", Strings.Nesting, First.Name, Second.Name);
     }
   }
 }
