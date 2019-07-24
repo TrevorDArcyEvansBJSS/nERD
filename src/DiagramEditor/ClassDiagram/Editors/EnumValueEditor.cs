@@ -19,7 +19,7 @@ using System.Drawing;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public partial class EnumValueEditor : ItemEditor
+  public sealed partial class EnumValueEditor : ItemEditor
   {
     internal EnumShape Shape { get; set; } = null;
 
