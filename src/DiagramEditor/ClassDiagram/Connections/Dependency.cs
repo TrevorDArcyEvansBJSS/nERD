@@ -31,7 +31,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
     public Dependency(DependencyRelationship dependency, Shape startShape, Shape endShape) :
       base(dependency, startShape, endShape)
     {
-      this.DependencyRelationship = dependency;
+      DependencyRelationship = dependency;
     }
 
     internal DependencyRelationship DependencyRelationship { get; }
