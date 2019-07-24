@@ -22,9 +22,7 @@ namespace NClass.Core
 {
   public abstract class ClassType : SingleInheritanceType
   {
-    private ClassModifier modifier = ClassModifier.None;
-    private ClassType baseClass = null;
-    private int derivedClassCount = 0;
+    private int _derivedClassCount = 0;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -39,6 +37,7 @@ namespace NClass.Core
       get { return EntityType.Class; }
     }
 
+    private ClassModifier _modifier = ClassModifier.None;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -46,11 +45,11 @@ namespace NClass.Core
     {
       get
       {
-        return modifier;
+        return _modifier;
       }
       set
       {
-        if (modifier != value)
+        if (_modifier != value)
         {
           if (value == ClassModifier.Static && (IsSuperClass || HasExplicitBase))
             throw new BadSyntaxException(Strings.ErrorInvalidModifier);
@@ -58,7 +57,7 @@ namespace NClass.Core
             throw new BadSyntaxException(Strings.ErrorInvalidModifier);
 
           OnBeginUndoableOperation();
-          modifier = value;
+          _modifier = value;
           Changed();
         }
       }
@@ -107,13 +106,13 @@ namespace NClass.Core
     {
       get
       {
-        return (baseClass != null);
+        return (_baseClass != null);
       }
     }
 
     public bool IsSuperClass
     {
-      get { return (derivedClassCount > 0); }
+      get { return (_derivedClassCount > 0); }
     }
 
     public sealed override string Signature
@@ -154,6 +153,7 @@ namespace NClass.Core
       }
     }
 
+    private ClassType _baseClass = null;
     /// <exception cref="RelationshipException">
     /// The language of <paramref name="value"/> does not equal.-or-
     /// <paramref name="value"/> is static or sealed class.-or-
@@ -163,18 +163,18 @@ namespace NClass.Core
     {
       get
       {
-        return baseClass;
+        return _baseClass;
       }
       set
       {
-        if (value == baseClass)
+        if (value == _baseClass)
           return;
 
         if (value == null)
         {
           OnBeginUndoableOperation();
-          baseClass.derivedClassCount--;
-          baseClass = null;
+          _baseClass._derivedClassCount--;
+          _baseClass = null;
           Changed();
           return;
         }
@@ -196,8 +196,8 @@ namespace NClass.Core
           throw new RelationshipException(Strings.ErrorLanguagesDoNotEqual);
 
         OnBeginUndoableOperation();
-        baseClass = value;
-        baseClass.derivedClassCount++;
+        _baseClass = value;
+        _baseClass._derivedClassCount++;
         Changed();
       }
     }
@@ -226,7 +226,7 @@ namespace NClass.Core
     {
       base.CopyFrom(type);
       ClassType classType = (ClassType)type;
-      modifier = classType.modifier;
+      _modifier = classType._modifier;
     }
 
     public abstract ClassType Clone();
