@@ -17,11 +17,6 @@ namespace NClass.Core
 {
   public abstract class Parameter : LanguageElement
   {
-    private string type;
-    private string name;
-    private ParameterModifier modifier;
-    private string defaultValue;
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> or <paramref name="type"/> 
     /// does not fit to the syntax.
@@ -36,6 +31,7 @@ namespace NClass.Core
       Initializing = false;
     }
 
+    private string _name;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -43,21 +39,22 @@ namespace NClass.Core
     {
       get
       {
-        return name;
+        return _name;
       }
       set
       {
         string newName = Language.GetValidName(value, false);
 
-        if (newName != name)
+        if (newName != _name)
         {
           OnBeginUndoableOperation();
-          name = newName;
+          _name = newName;
           Changed();
         }
       }
     }
 
+    private string _type;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -65,53 +62,55 @@ namespace NClass.Core
     {
       get
       {
-        return type;
+        return _type;
       }
       protected set
       {
         string newType = Language.GetValidTypeName(value);
 
-        if (newType != type)
+        if (newType != _type)
         {
           OnBeginUndoableOperation();
-          type = newType;
+          _type = newType;
           Changed();
         }
       }
     }
 
+    private ParameterModifier _modifier;
     public virtual ParameterModifier Modifier
     {
       get
       {
-        return modifier;
+        return _modifier;
       }
       protected set
       {
-        if (modifier != value)
+        if (_modifier != value)
         {
           OnBeginUndoableOperation();
-          modifier = value;
+          _modifier = value;
           Changed();
         }
       }
     }
 
+    private string _defaultValue;
     public virtual string DefaultValue
     {
       get
       {
-        return defaultValue;
+        return _defaultValue;
       }
       protected set
       {
         if (string.IsNullOrWhiteSpace(value))
           value = null;
 
-        if (defaultValue != value)
+        if (_defaultValue != value)
         {
           OnBeginUndoableOperation();
-          defaultValue = value;
+          _defaultValue = value;
           Changed();
         }
       }
