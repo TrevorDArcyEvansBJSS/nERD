@@ -508,7 +508,7 @@ namespace NClass.DiagramEditor.ClassDiagram
           bottomMax = area.Bottom + Padding;
       }
 
-      this.Size = new Size(rightMax, bottomMax);
+      Size = new Size(rightMax, bottomMax);
     }
 
     public void AlignLeft()
