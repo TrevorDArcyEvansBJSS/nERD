@@ -29,13 +29,13 @@ namespace NClass.Core
     public ReservedNameException(string name) :
       base(Strings.ErrorReservedName)
     {
-      this.ReservedName = name;
+      ReservedName = name;
     }
 
     public ReservedNameException(string name, Exception innerException) :
       base(Strings.ErrorReservedName, innerException)
     {
-      this.ReservedName = name;
+      ReservedName = name;
     }
 
     public string ReservedName { get; }
