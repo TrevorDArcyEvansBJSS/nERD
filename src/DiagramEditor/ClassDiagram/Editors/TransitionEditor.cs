@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public partial class TransitionEditor : TypeEditor
+  public sealed partial class TransitionEditor : TypeEditor
   {
     private TransitionConnection Connection { get; set; } = null;
 
