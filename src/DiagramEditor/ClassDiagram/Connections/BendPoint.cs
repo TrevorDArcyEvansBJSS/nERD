@@ -119,7 +119,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
 
     public object Clone()
     {
-      return this.MemberwiseClone();
+      return MemberwiseClone();
     }
 
     internal void Draw(Graphics g, bool onScreen, float zoom, Point offset)
