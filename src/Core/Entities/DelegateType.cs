@@ -21,9 +21,6 @@ namespace NClass.Core
 {
   public abstract class DelegateType : TypeBase
   {
-    private string _returnType;
-    private ArgumentList _argumentList;
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
@@ -38,6 +35,7 @@ namespace NClass.Core
       get { return EntityType.Delegate; }
     }
 
+    private string _returnType;
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="value"/> does not fit to the syntax.
     /// </exception>
@@ -60,6 +58,7 @@ namespace NClass.Core
       }
     }
 
+    private ArgumentList _argumentList;
     public IEnumerable<Parameter> Arguments
     {
       get { return _argumentList; }
