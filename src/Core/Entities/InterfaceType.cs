@@ -127,7 +127,7 @@ namespace NClass.Core
           Strings.Interface));
       }
 
-      if (_base.Language != this.Language)
+      if (_base.Language != Language)
         throw new RelationshipException(Strings.ErrorLanguagesDoNotEqual);
 
       OnBeginUndoableOperation();
