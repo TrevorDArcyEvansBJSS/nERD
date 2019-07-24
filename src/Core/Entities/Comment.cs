@@ -24,8 +24,6 @@ namespace NClass.Core
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
-    private string _text = string.Empty;
-
     internal Comment()
     {
     }
@@ -45,6 +43,7 @@ namespace NClass.Core
       get { return Strings.Comment; }
     }
 
+    private string _text = string.Empty;
     public string Text
     {
       get
@@ -67,7 +66,7 @@ namespace NClass.Core
 
     public Comment Clone()
     {
-      return new Comment(this._text);
+      return new Comment(_text);
     }
 
     public void Serialize(XmlElement node)
