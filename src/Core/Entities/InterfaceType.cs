@@ -21,7 +21,6 @@ namespace NClass.Core
 {
   public abstract class InterfaceType : CompositeType
   {
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
