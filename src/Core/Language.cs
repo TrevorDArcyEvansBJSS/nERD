@@ -160,8 +160,7 @@ namespace NClass.Core
     /// <exception cref="ArgumentException">
     /// The language does not support explicit interface implementation.
     /// </exception>
-    protected internal abstract Operation Implement(Operation operation,
-      CompositeType newParent, bool explicitly);
+    protected internal abstract Operation Implement(Operation operation, CompositeType newParent, bool explicitly);
 
     /// <exception cref="ArgumentException">
     /// <paramref name="operation"/> cannot be overridden.
@@ -194,8 +193,7 @@ namespace NClass.Core
     {
       try
       {
-        return (ClassModifier)Enum.Parse(
-          typeof(ClassModifier), value, true);
+        return (ClassModifier)Enum.Parse(typeof(ClassModifier), value, true);
       }
       catch
       {
@@ -228,8 +226,7 @@ namespace NClass.Core
         }
         else
         {
-          return (OperationModifier)Enum.Parse(
-            typeof(OperationModifier), value, true);
+          return (OperationModifier)Enum.Parse(typeof(OperationModifier), value, true);
         }
       }
       catch
