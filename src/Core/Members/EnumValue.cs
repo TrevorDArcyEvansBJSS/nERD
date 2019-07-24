@@ -17,7 +17,6 @@ namespace NClass.Core
 {
   public abstract class EnumValue : LanguageElement
   {
-    private string name = null;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="declaration"/> does not fit to the syntax.
@@ -29,18 +28,19 @@ namespace NClass.Core
       Initializing = false;
     }
 
+    private string _name = null;
     public override string Name
     {
       get
       {
-        return name;
+        return _name;
       }
       set
       {
-        if (name != value)
+        if (_name != value)
         {
           OnBeginUndoableOperation();
-          name = value;
+          _name = value;
           Changed();
         }
       }
