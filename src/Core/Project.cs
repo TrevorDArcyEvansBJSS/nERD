@@ -296,7 +296,7 @@ namespace NClass.Core
     private void Serialize(XmlElement node)
     {
       XmlElement nameElement = node.OwnerDocument.CreateElement("Name");
-      nameElement.InnerText = this.Name;
+      nameElement.InnerText = Name;
       node.AppendChild(nameElement);
 
       foreach (IProjectItem item in Items)
@@ -405,17 +405,17 @@ namespace NClass.Core
       if (obj == null)
         return false;
 
-      if (this.GetType() != obj.GetType())
+      if (GetType() != obj.GetType())
         return false;
 
       Project project = (Project)obj;
 
-      if (this._projectFile == null && project._projectFile == null)
+      if (_projectFile == null && project._projectFile == null)
         return object.ReferenceEquals(this, obj);
 
       return (
-        this._projectFile != null && project._projectFile != null &&
-        this._projectFile.FullName == project._projectFile.FullName
+        _projectFile != null && project._projectFile != null &&
+        _projectFile.FullName == project._projectFile.FullName
       );
     }
 
