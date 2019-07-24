@@ -27,7 +27,6 @@ namespace NClass.Core
       return GetDeclaration();
     }
 
-    [Obsolete]
     protected static string GetNameWithoutGeneric(string name)
     {
       int index = name.IndexOf('<');
