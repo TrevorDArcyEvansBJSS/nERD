@@ -20,11 +20,6 @@ namespace NClass.Core
 {
   public abstract class Property : Operation
   {
-    private bool isReadonly = false;
-    private bool isWriteonly = false;
-    private AccessModifier readAccess = AccessModifier.Default;
-    private AccessModifier writeAccess = AccessModifier.Default;
-
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
@@ -54,44 +49,47 @@ namespace NClass.Core
       }
     }
 
+    private bool _isReadonly = false;
     public bool IsReadonly
     {
       get
       {
-        return isReadonly;
+        return _isReadonly;
       }
       set
       {
-        if (isReadonly != value)
+        if (_isReadonly != value)
         {
           if (value)
-            isWriteonly = false;
+            _isWriteonly = false;
           OnBeginUndoableOperation();
-          isReadonly = value;
+          _isReadonly = value;
           Changed();
         }
       }
     }
 
+    private bool _isWriteonly = false;
     public bool IsWriteonly
     {
       get
       {
-        return isWriteonly;
+        return _isWriteonly;
       }
       set
       {
-        if (isWriteonly != value)
+        if (_isWriteonly != value)
         {
           if (value)
-            isReadonly = false;
+            _isReadonly = false;
           OnBeginUndoableOperation();
-          isWriteonly = value;
+          _isWriteonly = value;
           Changed();
         }
       }
     }
 
+    private AccessModifier _readAccess = AccessModifier.Default;
     /// <exception cref="BadSyntaxException">
     /// Cannot set accessor modifier.
     /// </exception>
@@ -99,18 +97,18 @@ namespace NClass.Core
     {
       get
       {
-        return readAccess;
+        return _readAccess;
       }
       protected set
       {
-        if (value == readAccess)
+        if (value == _readAccess)
           return;
 
         if (value == AccessModifier.Default || (value != Access &&
           WriteAccess == AccessModifier.Default && !IsReadonly && !IsWriteonly))
         {
           OnBeginUndoableOperation();
-          readAccess = value;
+          _readAccess = value;
           Changed();
         }
         else
@@ -120,6 +118,7 @@ namespace NClass.Core
       }
     }
 
+    private AccessModifier _writeAccess = AccessModifier.Default;
     /// <exception cref="BadSyntaxException">
     /// Cannot set accessor modifier.
     /// </exception>
@@ -127,18 +126,18 @@ namespace NClass.Core
     {
       get
       {
-        return writeAccess;
+        return _writeAccess;
       }
       protected set
       {
-        if (value == writeAccess)
+        if (value == _writeAccess)
           return;
 
         if (value == AccessModifier.Default || (value != Access &&
           ReadAccess == AccessModifier.Default && !IsReadonly && !IsWriteonly))
         {
           OnBeginUndoableOperation();
-          writeAccess = value;
+          _writeAccess = value;
           Changed();
         }
         else
@@ -153,10 +152,10 @@ namespace NClass.Core
       base.CopyFrom(member);
 
       Property property = (Property)member;
-      isReadonly = property.isReadonly;
-      isWriteonly = property.isWriteonly;
-      readAccess = property.readAccess;
-      writeAccess = property.writeAccess;
+      _isReadonly = property._isReadonly;
+      _isWriteonly = property._isWriteonly;
+      _readAccess = property._readAccess;
+      _writeAccess = property._writeAccess;
     }
   }
 }
