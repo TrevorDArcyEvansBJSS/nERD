@@ -719,7 +719,7 @@ namespace NClass.Core
         if (language == null)
           throw new InvalidDataException("Invalid project language.");
 
-        this.Language = language;
+        Language = language;
       }
       catch (Exception ex)
       {
