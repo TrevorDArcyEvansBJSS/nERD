@@ -22,11 +22,11 @@ namespace NClass.CodeGenerator
 {
   internal sealed class CSharpProjectGenerator : ProjectGenerator
   {
-    SolutionType solutionType;
+    private readonly SolutionType _solutionType;
 
     public CSharpProjectGenerator(Model model, SolutionType solutionType) : base(model)
     {
-      this.solutionType = solutionType;
+      _solutionType = solutionType;
     }
 
     public override string RelativeProjectFileName
@@ -66,7 +66,7 @@ namespace NClass.CodeGenerator
 
             if (line.Contains("${VS2005:"))
             {
-              if (solutionType == SolutionType.VisualStudio2005)
+              if (_solutionType == SolutionType.VisualStudio2005)
                 line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "${content}");
               else
                 line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "");
@@ -76,7 +76,7 @@ namespace NClass.CodeGenerator
             }
             if (line.Contains("${VS2008:"))
             {
-              if (solutionType == SolutionType.VisualStudio2008)
+              if (_solutionType == SolutionType.VisualStudio2008)
                 line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "${content}");
               else
                 line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "");
