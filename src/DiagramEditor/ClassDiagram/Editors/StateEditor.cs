@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public partial class StateEditor : TypeEditor
+  public sealed partial class StateEditor : TypeEditor
   {
     private bool NeedValidation { get; set; } = false;
     private StateShape Shape { get; set; } = null;
