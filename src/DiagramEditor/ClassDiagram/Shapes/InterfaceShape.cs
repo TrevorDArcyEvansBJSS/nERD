@@ -20,8 +20,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public sealed class InterfaceShape : CompositeTypeShape
   {
-    internal InterfaceShape(InterfaceType interfaceType)
-      : base(interfaceType)
+    internal InterfaceShape(InterfaceType interfaceType) :
+      base(interfaceType)
     {
       InterfaceType = interfaceType;
       UpdateMinSize();
