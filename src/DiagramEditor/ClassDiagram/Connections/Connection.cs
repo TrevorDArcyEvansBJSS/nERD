@@ -62,8 +62,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
       if (endShape == null)
         throw new ArgumentNullException("endShape");
 
-      this.StartShape = startShape;
-      this.EndShape = endShape;
+      StartShape = startShape;
+      EndShape = endShape;
       InitOrientations();
       _bendPoints.Add(new BendPoint(startShape, true));
       _bendPoints.Add(new BendPoint(endShape, false));
@@ -1595,10 +1595,10 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
         Connection connection = diagram.ConnectionList.FirstValue;
         connection.IsSelected = true;
 
-        connection._startOrientation = this._startOrientation;
-        connection._endOrientation = this._endOrientation;
+        connection._startOrientation = _startOrientation;
+        connection._endOrientation = _endOrientation;
         connection._bendPoints.Clear();
-        foreach (BendPoint point in this._bendPoints)
+        foreach (BendPoint point in _bendPoints)
         {
           Shape relativeShape = point.RelativeToStartShape ? first : second;
           BendPoint newPoint = new BendPoint(relativeShape,
