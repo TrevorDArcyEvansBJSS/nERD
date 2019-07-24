@@ -17,18 +17,13 @@ namespace NClass.Core
 {
   public delegate void ProjectItemEventHandler(object sender, ProjectItemEventArgs e);
 
-  public class ProjectItemEventArgs
+  public sealed class ProjectItemEventArgs
   {
-    IProjectItem projectItem;
-
     public ProjectItemEventArgs(IProjectItem projectItem)
     {
-      this.projectItem = projectItem;
+      ProjectItem = projectItem;
     }
 
-    public IProjectItem ProjectItem
-    {
-      get { return projectItem; }
-    }
+    public IProjectItem ProjectItem { get; }
   }
 }
