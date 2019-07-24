@@ -13,42 +13,42 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Translations;
 using System;
 using System.Windows.Forms;
-using NClass.Translations;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-	public partial class EditCommentDialog : Form
-	{
-		public EditCommentDialog()
-		{
-			InitializeComponent();
-		}
+  public partial class EditCommentDialog : Form
+  {
+    public EditCommentDialog()
+    {
+      InitializeComponent();
+    }
 
-		public EditCommentDialog(string initText)
-		{
-			InitializeComponent();
-			txtInput.Text = initText;
-		}
+    public EditCommentDialog(string initText)
+    {
+      InitializeComponent();
+      txtInput.Text = initText;
+    }
 
-		public string InputText
-		{
-			get { return txtInput.Text; }
-		}
+    public string InputText
+    {
+      get { return txtInput.Text; }
+    }
 
-		private void UpdateTexts()
-		{
-			this.Text = Strings.EditComment;
-			lblEdit.Text = Strings.EditText;
-			btnOK.Text = Strings.ButtonOK;
-			btnCancel.Text = Strings.ButtonCancel;
-		}
+    private void UpdateTexts()
+    {
+      this.Text = Strings.EditComment;
+      lblEdit.Text = Strings.EditText;
+      btnOK.Text = Strings.ButtonOK;
+      btnCancel.Text = Strings.ButtonCancel;
+    }
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-			UpdateTexts();
-		}
-	}
+    protected override void OnLoad(EventArgs e)
+    {
+      base.OnLoad(e);
+      UpdateTexts();
+    }
+  }
 }
