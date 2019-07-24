@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public partial class CompositeTypeEditor : TypeEditor
+  public sealed partial class CompositeTypeEditor : TypeEditor
   {
     public bool NeedValidation { get; set; } = false;
     public CompositeTypeShape Shape { get; set; } = null;
