@@ -85,7 +85,7 @@ namespace NClass.GUI
 
       // Mono hack for a ToolStripItem layout problem
       if (MonoHelper.IsRunningOnMono)
-        location -= this.Bounds.Left;
+        location -= Bounds.Left;
 
       if (snapToCenter && Math.Abs(location - center) <= PrecisionSize)
         location = center;
