@@ -20,8 +20,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Shapes
 {
   public sealed class ClassShape : CompositeTypeShape
   {
-    internal ClassShape(ClassType classType)
-      : base(classType)
+    internal ClassShape(ClassType classType) :
+      base(classType)
     {
       ClassType = classType;
       UpdateMinSize();
