@@ -192,7 +192,7 @@ namespace NClass.Core
           throw new RelationshipException(string.Format(Strings.ErrorCyclicBase,
             Strings.Class));
         }
-        if (value.Language != this.Language)
+        if (value.Language != Language)
           throw new RelationshipException(Strings.ErrorLanguagesDoNotEqual);
 
         OnBeginUndoableOperation();
