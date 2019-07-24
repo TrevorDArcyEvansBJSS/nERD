@@ -30,7 +30,7 @@ namespace NClass.DiagramEditor
       Zoom = zoom;
     }
 
-    public AbsoluteMouseEventArgs(MouseEventArgs e, IDocument document) : 
+    public AbsoluteMouseEventArgs(MouseEventArgs e, IDocument document) :
       this(e, document.Offset, document.Zoom)
     {
     }
