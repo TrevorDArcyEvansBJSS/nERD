@@ -37,7 +37,7 @@ namespace NClass.GUI.Dialogs
 
     private void UpdateTexts()
     {
-      this.Text = Strings.Options;
+      Text = Strings.Options;
       tabGeneral.Text = Strings.General;
       tabStyle.Text = Strings.Style;
       grpGeneral.Text = Strings.General;
@@ -157,7 +157,7 @@ namespace NClass.GUI.Dialogs
     protected override void OnClosed(EventArgs e)
     {
       base.OnClosed(e);
-      if (this.DialogResult == DialogResult.Cancel)
+      if (DialogResult == DialogResult.Cancel)
         Style.CurrentStyle = savedStyle;
       savedStyle.Dispose();
     }
