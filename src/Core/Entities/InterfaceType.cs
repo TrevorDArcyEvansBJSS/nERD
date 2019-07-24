@@ -21,14 +21,14 @@ namespace NClass.Core
 {
   public abstract class InterfaceType : CompositeType
   {
-    List<InterfaceType> baseList;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
     /// </exception>
-    protected InterfaceType(string name) : base(name)
+    protected InterfaceType(string name) :
+      base(name)
     {
-      baseList = new List<InterfaceType>();
+      BaseList = new List<InterfaceType>();
     }
 
     public sealed override EntityType EntityType
@@ -36,14 +36,11 @@ namespace NClass.Core
       get { return EntityType.Interface; }
     }
 
-    protected List<InterfaceType> BaseList
-    {
-      get { return baseList; }
-    }
+    protected List<InterfaceType> BaseList { get; }
 
     public IEnumerable<InterfaceType> Bases
     {
-      get { return baseList; }
+      get { return BaseList; }
     }
 
     public override bool SupportsFields
@@ -73,7 +70,7 @@ namespace NClass.Core
 
     public override bool HasExplicitBase
     {
-      get { return (baseList.Count > 0); }
+      get { return (BaseList.Count > 0); }
     }
 
     public override bool IsAllowedParent
@@ -101,7 +98,7 @@ namespace NClass.Core
 
     private bool IsAncestor(InterfaceType _interface)
     {
-      foreach (InterfaceType baseInterface in baseList)
+      foreach (InterfaceType baseInterface in BaseList)
       {
         if (baseInterface.IsAncestor(_interface))
           return true;
@@ -124,6 +121,7 @@ namespace NClass.Core
         throw new RelationshipException(
           Strings.ErrorCannotAddSameBaseInterface);
       }
+
       if (_base.IsAncestor(this))
       {
         throw new RelationshipException(string.Format(Strings.ErrorCyclicBase,
