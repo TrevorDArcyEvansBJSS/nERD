@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Editors
 {
-  public class BorderedTextBox : UserControl
+  public sealed class BorderedTextBox : UserControl
   {
     private sealed class TabTextBox : TextBox
     {
