@@ -17,7 +17,7 @@ using System.Drawing.Printing;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public class PrintingSettings
+  public sealed class PrintingSettings
   {
     public bool Landscape { get; set; }
     public Margins Margins { get; set; }
