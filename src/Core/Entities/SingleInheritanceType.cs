@@ -94,7 +94,7 @@ namespace NClass.Core
       if (operation == null)
         throw new ArgumentNullException("operation");
 
-      if (operation.Language != this.Language)
+      if (operation.Language != Language)
         throw new ArgumentException(Strings.ErrorLanguagesDoNotEqual);
 
       if (!(operation.Parent is InterfaceType))
@@ -124,7 +124,7 @@ namespace NClass.Core
       if (operation == null)
         throw new ArgumentNullException("operation");
 
-      if (operation.Language != this.Language)
+      if (operation.Language != Language)
         throw new ArgumentException(Strings.ErrorLanguagesDoNotEqual);
 
       Operation newOperation = Language.Override(operation, this);
