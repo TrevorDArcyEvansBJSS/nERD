@@ -152,7 +152,7 @@ namespace NClass.GUI.ModelExplorer
       }
 
       if (MonoHelper.IsRunningOnMono)
-        this.Refresh();
+        Refresh();
     }
 
     private void workspace_ProjectAdded(object sender, ProjectEventArgs e)
@@ -237,8 +237,8 @@ namespace NClass.GUI.ModelExplorer
 
       _normalFont.Dispose();
       _boldFont.Dispose();
-      _normalFont = new Font(this.Font, FontStyle.Regular);
-      _boldFont = new Font(this.Font, FontStyle.Bold);
+      _normalFont = new Font(Font, FontStyle.Regular);
+      _boldFont = new Font(Font, FontStyle.Bold);
     }
 
     #region Context menu event handlers
