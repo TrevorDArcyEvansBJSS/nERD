@@ -29,9 +29,6 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
     private const int DiamondWidth = 20;
     private const int DiamondHeight = 10;
 
-    private Direction _modifiedDirection;
-    private AssociationType _modifiedType;
-
     public AssociationDialog()
     {
       InitializeComponent();
@@ -99,6 +96,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       }
     }
 
+    private AssociationType _modifiedType;
     private void ChangeType()
     {
       if (_modifiedType == AssociationType.Association)
@@ -115,6 +113,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       }
     }
 
+    private Direction _modifiedDirection;
     private void ChangeHead()
     {
       if (_modifiedDirection == Direction.Bidirectional)
