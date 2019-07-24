@@ -24,42 +24,31 @@ namespace NClass.CodeGenerator
   public abstract class SourceFileGenerator
   {
     // This builder object is static to increase performance
-    static StringBuilder codeBuilder;
-    const int DefaultBuilderCapacity = 10240; // 10 KB
+    private const int DefaultBuilderCapacity = 10240; // 10 KB
 
-    TypeBase type;
-    string rootNamespace;
-    int indentLevel = 0;
+    private static StringBuilder CodeBuilder = new StringBuilder(DefaultBuilderCapacity);
 
     protected SourceFileGenerator(TypeBase type, string rootNamespace)
     {
-      if (type == null)
-        throw new ArgumentNullException("type");
-
-      this.type = type;
-      this.rootNamespace = rootNamespace;
+      Type = type ?? throw new ArgumentNullException("type");
+      RootNamespace = rootNamespace;
     }
 
-    protected TypeBase Type
-    {
-      get { return type; }
-    }
+    protected TypeBase Type { get; }
 
-    protected string RootNamespace
-    {
-      get { return rootNamespace; }
-    }
+    protected string RootNamespace { get; }
 
+    private int _indentLevel = 0;
     protected int IndentLevel
     {
       get
       {
-        return indentLevel;
+        return _indentLevel;
       }
       set
       {
         if (value >= 0)
-          indentLevel = value;
+          _indentLevel = value;
       }
     }
 
@@ -102,20 +91,17 @@ namespace NClass.CodeGenerator
     /// </exception>
     private void WriteFileContent(TextWriter writer)
     {
-      if (codeBuilder == null)
-        codeBuilder = new StringBuilder(DefaultBuilderCapacity);
-      else
-        codeBuilder.Length = 0;
+      CodeBuilder.Length = 0;
 
       WriteFileContent();
-      writer.Write(codeBuilder.ToString());
+      writer.Write(CodeBuilder.ToString());
     }
 
     protected abstract void WriteFileContent();
 
     internal static void FinishWork()
     {
-      codeBuilder = null;
+      CodeBuilder = null;
     }
 
     protected void AddBlankLine()
@@ -127,7 +113,7 @@ namespace NClass.CodeGenerator
     {
       if (indentation)
         AddIndent();
-      codeBuilder.AppendLine();
+      CodeBuilder.AppendLine();
     }
 
     protected void WriteLine(string text)
@@ -139,7 +125,7 @@ namespace NClass.CodeGenerator
     {
       if (indentation)
         AddIndent();
-      codeBuilder.AppendLine(text);
+      CodeBuilder.AppendLine(text);
     }
 
     private void AddIndent()
@@ -150,7 +136,7 @@ namespace NClass.CodeGenerator
       else
         indentString = new string(' ', IndentLevel * Settings.Default.IndentSize);
 
-      codeBuilder.Append(indentString);
+      CodeBuilder.Append(indentString);
     }
   }
 }
