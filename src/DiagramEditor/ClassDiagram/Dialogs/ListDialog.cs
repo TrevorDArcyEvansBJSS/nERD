@@ -238,7 +238,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void btnClose_Click(object sender, EventArgs e)
     {
-      this.Close();
+      Close();
     }
   }
 }
