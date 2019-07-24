@@ -488,7 +488,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
           (int)(absolute.Y * diagram.Zoom) - diagram.Offset.Y);
         relative.Height -= (Height - (int)(record.Height * diagram.Zoom)) / 2;
 
-        this.Location = ParentLocation + relative;
+        Location = ParentLocation + relative;
       }
     }
 
