@@ -21,7 +21,6 @@ namespace NClass.Core
 {
   public abstract class EnumType : TypeBase
   {
-    private readonly List<EnumValue> _values = new List<EnumValue>();
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="name"/> does not fit to the syntax.
@@ -35,6 +34,7 @@ namespace NClass.Core
       get { return EntityType.Enum; }
     }
 
+    private readonly List<EnumValue> _values = new List<EnumValue>();
     public IEnumerable<EnumValue> Values
     {
       get { return _values; }
