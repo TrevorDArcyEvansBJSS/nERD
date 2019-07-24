@@ -73,7 +73,6 @@
     <Compile Include="Relationships\EntityRelationship.cs" />
     <Compile Include="Relationships\MultiplicityType.cs" />
     <Compile Include="Relationships\RelationshipType.cs" />
-    <Compile Include="LangaugeManager.cs" />
     <Compile Include="ProjectItemEventArgs.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="IModifiable.cs" />
