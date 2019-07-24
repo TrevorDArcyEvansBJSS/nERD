@@ -25,14 +25,13 @@ namespace NClass.DiagramEditor.ClassDiagram.Connections
   {
     private readonly Size MultiplicitySize = new Size(25, 25);
 
-    private readonly EntityRelationship _relationship;
-
     public EntityRelationshipConnection(EntityRelationship relationship, Shape startShape, Shape endShape) :
       base(relationship, startShape, endShape)
     {
       _relationship = relationship;
     }
 
+    private readonly EntityRelationship _relationship;
     public override Relationship Relationship
     {
       get { return _relationship; }
