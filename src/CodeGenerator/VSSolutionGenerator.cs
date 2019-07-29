@@ -77,6 +77,7 @@ namespace NClass.CodeGenerator
 
       if (language == CSharpLanguage.Instance)
         return new CSharpProjectGenerator(model, Version);
+
       if (language == JavaLanguage.Instance)
         return new JavaProjectGenerator(model);
 
