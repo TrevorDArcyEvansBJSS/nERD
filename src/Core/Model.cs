@@ -716,10 +716,7 @@ namespace NClass.Core
       try
       {
         Language language = Language.GetLanguage(languageElement.InnerText);
-        if (language == null)
-          throw new InvalidDataException("Invalid project language.");
-
-        Language = language;
+        Language = language ?? throw new InvalidDataException("Invalid project language.");
       }
       catch (Exception ex)
       {
