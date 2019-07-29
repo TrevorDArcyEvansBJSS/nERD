@@ -20,14 +20,14 @@ namespace NClass.CodeGenerator
 {
   public class Generator
   {
-    SolutionGenerator solutionGenerator;
+    private readonly SolutionGenerator _solutionGenerator;
 
     public Generator(Project project, SolutionType type)
     {
       if (project == null)
         throw new ArgumentNullException("project");
 
-      solutionGenerator = CreateSolutionGenerator(project, type);
+      _solutionGenerator = CreateSolutionGenerator(project, type);
     }
 
     protected virtual SolutionGenerator CreateSolutionGenerator(Project project, SolutionType type)
@@ -40,7 +40,7 @@ namespace NClass.CodeGenerator
     /// </exception>
     public GenerationResult Generate(string location)
     {
-      GenerationResult result = solutionGenerator.Generate(location);
+      GenerationResult result = _solutionGenerator.Generate(location);
       SourceFileGenerator.FinishWork();
 
       return result;

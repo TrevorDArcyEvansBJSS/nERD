@@ -24,25 +24,24 @@ namespace NClass.CodeGenerator
 {
   internal sealed class VSSolutionGenerator : SolutionGenerator
   {
-    SolutionType version = SolutionType.VisualStudio2008;
-
     public VSSolutionGenerator(Project project, SolutionType version) : base(project)
     {
       Version = version;
     }
 
+    private SolutionType _version = SolutionType.VisualStudio2008;
     public SolutionType Version
     {
       get
       {
-        return version;
+        return _version;
       }
       set
       {
         if (value == SolutionType.VisualStudio2005 ||
           value == SolutionType.VisualStudio2008)
         {
-          version = value;
+          _version = value;
         }
       }
     }
