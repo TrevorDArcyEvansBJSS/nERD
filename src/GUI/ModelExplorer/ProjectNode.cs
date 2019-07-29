@@ -17,6 +17,7 @@ using NClass.Core;
 using NClass.CSharp;
 using NClass.DiagramEditor;
 using NClass.DiagramEditor.ClassDiagram;
+using NClass.EntityRelationshipDiagram;
 using NClass.GUI.Properties;
 using NClass.Java;
 using NClass.Translations;
@@ -194,9 +195,8 @@ namespace NClass.GUI.ModelExplorer
       ToolStripItem menuItem = (ToolStripItem)sender;
       Project project = ((ProjectNode)menuItem.OwnerItem.Owner.Tag).Project;
 
-      // TODO   ErdLanguage
-      Diagram diagram = new Diagram(JavaLanguage.Instance);
-      Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
+      Diagram diagram = new Diagram(ErdLanguage.Instance);
+      Settings.Default.DefaultLanguageName = ErdLanguage.Instance.AssemblyName;
       project.Add(diagram);
     }
 

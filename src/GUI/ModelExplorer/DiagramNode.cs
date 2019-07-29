@@ -41,9 +41,7 @@ namespace NClass.GUI.ModelExplorer
     {
       Diagram = diagram ?? throw new ArgumentNullException("diagram");
       Text = diagram.Name;
-
-      // TODO   KeyFromLanguage
-      ImageKey = SelectedImageKey = "diagram";
+      ImageKey = SelectedImageKey = KeyFromLanguage(diagram.Language);
 
       diagram.Renamed += new EventHandler(diagram_Renamed);
     }
@@ -125,6 +123,26 @@ namespace NClass.GUI.ModelExplorer
       {
         project.Remove(diagram);
       }
+    }
+
+    private static string KeyFromLanguage(Language language)
+    {
+      if (language is CSharp.CSharpLanguage)
+      {
+        return "diagram";
+      }
+
+      if (language is Java.JavaLanguage)
+      {
+        return "diagram";
+      }
+
+      if (language is EntityRelationshipDiagram.ErdLanguage)
+      {
+        return "erd";
+      }
+
+      return "diagram";
     }
   }
 }

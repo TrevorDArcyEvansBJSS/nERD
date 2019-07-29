@@ -188,6 +188,10 @@
       <Project>{F52A7548-E60A-485B-9C84-1D2871416DB7}</Project>
       <Name>DiagramEditor</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EntityRelationshipDiagram\EntityRelationshipDiagram.csproj">
+      <Project>{722F4F78-E7CA-41C5-908A-707C0226486B}</Project>
+      <Name>EntityRelationshipDiagram</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Java\Java.csproj">
       <Project>{255565B1-3246-4184-9F71-19178FE0BA65}</Project>
       <Name>Java</Name>

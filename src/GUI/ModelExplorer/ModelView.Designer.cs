@@ -179,7 +179,7 @@ namespace NClass.GUI.ModelExplorer
       this.imageList.TransparentColor = System.Drawing.Color.Transparent;
       this.imageList.Images.SetKeyName(0, "project");
       this.imageList.Images.SetKeyName(1, "diagram");
-      this.imageList.Images.SetKeyName(2, "erd.png");
+      this.imageList.Images.SetKeyName(2, "erd");
       // 
       // lblAddProject
       // 
