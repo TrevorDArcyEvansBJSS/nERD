@@ -49,6 +49,7 @@ namespace NClass.CodeGenerator
 
       if (!GenerateProjectFiles(location))
         return GenerationResult.Error;
+
       if (!GenerateSolutionFile(location))
         return GenerationResult.Error;
 
