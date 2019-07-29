@@ -66,6 +66,7 @@ namespace NClass.DiagramEditor.ClassDiagram
         mnuNewStructure.Visible = toolNewStructure.Visible = _diagram.Language.SupportsStructures;
         mnuNewDelegate.Visible = toolNewDelegate.Visible = _diagram.Language.SupportsDelegates;
         mnuNewEnum.Visible = toolNewEnum.Visible = _diagram.Language.SupportsEnums;
+        mnuNewState.Visible = toolNewState.Visible = _diagram.Language.SupportsStates;
 
         toolDelete.Enabled = _diagram.HasSelectedElement;
       }

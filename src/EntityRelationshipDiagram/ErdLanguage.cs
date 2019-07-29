@@ -52,6 +52,8 @@ namespace NClass.EntityRelationshipDiagram
 
     public override bool SupportsExplicitImplementation => false;
 
+    public override bool SupportsStates => false;
+
     public override bool ExplicitVirtualMethods => false;
 
     public override string DefaultFileExtension => "*.erd";

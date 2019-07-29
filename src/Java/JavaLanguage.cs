@@ -146,6 +146,11 @@ namespace NClass.Java
       get { return false; }
     }
 
+    public override bool SupportsStates
+    {
+      get { return false; }
+    }
+
     public override bool SupportsAssemblyImport
     {
       get { return false; }

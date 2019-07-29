@@ -143,6 +143,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewStructure.Visible = diagram.Language.SupportsStructures;
       mnuNewDelegate.Visible = diagram.Language.SupportsDelegates;
       mnuNewEnum.Visible = diagram.Language.SupportsEnums;
+      mnuNewState.Visible = diagram.Language.SupportsStates;
 
       mnuShowType.Checked = Settings.Default.ShowType;
       mnuShowParameters.Checked = Settings.Default.ShowParameters;

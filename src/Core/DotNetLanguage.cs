@@ -42,6 +42,11 @@ namespace NClass.Core
       get { return true; }
     }
 
+    public sealed override bool SupportsStates
+    {
+      get { return false; }
+    }
+
     public override bool SupportsExplicitImplementation
     {
       get { return true; }

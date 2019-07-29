@@ -82,6 +82,11 @@ namespace NClass.Core
       get;
     }
 
+    public abstract bool SupportsStates
+    {
+      get;
+    }
+
     public abstract bool SupportsExplicitImplementation
     {
       get;
