@@ -30,6 +30,16 @@ namespace NClass.DiagramEditor.ClassDiagram
 {
   public sealed class Diagram : Model, IDocument, IEditable, IPrintable
   {
+    public event EventHandler OffsetChanged;
+    public event EventHandler SizeChanged;
+    public event EventHandler ZoomChanged;
+    public event EventHandler StatusChanged;
+    public event EventHandler SelectionChanged;
+    public event EventHandler NeedsRedraw;
+    public event EventHandler ClipboardAvailabilityChanged;
+    public event PopupWindowEventHandler ShowingWindow;
+    public event PopupWindowEventHandler HidingWindow;
+
     private enum Mode
     {
       Normal,
@@ -59,16 +69,6 @@ namespace NClass.DiagramEditor.ClassDiagram
     private EntityType _shapeType;
     private EntityType _newShapeType = EntityType.Class;
     private ConnectionCreator _connectionCreator = null;
-
-    public event EventHandler OffsetChanged;
-    public event EventHandler SizeChanged;
-    public event EventHandler ZoomChanged;
-    public event EventHandler StatusChanged;
-    public event EventHandler SelectionChanged;
-    public event EventHandler NeedsRedraw;
-    public event EventHandler ClipboardAvailabilityChanged;
-    public event PopupWindowEventHandler ShowingWindow;
-    public event PopupWindowEventHandler HidingWindow;
 
     // required for XML deserialisation
     private Diagram()

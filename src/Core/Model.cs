@@ -35,9 +35,6 @@ namespace NClass.Core
     public event SerializeEventHandler Serializing;
     public event SerializeEventHandler Deserializing;
 
-    private string _name;
-    private readonly List<IEntity> _entities = new List<IEntity>();
-    private readonly List<Relationship> _relationships = new List<Relationship>();
     protected Stack<XmlElement> UndoModels = new Stack<XmlElement>();
 
     // required for XML deserialisation
@@ -61,6 +58,7 @@ namespace NClass.Core
       Language = language ?? throw new ArgumentNullException("language");
     }
 
+    private string _name;
     public string Name
     {
       get
@@ -116,11 +114,13 @@ namespace NClass.Core
       OnClosing(EventArgs.Empty);
     }
 
+    private readonly List<IEntity> _entities = new List<IEntity>();
     public IEnumerable<IEntity> Entities
     {
       get { return _entities; }
     }
 
+    private readonly List<Relationship> _relationships = new List<Relationship>();
     public IEnumerable<Relationship> Relationships
     {
       get { return _relationships; }
