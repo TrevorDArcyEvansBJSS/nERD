@@ -21,9 +21,9 @@ using NClass.Translations;
 
 namespace NClass.CSharp
 {
-  internal sealed class CSharpClass : ClassType
+  public sealed class CSharpClass : ClassType
   {
-    internal CSharpClass() :
+    public CSharpClass() :
       this("NewClass")
     {
     }
