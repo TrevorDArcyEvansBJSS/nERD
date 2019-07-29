@@ -19,6 +19,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using NClass.Core;
 using System.IO;
+using NClass.EntityRelationshipDiagram;
+using NClass.CSharp;
+using NClass.Java;
 
 namespace NClass.CodeGenerator
 {
@@ -42,10 +45,13 @@ namespace NClass.CodeGenerator
         CSharpImportList = new StringCollection();
       if (JavaImportList == null)
         JavaImportList = new StringCollection();
+      if (ErdImportList == null)
+        ErdImportList = new StringCollection();
 
       ImportList.Clear();
-      ImportList.Add(CSharp.CSharpLanguage.Instance, CSharpImportList);
-      ImportList.Add(Java.JavaLanguage.Instance, JavaImportList);
+      ImportList.Add(CSharpLanguage.Instance, CSharpImportList);
+      ImportList.Add(JavaLanguage.Instance, JavaImportList);
+      ImportList.Add(ErdLanguage.Instance, ErdImportList);
 
       if (string.IsNullOrEmpty(DestinationPath))
       {

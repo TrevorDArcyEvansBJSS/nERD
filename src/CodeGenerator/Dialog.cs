@@ -15,6 +15,7 @@
 
 using NClass.Core;
 using NClass.CSharp;
+using NClass.EntityRelationshipDiagram;
 using NClass.Java;
 using NClass.Translations;
 using System;
@@ -69,10 +70,26 @@ namespace NClass.CodeGenerator
     {
       Language language = null;
 
-      if (Equals(cboLanguage.SelectedItem, "C#"))
-        language = CSharpLanguage.Instance;
-      else if (Equals(cboLanguage.SelectedItem, "Java"))
-        language = JavaLanguage.Instance;
+      switch (cboLanguage.SelectedItem)
+      {
+        case "C#":
+          language = CSharpLanguage.Instance;
+          break;
+
+        case "Java":
+          language = JavaLanguage.Instance;
+          break;
+
+        case "SQL":
+          language = ErdLanguage.Instance;
+          break;
+
+        case null:
+          break;
+
+        default:
+          throw new ArgumentException("The model has an unknown language.");
+      }
 
       if (language != null)
       {
@@ -93,6 +110,8 @@ namespace NClass.CodeGenerator
         Settings.Default.CSharpImportList = importList;
       else if (Equals(cboLanguage.SelectedItem, "Java"))
         Settings.Default.JavaImportList = importList;
+      else if (Equals(cboLanguage.SelectedItem, "SQL"))
+        Settings.Default.ErdImportList = importList;
     }
 
     public void ShowDialog(Project project)
