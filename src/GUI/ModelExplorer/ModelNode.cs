@@ -19,8 +19,6 @@ namespace NClass.GUI.ModelExplorer
 {
   public abstract class ModelNode : TreeNode
   {
-    private bool _deleted = false;
-
     protected ModelNode()
     {
     }
@@ -40,6 +38,7 @@ namespace NClass.GUI.ModelExplorer
       }
     }
 
+    private bool _deleted = false;
     public void Delete()
     {
       if (!_deleted)
