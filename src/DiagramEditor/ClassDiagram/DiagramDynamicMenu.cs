@@ -62,10 +62,11 @@ namespace NClass.DiagramEditor.ClassDiagram
         _diagram = document as Diagram;
         _diagram.SelectionChanged += new EventHandler(Diagram_SelectionChanged);
 
-        mnuNewStructure.Visible = _diagram.Language.SupportsStructures;
-        mnuNewDelegate.Visible = _diagram.Language.SupportsDelegates;
-        toolNewStructure.Visible = _diagram.Language.SupportsStructures;
-        toolNewDelegate.Visible = _diagram.Language.SupportsDelegates;
+        mnuNewInterface.Visible = toolNewInterface.Visible = _diagram.Language.SupportsInterfaces;
+        mnuNewStructure.Visible = toolNewStructure.Visible = _diagram.Language.SupportsStructures;
+        mnuNewDelegate.Visible = toolNewDelegate.Visible = _diagram.Language.SupportsDelegates;
+        mnuNewEnum.Visible = toolNewEnum.Visible = _diagram.Language.SupportsEnums;
+
         toolDelete.Enabled = _diagram.HasSelectedElement;
       }
     }

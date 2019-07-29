@@ -139,8 +139,10 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       base.ValidateMenuItems(diagram);
       mnuPaste.Enabled = diagram.CanPasteFromClipboard;
 
+      mnuNewInterface.Visible = diagram.Language.SupportsInterfaces;
       mnuNewStructure.Visible = diagram.Language.SupportsStructures;
       mnuNewDelegate.Visible = diagram.Language.SupportsDelegates;
+      mnuNewEnum.Visible = diagram.Language.SupportsEnums;
 
       mnuShowType.Checked = Settings.Default.ShowType;
       mnuShowParameters.Checked = Settings.Default.ShowParameters;
