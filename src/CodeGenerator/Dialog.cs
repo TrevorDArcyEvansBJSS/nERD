@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace NClass.CodeGenerator
 {
-  public partial class Dialog : Form
+  public sealed partial class Dialog : Form
   {
     private Project _project = null;
 
@@ -69,9 +69,9 @@ namespace NClass.CodeGenerator
     {
       Language language = null;
 
-      if (object.Equals(cboLanguage.SelectedItem, "C#"))
+      if (Equals(cboLanguage.SelectedItem, "C#"))
         language = CSharpLanguage.Instance;
-      else if (object.Equals(cboLanguage.SelectedItem, "Java"))
+      else if (Equals(cboLanguage.SelectedItem, "Java"))
         language = JavaLanguage.Instance;
 
       if (language != null)
@@ -89,9 +89,9 @@ namespace NClass.CodeGenerator
       foreach (object import in lstImportList.Items)
         importList.Add(import.ToString());
 
-      if (object.Equals(cboLanguage.SelectedItem, "C#"))
+      if (Equals(cboLanguage.SelectedItem, "C#"))
         Settings.Default.CSharpImportList = importList;
-      else if (object.Equals(cboLanguage.SelectedItem, "Java"))
+      else if (Equals(cboLanguage.SelectedItem, "Java"))
         Settings.Default.JavaImportList = importList;
     }
 
