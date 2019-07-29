@@ -34,6 +34,7 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
     private readonly ToolStripMenuItem mnuNewDelegate;
     private readonly ToolStripMenuItem mnuNewComment;
     private readonly ToolStripMenuItem mnuNewState;
+
     private readonly ToolStripMenuItem mnuNewAssociation;
     private readonly ToolStripMenuItem mnuNewComposition;
     private readonly ToolStripMenuItem mnuNewAggregation;
