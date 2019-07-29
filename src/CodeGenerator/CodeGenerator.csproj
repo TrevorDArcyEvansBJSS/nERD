@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GenerationResult.cs" />
+    <Compile Include="SqlProjectGenerator.cs" />
     <Compile Include="ToolStripSimplifiedRenderer.cs" />
     <Compile Include="VSSolutionGenerator.cs" />
     <Compile Include="SolutionType.cs" />

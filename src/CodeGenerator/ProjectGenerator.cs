@@ -89,7 +89,7 @@ namespace NClass.CodeGenerator
 
           try
           {
-            string fileName = sourceFile.Generate(location);
+            string fileName = sourceFile?.Generate(location);
             FileNames.Add(fileName);
           }
           catch (FileGenerationException)

@@ -15,6 +15,7 @@
 
 using NClass.Core;
 using NClass.CSharp;
+using NClass.EntityRelationshipDiagram;
 using NClass.Java;
 using System;
 using System.IO;
@@ -80,6 +81,9 @@ namespace NClass.CodeGenerator
 
       if (language == JavaLanguage.Instance)
         return new JavaProjectGenerator(model);
+
+      if (language == ErdLanguage.Instance)
+        return new SqlProjectGenerator(model);
 
       throw new ArgumentException("The model has an unknown language.");
     }
