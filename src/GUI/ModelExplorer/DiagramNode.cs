@@ -41,8 +41,9 @@ namespace NClass.GUI.ModelExplorer
     {
       Diagram = diagram ?? throw new ArgumentNullException("diagram");
       Text = diagram.Name;
-      ImageKey = "diagram";
-      SelectedImageKey = "diagram";
+
+      // TODO   KeyFromLanguage
+      ImageKey = SelectedImageKey = "diagram";
 
       diagram.Renamed += new EventHandler(diagram_Renamed);
     }

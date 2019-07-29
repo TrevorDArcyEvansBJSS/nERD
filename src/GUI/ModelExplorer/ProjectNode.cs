@@ -34,7 +34,8 @@ namespace NClass.GUI.ModelExplorer
       _contextMenu.Items.AddRange(new ToolStripItem[] {
         new ToolStripMenuItem(Strings.MenuAddNew, Resources.NewDocument,
           new ToolStripMenuItem(Strings.MenuCSharpDiagram, null, newCSharpDiagram_Click),
-          new ToolStripMenuItem(Strings.MenuJavaDiagram, null, newJavaDiagram_Click)
+          new ToolStripMenuItem(Strings.MenuJavaDiagram, null, newJavaDiagram_Click),
+          new ToolStripMenuItem(Strings.MenuErdDiagram, null, newErdDiagram_Click)
         ),
         new ToolStripSeparator(),
         new ToolStripMenuItem(Strings.MenuSave, Resources.Save, save_Click),
@@ -183,6 +184,17 @@ namespace NClass.GUI.ModelExplorer
       ToolStripItem menuItem = (ToolStripItem)sender;
       Project project = ((ProjectNode)menuItem.OwnerItem.Owner.Tag).Project;
 
+      Diagram diagram = new Diagram(JavaLanguage.Instance);
+      Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
+      project.Add(diagram);
+    }
+
+    private static void newErdDiagram_Click(object sender, EventArgs e)
+    {
+      ToolStripItem menuItem = (ToolStripItem)sender;
+      Project project = ((ProjectNode)menuItem.OwnerItem.Owner.Tag).Project;
+
+      // TODO   ErdLanguage
       Diagram diagram = new Diagram(JavaLanguage.Instance);
       Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
       project.Add(diagram);

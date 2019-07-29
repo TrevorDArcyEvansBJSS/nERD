@@ -1936,6 +1936,15 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entity Relationship Diagram.
+        /// </summary>
+        public static string MenuErdDiagram {
+            get {
+                return ResourceManager.GetString("MenuErdDiagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E&amp;xit.
         /// </summary>
         public static string MenuExit {

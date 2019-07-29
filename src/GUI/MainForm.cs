@@ -239,6 +239,7 @@ namespace NClass.GUI
       mnuNewProject.Text = Strings.MenuProject;
       mnuNewCSharpDiagram.Text = Strings.MenuCSharpDiagram;
       mnuNewJavaDiagram.Text = Strings.MenuJavaDiagram;
+      mnuNewErdDiagram.Text = Strings.MenuErdDiagram;
       mnuOpen.Text = Strings.MenuOpen;
       mnuOpenFile.Text = Strings.MenuOpenFile;
       mnuSave.Text = Strings.MenuSave;
@@ -280,6 +281,7 @@ namespace NClass.GUI
       // Toolbar
       toolNewCSharpDiagram.Text = Strings.MenuCSharpDiagram;
       toolNewJavaDiagram.Text = Strings.MenuJavaDiagram;
+      toolNewErdDiagram.Text = Strings.MenuErdDiagram;
       toolSave.Text = Strings.Save;
       toolPrint.Text = Strings.Print;
       toolCut.Text = Strings.Cut;
@@ -355,6 +357,7 @@ namespace NClass.GUI
     {
       toolNewCSharpDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolNewJavaDiagram.Enabled = Workspace.Default.HasActiveProject;
+      toolNewErdDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolSave.Enabled = Workspace.Default.HasActiveProject;
       toolPrint.Enabled = _docManager.HasDocument;
       toolZoom.Enabled = _docManager.HasDocument;
@@ -565,6 +568,18 @@ namespace NClass.GUI
       if (Workspace.Default.HasActiveProject)
       {
         ShowModelExplorer = true;
+        Diagram diagram = new Diagram(JavaLanguage.Instance);
+        Workspace.Default.ActiveProject.Add(diagram);
+        Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
+      }
+    }
+
+    private void mnuNewErdDiagram_Click(object sender, EventArgs e)
+    {
+      if (Workspace.Default.HasActiveProject)
+      {
+        ShowModelExplorer = true;
+        // TODO   ErdLanguage
         Diagram diagram = new Diagram(JavaLanguage.Instance);
         Workspace.Default.ActiveProject.Add(diagram);
         Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
@@ -856,6 +871,7 @@ namespace NClass.GUI
     {
       toolNewCSharpDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolNewJavaDiagram.Enabled = Workspace.Default.HasActiveProject;
+      toolNewErdDiagram.Enabled = Workspace.Default.HasActiveProject;
     }
 
     private void toolOpen_DropDownOpening(object sender, EventArgs e)

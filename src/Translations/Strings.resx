@@ -1200,4 +1200,7 @@ Do you still want to continue?</value>
   <data name="StageStart" xml:space="preserve">
     <value>Start</value>
   </data>
+  <data name="MenuErdDiagram" xml:space="preserve">
+    <value>Entity Relationship Diagram</value>
+  </data>
 </root>
