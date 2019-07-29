@@ -111,55 +111,25 @@ namespace NClass.Java
 
     internal static JavaClass ObjectClass { get; private set; }
 
-    public override string Name
-    {
-      get { return "Java"; }
-    }
+    public override string Name => "Java";
 
-    public override string AssemblyName
-    {
-      get { return "Java"; }
-    }
+    public override string AssemblyName => "Java";
 
-    public override bool SupportsInterfaces
-    {
-      get { return true; }
-    }
+    public override bool SupportsInterfaces => true;
 
-    public override bool SupportsStructures
-    {
-      get { return false; }
-    }
+    public override bool SupportsStructures => false;
 
-    public override bool SupportsEnums
-    {
-      get { return true; }
-    }
+    public override bool SupportsEnums => true;
 
-    public override bool SupportsDelegates
-    {
-      get { return false; }
-    }
+    public override bool SupportsDelegates => false;
 
-    public override bool SupportsExplicitImplementation
-    {
-      get { return false; }
-    }
+    public override bool SupportsExplicitImplementation => false;
 
-    public override bool SupportsStates
-    {
-      get { return false; }
-    }
+    public override bool SupportsStates => false;
 
-    public override bool SupportsAssemblyImport
-    {
-      get { return false; }
-    }
+    public override bool SupportsAssemblyImport => false;
 
-    public override bool ExplicitVirtualMethods
-    {
-      get { return false; }
-    }
+    public override bool ExplicitVirtualMethods => false;
 
     private static readonly Dictionary<AccessModifier, string> _validAccessModifiers = new Dictionary<AccessModifier, string>(4)
     {
@@ -233,10 +203,7 @@ namespace NClass.Java
       get { return _typeKeywords; }
     }
 
-    public override string DefaultFileExtension
-    {
-      get { return ".jd"; }
-    }
+    public override string DefaultFileExtension => ".jd";
 
     public override bool IsValidModifier(AccessModifier modifier)
     {
@@ -312,8 +279,7 @@ namespace NClass.Java
     /// <exception cref="ArgumentException">
     /// The language does not support explicit interface implementation.
     /// </exception>
-    protected override Operation Implement(Operation operation,
-      CompositeType newParent, bool explicitly)
+    protected override Operation Implement(Operation operation, CompositeType newParent, bool explicitly)
     {
       if (operation == null)
         throw new ArgumentNullException("operation");
@@ -497,40 +463,22 @@ namespace NClass.Java
       }
     }
 
-    protected override ClassType CreateClass()
-    {
-      return new JavaClass();
-    }
+    protected override ClassType CreateClass() => new JavaClass();
 
     /// <exception cref="InvalidOperationException">
     /// The language does not support structures.
     /// </exception>
-    protected override StructureType CreateStructure()
-    {
-      throw new InvalidOperationException(string.Format(Strings.ErrorCannotCreateStructure, Name));
-    }
+    protected override StructureType CreateStructure() => throw new InvalidOperationException(string.Format(Strings.ErrorCannotCreateStructure, Name));
 
-    protected override InterfaceType CreateInterface()
-    {
-      return new JavaInterface();
-    }
+    protected override InterfaceType CreateInterface() => new JavaInterface();
 
-    protected override EnumType CreateEnum()
-    {
-      return new JavaEnum();
-    }
+    protected override EnumType CreateEnum() => new JavaEnum();
 
     /// <exception cref="InvalidOperationException">
     /// The language does not support delegates.
     /// </exception>
-    protected override DelegateType CreateDelegate()
-    {
-      throw new InvalidOperationException(string.Format(Strings.ErrorCannotCrateDelegate, Name));
-    }
+    protected override DelegateType CreateDelegate() => throw new InvalidOperationException(string.Format(Strings.ErrorCannotCrateDelegate, Name));
 
-    protected override ArgumentList CreateParameterCollection()
-    {
-      return new JavaArgumentList();
-    }
+    protected override ArgumentList CreateParameterCollection() => new JavaArgumentList();
   }
 }

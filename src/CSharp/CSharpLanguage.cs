@@ -115,15 +115,9 @@ namespace NClass.CSharp
 
     internal static CSharpClass ObjectClass { get; private set; }
 
-    public override string Name
-    {
-      get { return "C#"; }
-    }
+    public override string Name => "C#";
 
-    public override string AssemblyName
-    {
-      get { return "CSharp"; }
-    }
+    public override string AssemblyName => "CSharp";
 
     private static readonly Dictionary<AccessModifier, string> _validAccessModifiers = new Dictionary<AccessModifier, string>(6)
     {
@@ -215,25 +209,13 @@ namespace NClass.CSharp
       get { return _typeKeywords; }
     }
 
-    public override string DefaultFileExtension
-    {
-      get { return ".csd"; }
-    }
+    public override string DefaultFileExtension => ".csd";
 
-    public override bool IsValidModifier(AccessModifier modifier)
-    {
-      return true;
-    }
+    public override bool IsValidModifier(AccessModifier modifier) => true;
 
-    public override bool IsValidModifier(FieldModifier modifier)
-    {
-      return true;
-    }
+    public override bool IsValidModifier(FieldModifier modifier) => true;
 
-    public override bool IsValidModifier(OperationModifier modifier)
-    {
-      return true;
-    }
+    public override bool IsValidModifier(OperationModifier modifier) => true;
 
     /// <exception cref="BadSyntaxException">
     /// The <paramref name="operation"/> contains invalid modifier combinations.
@@ -588,34 +570,16 @@ namespace NClass.CSharp
         return modifier.ToString().ToLower();
     }
 
-    protected override ClassType CreateClass()
-    {
-      return new CSharpClass();
-    }
+    protected override ClassType CreateClass() => new CSharpClass();
 
-    protected override StructureType CreateStructure()
-    {
-      return new CSharpStructure();
-    }
+    protected override StructureType CreateStructure() => new CSharpStructure();
 
-    protected override InterfaceType CreateInterface()
-    {
-      return new CSharpInterface();
-    }
+    protected override InterfaceType CreateInterface() => new CSharpInterface();
 
-    protected override EnumType CreateEnum()
-    {
-      return new CSharpEnum();
-    }
+    protected override EnumType CreateEnum() => new CSharpEnum();
 
-    protected override DelegateType CreateDelegate()
-    {
-      return new CSharpDelegate();
-    }
+    protected override DelegateType CreateDelegate() => new CSharpDelegate();
 
-    protected override ArgumentList CreateParameterCollection()
-    {
-      return new CSharpArgumentList();
-    }
+    protected override ArgumentList CreateParameterCollection() => new CSharpArgumentList();
   }
 }
