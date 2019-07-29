@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace NClass.GUI.ModelExplorer
 {
-  public partial class ModelView : TreeView
+  public sealed partial class ModelView : TreeView
   {
     public event DocumentEventHandler DocumentOpening;
 
@@ -70,7 +70,9 @@ namespace NClass.GUI.ModelExplorer
             _workspace.ProjectRemoved -= workspace_ProjectRemoved;
             RemoveProjects();
           }
+
           _workspace = value;
+
           if (_workspace != null)
           {
             _workspace.ActiveProjectChanged += workspace_ActiveProjectChanged;
@@ -78,6 +80,7 @@ namespace NClass.GUI.ModelExplorer
             _workspace.ProjectRemoved += workspace_ProjectRemoved;
             LoadProjects();
           }
+
           lblAddProject.Visible = (_workspace != null && !_workspace.HasProject);
         }
       }
@@ -97,11 +100,11 @@ namespace NClass.GUI.ModelExplorer
       {
         foreach (IProjectItem item in project.Items)
         {
-          IDocument document = item as IDocument;
-          if (document != null)
+          if (item is IDocument document)
             OnDocumentOpening(new DocumentEventArgs(document));
         }
       }
+
       if (project.IsUntitled)
       {
         projectNode.EditLabel();
@@ -118,6 +121,7 @@ namespace NClass.GUI.ModelExplorer
           break;
         }
       }
+
       if (!_workspace.HasProject)
         lblAddProject.Visible = true;
     }
@@ -187,12 +191,12 @@ namespace NClass.GUI.ModelExplorer
       if (e.KeyCode == Keys.Enter)
       {
         ModelNode selectedNode = SelectedNode as ModelNode;
-          selectedNode?.EnterPressed();
+        selectedNode?.EnterPressed();
       }
       else if (e.KeyCode == Keys.F2)
       {
         ModelNode selectedNode = SelectedNode as ModelNode;
-          selectedNode?.EditLabel();
+        selectedNode?.EditLabel();
       }
     }
 
@@ -226,7 +230,7 @@ namespace NClass.GUI.ModelExplorer
       }
     }
 
-    protected internal virtual void OnDocumentOpening(DocumentEventArgs e)
+    internal void OnDocumentOpening(DocumentEventArgs e)
     {
       DocumentOpening?.Invoke(this, e);
     }
