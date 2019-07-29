@@ -31,7 +31,7 @@ namespace NClass.Core
     public event ProjectItemEventHandler ItemAdded;
     public event ProjectItemEventHandler ItemRemoved;
 
-    private bool _loading = false;
+    private bool Loading { get; set; } = false;
 
     public Project()
     {
@@ -233,7 +233,7 @@ namespace NClass.Core
 
       XmlElement root = document["Project"];
       Project project = new Project();
-      project._loading = true;
+      project.Loading = true;
       try
       {
         project.Deserialize(root);
@@ -242,7 +242,7 @@ namespace NClass.Core
       {
         throw new InvalidDataException(Strings.ErrorCorruptSaveFile, ex);
       }
-      project._loading = false;
+      project.Loading = false;
       project.FilePath = fileName;
       project.IsReadOnly = project._projectFile.IsReadOnly;
 
@@ -365,7 +365,7 @@ namespace NClass.Core
 
     private void OnBeginUndoableOperation(EventArgs e)
     {
-      if (!_loading)
+      if (!Loading)
       {
         BeginUndoableOperation?.Invoke(this, e);
       }
@@ -373,7 +373,7 @@ namespace NClass.Core
 
     private void OnModified(EventArgs e)
     {
-      if (!_loading)
+      if (!Loading)
       {
         IsDirty = true;
         Modified?.Invoke(this, e);
