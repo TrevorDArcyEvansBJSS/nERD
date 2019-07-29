@@ -146,6 +146,8 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewEnum.Visible = diagram.Language.SupportsEnums;
       mnuNewState.Visible = diagram.Language.SupportsStates;
 
+      // TODO   link creation visibility
+
       mnuShowType.Checked = Settings.Default.ShowType;
       mnuShowParameters.Checked = Settings.Default.ShowParameters;
       mnuShowParameterNames.Checked = Settings.Default.ShowParameterNames;

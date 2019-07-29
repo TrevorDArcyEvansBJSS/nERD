@@ -68,6 +68,8 @@ namespace NClass.DiagramEditor.ClassDiagram
         mnuNewEnum.Visible = toolNewEnum.Visible = _diagram.Language.SupportsEnums;
         mnuNewState.Visible = toolNewState.Visible = _diagram.Language.SupportsStates;
 
+      // TODO   link creation visibility
+
         toolDelete.Enabled = _diagram.HasSelectedElement;
       }
     }

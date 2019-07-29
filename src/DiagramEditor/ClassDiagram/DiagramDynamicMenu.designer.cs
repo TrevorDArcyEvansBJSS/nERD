@@ -735,6 +735,7 @@
     private System.Windows.Forms.ToolStripMenuItem mnuNewDelegate;
     private System.Windows.Forms.ToolStripMenuItem mnuNewComment;
     private System.Windows.Forms.ToolStripMenuItem mnuNewState;
+
     private System.Windows.Forms.ToolStripMenuItem mnuNewAssociation;
     private System.Windows.Forms.ToolStripMenuItem mnuNewComposition;
     private System.Windows.Forms.ToolStripMenuItem mnuNewAggregation;
@@ -745,12 +746,15 @@
     private System.Windows.Forms.ToolStripMenuItem mnuNewCommentRelationship;
     private System.Windows.Forms.ToolStripMenuItem mnuNewEntityRelationship;
     private System.Windows.Forms.ToolStripMenuItem mnuNewTransitionRelationship;
+
     private System.Windows.Forms.ToolStripMenuItem mnuMembersFormat;
     private System.Windows.Forms.ToolStripMenuItem mnuShowType;
     private System.Windows.Forms.ToolStripMenuItem mnuShowParameters;
     private System.Windows.Forms.ToolStripMenuItem mnuShowParameterNames;
     private System.Windows.Forms.ToolStripMenuItem mnuShowInitialValue;
+
     private System.Windows.Forms.ToolStripMenuItem mnuSaveAsImage;
+
     private System.Windows.Forms.ToolStripMenuItem mnuAlign;
     private System.Windows.Forms.ToolStripMenuItem mnuAlignTop;
     private System.Windows.Forms.ToolStripMenuItem mnuAlignLeft;
@@ -762,6 +766,7 @@
     private System.Windows.Forms.ToolStripMenuItem mnuSameWidth;
     private System.Windows.Forms.ToolStripMenuItem mnuSameHeight;
     private System.Windows.Forms.ToolStripMenuItem mnuSameSize;
+    private System.Windows.Forms.ToolStripMenuItem mnuAutoSize;
     private System.Windows.Forms.ToolStripMenuItem mnuAutoWidth;
     private System.Windows.Forms.ToolStripMenuItem mnuAutoHeight;
     private System.Windows.Forms.ToolStripMenuItem mnuAutoLayout;
@@ -769,6 +774,7 @@
     private System.Windows.Forms.ToolStripMenuItem mnuExpandAll;
     private System.Windows.Forms.ToolStripMenuItem mnuDiagram;
     private System.Windows.Forms.ToolStripMenuItem mnuFormat;
+
     private System.Windows.Forms.ToolStripButton toolNewClass;
     private System.Windows.Forms.ToolStripButton toolNewStructure;
     private System.Windows.Forms.ToolStripButton toolNewInterface;
@@ -776,7 +782,9 @@
     private System.Windows.Forms.ToolStripButton toolNewDelegate;
     private System.Windows.Forms.ToolStripButton toolNewComment;
     private System.Windows.Forms.ToolStripButton toolNewState;
+
     private System.Windows.Forms.ToolStripSeparator toolSepEntities;
+
     private System.Windows.Forms.ToolStripButton toolNewAssociation;
     private System.Windows.Forms.ToolStripButton toolNewComposition;
     private System.Windows.Forms.ToolStripButton toolNewAggregation;
@@ -784,18 +792,20 @@
     private System.Windows.Forms.ToolStripButton toolNewRealization;
     private System.Windows.Forms.ToolStripButton toolNewDependency;
     private System.Windows.Forms.ToolStripButton toolNewNesting;
+
     private System.Windows.Forms.ToolStripButton toolNewCommentRelationship;
     private System.Windows.Forms.ToolStripButton toolNewEntityRelationship;
     private System.Windows.Forms.ToolStripButton toolNewTransitionRelationship;
-    private System.Windows.Forms.ToolStripSeparator toolSepRelationships;
+
     private System.Windows.Forms.ToolStripButton toolDelete;
     private System.Windows.Forms.ToolStripMenuItem mnuGenerateCode;
-    private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+    private System.Windows.Forms.ToolStripSeparator toolSepRelationships;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+    private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+
     private System.Windows.Forms.ToolStrip elementsToolStrip;
-    private System.Windows.Forms.ToolStripMenuItem mnuAutoSize;
   }
 }
