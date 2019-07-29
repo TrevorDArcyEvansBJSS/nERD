@@ -19,7 +19,8 @@ namespace NClass.CodeGenerator
 {
   internal sealed class JavaProjectGenerator : ProjectGenerator
   {
-    public JavaProjectGenerator(Model model) : base(model)
+    public JavaProjectGenerator(Model model) :
+      base(model)
     {
     }
 

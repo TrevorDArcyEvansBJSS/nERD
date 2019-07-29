@@ -24,7 +24,8 @@ namespace NClass.CodeGenerator
   {
     private readonly SolutionType _solutionType;
 
-    public CSharpProjectGenerator(Model model, SolutionType solutionType) : base(model)
+    public CSharpProjectGenerator(Model model, SolutionType solutionType) :
+      base(model)
     {
       _solutionType = solutionType;
     }
@@ -54,8 +55,7 @@ namespace NClass.CodeGenerator
         string projectFile = Path.Combine(location, RelativeProjectFileName);
 
         using (StreamReader reader = new StreamReader(templateFile))
-        using (StreamWriter writer = new StreamWriter(
-          projectFile, false, reader.CurrentEncoding))
+        using (StreamWriter writer = new StreamWriter(projectFile, false, reader.CurrentEncoding))
         {
           while (!reader.EndOfStream)
           {
