@@ -326,15 +326,18 @@ namespace NClass.GUI
             toolStripContainer?.TopToolStripPanel.Controls.Remove(toolStrip);
           _dynamicMenu.SetReference(null);
         }
+
         if (newMenu != null)
         {
           int preferredIndex = newMenu.PreferredIndex;
           if (preferredIndex < 0)
             preferredIndex = 3;
+
           foreach (ToolStripMenuItem menuItem in newMenu)
           {
             MainMenuStrip.Items.Insert(preferredIndex++, menuItem);
           }
+
           ToolStrip toolStrip = newMenu.GetToolStrip();
           if (toolStrip != null)
           {
@@ -343,6 +346,7 @@ namespace NClass.GUI
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
           }
         }
+
         _dynamicMenu = newMenu;
       }
     }
