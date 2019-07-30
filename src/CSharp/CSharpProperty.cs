@@ -21,7 +21,7 @@ using NClass.Translations;
 
 namespace NClass.CSharp
 {
-  internal sealed class CSharpProperty : Property
+  public sealed class CSharpProperty : Property
   {
     const string AccessorAccessPattern = @"(protected\s+internal\s+|" +
       @"internal\s+protected\s+|internal\s+|protected\s+|private\s+)";

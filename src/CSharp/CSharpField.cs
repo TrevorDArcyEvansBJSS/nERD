@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 
 namespace NClass.CSharp
 {
-  internal sealed class CSharpField : Field
+  public sealed class CSharpField : Field
   {
     const string ModifiersPattern = @"((?<modifier>static|readonly|const|new|volatile)\s+)*";
     const string InitValuePattern = @"(?<initvalue>[^\s;](.*[^\s;])?)";

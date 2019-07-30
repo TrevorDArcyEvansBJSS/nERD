@@ -14,6 +14,11 @@
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 using NClass.Core;
+using NClass.CSharp;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace NClass.CodeGenerator
 {
@@ -36,8 +41,135 @@ namespace NClass.CodeGenerator
 
     protected override bool GenerateProjectFiles(string location)
     {
-      // TODO   generate single SQL file
+      var entities = Model.Entities.OfType<CSharpClass>();
+      var links = Model.Relationships.OfType<EntityRelationship>();
+
+      // check for loop relationships - unsupported as no reliable way to determine foreign key
+      if (links.Any(link => link.First.Id == link.Second.Id))
+      {
+        return false;
+      }
+
+      // check for two links between two entities - BAD
+      foreach (var link in links)
+      {
+        var otherLinks = links.Except(new[] { link });
+        if (otherLinks.Any(otherLink =>
+          (otherLink.First.Id == link.First.Id && otherLink.Second.Id == link.Second.Id) ||
+          (otherLink.First.Id == link.Second.Id && otherLink.Second.Id == link.First.Id)))
+        {
+          return false;
+        }
+      }
+
+      var sb = new StringBuilder();
+
+      // create all entities
+      foreach (var entity in entities)
+      {
+        WriteEntity(sb, entity);
+      }
+      sb.AppendLine();
+
+      // write primary key
+      foreach (var entity in entities)
+      {
+        WritePrimaryKey(sb, entity);
+      }
+      sb.AppendLine();
+
+      // create all links aka foreign keys
+      foreach (var link in links)
+      {
+        WriteForeignKey(sb, link);
+      }
+      sb.AppendLine();
+
+      var fileName = Path.ChangeExtension(Model.Name, ".sql");
+      var filePath = Path.Combine(location, fileName);
+      File.WriteAllText(filePath, sb.ToString());
+
       return true;
     }
+
+    private void WriteEntity(StringBuilder sb, CSharpClass type)
+    {
+      sb.AppendLine($"CREATE TABLE {type.Name}");
+      sb.AppendLine($"(");
+
+      foreach (var field in type.Fields.OfType<CSharpField>())
+      {
+        sb.AppendLine($"  {field.Name} {NetToSqlTypeMap[field.Type.ToLowerInvariant()]},");
+      }
+
+      foreach (var op in type.Operations.OfType<CSharpProperty>())
+      {
+        sb.AppendLine($"  {op.Name} {NetToSqlTypeMap[op.Type.ToLowerInvariant()]},");
+      }
+
+      sb.AppendLine($");");
+      sb.AppendLine();
+    }
+
+    private void WritePrimaryKey(StringBuilder sb, CSharpClass type)
+    {
+      var pk = GetPrimaryKeyMember(type);
+      if (pk != null)
+      {
+        sb.AppendLine($"ALTER TABLE {type.Name} ADD PRIMARY KEY({pk.Name});");
+      }
+    }
+
+    private void WriteForeignKey(StringBuilder sb, EntityRelationship link)
+    {
+      // TODO   create link tables
+      if ((link.StartMultiplicity == MultiplicityType.ZeroOrMany || link.StartMultiplicity == MultiplicityType.OneOrMany) &&
+        (link.EndMultiplicity == MultiplicityType.ZeroOrMany || link.EndMultiplicity == MultiplicityType.OneOrMany))
+      {
+        sb.AppendLine($"-- generate link table: [{link.First.Name}] >+--+< [{link.Second.Name}]");
+        return;
+      }
+
+      // [First] --> [Second]
+      var fk1 = GetForeignKeyMember((CSharpClass)link.Second, link.First.Name);
+      if (fk1 != null)
+      {
+        sb.AppendLine($"ALTER TABLE {link.Second.Name} ADD FOREIGN KEY({fk1.Name}) REFERENCES {link.First.Name}({fk1.Name})");
+      }
+
+      // [Second] --> [First]
+      var fk2 = GetForeignKeyMember((CSharpClass)link.First, link.Second.Name);
+      if (fk2 != null)
+      {
+        sb.AppendLine($"ALTER TABLE {link.First.Name} ADD FOREIGN KEY({fk2.Name}) REFERENCES {link.Second.Name}({fk2.Name})");
+      }
+    }
+
+    private static Member GetPrimaryKeyMember(CSharpClass type)
+    {
+      var pk = GetForeignKeyMember(type, string.Empty);
+      return pk;
+    }
+
+    private static Member GetForeignKeyMember(CSharpClass type, string otherTypeName)
+    {
+      // give preference to Property over Field
+      var fk = type.Operations.OfType<CSharpProperty>().SingleOrDefault(op => op.Name.ToLowerInvariant() == $"{otherTypeName.ToLowerInvariant()}id") as Member ??
+                type.Fields.OfType<CSharpField>().SingleOrDefault(field => field.Name.ToLowerInvariant() == $"{otherTypeName.ToLowerInvariant()}id");
+      return fk;
+    }
+
+    // [.NET type (lowercase)] --> [MS SQL type]
+    private readonly static Dictionary<string, string> NetToSqlTypeMap = new Dictionary<string, string>
+    {
+      { "int", "int" },
+      { "string", "nvarchar(max)" },
+      { "bool", "bit" },
+      { "datetime", "datetime2" },
+      { "decimal", "decimal" },
+      { "float", "float" },
+      { "double", "float" },
+      { "guid", "uniqueidentifier" }
+    };
   }
 }
