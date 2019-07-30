@@ -76,7 +76,7 @@ namespace NClass.CodeGenerator
       // create all entities
       foreach (var entity in entities)
       {
-        WriteEntity(sb, entity);
+        WriteTable(sb, entity);
       }
       sb.AppendLine();
 
@@ -101,7 +101,7 @@ namespace NClass.CodeGenerator
       return true;
     }
 
-    private void WriteEntity(StringBuilder sb, CSharpClass type)
+    private void WriteTable(StringBuilder sb, CSharpClass type)
     {
       sb.AppendLine($"CREATE TABLE {type.Name}");
       sb.AppendLine($"(");
@@ -131,11 +131,14 @@ namespace NClass.CodeGenerator
 
     private void WriteForeignKey(StringBuilder sb, EntityRelationship link)
     {
-      // TODO   create link tables
+      // create link tables
       if ((link.StartMultiplicity == MultiplicityType.ZeroOrMany || link.StartMultiplicity == MultiplicityType.OneOrMany) &&
         (link.EndMultiplicity == MultiplicityType.ZeroOrMany || link.EndMultiplicity == MultiplicityType.OneOrMany))
       {
+        sb.AppendLine();
         sb.AppendLine($"-- generate link table: [{link.First.Name}] >+--+< [{link.Second.Name}]");
+        WriteLinkTable(sb, link);
+        sb.AppendLine();
         return;
       }
 
@@ -152,6 +155,26 @@ namespace NClass.CodeGenerator
       {
         sb.AppendLine($"ALTER TABLE {link.First.Name} ADD FOREIGN KEY({fk2.Name}) REFERENCES {link.Second.Name}({fk2.Name})");
       }
+    }
+
+    private void WriteLinkTable(StringBuilder sb, EntityRelationship link)
+    {
+      var linkTable = new CSharpClass
+      {
+        Name = $"{link.First.Name}_{link.Second.Name}"
+      };
+      var firstId = linkTable.AddProperty();
+      firstId.Name = $"{link.First.Name}Id";
+      firstId.Type = GetPrimaryKeyMember((CSharpClass)link.First).Type;
+
+      var secondId = linkTable.AddProperty();
+      secondId.Name = $"{link.Second.Name}Id";
+      secondId.Type = GetPrimaryKeyMember((CSharpClass)link.Second).Type;
+
+      WriteTable(sb, linkTable);
+
+      sb.AppendLine($"ALTER TABLE {linkTable.Name} ADD FOREIGN KEY({firstId.Name}) REFERENCES {link.First.Name}({firstId.Name})");
+      sb.AppendLine($"ALTER TABLE {linkTable.Name} ADD FOREIGN KEY({secondId.Name}) REFERENCES {link.Second.Name}({secondId.Name})");
     }
 
     private static Member GetPrimaryKeyMember(CSharpClass type)
