@@ -44,6 +44,15 @@ namespace NClass.CodeGenerator
       var entities = Model.Entities.OfType<CSharpClass>();
       var links = Model.Relationships.OfType<EntityRelationship>();
 
+      // check for any unsupported .NET types
+      var fieldTypeNames = entities.SelectMany(ent => ent.Fields.OfType<CSharpField>()).Select(field => field.Type);
+      var propTypeNames = entities.SelectMany(ent => ent.Operations.OfType<CSharpProperty>()).Select(op => op.Type);
+      if (fieldTypeNames.Any(fieldTypeName => !NetToSqlTypeMap.TryGetValue(fieldTypeName.ToLowerInvariant(), out _)) ||
+        propTypeNames.Any(propTypeName => !NetToSqlTypeMap.TryGetValue(propTypeName.ToLowerInvariant(), out _)))
+      {
+        return false;
+      }
+
       // check for loop relationships - unsupported as no reliable way to determine foreign key
       if (links.Any(link => link.First.Id == link.Second.Id))
       {
