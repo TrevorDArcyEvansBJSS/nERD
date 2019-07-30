@@ -18,7 +18,7 @@ using System.Runtime.Serialization;
 
 namespace NClass.CodeGenerator
 {
-  public class FileGenerationException : Exception
+  public sealed class FileGenerationException : Exception
   {
     public FileGenerationException(string filePath) :
       base(@"Could not generate the file\n" + filePath)
