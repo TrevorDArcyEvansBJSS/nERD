@@ -101,7 +101,7 @@ namespace NClass.CodeGenerator
 
           try
           {
-            projectGenerator.Generate(location);
+            success &= projectGenerator.Generate(location);
           }
           catch (FileGenerationException)
           {
