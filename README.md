@@ -14,6 +14,7 @@ Please note, nERD is far from complete. There are many missing features that are
 * Full C# and Java support with many language specific elements
 * UML diagrams
 * Entity-Relationship diagrams
+* SQL generation
 * State-Transition diagrams
 * Simple and easy to use user interface
 * Undo
