@@ -68,7 +68,17 @@ namespace NClass.DiagramEditor.ClassDiagram
         mnuNewEnum.Visible = toolNewEnum.Visible = _diagram.Language.SupportsEnums;
         mnuNewState.Visible = toolNewState.Visible = _diagram.Language.SupportsStates;
 
-      // TODO   link creation visibility
+        var isERDdiagram = _diagram.Language is EntityRelationshipDiagram.ErdLanguage;
+        mnuNewAssociation.Visible = toolNewAssociation.Visible =
+        mnuNewComposition.Visible = toolNewComposition.Visible =
+        mnuNewAggregation.Visible = toolNewAggregation.Visible =
+        mnuNewGeneralization.Visible = toolNewGeneralization.Visible =
+        mnuNewRealization.Visible = toolNewRealization.Visible =
+        mnuNewDependency.Visible = toolNewDependency.Visible =
+        mnuNewNesting.Visible = toolNewNesting.Visible =
+        mnuNewCommentRelationship.Visible = toolNewCommentRelationship.Visible =
+        mnuNewTransitionRelationship.Visible = toolNewTransitionRelationship.Visible = !isERDdiagram;
+        mnuNewEntityRelationship.Visible = toolNewEntityRelationship.Visible = isERDdiagram;
 
         toolDelete.Enabled = _diagram.HasSelectedElement;
       }

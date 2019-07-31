@@ -146,7 +146,17 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewEnum.Visible = diagram.Language.SupportsEnums;
       mnuNewState.Visible = diagram.Language.SupportsStates;
 
-      // TODO   link creation visibility
+      var isERDdiagram = diagram.Language is EntityRelationshipDiagram.ErdLanguage;
+      mnuNewAssociation.Visible =
+      mnuNewComposition.Visible =
+      mnuNewAggregation.Visible =
+      mnuNewGeneralization.Visible =
+      mnuNewRealization.Visible =
+      mnuNewDependency.Visible =
+      mnuNewNesting.Visible =
+      mnuNewCommentRelationship.Visible =
+      mnuNewTransitionRelationship.Visible = !isERDdiagram;
+      mnuNewEntityRelationship.Visible = isERDdiagram;
 
       mnuShowType.Checked = Settings.Default.ShowType;
       mnuShowParameters.Checked = Settings.Default.ShowParameters;
