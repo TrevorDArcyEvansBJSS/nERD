@@ -2893,6 +2893,33 @@ namespace NClass.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to loop relationships - unsupported as no reliable way to determine foreign key.
+        /// </summary>
+        public static string SqlGenError_LoopRelationship {
+            get {
+                return ResourceManager.GetString("SqlGenError_LoopRelationship", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to two links between two entities.
+        /// </summary>
+        public static string SqlGenError_TwoLinks {
+            get {
+                return ResourceManager.GetString("SqlGenError_TwoLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unsupported .NET types.
+        /// </summary>
+        public static string SqlGenError_UnsupportedType {
+            get {
+                return ResourceManager.GetString("SqlGenError_UnsupportedType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stage.
         /// </summary>
         public static string Stage {

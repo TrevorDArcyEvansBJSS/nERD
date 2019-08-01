@@ -1203,4 +1203,13 @@ Do you still want to continue?</value>
   <data name="MenuErdDiagram" xml:space="preserve">
     <value>Entity Relationship Diagram</value>
   </data>
+  <data name="SqlGenError_LoopRelationship" xml:space="preserve">
+    <value>loop relationships - unsupported as no reliable way to determine foreign key</value>
+  </data>
+  <data name="SqlGenError_TwoLinks" xml:space="preserve">
+    <value>two links between two entities</value>
+  </data>
+  <data name="SqlGenError_UnsupportedType" xml:space="preserve">
+    <value>unsupported .NET types</value>
+  </data>
 </root>

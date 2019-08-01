@@ -15,6 +15,7 @@
 
 using NClass.Core;
 using NClass.CSharp;
+using NClass.Translations;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,64 +42,72 @@ namespace NClass.CodeGenerator
 
     protected override bool GenerateProjectFiles(string location)
     {
-      var entities = Model.Entities.OfType<CSharpClass>();
-      var links = Model.Relationships.OfType<EntityRelationship>();
-
-      // check for any unsupported .NET types
-      var fieldTypeNames = entities.SelectMany(ent => ent.Fields.OfType<CSharpField>()).Select(field => field.Type);
-      var propTypeNames = entities.SelectMany(ent => ent.Operations.OfType<CSharpProperty>()).Select(op => op.Type);
-      if (fieldTypeNames.Any(fieldTypeName => !NetToSqlTypeMap.TryGetValue(fieldTypeName.ToLowerInvariant(), out _)) ||
-        propTypeNames.Any(propTypeName => !NetToSqlTypeMap.TryGetValue(propTypeName.ToLowerInvariant(), out _)))
+      var sb = new StringBuilder();
+      try
       {
-        return false;
-      }
+        var entities = Model.Entities.OfType<CSharpClass>();
+        var links = Model.Relationships.OfType<EntityRelationship>();
 
-      // check for loop relationships - unsupported as no reliable way to determine foreign key
-      if (links.Any(link => link.First.Id == link.Second.Id))
-      {
-        return false;
-      }
-
-      // check for two links between two entities - BAD
-      foreach (var link in links)
-      {
-        var otherLinks = links.Except(new[] { link });
-        if (otherLinks.Any(otherLink =>
-          (otherLink.First.Id == link.First.Id && otherLink.Second.Id == link.Second.Id) ||
-          (otherLink.First.Id == link.Second.Id && otherLink.Second.Id == link.First.Id)))
+        // check for any unsupported .NET types
+        var fieldTypeNames = entities.SelectMany(ent => ent.Fields.OfType<CSharpField>()).Select(field => field.Type);
+        var propTypeNames = entities.SelectMany(ent => ent.Operations.OfType<CSharpProperty>()).Select(op => op.Type);
+        if (fieldTypeNames.Any(fieldTypeName => !NetToSqlTypeMap.TryGetValue(fieldTypeName.ToLowerInvariant(), out _)) ||
+          propTypeNames.Any(propTypeName => !NetToSqlTypeMap.TryGetValue(propTypeName.ToLowerInvariant(), out _)))
         {
+          sb.AppendLine($"-- {Strings.SqlGenError_UnsupportedType}");
           return false;
         }
+
+        // check for loop relationships - unsupported as no reliable way to determine foreign key
+        if (links.Any(link => link.First.Id == link.Second.Id))
+        {
+          sb.AppendLine($"-- {Strings.SqlGenError_LoopRelationship}");
+          return false;
+        }
+
+        // check for two links between two entities - BAD
+        foreach (var link in links)
+        {
+          var otherLinks = links.Except(new[] { link });
+          if (otherLinks.Any(otherLink =>
+            (otherLink.First.Id == link.First.Id && otherLink.Second.Id == link.Second.Id) ||
+            (otherLink.First.Id == link.Second.Id && otherLink.Second.Id == link.First.Id)))
+          {
+            sb.AppendLine($"-- {Strings.SqlGenError_TwoLinks}");
+            return false;
+          }
+        }
+
+
+        // create all entities
+        foreach (var entity in entities)
+        {
+          WriteTable(sb, entity);
+        }
+        sb.AppendLine();
+
+        // write primary key
+        foreach (var entity in entities)
+        {
+          WritePrimaryKey(sb, entity);
+        }
+        sb.AppendLine();
+
+        // create all links aka foreign keys
+        foreach (var link in links)
+        {
+          WriteForeignKey(sb, link);
+        }
+        sb.AppendLine();
+
+        return true;
       }
-
-      var sb = new StringBuilder();
-
-      // create all entities
-      foreach (var entity in entities)
+      finally
       {
-        WriteTable(sb, entity);
+        var fileName = Path.ChangeExtension(Model.Name, ".sql");
+        var filePath = Path.Combine(location, fileName);
+        File.WriteAllText(filePath, sb.ToString());
       }
-      sb.AppendLine();
-
-      // write primary key
-      foreach (var entity in entities)
-      {
-        WritePrimaryKey(sb, entity);
-      }
-      sb.AppendLine();
-
-      // create all links aka foreign keys
-      foreach (var link in links)
-      {
-        WriteForeignKey(sb, link);
-      }
-      sb.AppendLine();
-
-      var fileName = Path.ChangeExtension(Model.Name, ".sql");
-      var filePath = Path.Combine(location, fileName);
-      File.WriteAllText(filePath, sb.ToString());
-
-      return true;
     }
 
     private void WriteTable(StringBuilder sb, CSharpClass type)
