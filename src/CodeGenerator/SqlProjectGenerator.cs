@@ -25,7 +25,7 @@ namespace NClass.CodeGenerator
 {
   internal sealed class SqlProjectGenerator : ProjectGenerator
   {
-    private readonly string[] SupportedLoopForeignKeys = new[] { "Next", "Previous" };
+    private static readonly string[] SupportedLoopForeignKeys = new[] { "Next", "Previous" };
 
     public SqlProjectGenerator(Model model) :
       base(model)
@@ -132,7 +132,7 @@ namespace NClass.CodeGenerator
       }
     }
 
-    private void WriteTable(StringBuilder sb, CSharpClass type)
+    private static void WriteTable(StringBuilder sb, CSharpClass type)
     {
       sb.AppendLine($"CREATE TABLE {type.Name}");
       sb.AppendLine($"(");
@@ -151,12 +151,17 @@ namespace NClass.CodeGenerator
       sb.AppendLine();
     }
 
-    private void WritePrimaryKey(StringBuilder sb, CSharpClass type)
+    private static string GetPrimaryKeyName(CSharpClass type)
+    {
+      return $"PK_{type.Name}";
+    }
+
+    private static void WritePrimaryKey(StringBuilder sb, CSharpClass type)
     {
       var pk = GetPrimaryKeyMember(type);
       if (pk != null)
       {
-        sb.AppendLine($"ALTER TABLE {type.Name} ADD PRIMARY KEY({pk.Name});");
+        sb.AppendLine($"ALTER TABLE {type.Name} ADD CONSTRAINT {GetPrimaryKeyName(type)} PRIMARY KEY({pk.Name});");
       }
     }
 
@@ -210,7 +215,7 @@ namespace NClass.CodeGenerator
       }
     }
 
-    private void WriteLinkTable(StringBuilder sb, EntityRelationship link)
+    private static void WriteLinkTable(StringBuilder sb, EntityRelationship link)
     {
       var linkTable = new CSharpClass
       {
