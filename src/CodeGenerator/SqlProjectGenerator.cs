@@ -58,11 +58,32 @@ namespace NClass.CodeGenerator
           return false;
         }
 
-        // check for loop relationships - unsupported as no reliable way to determine foreign key
-        if (links.Any(link => link.First.Id == link.Second.Id))
+        // check for loop relationships - only support 'NextId' or 'PreviousId'
+        foreach (var link in links)
         {
-          sb.AppendLine($"-- {Strings.SqlGenError_LoopRelationship}");
-          return false;
+          if (link.First.Id == link.Second.Id)
+          {
+            var canWriteLink = false;
+            // Note:  GetForeignKeyMember will append 'Id'
+            var supportedFks = new[] { "Next".ToLowerInvariant(), "Previous".ToLowerInvariant() };
+            foreach (var suppFk in supportedFks)
+            {
+              if (GetForeignKeyMember((CSharpClass)link.First, suppFk) != null ||
+              GetForeignKeyMember((CSharpClass)link.Second, suppFk) != null)
+              {
+                canWriteLink = true;
+                continue;
+              }
+            }
+            if (canWriteLink)
+            {
+              continue;
+            }
+
+            sb.AppendLine($"-- {Strings.SqlGenError_LoopRelationship}");
+            sb.AppendLine($"-- [{link.First.Name}] <---> [{link.Second.Name}]");
+            return false;
+          }
         }
 
         // check for two links between two entities - BAD
