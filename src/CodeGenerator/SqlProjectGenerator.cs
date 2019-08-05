@@ -25,6 +25,8 @@ namespace NClass.CodeGenerator
 {
   internal sealed class SqlProjectGenerator : ProjectGenerator
   {
+    private readonly string[] SupportedLoopForeignKeys = new[] { "Next", "Previous" };
+
     public SqlProjectGenerator(Model model) :
       base(model)
     {
@@ -63,19 +65,18 @@ namespace NClass.CodeGenerator
         {
           if (link.First.Id == link.Second.Id)
           {
-            var canWriteLink = false;
+            var canWriteLoop = false;
             // Note:  GetForeignKeyMember will append 'Id'
-            var supportedFks = new[] { "Next".ToLowerInvariant(), "Previous".ToLowerInvariant() };
-            foreach (var suppFk in supportedFks)
+            foreach (var suppLoopFk in SupportedLoopForeignKeys)
             {
-              if (GetForeignKeyMember((CSharpClass)link.First, suppFk) != null ||
-              GetForeignKeyMember((CSharpClass)link.Second, suppFk) != null)
+              if (GetForeignKeyMember((CSharpClass)link.First, suppLoopFk.ToLowerInvariant()) != null ||
+              GetForeignKeyMember((CSharpClass)link.Second, suppLoopFk.ToLowerInvariant()) != null)
               {
-                canWriteLink = true;
+                canWriteLoop = true;
                 continue;
               }
             }
-            if (canWriteLink)
+            if (canWriteLoop)
             {
               continue;
             }
@@ -161,9 +162,31 @@ namespace NClass.CodeGenerator
 
     private void WriteForeignKey(StringBuilder sb, EntityRelationship link)
     {
+      // loop relationship
+      if (link.First.Id == link.Second.Id)
+      {
+        // Note:  GetForeignKeyMember will append 'Id'
+        foreach (var suppFk in SupportedLoopForeignKeys)
+        {
+          var fkLoop = GetForeignKeyMember((CSharpClass)link.First, suppFk.ToLowerInvariant());
+          if (fkLoop != null)
+          {
+            var pk = GetPrimaryKeyMember((CSharpClass)link.First);
+            sb.AppendLine($"ALTER TABLE {link.First.Name} ADD FOREIGN KEY({fkLoop.Name}) REFERENCES {link.First.Name}({pk.Name})");
+            return;
+          }
+        }
+
+        // should never get here as should have passed pre-flight checks
+        var fileName = Path.ChangeExtension(Model.Name, ".sql");
+        var errMsg = $"Unknown error generating loop relationship:  [{link.First.Name}] <---> [{link.Second.Name}]";
+        sb.AppendLine($"-- {errMsg}");
+        throw new FileGenerationException(fileName, errMsg);
+      }
+
       // create link tables
       if ((link.StartMultiplicity == MultiplicityType.ZeroOrMany || link.StartMultiplicity == MultiplicityType.OneOrMany) &&
-        (link.EndMultiplicity == MultiplicityType.ZeroOrMany || link.EndMultiplicity == MultiplicityType.OneOrMany))
+      (link.EndMultiplicity == MultiplicityType.ZeroOrMany || link.EndMultiplicity == MultiplicityType.OneOrMany))
       {
         sb.AppendLine();
         sb.AppendLine($"-- generate link table: [{link.First.Name}] >+--+< [{link.Second.Name}]");
