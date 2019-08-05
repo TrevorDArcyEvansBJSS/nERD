@@ -129,6 +129,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Editors
 
     private void textBox_GotFocus(object sender, EventArgs e)
     {
+      SelectionStart = 0;
+      TextBox.SelectionLength = Text.Length;
       OnGotFocus(e);
     }
 
