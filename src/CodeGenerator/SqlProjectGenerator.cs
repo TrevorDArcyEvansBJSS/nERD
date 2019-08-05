@@ -50,6 +50,8 @@ namespace NClass.CodeGenerator
         var entities = Model.Entities.OfType<CSharpClass>();
         var links = Model.Relationships.OfType<EntityRelationship>();
 
+        #region Pre-flight Checks
+
         // check for any unsupported .NET types
         var fieldTypeNames = entities.SelectMany(ent => ent.Fields.OfType<CSharpField>()).Select(field => field.Type);
         var propTypeNames = entities.SelectMany(ent => ent.Operations.OfType<CSharpProperty>()).Select(op => op.Type);
@@ -100,8 +102,33 @@ namespace NClass.CodeGenerator
           }
         }
 
+        #endregion
 
-        // create all entities
+        #region Delete
+
+        sb.AppendLine("------------ Delete");
+
+        // delete all links aka foreign keys
+        foreach (var link in links)
+        {
+          DeleteForeignKey(sb, link);
+        }
+        sb.AppendLine();
+
+        // delete all entities aka tables
+        foreach (var entity in entities)
+        {
+          DeleteTable(sb, entity);
+        }
+        sb.AppendLine();
+
+        #endregion
+
+        #region Create
+
+        sb.AppendLine("------------ Create");
+
+        // create all entities aka tables
         foreach (var entity in entities)
         {
           WriteTable(sb, entity);
@@ -122,6 +149,8 @@ namespace NClass.CodeGenerator
         }
         sb.AppendLine();
 
+        #endregion
+
         return true;
       }
       finally
@@ -130,6 +159,13 @@ namespace NClass.CodeGenerator
         var filePath = Path.Combine(location, fileName);
         File.WriteAllText(filePath, sb.ToString());
       }
+    }
+
+    private static void DeleteTable(StringBuilder sb, CSharpClass type)
+    {
+      var pk = GetPrimaryKeyMember(type);
+
+      sb.AppendLine($"DROP TABLE {type.Name};");
     }
 
     private static void WriteTable(StringBuilder sb, CSharpClass type)
@@ -174,6 +210,17 @@ namespace NClass.CodeGenerator
       return $"FK_{first.Name}_{second.Name}";
     }
 
+    private static void DeleteForeignKey(
+      StringBuilder sb,
+      string tableName,
+      IEntity first,
+      IEntity second,
+      string firstPk,
+      string secondPk)
+    {
+      sb.AppendLine($"ALTER TABLE {tableName} DROP CONSTRAINT {GetForeignKeyName(first, second)};");
+    }
+
     private static void WriteForeignKey(
       StringBuilder sb,
       string tableName,
@@ -183,6 +230,58 @@ namespace NClass.CodeGenerator
       string secondPk)
     {
       sb.AppendLine($"ALTER TABLE {tableName} ADD CONSTRAINT {GetForeignKeyName(first, second)} FOREIGN KEY({firstPk}) REFERENCES {first.Name}({secondPk});");
+    }
+
+    private void DeleteForeignKey(StringBuilder sb, EntityRelationship link)
+    {
+      // loop relationship
+      if (link.First.Id == link.Second.Id)
+      {
+        // Note:  GetForeignKeyMember will append 'Id'
+        foreach (var suppFk in SupportedLoopForeignKeys)
+        {
+          var fkLoop = GetForeignKeyMember((CSharpClass)link.First, suppFk.ToLowerInvariant());
+          if (fkLoop != null)
+          {
+            var pk = GetPrimaryKeyMember((CSharpClass)link.First);
+            DeleteForeignKey(sb, link.First.Name, link.First, link.First, fkLoop.Name, pk.Name);
+            return;
+          }
+        }
+
+        // should never get here as should have passed pre-flight checks
+        var fileName = Path.ChangeExtension(Model.Name, ".sql");
+        var errMsg = $"Unknown error deleting loop relationship:  [{link.First.Name}] <---> [{link.Second.Name}]";
+        sb.AppendLine($"-- {errMsg}");
+        throw new FileGenerationException(fileName, errMsg);
+      }
+
+      // [First] --> [Second]
+      var fk1 = GetForeignKeyMember((CSharpClass)link.Second, link.First.Name);
+      if (fk1 != null)
+      {
+        var pk1 = GetPrimaryKeyMember((CSharpClass)link.First);
+        DeleteForeignKey(sb, link.Second.Name, link.First, link.Second, fk1.Name, pk1.Name);
+      }
+
+      // [Second] --> [First]
+      var fk2 = GetForeignKeyMember((CSharpClass)link.First, link.Second.Name);
+      if (fk2 != null)
+      {
+        var pk2 = GetPrimaryKeyMember((CSharpClass)link.Second);
+        DeleteForeignKey(sb, link.First.Name, link.Second, link.First, fk2.Name, pk2.Name);
+      }
+
+      // create link tables
+      if ((link.StartMultiplicity == MultiplicityType.ZeroOrMany || link.StartMultiplicity == MultiplicityType.OneOrMany) &&
+      (link.EndMultiplicity == MultiplicityType.ZeroOrMany || link.EndMultiplicity == MultiplicityType.OneOrMany))
+      {
+        sb.AppendLine();
+        sb.AppendLine($"-- delete link table: [{link.First.Name}] >+--+< [{link.Second.Name}]");
+        DeleteLinkTable(sb, link);
+        sb.AppendLine();
+        return;
+      }
     }
 
     private void WriteForeignKey(StringBuilder sb, EntityRelationship link)
@@ -235,6 +334,16 @@ namespace NClass.CodeGenerator
         var pk2 = GetPrimaryKeyMember((CSharpClass)link.Second);
         WriteForeignKey(sb, link.First.Name, link.Second, link.First, fk2.Name, pk2.Name);
       }
+    }
+
+    private static void DeleteLinkTable(StringBuilder sb, EntityRelationship link)
+    {
+      var linkTable = new CSharpClass
+      {
+        Name = $"{link.First.Name}_{link.Second.Name}"
+      };
+
+      DeleteTable(sb, linkTable);
     }
 
     private static void WriteLinkTable(StringBuilder sb, EntityRelationship link)
