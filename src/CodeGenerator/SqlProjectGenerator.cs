@@ -165,6 +165,11 @@ namespace NClass.CodeGenerator
       }
     }
 
+    private static string GetForeignKeyName(IEntity first, IEntity second)
+    {
+      return $"FK_{first.Name}_{second.Name}";
+    }
+
     private void WriteForeignKey(StringBuilder sb, EntityRelationship link)
     {
       // loop relationship
@@ -177,7 +182,7 @@ namespace NClass.CodeGenerator
           if (fkLoop != null)
           {
             var pk = GetPrimaryKeyMember((CSharpClass)link.First);
-            sb.AppendLine($"ALTER TABLE {link.First.Name} ADD FOREIGN KEY({fkLoop.Name}) REFERENCES {link.First.Name}({pk.Name})");
+            sb.AppendLine($"ALTER TABLE {link.First.Name} ADD CONSTRAINT {GetForeignKeyName(link.First, link.First)} FOREIGN KEY({fkLoop.Name}) REFERENCES {link.First.Name}({pk.Name})");
             return;
           }
         }
@@ -204,14 +209,14 @@ namespace NClass.CodeGenerator
       var fk1 = GetForeignKeyMember((CSharpClass)link.Second, link.First.Name);
       if (fk1 != null)
       {
-        sb.AppendLine($"ALTER TABLE {link.Second.Name} ADD FOREIGN KEY({fk1.Name}) REFERENCES {link.First.Name}({fk1.Name})");
+        sb.AppendLine($"ALTER TABLE {link.Second.Name} ADD CONSTRAINT {GetForeignKeyName(link.First, link.Second)} FOREIGN KEY({fk1.Name}) REFERENCES {link.First.Name}({fk1.Name})");
       }
 
       // [Second] --> [First]
       var fk2 = GetForeignKeyMember((CSharpClass)link.First, link.Second.Name);
       if (fk2 != null)
       {
-        sb.AppendLine($"ALTER TABLE {link.First.Name} ADD FOREIGN KEY({fk2.Name}) REFERENCES {link.Second.Name}({fk2.Name})");
+        sb.AppendLine($"ALTER TABLE {link.First.Name} ADD CONSTRAINT {GetForeignKeyName(link.Second, link.First)} FOREIGN KEY({fk2.Name}) REFERENCES {link.Second.Name}({fk2.Name})");
       }
     }
 
@@ -231,8 +236,8 @@ namespace NClass.CodeGenerator
 
       WriteTable(sb, linkTable);
 
-      sb.AppendLine($"ALTER TABLE {linkTable.Name} ADD FOREIGN KEY({firstId.Name}) REFERENCES {link.First.Name}({firstId.Name})");
-      sb.AppendLine($"ALTER TABLE {linkTable.Name} ADD FOREIGN KEY({secondId.Name}) REFERENCES {link.Second.Name}({secondId.Name})");
+      sb.AppendLine($"ALTER TABLE {linkTable.Name} ADD CONSTRAINT {GetForeignKeyName(link.First, link.Second)} FOREIGN KEY({firstId.Name}) REFERENCES {link.First.Name}({firstId.Name})");
+      sb.AppendLine($"ALTER TABLE {linkTable.Name} ADD CONSTRAINT {GetForeignKeyName(link.Second, link.First)} FOREIGN KEY({secondId.Name}) REFERENCES {link.Second.Name}({secondId.Name})");
     }
 
     private static Member GetPrimaryKeyMember(CSharpClass type)
