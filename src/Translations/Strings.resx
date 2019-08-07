@@ -667,9 +667,6 @@
   <data name="ErrorCorruptSaveFormat" xml:space="preserve">
     <value>Corrupt save format.</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>&amp;Java diagram</value>
-  </data>
   <data name="GeneratorTargetDir" xml:space="preserve">
     <value>Select the target directory for the generated source files:</value>
   </data>

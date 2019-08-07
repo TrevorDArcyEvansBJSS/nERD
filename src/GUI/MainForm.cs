@@ -19,7 +19,6 @@ using NClass.DiagramEditor;
 using NClass.DiagramEditor.ClassDiagram;
 using NClass.EntityRelationshipDiagram;
 using NClass.GUI.Dialogs;
-using NClass.Java;
 using NClass.Translations;
 using System;
 using System.Collections.Generic;
@@ -239,7 +238,6 @@ namespace NClass.GUI
       mnuNew.Text = Strings.MenuNew;
       mnuNewProject.Text = Strings.MenuProject;
       mnuNewCSharpDiagram.Text = Strings.MenuCSharpDiagram;
-      mnuNewJavaDiagram.Text = Strings.MenuJavaDiagram;
       mnuNewErdDiagram.Text = Strings.MenuErdDiagram;
       mnuOpen.Text = Strings.MenuOpen;
       mnuOpenFile.Text = Strings.MenuOpenFile;
@@ -281,7 +279,6 @@ namespace NClass.GUI
 
       // Toolbar
       toolNewCSharpDiagram.Text = Strings.MenuCSharpDiagram;
-      toolNewJavaDiagram.Text = Strings.MenuJavaDiagram;
       toolNewErdDiagram.Text = Strings.MenuErdDiagram;
       toolSave.Text = Strings.Save;
       toolPrint.Text = Strings.Print;
@@ -357,7 +354,6 @@ namespace NClass.GUI
     private void UpdateStandardToolStrip()
     {
       toolNewCSharpDiagram.Enabled = Workspace.Default.HasActiveProject;
-      toolNewJavaDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolNewErdDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolSave.Enabled = Workspace.Default.HasActiveProject;
       toolPrint.Enabled = _docManager.HasDocument;
@@ -544,7 +540,6 @@ namespace NClass.GUI
     private void mnuNew_DropDownOpening(object sender, EventArgs e)
     {
       mnuNewCSharpDiagram.Enabled = Workspace.Default.HasActiveProject;
-      mnuNewJavaDiagram.Enabled = Workspace.Default.HasActiveProject;
       mnuNewErdDiagram.Enabled = Workspace.Default.HasActiveProject;
     }
 
@@ -562,17 +557,6 @@ namespace NClass.GUI
         Diagram diagram = new Diagram(CSharpLanguage.Instance);
         Workspace.Default.ActiveProject.Add(diagram);
         Settings.Default.DefaultLanguageName = CSharpLanguage.Instance.AssemblyName;
-      }
-    }
-
-    private void mnuNewJavaDiagram_Click(object sender, EventArgs e)
-    {
-      if (Workspace.Default.HasActiveProject)
-      {
-        ShowModelExplorer = true;
-        Diagram diagram = new Diagram(JavaLanguage.Instance);
-        Workspace.Default.ActiveProject.Add(diagram);
-        Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
       }
     }
 
@@ -871,7 +855,6 @@ namespace NClass.GUI
     private void toolNew_DropDownOpening(object sender, EventArgs e)
     {
       toolNewCSharpDiagram.Enabled = Workspace.Default.HasActiveProject;
-      toolNewJavaDiagram.Enabled = Workspace.Default.HasActiveProject;
       toolNewErdDiagram.Enabled = Workspace.Default.HasActiveProject;
     }
 

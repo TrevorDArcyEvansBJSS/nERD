@@ -282,7 +282,6 @@
       this.cboLanguage.FormattingEnabled = true;
       this.cboLanguage.Items.AddRange(new object[] {
             "C#",
-            "Java",
             "SQL"});
       this.cboLanguage.Location = new System.Drawing.Point(18, 98);
       this.cboLanguage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);

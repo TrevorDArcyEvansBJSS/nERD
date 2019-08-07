@@ -2053,15 +2053,6 @@ namespace NClass.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Java diagram.
-        /// </summary>
-        public static string MenuJavaDiagram {
-            get {
-                return ResourceManager.GetString("MenuJavaDiagram", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &amp;Make Same Size.
         /// </summary>
         public static string MenuMakeSameSize {

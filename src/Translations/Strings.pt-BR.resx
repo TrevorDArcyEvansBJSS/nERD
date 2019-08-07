@@ -665,9 +665,6 @@ Não é possível definir o acesso modificador explícito em execução.</value>
   <data name="ErrorCorruptSaveFormat" xml:space="preserve">
     <value>Formato salvo corrompido.</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>&amp;Java diagrama</value>
-  </data>
   <data name="GeneratorTargetDir" xml:space="preserve">
     <value>Selecione o diretório para a geração do código fonte.</value>
   </data>

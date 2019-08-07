@@ -66,20 +66,6 @@ namespace NClass.CodeGenerator {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>java.io.*</string>\r\n  <string>java.util.*</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection JavaImportList {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["JavaImportList"]));
-            }
-            set {
-                this["JavaImportList"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("VisualStudio2008")]
         public global::NClass.CodeGenerator.SolutionType SolutionType {
             get {

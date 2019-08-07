@@ -660,9 +660,6 @@
   <data name="ErrorCorruptSaveFormat" xml:space="preserve">
     <value>Die Datei konnte nicht gespeichert werden.</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>&amp;Java Diagramm</value>
-  </data>
   <data name="GeneratorTargetDir" xml:space="preserve">
     <value>Wählen Sie ein Verzeichniss, in dem der Quellcode generiert werden soll:</value>
   </data>

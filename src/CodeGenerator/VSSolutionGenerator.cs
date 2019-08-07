@@ -16,7 +16,6 @@
 using NClass.Core;
 using NClass.CSharp;
 using NClass.EntityRelationshipDiagram;
-using NClass.Java;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -78,9 +77,6 @@ namespace NClass.CodeGenerator
 
       if (language == CSharpLanguage.Instance)
         return new CSharpProjectGenerator(model, Version);
-
-      if (language == JavaLanguage.Instance)
-        return new JavaProjectGenerator(model);
 
       if (language == ErdLanguage.Instance)
         return new SqlProjectGenerator(model);

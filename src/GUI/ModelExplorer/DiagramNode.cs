@@ -132,11 +132,6 @@ namespace NClass.GUI.ModelExplorer
         return "diagram";
       }
 
-      if (language is Java.JavaLanguage)
-      {
-        return "diagram";
-      }
-
       if (language is EntityRelationshipDiagram.ErdLanguage)
       {
         return "erd";

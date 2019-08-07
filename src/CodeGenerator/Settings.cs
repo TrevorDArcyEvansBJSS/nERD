@@ -13,15 +13,14 @@
 // this program; if not, write to the Free Software Foundation, Inc., 
 // 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+using NClass.Core;
+using NClass.CSharp;
+using NClass.EntityRelationshipDiagram;
 using System;
-using System.Configuration;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using NClass.Core;
+using System.Configuration;
 using System.IO;
-using NClass.EntityRelationshipDiagram;
-using NClass.CSharp;
-using NClass.Java;
 
 namespace NClass.CodeGenerator
 {
@@ -43,14 +42,11 @@ namespace NClass.CodeGenerator
     {
       if (CSharpImportList == null)
         CSharpImportList = new StringCollection();
-      if (JavaImportList == null)
-        JavaImportList = new StringCollection();
       if (ErdImportList == null)
         ErdImportList = new StringCollection();
 
       ImportList.Clear();
       ImportList.Add(CSharpLanguage.Instance, CSharpImportList);
-      ImportList.Add(JavaLanguage.Instance, JavaImportList);
       ImportList.Add(ErdLanguage.Instance, ErdImportList);
 
       if (string.IsNullOrEmpty(DestinationPath))

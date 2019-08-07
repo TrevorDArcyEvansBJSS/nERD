@@ -604,9 +604,6 @@
   <data name="MenuInterface" xml:space="preserve">
     <value>&amp;Интерфейс</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>&amp;Java диаграмма</value>
-  </data>
   <data name="MenuMembersFormat" xml:space="preserve">
     <value>&amp;Форматирование членов</value>
   </data>

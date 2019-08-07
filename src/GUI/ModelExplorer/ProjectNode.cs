@@ -19,7 +19,6 @@ using NClass.DiagramEditor;
 using NClass.DiagramEditor.ClassDiagram;
 using NClass.EntityRelationshipDiagram;
 using NClass.GUI.Properties;
-using NClass.Java;
 using NClass.Translations;
 using System;
 using System.Windows.Forms;
@@ -35,7 +34,6 @@ namespace NClass.GUI.ModelExplorer
       _contextMenu.Items.AddRange(new ToolStripItem[] {
         new ToolStripMenuItem(Strings.MenuAddNew, Resources.NewDocument,
           new ToolStripMenuItem(Strings.MenuCSharpDiagram, null, newCSharpDiagram_Click),
-          new ToolStripMenuItem(Strings.MenuJavaDiagram, null, newJavaDiagram_Click),
           new ToolStripMenuItem(Strings.MenuErdDiagram, null, newErdDiagram_Click)
         ),
         new ToolStripSeparator(),
@@ -178,16 +176,6 @@ namespace NClass.GUI.ModelExplorer
       Diagram diagram = new Diagram(CSharpLanguage.Instance);
       project.Add(diagram);
       Settings.Default.DefaultLanguageName = CSharpLanguage.Instance.AssemblyName;
-    }
-
-    private static void newJavaDiagram_Click(object sender, EventArgs e)
-    {
-      ToolStripItem menuItem = (ToolStripItem)sender;
-      Project project = ((ProjectNode)menuItem.OwnerItem.Owner.Tag).Project;
-
-      Diagram diagram = new Diagram(JavaLanguage.Instance);
-      Settings.Default.DefaultLanguageName = JavaLanguage.Instance.AssemblyName;
-      project.Add(diagram);
     }
 
     private static void newErdDiagram_Click(object sender, EventArgs e)

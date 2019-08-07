@@ -681,9 +681,6 @@ Biztos, hogy folytatni akarja?</value>
   <data name="MenuInterface" xml:space="preserve">
     <value>&amp;Interfész</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>&amp;Java diagram</value>
-  </data>
   <data name="MenuMakeSameSize" xml:space="preserve">
     <value>&amp;Azonos méretre igazítás</value>
   </data>

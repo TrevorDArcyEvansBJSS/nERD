@@ -47,7 +47,6 @@ namespace NClass.GUI
       this.mnuNewProject = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuSepProject = new System.Windows.Forms.ToolStripSeparator();
       this.mnuNewCSharpDiagram = new System.Windows.Forms.ToolStripMenuItem();
-      this.mnuNewJavaDiagram = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuNewErdDiagram = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
       this.mnuOpenFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,7 +107,6 @@ namespace NClass.GUI
       this.toolNewProject = new System.Windows.Forms.ToolStripMenuItem();
       this.toolSepProject = new System.Windows.Forms.ToolStripSeparator();
       this.toolNewCSharpDiagram = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolNewJavaDiagram = new System.Windows.Forms.ToolStripMenuItem();
       this.toolNewErdDiagram = new System.Windows.Forms.ToolStripMenuItem();
       this.toolOpen = new System.Windows.Forms.ToolStripSplitButton();
       this.toolRecentFile1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,7 +326,6 @@ namespace NClass.GUI
             this.mnuNewProject,
             this.mnuSepProject,
             this.mnuNewCSharpDiagram,
-            this.mnuNewJavaDiagram,
             this.mnuNewErdDiagram});
       this.mnuNew.Image = global::NClass.GUI.Properties.Resources.NewDocument;
       this.mnuNew.Name = "mnuNew";
@@ -355,13 +352,6 @@ namespace NClass.GUI
       this.mnuNewCSharpDiagram.Size = new System.Drawing.Size(149, 22);
       this.mnuNewCSharpDiagram.Text = "&C# diagram";
       this.mnuNewCSharpDiagram.Click += new System.EventHandler(this.mnuNewCSharpDiagram_Click);
-      // 
-      // mnuNewJavaDiagram
-      // 
-      this.mnuNewJavaDiagram.Name = "mnuNewJavaDiagram";
-      this.mnuNewJavaDiagram.Size = new System.Drawing.Size(149, 22);
-      this.mnuNewJavaDiagram.Text = "&Java diagram";
-      this.mnuNewJavaDiagram.Click += new System.EventHandler(this.mnuNewJavaDiagram_Click);
       // 
       // mnuNewErdDiagram
       // 
@@ -842,7 +832,6 @@ namespace NClass.GUI
             this.toolNewProject,
             this.toolSepProject,
             this.toolNewCSharpDiagram,
-            this.toolNewJavaDiagram,
             this.toolNewErdDiagram});
       this.toolNew.Image = global::NClass.GUI.Properties.Resources.NewDocument;
       this.toolNew.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -870,14 +859,6 @@ namespace NClass.GUI
       this.toolNewCSharpDiagram.Size = new System.Drawing.Size(149, 22);
       this.toolNewCSharpDiagram.Text = "C# diagram";
       this.toolNewCSharpDiagram.Click += new System.EventHandler(this.mnuNewCSharpDiagram_Click);
-      // 
-      // toolNewJavaDiagram
-      // 
-      this.toolNewJavaDiagram.Enabled = false;
-      this.toolNewJavaDiagram.Name = "toolNewJavaDiagram";
-      this.toolNewJavaDiagram.Size = new System.Drawing.Size(149, 22);
-      this.toolNewJavaDiagram.Text = "Java diagram";
-      this.toolNewJavaDiagram.Click += new System.EventHandler(this.mnuNewJavaDiagram_Click);
       // 
       // toolNewErdDiagram
       // 
@@ -1127,7 +1108,6 @@ namespace NClass.GUI
     private System.Windows.Forms.ToolStripMenuItem mnuFile;
     private System.Windows.Forms.ToolStripMenuItem mnuNew;
     private System.Windows.Forms.ToolStripMenuItem mnuNewCSharpDiagram;
-    private System.Windows.Forms.ToolStripMenuItem mnuNewJavaDiagram;
     private System.Windows.Forms.ToolStripMenuItem mnuNewErdDiagram;
     private System.Windows.Forms.ToolStripMenuItem mnuOpen;
     private System.Windows.Forms.ToolStripMenuItem mnuOpenFile;
@@ -1199,7 +1179,6 @@ namespace NClass.GUI
     private System.Windows.Forms.ToolStripMenuItem toolNewProject;
     private System.Windows.Forms.ToolStripSeparator toolSepProject;
     private System.Windows.Forms.ToolStripMenuItem toolNewCSharpDiagram;
-    private System.Windows.Forms.ToolStripMenuItem toolNewJavaDiagram;
     private System.Windows.Forms.ToolStripMenuItem toolNewErdDiagram;
     private System.Windows.Forms.ToolStripSeparator mnuSepClose;
     private System.Windows.Forms.ToolStripMenuItem mnuCloseProject;

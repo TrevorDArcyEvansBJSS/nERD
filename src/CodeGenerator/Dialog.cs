@@ -16,7 +16,6 @@
 using NClass.Core;
 using NClass.CSharp;
 using NClass.EntityRelationshipDiagram;
-using NClass.Java;
 using NClass.Translations;
 using System;
 using System.Collections.Specialized;
@@ -76,10 +75,6 @@ namespace NClass.CodeGenerator
           language = CSharpLanguage.Instance;
           break;
 
-        case "Java":
-          language = JavaLanguage.Instance;
-          break;
-
         case "SQL":
           language = ErdLanguage.Instance;
           break;
@@ -108,8 +103,6 @@ namespace NClass.CodeGenerator
 
       if (Equals(cboLanguage.SelectedItem, "C#"))
         Settings.Default.CSharpImportList = importList;
-      else if (Equals(cboLanguage.SelectedItem, "Java"))
-        Settings.Default.JavaImportList = importList;
       else if (Equals(cboLanguage.SelectedItem, "SQL"))
         Settings.Default.ErdImportList = importList;
     }

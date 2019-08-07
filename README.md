@@ -2,7 +2,7 @@
 formerly NClass (http://nclass.sourceforge.net/)
 
 ## Overview
-nERD is a free tool to easily create UML class diagrams with full C# and Java language support. The user interface is designed to be simple and user-friendly for easy and fast development. Properties, enums, delegates and other language specific elements are fully supported with strict syntactical and semantical verification.
+nERD is a free tool to easily create UML class diagrams with full C# language support. The user interface is designed to be simple and user-friendly for easy and fast development. Properties, enums, delegates and other language specific elements are fully supported with strict syntactical and semantical verification.
 
 Design your application with just a few clicks - the main goal is to provide a simple but powerful class designer that is very intuitive to use. Diagram styles help you to create professional looking diagrams, just like in Visual Studio or other commercial products. Furthermore, you can generate code from your models or you can also import classes from existing .NET assemblies.
 Please note, nERD is far from complete. There are many missing features that are planned for future versions. But if you have an idea, please share your thoughts in one of the way listed on the support page.
@@ -11,7 +11,7 @@ Please note, nERD is far from complete. There are many missing features that are
 [![Download](img/desktop-download.png)](https://github.com/TrevorDArcyEvansBJSS/nERD/releases)
 
 ## Features
-* Full C# and Java support with many language specific elements
+* Full C# support with many language specific elements
 * UML diagrams
 * Entity-Relationship diagrams
 * SQL generation

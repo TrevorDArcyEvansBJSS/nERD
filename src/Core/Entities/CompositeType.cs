@@ -472,7 +472,7 @@ namespace NClass.Core
       {
         string type = childNode.GetAttribute("type");
 
-        if (type == "Field" || type == "CSharpField" || type == "JavaField")
+        if (type == "Field" || type == "CSharpField")
         {
           Field field = AddField();
           field.InitFromString(childNode.InnerText);

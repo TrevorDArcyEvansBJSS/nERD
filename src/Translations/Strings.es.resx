@@ -620,9 +620,6 @@
   <data name="MenuInterface" xml:space="preserve">
     <value>&amp;Interfaz</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>Diagrama &amp;Java</value>
-  </data>
   <data name="MenuMembersFormat" xml:space="preserve">
     <value>&amp;Formato de los miembros</value>
   </data>

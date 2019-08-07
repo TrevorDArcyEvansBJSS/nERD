@@ -192,10 +192,6 @@
       <Project>{722F4F78-E7CA-41C5-908A-707C0226486B}</Project>
       <Name>EntityRelationshipDiagram</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Java\Java.csproj">
-      <Project>{255565B1-3246-4184-9F71-19178FE0BA65}</Project>
-      <Name>Java</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Translations\Translations.csproj">
       <Project>{B3B7D798-3D52-47F0-B1A7-A91BC5FE184F}</Project>
       <Name>Translations</Name>

@@ -639,9 +639,6 @@
   <data name="ErrorCorruptSaveFormat" xml:space="preserve">
     <value>保存格式损坏。</value>
   </data>
-  <data name="MenuJavaDiagram" xml:space="preserve">
-    <value>Java图(&amp;J)</value>
-  </data>
   <data name="GeneratorTargetDir" xml:space="preserve">
     <value>选择生成代码文件的目录:</value>
   </data>
