@@ -25,7 +25,9 @@ namespace NClass.CodeGenerator
     public Generator(Project project, SolutionType type)
     {
       if (project == null)
+      {
         throw new ArgumentNullException("project");
+      }
 
       _solutionGenerator = CreateSolutionGenerator(project, type);
     }
