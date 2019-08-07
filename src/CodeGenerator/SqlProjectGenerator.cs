@@ -25,7 +25,13 @@ namespace NClass.CodeGenerator
 {
   internal sealed class SqlProjectGenerator : ProjectGenerator
   {
-    private static readonly string[] SupportedLoopForeignKeys = new[] { "Next", "Previous" };
+    private static readonly string[] SupportedLoopForeignKeys = new[]
+    {
+      "Next",
+      "Previous",
+      "Parent",
+      "Child"
+    };
 
     public SqlProjectGenerator(Model model) :
       base(model)
