@@ -169,8 +169,6 @@ namespace NClass.CodeGenerator
 
     private static void DeleteTable(StringBuilder sb, CSharpClass type)
     {
-      var pk = GetPrimaryKeyMember(type);
-
       sb.AppendLine($"DROP TABLE {type.Name};");
     }
 
