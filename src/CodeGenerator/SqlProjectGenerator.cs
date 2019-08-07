@@ -137,21 +137,21 @@ namespace NClass.CodeGenerator
         // create all entities aka tables
         foreach (var entity in entities)
         {
-          WriteTable(sb, entity);
+          CreateTable(sb, entity);
         }
         sb.AppendLine();
 
         // write primary key
         foreach (var entity in entities)
         {
-          WritePrimaryKey(sb, entity);
+          CreatePrimaryKey(sb, entity);
         }
         sb.AppendLine();
 
         // create all links aka foreign keys
         foreach (var link in links)
         {
-          WriteForeignKey(sb, link);
+          CreateForeignKey(sb, link);
         }
         sb.AppendLine();
 
@@ -172,7 +172,7 @@ namespace NClass.CodeGenerator
       sb.AppendLine($"DROP TABLE {type.Name};");
     }
 
-    private static void WriteTable(StringBuilder sb, CSharpClass type)
+    private static void CreateTable(StringBuilder sb, CSharpClass type)
     {
       var pk = GetPrimaryKeyMember(type);
 
@@ -200,7 +200,7 @@ namespace NClass.CodeGenerator
       return $"PK_{type.Name}";
     }
 
-    private static void WritePrimaryKey(StringBuilder sb, CSharpClass type)
+    private static void CreatePrimaryKey(StringBuilder sb, CSharpClass type)
     {
       var pk = GetPrimaryKeyMember(type);
       if (pk != null)
@@ -225,7 +225,7 @@ namespace NClass.CodeGenerator
       sb.AppendLine($"ALTER TABLE {tableName} DROP CONSTRAINT {GetForeignKeyName(first, second)};");
     }
 
-    private static void WriteForeignKey(
+    private static void CreateForeignKey(
       StringBuilder sb,
       string tableName,
       IEntity first,
@@ -288,7 +288,7 @@ namespace NClass.CodeGenerator
       }
     }
 
-    private void WriteForeignKey(StringBuilder sb, EntityRelationship link)
+    private void CreateForeignKey(StringBuilder sb, EntityRelationship link)
     {
       // loop relationship
       if (link.First.Id == link.Second.Id)
@@ -300,7 +300,7 @@ namespace NClass.CodeGenerator
           if (fkLoop != null)
           {
             var pk = GetPrimaryKeyMember((CSharpClass)link.First);
-            WriteForeignKey(sb, link.First.Name, link.First, link.First, fkLoop.Name, pk.Name);
+            CreateForeignKey(sb, link.First.Name, link.First, link.First, fkLoop.Name, pk.Name);
             return;
           }
         }
@@ -318,7 +318,7 @@ namespace NClass.CodeGenerator
       {
         sb.AppendLine();
         sb.AppendLine($"-- generate link table: [{link.First.Name}] >+--+< [{link.Second.Name}]");
-        WriteLinkTable(sb, link);
+        CreateLinkTable(sb, link);
         sb.AppendLine();
         return;
       }
@@ -328,7 +328,7 @@ namespace NClass.CodeGenerator
       if (fk1 != null)
       {
         var pk1 = GetPrimaryKeyMember((CSharpClass)link.First);
-        WriteForeignKey(sb, link.Second.Name, link.First, link.Second, fk1.Name, pk1.Name);
+        CreateForeignKey(sb, link.Second.Name, link.First, link.Second, fk1.Name, pk1.Name);
       }
 
       // [Second] --> [First]
@@ -336,7 +336,7 @@ namespace NClass.CodeGenerator
       if (fk2 != null)
       {
         var pk2 = GetPrimaryKeyMember((CSharpClass)link.Second);
-        WriteForeignKey(sb, link.First.Name, link.Second, link.First, fk2.Name, pk2.Name);
+        CreateForeignKey(sb, link.First.Name, link.Second, link.First, fk2.Name, pk2.Name);
       }
     }
 
@@ -350,7 +350,7 @@ namespace NClass.CodeGenerator
       DeleteTable(sb, linkTable);
     }
 
-    private static void WriteLinkTable(StringBuilder sb, EntityRelationship link)
+    private static void CreateLinkTable(StringBuilder sb, EntityRelationship link)
     {
       var linkTable = new CSharpClass
       {
@@ -367,10 +367,10 @@ namespace NClass.CodeGenerator
       secondId.Name = $"{link.Second.Name}Id";
       secondId.Type = pk2.Type;
 
-      WriteTable(sb, linkTable);
+      CreateTable(sb, linkTable);
 
-      WriteForeignKey(sb, linkTable.Name, link.First, link.Second, firstId.Name, pk1.Name);
-      WriteForeignKey(sb, linkTable.Name, link.Second, link.First, secondId.Name, pk2.Name);
+      CreateForeignKey(sb, linkTable.Name, link.First, link.Second, firstId.Name, pk1.Name);
+      CreateForeignKey(sb, linkTable.Name, link.Second, link.First, secondId.Name, pk2.Name);
     }
 
     private static Member GetPrimaryKeyMember(CSharpClass type)
