@@ -48,6 +48,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 
     private void UpdateFields()
     {
+      txtFirst.Text = _relationship.First.Name;
+      txtSecond.Text = _relationship.Second.Name;
       txtName.Text = _relationship.Label;
       cboStartMultiplicity.SelectedIndex = (int)_relationship.StartMultiplicity;
       cboEndMultiplicity.SelectedIndex = (int)_relationship.EndMultiplicity;
@@ -99,12 +101,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       {
         case MultiplicityType.ZeroOrOne:
           return "o+";
+
         case MultiplicityType.OneAndOnly:
           return "++";
+
         case MultiplicityType.ZeroOrMany:
           return ">o";
+
         case MultiplicityType.OneOrMany:
           return ">+";
+
         default:
           throw new ArgumentOutOfRangeException($"Unknown MultiplicityType: {mult}");
       }
@@ -116,12 +122,16 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       {
         case MultiplicityType.ZeroOrOne:
           return "+o";
+
         case MultiplicityType.OneAndOnly:
           return "++";
+
         case MultiplicityType.ZeroOrMany:
           return "o<";
+
         case MultiplicityType.OneOrMany:
           return "+<";
+
         default:
           throw new ArgumentOutOfRangeException($"Unknown MultiplicityType: {mult}");
       }

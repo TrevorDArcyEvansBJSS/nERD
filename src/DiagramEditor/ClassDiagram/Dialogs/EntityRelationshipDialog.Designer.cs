@@ -34,6 +34,8 @@
       this.cboStartMultiplicity = new System.Windows.Forms.ComboBox();
       this.picArrow = new System.Windows.Forms.PictureBox();
       this.txtName = new System.Windows.Forms.TextBox();
+      this.txtFirst = new System.Windows.Forms.TextBox();
+      this.txtSecond = new System.Windows.Forms.TextBox();
       ((System.ComponentModel.ISupportInitialize)(this.picArrow)).BeginInit();
       this.SuspendLayout();
       // 
@@ -41,7 +43,7 @@
       // 
       this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-      this.btnCancel.Location = new System.Drawing.Point(408, 112);
+      this.btnCancel.Location = new System.Drawing.Point(408, 145);
       this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.btnCancel.Name = "btnCancel";
       this.btnCancel.Size = new System.Drawing.Size(112, 35);
@@ -53,7 +55,7 @@
       // 
       this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
       this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-      this.btnOK.Location = new System.Drawing.Point(286, 112);
+      this.btnOK.Location = new System.Drawing.Point(286, 145);
       this.btnOK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.btnOK.Name = "btnOK";
       this.btnOK.Size = new System.Drawing.Size(112, 35);
@@ -72,7 +74,7 @@
             "1",
             "0..*",
             "1..*"});
-      this.cboEndMultiplicity.Location = new System.Drawing.Point(446, 18);
+      this.cboEndMultiplicity.Location = new System.Drawing.Point(446, 58);
       this.cboEndMultiplicity.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.cboEndMultiplicity.Name = "cboEndMultiplicity";
       this.cboEndMultiplicity.Size = new System.Drawing.Size(73, 28);
@@ -88,7 +90,7 @@
             "1",
             "0..*",
             "1..*"});
-      this.cboStartMultiplicity.Location = new System.Drawing.Point(18, 18);
+      this.cboStartMultiplicity.Location = new System.Drawing.Point(18, 58);
       this.cboStartMultiplicity.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.cboStartMultiplicity.Name = "cboStartMultiplicity";
       this.cboStartMultiplicity.Size = new System.Drawing.Size(73, 28);
@@ -99,7 +101,7 @@
       // 
       this.picArrow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-      this.picArrow.Location = new System.Drawing.Point(18, 60);
+      this.picArrow.Location = new System.Drawing.Point(18, 100);
       this.picArrow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.picArrow.Name = "picArrow";
       this.picArrow.Size = new System.Drawing.Size(502, 23);
@@ -110,12 +112,30 @@
       // txtName
       // 
       this.txtName.Anchor = System.Windows.Forms.AnchorStyles.Top;
-      this.txtName.Location = new System.Drawing.Point(148, 18);
+      this.txtName.Location = new System.Drawing.Point(148, 58);
       this.txtName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.txtName.Name = "txtName";
       this.txtName.Size = new System.Drawing.Size(238, 26);
       this.txtName.TabIndex = 0;
       this.txtName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // txtFirst
+      // 
+      this.txtFirst.Location = new System.Drawing.Point(18, 13);
+      this.txtFirst.Name = "txtFirst";
+      this.txtFirst.ReadOnly = true;
+      this.txtFirst.Size = new System.Drawing.Size(132, 26);
+      this.txtFirst.TabIndex = 7;
+      // 
+      // txtSecond
+      // 
+      this.txtSecond.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.txtSecond.Location = new System.Drawing.Point(387, 12);
+      this.txtSecond.Name = "txtSecond";
+      this.txtSecond.ReadOnly = true;
+      this.txtSecond.Size = new System.Drawing.Size(132, 26);
+      this.txtSecond.TabIndex = 8;
+      this.txtSecond.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       // 
       // EntityRelationshipDialog
       // 
@@ -123,7 +143,9 @@
       this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.CancelButton = this.btnCancel;
-      this.ClientSize = new System.Drawing.Size(538, 165);
+      this.ClientSize = new System.Drawing.Size(538, 198);
+      this.Controls.Add(this.txtSecond);
+      this.Controls.Add(this.txtFirst);
       this.Controls.Add(this.txtName);
       this.Controls.Add(this.cboStartMultiplicity);
       this.Controls.Add(this.picArrow);
@@ -152,5 +174,7 @@
 		private System.Windows.Forms.PictureBox picArrow;
 		private System.Windows.Forms.ComboBox cboStartMultiplicity;
 		private System.Windows.Forms.TextBox txtName;
-	}
+    private System.Windows.Forms.TextBox txtFirst;
+    private System.Windows.Forms.TextBox txtSecond;
+  }
 }
