@@ -92,9 +92,7 @@ namespace NClass.CodeGenerator
       ProjectGenerators.Clear();
       foreach (IProjectItem projectItem in Project.Items)
       {
-        Model model = projectItem as Model;
-
-        if (model != null)
+        if (projectItem is Model model)
         {
           ProjectGenerator projectGenerator = CreateProjectGenerator(model);
           ProjectGenerators.Add(projectGenerator);
