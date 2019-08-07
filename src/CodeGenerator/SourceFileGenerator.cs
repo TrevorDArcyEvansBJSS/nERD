@@ -25,7 +25,7 @@ namespace NClass.CodeGenerator
   {
     private const int DefaultBuilderCapacity = 10240; // 10 KB
 
-    private readonly StringBuilder CodeBuilder = new StringBuilder(DefaultBuilderCapacity);
+    private readonly StringBuilder _codeBuilder = new StringBuilder(DefaultBuilderCapacity);
 
     protected SourceFileGenerator(TypeBase type, string rootNamespace)
     {
@@ -47,7 +47,9 @@ namespace NClass.CodeGenerator
       set
       {
         if (value >= 0)
+        {
           _indentLevel = value;
+        }
       }
     }
 
@@ -64,11 +66,13 @@ namespace NClass.CodeGenerator
       try
       {
         if (!Directory.Exists(directory))
+        {
           Directory.CreateDirectory(directory);
+        }
 
-        string fileName = Type.Name + Extension;
+        var fileName = Type.Name + Extension;
         fileName = Regex.Replace(fileName, @"\<(?<type>.+)\>", @"[${type}]");
-        string path = Path.Combine(directory, fileName);
+        var path = Path.Combine(directory, fileName);
 
         using (StreamWriter writer = new StreamWriter(path, false))
         {
@@ -90,10 +94,10 @@ namespace NClass.CodeGenerator
     /// </exception>
     private void WriteFileContent(TextWriter writer)
     {
-      CodeBuilder.Length = 0;
+      _codeBuilder.Length = 0;
 
       WriteFileContent();
-      writer.Write(CodeBuilder.ToString());
+      writer.Write(_codeBuilder.ToString());
     }
 
     protected abstract void WriteFileContent();
@@ -106,8 +110,10 @@ namespace NClass.CodeGenerator
     protected void AddBlankLine(bool indentation)
     {
       if (indentation)
+      {
         AddIndent();
-      CodeBuilder.AppendLine();
+      }
+      _codeBuilder.AppendLine();
     }
 
     protected void WriteLine(string text)
@@ -118,19 +124,25 @@ namespace NClass.CodeGenerator
     protected void WriteLine(string text, bool indentation)
     {
       if (indentation)
+      {
         AddIndent();
-      CodeBuilder.AppendLine(text);
+      }
+      _codeBuilder.AppendLine(text);
     }
 
     private void AddIndent()
     {
       string indentString;
       if (Settings.Default.UseTabsForIndents)
+      {
         indentString = new string('\t', IndentLevel);
+      }
       else
+      {
         indentString = new string(' ', IndentLevel * Settings.Default.IndentSize);
+      }
 
-      CodeBuilder.Append(indentString);
+      _codeBuilder.Append(indentString);
     }
   }
 }
