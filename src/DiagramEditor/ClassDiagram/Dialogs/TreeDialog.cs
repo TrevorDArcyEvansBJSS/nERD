@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public abstract partial class TreeDialog : Form
+  public partial class TreeDialog : Form
   {
     private bool _checkingLocked = false;
 
