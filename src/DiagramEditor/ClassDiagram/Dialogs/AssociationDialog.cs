@@ -64,6 +64,8 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       _modifiedDirection = _association.Direction;
       _modifiedType = _association.AssociationType;
 
+      txtFirst.Text = _association.First.Name;
+      txtSecond.Text = _association.Second.Name;
       txtName.Text = _association.Label;
       txtStartRole.Text = _association.StartRole;
       txtEndRole.Text = _association.EndRole;
