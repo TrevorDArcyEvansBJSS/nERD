@@ -48,13 +48,17 @@ namespace NClass.CodeGenerator
     {
       get
       {
-        string projectName = Model.Project.Name;
-        string modelName = Model.Name;
+        var projectName = Model.Project.Name;
+        var modelName = Model.Name;
 
         if (string.Equals(projectName, modelName, StringComparison.OrdinalIgnoreCase))
+        {
           return modelName;
+        }
         else
+        {
           return projectName + "." + modelName;
+        }
       }
     }
 
@@ -65,7 +69,7 @@ namespace NClass.CodeGenerator
     /// </exception>
     internal bool Generate(string location)
     {
-      bool success = true;
+      var success = true;
 
       success &= GenerateSourceFiles(location);
       success &= GenerateProjectFiles(location);
@@ -75,15 +79,13 @@ namespace NClass.CodeGenerator
 
     private bool GenerateSourceFiles(string location)
     {
-      bool success = true;
+      var success = true;
       location = Path.Combine(location, ProjectName);
 
       FileNames.Clear();
       foreach (IEntity entity in Model.Entities)
       {
-        TypeBase type = entity as TypeBase;
-
-        if (type != null && !type.IsNested)
+        if (entity is TypeBase type && !type.IsNested)
         {
           SourceFileGenerator sourceFile = CreateSourceFileGenerator(type);
 
