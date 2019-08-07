@@ -76,7 +76,6 @@ namespace NClass.DiagramEditor.ClassDiagram
         mnuNewRealization.Visible = toolNewRealization.Visible =
         mnuNewDependency.Visible = toolNewDependency.Visible =
         mnuNewNesting.Visible = toolNewNesting.Visible =
-        mnuNewCommentRelationship.Visible = toolNewCommentRelationship.Visible =
         mnuNewTransitionRelationship.Visible = toolNewTransitionRelationship.Visible = !isERDdiagram;
         mnuNewEntityRelationship.Visible = toolNewEntityRelationship.Visible = isERDdiagram;
 

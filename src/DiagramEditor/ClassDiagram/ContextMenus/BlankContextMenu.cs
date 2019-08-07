@@ -154,7 +154,6 @@ namespace NClass.DiagramEditor.ClassDiagram.ContextMenus
       mnuNewRealization.Visible =
       mnuNewDependency.Visible =
       mnuNewNesting.Visible =
-      mnuNewCommentRelationship.Visible =
       mnuNewTransitionRelationship.Visible = !isERDdiagram;
       mnuNewEntityRelationship.Visible = isERDdiagram;
 
