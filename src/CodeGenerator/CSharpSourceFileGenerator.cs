@@ -106,7 +106,7 @@ namespace NClass.CodeGenerator
         }
       }
 
-      bool needBlankLine = (type.FieldCount > 0 && type.OperationCount > 0);
+      var needBlankLine = type.FieldCount > 0 && type.OperationCount > 0;
 
       foreach (Operation operation in type.Operations)
       {
