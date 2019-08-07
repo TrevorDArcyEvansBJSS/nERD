@@ -45,13 +45,19 @@ namespace NClass.CodeGenerator
     {
       GenerationResult result = CheckDestination(location);
       if (result != GenerationResult.Success)
+      {
         return result;
+      }
 
       if (!GenerateProjectFiles(location))
+      {
         return GenerationResult.Error;
+      }
 
       if (!GenerateSolutionFile(location))
+      {
         return GenerationResult.Error;
+      }
 
       return GenerationResult.Success;
     }
@@ -68,9 +74,13 @@ namespace NClass.CodeGenerator
             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
           if (result == DialogResult.Yes)
+          {
             return GenerationResult.Success;
+          }
           else
+          {
             return GenerationResult.Cancelled;
+          }
         }
         else
         {
