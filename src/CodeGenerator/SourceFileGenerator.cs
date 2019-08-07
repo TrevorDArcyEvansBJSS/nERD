@@ -23,10 +23,9 @@ namespace NClass.CodeGenerator
 {
   public abstract class SourceFileGenerator
   {
-    // This builder object is static to increase performance
     private const int DefaultBuilderCapacity = 10240; // 10 KB
 
-    private static StringBuilder CodeBuilder = new StringBuilder(DefaultBuilderCapacity);
+    private readonly StringBuilder CodeBuilder = new StringBuilder(DefaultBuilderCapacity);
 
     protected SourceFileGenerator(TypeBase type, string rootNamespace)
     {
@@ -98,11 +97,6 @@ namespace NClass.CodeGenerator
     }
 
     protected abstract void WriteFileContent();
-
-    internal static void FinishWork()
-    {
-      CodeBuilder = null;
-    }
 
     protected void AddBlankLine()
     {

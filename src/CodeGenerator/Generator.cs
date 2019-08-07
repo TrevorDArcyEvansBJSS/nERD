@@ -18,7 +18,7 @@ using NClass.Core;
 
 namespace NClass.CodeGenerator
 {
-  public class Generator
+  public sealed class Generator
   {
     private readonly SolutionGenerator _solutionGenerator;
 
@@ -30,7 +30,7 @@ namespace NClass.CodeGenerator
       _solutionGenerator = CreateSolutionGenerator(project, type);
     }
 
-    protected virtual SolutionGenerator CreateSolutionGenerator(Project project, SolutionType type)
+    internal SolutionGenerator CreateSolutionGenerator(Project project, SolutionType type)
     {
       return new VSSolutionGenerator(project, type);
     }
@@ -40,8 +40,7 @@ namespace NClass.CodeGenerator
     /// </exception>
     public GenerationResult Generate(string location)
     {
-      GenerationResult result = _solutionGenerator.Generate(location);
-      SourceFileGenerator.FinishWork();
+      var result = _solutionGenerator.Generate(location);
 
       return result;
     }
