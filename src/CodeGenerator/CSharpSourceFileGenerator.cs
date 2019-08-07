@@ -43,10 +43,14 @@ namespace NClass.CodeGenerator
     {
       StringCollection importList = Settings.Default.CSharpImportList;
       foreach (string usingElement in importList)
+      {
         WriteLine("using " + usingElement + ";");
+      }
 
       if (importList.Count > 0)
+      {
         AddBlankLine();
+      }
     }
 
     private void OpenNamespace()
@@ -65,11 +69,17 @@ namespace NClass.CodeGenerator
     private void WriteType(TypeBase type)
     {
       if (type is CompositeType)
+      {
         WriteCompositeType((CompositeType)type);
+      }
       else if (type is EnumType)
+      {
         WriteEnum((EnumType)type);
+      }
       else if (type is DelegateType)
+      {
         WriteDelegate((DelegateType)type);
+      }
     }
 
     private void WriteCompositeType(CompositeType type)
@@ -91,7 +101,9 @@ namespace NClass.CodeGenerator
       if (type.SupportsFields)
       {
         foreach (Field field in type.Fields)
+        {
           WriteField(field);
+        }
       }
 
       bool needBlankLine = (type.FieldCount > 0 && type.OperationCount > 0);
@@ -99,7 +111,9 @@ namespace NClass.CodeGenerator
       foreach (Operation operation in type.Operations)
       {
         if (needBlankLine)
+        {
           AddBlankLine();
+        }
         needBlankLine = true;
 
         WriteOperation(operation);
@@ -121,9 +135,13 @@ namespace NClass.CodeGenerator
       foreach (EnumValue value in _enum.Values)
       {
         if (--valuesRemained > 0)
+        {
           WriteLine(value.GetDeclaration() + ",");
+        }
         else
+        {
           WriteLine(value.GetDeclaration());
+        }
       }
 
       // Writing closing bracket of the type block
@@ -178,7 +196,8 @@ namespace NClass.CodeGenerator
 
       if (!property.IsWriteonly)
       {
-        if (property.HasImplementation)
+        if (property.HasImplementation &&
+          Settings.Default.UseNotImplementedExceptions)
         {
           WriteLine("get");
           WriteLine("{");
@@ -192,9 +211,11 @@ namespace NClass.CodeGenerator
           WriteLine("get;");
         }
       }
+
       if (!property.IsReadonly)
       {
-        if (property.HasImplementation)
+        if (property.HasImplementation &&
+          Settings.Default.UseNotImplementedExceptions)
         {
           WriteLine("set");
           WriteLine("{");
@@ -218,9 +239,13 @@ namespace NClass.CodeGenerator
       if (Settings.Default.UseNotImplementedExceptions)
       {
         if (Settings.Default.CSharpImportList.Contains("System"))
+        {
           WriteLine("throw new NotImplementedException();");
+        }
         else
+        {
           WriteLine("throw new System.NotImplementedException();");
+        }
       }
       else
       {
