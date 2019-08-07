@@ -34,8 +34,8 @@ namespace NClass.CodeGenerator
     {
       get
       {
-        string fileName = ProjectName + ".csproj";
-        string directoryName = ProjectName;
+        var fileName = ProjectName + ".csproj";
+        var directoryName = ProjectName;
 
         return Path.Combine(directoryName, fileName);
       }
@@ -50,52 +50,67 @@ namespace NClass.CodeGenerator
     {
       try
       {
-        string templateDir = Path.Combine(Application.StartupPath, "Templates");
-        string templateFile = Path.Combine(templateDir, "csproj.template");
-        string projectFile = Path.Combine(location, RelativeProjectFileName);
+        var templateDir = Path.Combine(Application.StartupPath, "Templates");
+        var templateFile = Path.Combine(templateDir, "csproj.template");
+        var projectFile = Path.Combine(location, RelativeProjectFileName);
 
         using (StreamReader reader = new StreamReader(templateFile))
-        using (StreamWriter writer = new StreamWriter(projectFile, false, reader.CurrentEncoding))
         {
-          while (!reader.EndOfStream)
+          using (StreamWriter writer = new StreamWriter(projectFile, false, reader.CurrentEncoding))
           {
-            string line = reader.ReadLine();
-
-            line = line.Replace("${RootNamespace}", RootNamespace);
-            line = line.Replace("${AssemblyName}", ProjectName);
-
-            if (line.Contains("${VS2005:"))
+            while (!reader.EndOfStream)
             {
-              if (_solutionType == SolutionType.VisualStudio2005)
-                line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "${content}");
-              else
-                line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "");
+              var line = reader.ReadLine();
 
-              if (line.Length == 0)
-                continue;
-            }
-            if (line.Contains("${VS2008:"))
-            {
-              if (_solutionType == SolutionType.VisualStudio2008)
-                line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "${content}");
-              else
-                line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "");
+              line = line.Replace("${RootNamespace}", RootNamespace);
+              line = line.Replace("${AssemblyName}", ProjectName);
 
-              if (line.Length == 0)
-                continue;
-            }
-
-            if (line.Contains("${SourceFile}"))
-            {
-              foreach (string fileName in FileNames)
+              if (line.Contains("${VS2005:"))
               {
-                string newLine = line.Replace("${SourceFile}", fileName);
-                writer.WriteLine(newLine);
+                if (_solutionType == SolutionType.VisualStudio2005)
+                {
+                  line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "${content}");
+                }
+                else
+                {
+                  line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "");
+                }
+
+                if (line.Length == 0)
+                {
+                  continue;
+                }
               }
-            }
-            else
-            {
-              writer.WriteLine(line);
+
+              if (line.Contains("${VS2008:"))
+              {
+                if (_solutionType == SolutionType.VisualStudio2008)
+                {
+                  line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "${content}");
+                }
+                else
+                {
+                  line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "");
+                }
+
+                if (line.Length == 0)
+                {
+                  continue;
+                }
+              }
+
+              if (line.Contains("${SourceFile}"))
+              {
+                foreach (var fileName in FileNames)
+                {
+                  var newLine = line.Replace("${SourceFile}", fileName);
+                  writer.WriteLine(newLine);
+                }
+              }
+              else
+              {
+                writer.WriteLine(line);
+              }
             }
           }
         }
