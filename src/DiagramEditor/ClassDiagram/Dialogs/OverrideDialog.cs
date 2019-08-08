@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class OverrideDialog : TreeDialog
+  public sealed partial class OverrideDialog : TreeDialog
   {
     protected override void UpdateTexts()
     {
@@ -55,8 +55,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       }
     }
 
-    private void AddOperations(SingleInheritanceType derivedClass,
-      SingleInheritanceType baseClass)
+    private void AddOperations(SingleInheritanceType derivedClass, SingleInheritanceType baseClass)
     {
       if (derivedClass == null || baseClass == null)
         return;
