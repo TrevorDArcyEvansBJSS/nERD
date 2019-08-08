@@ -20,7 +20,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class ImplementDialog : TreeDialog
+  public sealed partial class ImplementDialog : TreeDialog
   {
     private readonly CheckBox chkImplementExplicitly = new CheckBox();
 
