@@ -26,9 +26,9 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       InitializeComponent();
     }
 
-    public EditCommentDialog(string initText)
+    public EditCommentDialog(string initText) :
+      this()
     {
-      InitializeComponent();
       txtInput.Text = initText;
     }
 
