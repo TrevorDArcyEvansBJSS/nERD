@@ -53,8 +53,7 @@ namespace NClass.DiagramEditor.ClassDiagram.Dialogs
       return node;
     }
 
-    private void AddOperations(IInterfaceImplementer implementer,
-      InterfaceType _interface, TreeNode node)
+    private void AddOperations(IInterfaceImplementer implementer, InterfaceType _interface, TreeNode node)
     {
       if (implementer == null || _interface == null || node == null)
         return;
