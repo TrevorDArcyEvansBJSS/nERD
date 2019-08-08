@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class AssociationDialog : Form
+  public sealed partial class AssociationDialog : Form
   {
     private const int ArrowWidth = 18;
     private const int ArrowHeight = 10;
