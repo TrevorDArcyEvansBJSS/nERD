@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class DiagramPrintDialog : Form
+  public sealed partial class DiagramPrintDialog : Form
   {
     private int _pageIndex = 0;
     private int _rows = 1;
