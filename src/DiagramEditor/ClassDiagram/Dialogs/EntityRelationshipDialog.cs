@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class EntityRelationshipDialog : Form
+  public sealed partial class EntityRelationshipDialog : Form
   {
     private readonly EntityRelationship _relationship = null;
 
