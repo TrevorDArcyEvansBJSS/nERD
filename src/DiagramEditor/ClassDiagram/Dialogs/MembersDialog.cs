@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class MembersDialog : Form
+  public sealed partial class MembersDialog : Form
   {
     public bool Locked { get; set; } = false;
     public int AttributeCount { get; set; } = 0;
