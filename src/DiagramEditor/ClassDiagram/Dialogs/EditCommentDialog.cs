@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace NClass.DiagramEditor.ClassDiagram.Dialogs
 {
-  public partial class EditCommentDialog : Form
+  public sealed partial class EditCommentDialog : Form
   {
     public EditCommentDialog()
     {
