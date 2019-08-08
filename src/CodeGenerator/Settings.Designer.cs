@@ -66,7 +66,7 @@ namespace NClass.CodeGenerator {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("VisualStudio2008")]
+        [global::System.Configuration.DefaultSettingValueAttribute("VisualStudio2019")]
         public global::NClass.CodeGenerator.SolutionType SolutionType {
             get {
                 return ((global::NClass.CodeGenerator.SolutionType)(this["SolutionType"]));

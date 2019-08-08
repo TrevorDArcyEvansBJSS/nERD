@@ -15,19 +15,15 @@
 
 using NClass.Core;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace NClass.CodeGenerator
 {
   internal sealed class CSharpProjectGenerator : ProjectGenerator
   {
-    private readonly SolutionType _solutionType;
-
-    public CSharpProjectGenerator(Model model, SolutionType solutionType) :
+    public CSharpProjectGenerator(Model model) :
       base(model)
     {
-      _solutionType = solutionType;
     }
 
     public override string RelativeProjectFileName
@@ -64,40 +60,6 @@ namespace NClass.CodeGenerator
 
               line = line.Replace("${RootNamespace}", RootNamespace);
               line = line.Replace("${AssemblyName}", ProjectName);
-
-              if (line.Contains("${VS2005:"))
-              {
-                if (_solutionType == SolutionType.VisualStudio2005)
-                {
-                  line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "${content}");
-                }
-                else
-                {
-                  line = Regex.Replace(line, @"\${VS2005:(?<content>.+?)}", "");
-                }
-
-                if (line.Length == 0)
-                {
-                  continue;
-                }
-              }
-
-              if (line.Contains("${VS2008:"))
-              {
-                if (_solutionType == SolutionType.VisualStudio2008)
-                {
-                  line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "${content}");
-                }
-                else
-                {
-                  line = Regex.Replace(line, @"\${VS2008:(?<content>.+?)}", "");
-                }
-
-                if (line.Length == 0)
-                {
-                  continue;
-                }
-              }
 
               if (line.Contains("${SourceFile}"))
               {

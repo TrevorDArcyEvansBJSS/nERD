@@ -17,7 +17,7 @@
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
     <Setting Name="SolutionType" Type="NClass.CodeGenerator.SolutionType" Scope="User">
-      <Value Profile="(Default)">VisualStudio2008</Value>
+      <Value Profile="(Default)">VisualStudio2019</Value>
     </Setting>
     <Setting Name="DestinationPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

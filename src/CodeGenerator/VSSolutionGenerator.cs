@@ -24,12 +24,13 @@ namespace NClass.CodeGenerator
 {
   internal sealed class VSSolutionGenerator : SolutionGenerator
   {
-    public VSSolutionGenerator(Project project, SolutionType version) : base(project)
+    public VSSolutionGenerator(Project project, SolutionType version) :
+      base(project)
     {
       Version = version;
     }
 
-    private SolutionType _version = SolutionType.VisualStudio2008;
+    private SolutionType _version = SolutionType.VisualStudio2019;
     public SolutionType Version
     {
       get
@@ -38,25 +39,14 @@ namespace NClass.CodeGenerator
       }
       set
       {
-        if (value == SolutionType.VisualStudio2005 ||
-          value == SolutionType.VisualStudio2008)
+        if (value == SolutionType.VisualStudio2017 ||
+          value == SolutionType.VisualStudio2019)
         {
           _version = value;
         }
-      }
-    }
-
-    private string VersionNumber
-    {
-      get
-      {
-        if (Version == SolutionType.VisualStudio2005)
-        {
-          return "9.00";
-        }
         else
         {
-          return "10.00";
+          throw new ArgumentOutOfRangeException($"Unknown version of Visual Studio:  {Version}");
         }
       }
     }
@@ -65,14 +55,17 @@ namespace NClass.CodeGenerator
     {
       get
       {
-        if (Version == SolutionType.VisualStudio2005)
+        if (Version == SolutionType.VisualStudio2017)
         {
-          return "Visual Studio 2005";
+          return "Visual Studio 2017";
         }
-        else
+
+        if (Version == SolutionType.VisualStudio2019)
         {
-          return "Visual Studio 2008";
+          return "Visual Studio 2019";
         }
+
+        throw new ArgumentOutOfRangeException($"Unknown version of Visual Studio:  {Version}");
       }
     }
 
@@ -85,7 +78,7 @@ namespace NClass.CodeGenerator
 
       if (language == CSharpLanguage.Instance)
       {
-        return new CSharpProjectGenerator(model, Version);
+        return new CSharpProjectGenerator(model);
       }
 
       if (language == ErdLanguage.Instance)
@@ -128,7 +121,6 @@ namespace NClass.CodeGenerator
     {
       var line = reader.ReadLine();
 
-      line = line.Replace("${VersionNumber}", VersionNumber);
       line = line.Replace("${VersionString}", VersionString);
 
       if (line.Contains("${ProjectFile}"))
